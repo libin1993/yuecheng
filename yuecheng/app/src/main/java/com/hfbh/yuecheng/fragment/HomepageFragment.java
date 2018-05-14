@@ -6,7 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseFragment;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Author：Libin on 2018/5/14 16:08
@@ -14,10 +18,13 @@ import com.hfbh.yuecheng.base.BaseFragment;
  * Describe：首页
  */
 public class HomepageFragment extends BaseFragment{
+    private Unbinder unbinder;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_homepage, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     public static HomepageFragment newInstance() {
@@ -27,4 +34,11 @@ public class HomepageFragment extends BaseFragment{
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
 }

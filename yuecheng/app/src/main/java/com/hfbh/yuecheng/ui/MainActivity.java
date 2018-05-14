@@ -1,8 +1,10 @@
 package com.hfbh.yuecheng.ui;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.hfbh.yuecheng.R;
@@ -11,6 +13,7 @@ import com.hfbh.yuecheng.fragment.ActivityFragment;
 import com.hfbh.yuecheng.fragment.DiscoveryFragment;
 import com.hfbh.yuecheng.fragment.HomepageFragment;
 import com.hfbh.yuecheng.fragment.MineFragment;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 
 import java.util.ArrayList;
@@ -50,7 +53,7 @@ public class MainActivity extends BaseActivity {
         fragmentList.add(ActivityFragment.newInstance());
         fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
-        fragmentUtils = new FragmentTabUtils(getSupportFragmentManager(), fragmentList,
+        fragmentUtils = new FragmentTabUtils(this,getSupportFragmentManager(), fragmentList,
                 R.id.fl_main_container, rgsMainTab);
     }
 }

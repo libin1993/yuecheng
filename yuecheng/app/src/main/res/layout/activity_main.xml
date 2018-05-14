@@ -18,20 +18,16 @@
         android:gravity="center">
         <RadioButton
             style="@style/RadioButton"
-            android:text="@string/homepage_tab"
-            android:drawableTop="@drawable/selector_homepage_tab"/>
+            android:text="@string/homepage_tab"/>
         <RadioButton
             style="@style/RadioButton"
-            android:text="@string/activity_tab"
-            android:drawableTop="@drawable/selector_activity_tab"/>
+            android:text="@string/activity_tab"/>
         <RadioButton
             style="@style/RadioButton"
-            android:text="@string/discovery_tab"
-            android:drawableTop="@drawable/selector_discovery_tab"/>
+            android:text="@string/discovery_tab"/>
         <RadioButton
             style="@style/RadioButton"
-            android:text="@string/mine_tab"
-            android:drawableTop="@drawable/selector_mine_tab"/>
+            android:text="@string/mine_tab"/>
     </RadioGroup>
 
     <View
