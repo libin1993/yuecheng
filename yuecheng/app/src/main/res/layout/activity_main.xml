@@ -7,13 +7,31 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context="ui.MainActivity">
 
     <RadioGroup
         android:id="@+id/rgs_main_tab"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <RadioButton
+            style="@style/RadioButton"
+            android:text="@string/homepage_tab"
+            android:drawableTop="@drawable/selector_homepage_tab"/>
+        <RadioButton
+            style="@style/RadioButton"
+            android:text="@string/activity_tab"
+            android:drawableTop="@drawable/selector_activity_tab"/>
+        <RadioButton
+            style="@style/RadioButton"
+            android:text="@string/discovery_tab"
+            android:drawableTop="@drawable/selector_discovery_tab"/>
+        <RadioButton
+            style="@style/RadioButton"
+            android:text="@string/mine_tab"
+            android:drawableTop="@drawable/selector_mine_tab"/>
     </RadioGroup>
 
     <View

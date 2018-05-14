@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">百大悦城</string>
+    <string name="homepage_tab">首页</string>
+    <string name="activity_tab">活动</string>
+    <string name="discovery_tab">发现</string>
+    <string name="mine_tab">我的</string>
 </resources>
