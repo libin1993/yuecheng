@@ -5,8 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
+    <RadioGroup
+        android:id="@+id/rgs_main_tab"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true">
+    </RadioGroup>
 
+    <View
+        android:id="@+id/view_main_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/rgs_main_tab"
+        android:background="@color/gray_ed"/>
+
+    <FrameLayout
+        android:id="@+id/fl_main_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/view_main_line"
+        android:background="@android:color/white"/>
 
 </RelativeLayout>
