@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.LogUtils;
+import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -41,6 +43,10 @@ public class HomepageFragment extends BaseFragment {
     private void initData() {
         OkHttpUtils.post()
                 .url(Constant.HOMEPAGE)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(getActivity(),"hash"))
                 .build()
                 .execute(new StringCallback() {
                     @Override

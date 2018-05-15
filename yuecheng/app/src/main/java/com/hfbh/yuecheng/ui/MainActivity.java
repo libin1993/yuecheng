@@ -19,6 +19,7 @@ import com.hfbh.yuecheng.fragment.MineFragment;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -66,9 +67,11 @@ public class MainActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LocationBean locationBean = GsonUtils.jsonToBean(s,LocationBean.class);
-                        if (locationBean.isFlag()){
+                        LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
+                        if (locationBean.isFlag()) {
                             MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
+                            String hash = locationBean.getHash();
+                            SharedPreUtils.saveStr(MainActivity.this, "hash", hash);
                         }
                     }
                 });
@@ -84,7 +87,7 @@ public class MainActivity extends BaseActivity {
         fragmentList.add(ActivityFragment.newInstance());
         fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
-        fragmentUtils = new FragmentTabUtils(this,getSupportFragmentManager(), fragmentList,
+        fragmentUtils = new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
                 R.id.fl_main_container, rgsMainTab);
     }
 }
