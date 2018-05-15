@@ -86,6 +86,8 @@ dependencies {
     compile project(':lrecyclerview')
     compile project(':photopicker')
     compile project(':slidingtablayout')
-    //    compile project(':wheelpicker')
     compile project(':wheelpicker')
+    compile ('com.alibaba.android:vlayout:1.2.8@aar') {
+        transitive = true
+    }
 }

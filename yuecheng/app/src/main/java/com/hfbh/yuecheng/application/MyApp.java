@@ -3,6 +3,8 @@ package com.hfbh.yuecheng.application;
 import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -24,6 +26,10 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Describe：全局对象
  */
 public class MyApp extends Application {
+    public static String appVersion;
+    public static String appType = "Android";
+    public static String organizeId;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -42,6 +48,22 @@ public class MyApp extends Application {
                 .build();
         OkHttpUtils.initClient(okHttpClient);
 
+        getVersionName();
+
+    }
+
+    /**
+     * 获取版本名称
+     */
+    private void getVersionName() {
+        try {
+            PackageManager packageManager = getPackageManager();
+            // getPackageName()是你当前类的包名，0代表是获取版本信息
+            PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(), 0);
+            appVersion = packInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
