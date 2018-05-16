@@ -4,4 +4,14 @@
     <string name="activity_tab">活动</string>
     <string name="discovery_tab">发现</string>
     <string name="mine_tab">我的</string>
+    <string name="home_footer">我是有底线的</string>
+    <string name="user_name">注册/登录</string>
+    <string name="user_tips">近者悦，远者来</string>
+    <string name="user_remain_money">余额</string>
+    <string name="remain_money">0.00</string>
+    <string name="money">元</string>
+    <string name="user_score">积分</string>
+    <string name="score">分</string>
+    <string name="receive_card">领取会员卡</string>
+    <string name="user_grade">等级</string>
 </resources>

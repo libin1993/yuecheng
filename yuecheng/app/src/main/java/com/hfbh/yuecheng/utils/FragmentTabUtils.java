@@ -52,10 +52,10 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
      */
     private void initIcon() {
         list = new ArrayList<>();
-        TabIconBean tabIconBean1 = new TabIconBean(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round);
-        TabIconBean tabIconBean2 = new TabIconBean(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round);
-        TabIconBean tabIconBean3 = new TabIconBean(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round);
-        TabIconBean tabIconBean4 = new TabIconBean(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round);
+        TabIconBean tabIconBean1 = new TabIconBean(R.mipmap.ic_tab_home_checked, R.mipmap.ic_tab_home_normal);
+        TabIconBean tabIconBean2 = new TabIconBean(R.mipmap.ic_tab_activity_checked, R.mipmap.ic_tab_activity_normal);
+        TabIconBean tabIconBean3 = new TabIconBean(R.mipmap.ic_tab_discovery_checked, R.mipmap.ic_tab_discovery_normal);
+        TabIconBean tabIconBean4 = new TabIconBean(R.mipmap.ic_tab_mine_checked, R.mipmap.ic_tab_mine_normal);
         list.add(tabIconBean1);
         list.add(tabIconBean2);
         list.add(tabIconBean3);
@@ -68,17 +68,17 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
         for (int i = 0; i < rgs.getChildCount(); i++) {
             RadioButton rBtn = ((RadioButton) rgs.getChildAt(i));
 
+            int width = (int) DisplayUtils.dp2px(context, 22);
+            int height = (int) DisplayUtils.dp2px(context, 20);
             if (rBtn.getId() == checkedId) {
                 Drawable drawable = context.getResources().getDrawable(list.get(i).getCheck_img());
-                int v = (int) DisplayUtils.dp2px(context, 30);
-                drawable.setBounds(0, 0, v, v);
+                drawable.setBounds(0, 0, width, height);
                 rBtn.setCompoundDrawables(null, drawable, null, null);
 //                initFragment(i);
                 switchFragment(i);
             } else {
                 Drawable drawable = context.getResources().getDrawable(list.get(i).getNormal_img());
-                int v = (int) DisplayUtils.dp2px(context, 30);
-                drawable.setBounds(0, 0, v, v);
+                drawable.setBounds(0, 0, width, height);
                 rBtn.setCompoundDrawables(null, drawable, null, null);
             }
         }
@@ -94,20 +94,20 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
         //开启事务
         FragmentTransaction ft = fragmentManager.beginTransaction();
         //遍历集合
-        for (int i = 0; i <fragmentList.size() ; i++) {
+        for (int i = 0; i < fragmentList.size(); i++) {
             Fragment fragment = fragmentList.get(i);
-            if (i==position){
+            if (i == position) {
                 //显示fragment
-                if (fragment.isAdded()){
+                if (fragment.isAdded()) {
                     //如果这个fragment已经被事务添加,显示
                     ft.show(fragment);
-                }else{
+                } else {
                     //如果这个fragment没有被事务添加过,添加
-                    ft.add(flContainerId,fragment);
+                    ft.add(flContainerId, fragment);
                 }
-            }else{
+            } else {
                 //隐藏fragment
-                if (fragment.isAdded()){
+                if (fragment.isAdded()) {
                     ft.hide(fragment);
                 }
             }

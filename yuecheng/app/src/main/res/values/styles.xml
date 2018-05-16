@@ -12,13 +12,10 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/gray_22</item>
+        <item name="android:textColor">@color/gray_10</item>
         <item name="android:textSize">10sp</item>
         <item name="android:gravity">center</item>
         <item name="android:button">@null</item>
-        <item name="android:drawablePadding">5dp</item>
+        <item name="android:drawablePadding">4dp</item>
     </style>
-
-
-    <color name="gray_22">#222222</color>
 </resources>

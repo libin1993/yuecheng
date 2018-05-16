@@ -8,6 +8,7 @@ package com.hfbh.yuecheng.constant;
 public class Constant {
     private static final String HOST = "http://yjwang.wmalle.com/";
     public static final String LOCATION = HOST + "wechat/appRequest/nearestMall.json";
-    public static final String HOMEPAGE = HOST + "wechat/homepage/homePage.json";
+    public static final String HOMEPAGE_TYPE = HOST + "wechat/homepage/homePage.json";
+    public static final String HOMEPAGE_MODULE = HOST + "wechat/homepage/queryByCode.json";
 
 }

@@ -52,7 +52,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initData();
-        initView();
+
     }
 
     private void initData() {
@@ -69,9 +69,10 @@ public class MainActivity extends BaseActivity {
                     public void onResponse(String s, int i) {
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
-                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
+//                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
                             String hash = locationBean.getHash();
                             SharedPreUtils.saveStr(MainActivity.this, "hash", hash);
+                            initView();
                         }
                     }
                 });

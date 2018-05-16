@@ -12,7 +12,7 @@
     <RadioGroup
         android:id="@+id/rgs_main_tab"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:gravity="center">
