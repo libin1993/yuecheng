@@ -1,8 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_bright">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/gray_ed"
+                android:fitsSystemWindows="true">
 
-</LinearLayout>
+    <include
+        layout="@layout/layout_header"/>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="44dp">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_ed"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@android:color/white"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/iv_activity_now"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="12dp"
+                        android:layout_weight="1"
+                        fresco:placeholderImage="@mipmap/ic_activity_now"
+                        fresco:placeholderImageScaleType="centerCrop"
+                        fresco:roundedCornerRadius="8dp"
+                        fresco:viewAspectRatio="1.63"/>
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/iv_activity_calendar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        fresco:placeholderImage="@mipmap/ic_activity_calendar"
+                        fresco:placeholderImageScaleType="centerCrop"
+                        fresco:roundedCornerRadius="8dp"
+                        fresco:viewAspectRatio="1.63"/>
+                </LinearLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+
+            <com.flyco.tablayout.SlidingTabLayout
+                android:id="@+id/tab_activity"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@android:color/white"
+                app:tl_indicator_corner_radius="2dp"
+                app:tl_indicator_height="4dp"
+                app:tl_indicator_margin_bottom="3dp"
+                app:tl_indicator_style="BLOCK"
+                app:tl_indicator_width="20dp"
+                app:tl_tab_space_equal="true"
+                app:tl_textSelectColor="@color/red_99"
+                app:tl_textUnselectColor="@color/yellow_e0"
+                app:tl_textsize="16sp"
+                app:tl_tab_padding="20dp"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        </android.support.v4.view.ViewPager>
+
+    </android.support.design.widget.CoordinatorLayout>
+    <include
+        layout="@layout/layout_loading"/>
+
+</RelativeLayout>

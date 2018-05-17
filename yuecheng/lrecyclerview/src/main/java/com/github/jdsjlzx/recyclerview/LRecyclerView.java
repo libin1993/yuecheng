@@ -123,7 +123,7 @@ public class LRecyclerView extends RecyclerView {
         mTouchSlop = ViewConfiguration.get(getContext().getApplicationContext()).getScaledTouchSlop();
         if (mPullRefreshEnabled) {
 
-            setRefreshHeader(new RefreshHeader(getContext().getApplicationContext()));
+            setRefreshHeader(new ArrowRefreshHeader(getContext().getApplicationContext()));
         }
 
         if (mLoadMoreEnabled) {

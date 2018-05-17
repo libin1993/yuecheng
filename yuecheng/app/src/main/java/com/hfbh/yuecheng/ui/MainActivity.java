@@ -1,14 +1,11 @@
 package com.hfbh.yuecheng.ui;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.widget.FrameLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.hfbh.yuecheng.R;
-import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.LocationBean;
 import com.hfbh.yuecheng.constant.Constant;
@@ -16,12 +13,12 @@ import com.hfbh.yuecheng.fragment.ActivityFragment;
 import com.hfbh.yuecheng.fragment.DiscoveryFragment;
 import com.hfbh.yuecheng.fragment.HomepageFragment;
 import com.hfbh.yuecheng.fragment.MineFragment;
-import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.wang.avi.AVLoadingIndicatorView;
+import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
@@ -30,7 +27,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
-import okhttp3.Response;
 
 
 /**
@@ -42,6 +38,8 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.rgs_main_tab)
     RadioGroup rgsMainTab;
+    @BindView(R.id.view_loading)
+    AVLoadingIndicatorView loadingView;
 
     private List<Fragment> fragmentList = new ArrayList<>();
     private FragmentTabUtils fragmentUtils;
@@ -56,6 +54,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initData() {
+        loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
+        loadingView.setIndicatorColor(Color.GRAY);
+        loadingView.smoothToShow();
         OkHttpUtils.post()
                 .url(Constant.LOCATION)
                 .build()
@@ -67,6 +68,7 @@ public class MainActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
+                        loadingView.smoothToHide();
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
 //                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());

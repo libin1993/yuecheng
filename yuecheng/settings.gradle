@@ -1,1 +1,1 @@
-include ':app', ':slidingtablayout', ':lrecyclerview', ':photopicker', ':wheelpicker'
+include ':app', ':slidingtablayout', ':lrecyclerview', ':photopicker', ':wheelpicker', ':appbarbehavior'

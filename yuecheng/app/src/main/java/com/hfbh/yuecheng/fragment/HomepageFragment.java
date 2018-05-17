@@ -2,6 +2,7 @@ package com.hfbh.yuecheng.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,8 @@ import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.BaseDelegateAdapter;
 import com.hfbh.yuecheng.application.MyApp;
@@ -35,10 +38,11 @@ import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
+import com.wang.avi.AVLoadingIndicatorView;
+import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -59,11 +63,14 @@ import okhttp3.Call;
  * Describe：首页
  */
 public class HomepageFragment extends BaseFragment {
+
+    @BindView(R.id.view_loading)
+    AVLoadingIndicatorView loadingView;
     @BindView(R.id.rv_homepage)
     RecyclerView rvHomepage;
+
     private Unbinder unbinder;
     private HomepageTypeBean typeBean;
-
 
     private BannerBean bannerBean;
     private FunctionBean functionBean;
@@ -85,6 +92,9 @@ public class HomepageFragment extends BaseFragment {
     }
 
     private void initData() {
+        loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
+        loadingView.setIndicatorColor(Color.GRAY);
+        loadingView.smoothToShow();
         OkHttpUtils.post()
                 .url(Constant.HOMEPAGE_TYPE)
                 .addParams("appType", MyApp.appType)
@@ -129,7 +139,6 @@ public class HomepageFragment extends BaseFragment {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.log(response);
 
                             switch (typeBean.getData().get(type).getModuleCode()) {
                                 case "BANNER":
@@ -150,6 +159,8 @@ public class HomepageFragment extends BaseFragment {
                             }
                             count++;
                             if (count == 5) {
+                                loadingView.smoothToHide();
+                                count = 0;
                                 initType();
                             }
                         }
@@ -168,7 +179,7 @@ public class HomepageFragment extends BaseFragment {
         //设置回收复用池大小，（如果一屏内相同类型的 View 个数比较多，需要设置一个合适的大小，防止来回滚动时重新创建 View）：
         RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
         rvHomepage.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0, 20);
+        viewPool.setMaxRecycledViews(0, 10);
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, true);
         rvHomepage.setAdapter(delegateAdapter);
@@ -230,7 +241,6 @@ public class HomepageFragment extends BaseFragment {
                 };
 
                 rvFunction.setAdapter(adapter);
-
 
             }
         };
@@ -330,17 +340,12 @@ public class HomepageFragment extends BaseFragment {
         mAdapters.add(activityAdapter);
 
         BaseDelegateAdapter footerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
-                R.layout.layout_homepage_footer, 1, 9) {
-            @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                holder.setText(R.id.tv_home_footer, "我是有底线的");
-            }
-        };
+                R.layout.layout_homepage_footer, 1, 9);
         mAdapters.add(footerAdapter);
 
 
         delegateAdapter.setAdapters(mAdapters);
+
     }
 
     /**
