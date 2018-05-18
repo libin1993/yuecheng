@@ -33,6 +33,7 @@ android {
     }
 
     productFlavors {
+        yuecheng {}
         m360 {}
         yingyongbao {}
         ali {}
@@ -88,7 +89,6 @@ dependencies {
     }
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
 
-    compile project(':lrecyclerview')
     compile project(':photopicker')
     compile project(':slidingtablayout')
     compile project(':wheelpicker')

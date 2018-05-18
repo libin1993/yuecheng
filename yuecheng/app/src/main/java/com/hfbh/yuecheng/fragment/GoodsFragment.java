@@ -3,6 +3,7 @@ package com.hfbh.yuecheng.fragment;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,9 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -52,12 +56,15 @@ public class GoodsFragment extends BaseFragment {
     RecyclerView rvGoods;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
+    @BindView(R.id.layout_refresh_goods)
+    SmartRefreshLayout refreshLayout;
     private Unbinder unbinder;
     //好物模块数量
     private int count;
     private List<GoodsBean.DataBean> popGoods = new ArrayList<>();
     private List<GoodsBean.DataBean> newGoods = new ArrayList<>();
     List<DelegateAdapter.Adapter> mAdapters;
+    private boolean isRefresh;
 
     @Nullable
     @Override
@@ -74,8 +81,7 @@ public class GoodsFragment extends BaseFragment {
     }
 
     /**
-     * @param type
-     * 加载数据
+     * @param type 加载数据
      */
     private void initData(final String type) {
         OkHttpUtils.post()
@@ -95,37 +101,42 @@ public class GoodsFragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
-                        if (goodsBean.isFlag()){
+                        if (goodsBean.isFlag()) {
                             switch (type) {
                                 case "SPECIAL":
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
-                                        if (goodsBean.getData().size() > 4) {
-                                            for (int i = 0; i < 4; i++) {
-                                                popGoods.add(goodsBean.getData().get(i));
-                                            }
-                                        } else {
-                                            popGoods.addAll(goodsBean.getData());
+                                        if (isRefresh) {
+                                            popGoods.clear();
                                         }
-
+                                        popGoods.addAll(goodsBean.getData());
                                     }
                                     break;
                                 case "FIRSTLOOK":
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
-                                        if (goodsBean.getData().size() > 5) {
-                                            for (int i = 0; i < 5; i++) {
-                                                newGoods.add(goodsBean.getData().get(i));
-                                            }
-                                        } else {
-                                            newGoods.addAll(goodsBean.getData());
+                                        if (isRefresh) {
+                                            newGoods.clear();
                                         }
+                                        newGoods.addAll(goodsBean.getData());
                                     }
                                     break;
                             }
+
+
                             count++;
                             if (count == 2) {
-                                loadingView.smoothToHide();
-                                initView();
                                 count = 0;
+                                //是否刷新状态
+                                if (isRefresh) {
+                                    refreshLayout.finishRefresh();
+                                    isRefresh = false;
+                                    for (int j = 0; j < mAdapters.size(); j++) {
+                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    loadingView.smoothToHide();
+                                    initView();
+                                }
                             }
                         }
                     }
@@ -213,6 +224,17 @@ public class GoodsFragment extends BaseFragment {
         mAdapters.add(footerAdapter);
 
         delegateAdapter.setAdapters(mAdapters);
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                refreshLayout.finishRefresh(1000, true);
+                isRefresh = true;
+                initData("SPECIAL");
+                initData("FIRSTLOOK");
+            }
+        });
+        refreshLayout.setEnableLoadMore(false);
 
     }
 

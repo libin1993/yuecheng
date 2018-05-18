@@ -66,6 +66,9 @@ public class ActivityFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * 活动标签
+     */
     private void initTitle() {
         tvHeaderTitle.setText("活动");
         loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
@@ -87,9 +90,7 @@ public class ActivityFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
-                        loadingView.setIndicatorColor(Color.GRAY);
-                        loadingView.smoothToShow();
+                        loadingView.smoothToHide();
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         tagList = new ArrayList<>();
                         if (activityListBean.isFlag() && activityListBean.getTagList().size() > 0) {
@@ -100,6 +101,9 @@ public class ActivityFragment extends BaseFragment {
                 });
     }
 
+    /**
+     * tab关联viewpager
+     */
     private void initView() {
         List<String> titleList = new ArrayList<>();
         List<Fragment> fragmentList = new ArrayList<>();

@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.widget.RadioGroup;
 
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.LocationBean;
 import com.hfbh.yuecheng.constant.Constant;
@@ -116,6 +117,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
 //                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
+                            MyApp.organizeName = locationBean.getData().getOrganizeName();
                             String hash = locationBean.getHash();
                             SharedPreUtils.saveStr(MainActivity.this, "hash", hash);
                             initView();

@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -42,7 +41,6 @@ import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
@@ -73,6 +71,8 @@ public class HomepageFragment extends BaseFragment {
     RecyclerView rvHomepage;
     @BindView(R.id.layout_refresh_home)
     SmartRefreshLayout refreshLayout;
+    @BindView(R.id.tv_home_location)
+    TextView tvHomeLocation;
 
 
     private Unbinder unbinder;
@@ -92,6 +92,7 @@ public class HomepageFragment extends BaseFragment {
     private List<DelegateAdapter.Adapter> mAdapters;
     private boolean isRefresh;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -106,6 +107,7 @@ public class HomepageFragment extends BaseFragment {
      * 加载模块
      */
     private void initType() {
+        tvHomeLocation.setText(MyApp.organizeName);
         loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
         loadingView.setIndicatorColor(Color.GRAY);
         loadingView.smoothToShow();
@@ -177,7 +179,6 @@ public class HomepageFragment extends BaseFragment {
                             count++;
                             if (count == 5) {
                                 count = 0;
-                                loadingView.smoothToHide();
                                 if (isRefresh) {
                                     refreshLayout.finishRefresh();
                                     isRefresh = false;
@@ -185,8 +186,8 @@ public class HomepageFragment extends BaseFragment {
                                         BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
                                         adapter.notifyDataSetChanged();
                                     }
-
                                 } else {
+                                    loadingView.smoothToHide();
                                     initView();
                                 }
                             }
@@ -376,23 +377,12 @@ public class HomepageFragment extends BaseFragment {
 
         delegateAdapter.setAdapters(mAdapters);
 
-//        ClassicsHeader classicsHeader = new ClassicsHeader(getActivity());
-//        classicsHeader.setEnableLastTime(false);
-//        classicsHeader.setArrowDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pulltorefresh_arrow));
-//        BallSpinFadeLoaderIndicator ball = new BallSpinFadeLoaderIndicator();
-//        ball.setColor(0xffaaaaaa);
-//        classicsHeader.setProgressDrawable(ball);
-//
-//        classicsHeader.setTextSizeTitle(12);
-//        classicsHeader.setAccentColor(0xffaaaaaa);
-//        refreshLayout.setRefreshHeader(classicsHeader);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 refreshLayout.finishRefresh(1000, true);
                 isRefresh = true;
                 initData();
-
             }
         });
         refreshLayout.setEnableLoadMore(false);

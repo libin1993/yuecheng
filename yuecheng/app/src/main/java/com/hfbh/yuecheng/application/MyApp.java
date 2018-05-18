@@ -40,17 +40,18 @@ public class MyApp extends Application {
     public static String appVersion;
     public static String appType = "Android";
     public static String organizeId = "2";
+    public static String organizeName = "";
 
     static {
         //设置全局的Header构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
             @Override
             public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
-                layout.setPrimaryColorsId(R.color.gray_ed, R.color.gray_aa);//全局设置主题颜色
+                layout.setPrimaryColors(0xffededed, 0xffaaaaaa);//全局设置主题颜色
 
                 ClassicsHeader classicsHeader = new ClassicsHeader(context);
                 classicsHeader.setEnableLastTime(false);
-                classicsHeader.setArrowDrawable(ContextCompat.getDrawable(context, R.drawable.ic_pulltorefresh_arrow));
+                classicsHeader.setArrowDrawable(ContextCompat.getDrawable(context, R.mipmap.ic_pulltorefresh_arrow));
                 BallSpinFadeLoaderIndicator ball = new BallSpinFadeLoaderIndicator();
                 ball.setColor(0xffaaaaaa);
                 classicsHeader.setProgressDrawable(ball);
@@ -62,7 +63,7 @@ public class MyApp extends Application {
         SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
             @Override
             public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
-                layout.setPrimaryColorsId(R.color.gray_ed, R.color.gray_aa);//全局设置主题颜色
+                layout.setPrimaryColors(0xffededed, 0xffaaaaaa);//全局设置主题颜色
                 ClassicsFooter classicsFooter = new ClassicsFooter(context);
                 BallSpinFadeLoaderIndicator ball = new BallSpinFadeLoaderIndicator();
                 ball.setColor(0xffaaaaaa);
