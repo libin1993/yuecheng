@@ -110,19 +110,18 @@ public class ActivityListFragment extends BaseFragment {
 
                             if (isRefresh) {
                                 refreshLayout.finishRefresh();
+                                isRefresh = false;
                                 adapter.notifyDataSetChanged();
                             } else if (isLoadMore) {
                                 refreshLayout.finishLoadMore();
+                                isLoadMore = false;
                                 adapter.notifyDataSetChanged();
                             } else {
                                 initView();
                             }
-                            isRefresh = false;
-                            isLoadMore = false;
                             svNoActivity.setVisibility(View.GONE);
                         } else {
                             refreshLayout.finishLoadMoreWithNoMoreData();
-
                             if (page == 1) {
                                 svNoActivity.setVisibility(View.VISIBLE);
                             }

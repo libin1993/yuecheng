@@ -27,10 +27,12 @@ import com.hfbh.yuecheng.bean.GoodsBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -63,8 +65,17 @@ public class GoodsFragment extends BaseFragment {
     private int count;
     private List<GoodsBean.DataBean> popGoods = new ArrayList<>();
     private List<GoodsBean.DataBean> newGoods = new ArrayList<>();
-    List<DelegateAdapter.Adapter> mAdapters;
+    List<DelegateAdapter.Adapter> mAdapters = new LinkedList<>();;
     private boolean isRefresh;
+    //加载更多
+    private boolean isLoadMore;
+
+    private int page1 = 1;
+    private int page2 = 1;
+
+
+    private int pages1;
+    private int pages2;
 
     @Nullable
     @Override
@@ -74,8 +85,8 @@ public class GoodsFragment extends BaseFragment {
         loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
         loadingView.setIndicatorColor(Color.GRAY);
         loadingView.smoothToShow();
-        initData("SPECIAL");
-        initData("FIRSTLOOK");
+        initData("SPECIAL", page1);
+        initData("FIRSTLOOK", page2);
 
         return view;
     }
@@ -83,7 +94,7 @@ public class GoodsFragment extends BaseFragment {
     /**
      * @param type 加载数据
      */
-    private void initData(final String type) {
+    private void initData(final String type, int page) {
         OkHttpUtils.post()
                 .url(Constant.DISCOVERY_GOODS)
                 .addParams("appType", MyApp.appType)
@@ -91,6 +102,7 @@ public class GoodsFragment extends BaseFragment {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getParentFragment().getActivity(), "hash"))
                 .addParams("commodityType", type)
+                .addParams("pageNum", String.valueOf(page))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -105,6 +117,7 @@ public class GoodsFragment extends BaseFragment {
                             switch (type) {
                                 case "SPECIAL":
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
+                                        pages1 = goodsBean.getPage().getPages();
                                         if (isRefresh) {
                                             popGoods.clear();
                                         }
@@ -113,6 +126,7 @@ public class GoodsFragment extends BaseFragment {
                                     break;
                                 case "FIRSTLOOK":
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
+                                        pages2 = goodsBean.getPage().getPages();
                                         if (isRefresh) {
                                             newGoods.clear();
                                         }
@@ -121,7 +135,6 @@ public class GoodsFragment extends BaseFragment {
                                     break;
                             }
 
-
                             count++;
                             if (count == 2) {
                                 count = 0;
@@ -129,6 +142,14 @@ public class GoodsFragment extends BaseFragment {
                                 if (isRefresh) {
                                     refreshLayout.finishRefresh();
                                     isRefresh = false;
+                                    for (int j = 0; j < mAdapters.size(); j++) {
+                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                } else if (isLoadMore) {
+                                    LogUtils.log(popGoods.size()+","+newGoods.size());
+                                    refreshLayout.finishLoadMore();
+                                    isLoadMore = false;
                                     for (int j = 0; j < mAdapters.size(); j++) {
                                         BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
                                         adapter.notifyDataSetChanged();
@@ -148,8 +169,6 @@ public class GoodsFragment extends BaseFragment {
      */
     private void initView() {
 
-        mAdapters = new LinkedList<>();
-
         //初始化
         VirtualLayoutManager layoutManager = new VirtualLayoutManager(getParentFragment().getActivity());
         rvGoods.setLayoutManager(layoutManager);
@@ -157,7 +176,7 @@ public class GoodsFragment extends BaseFragment {
         //设置回收复用池大小，（如果一屏内相同类型的 View 个数比较多，需要设置一个合适的大小，防止来回滚动时重新创建 View）：
         RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
         rvGoods.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0, 10);
+        viewPool.setMaxRecycledViews(4, 20);
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, true);
         rvGoods.setAdapter(delegateAdapter);
@@ -218,23 +237,40 @@ public class GoodsFragment extends BaseFragment {
         };
         mAdapters.add(newAdapter);
 
-
-        BaseDelegateAdapter footerAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(), new LinearLayoutHelper(),
-                R.layout.layout_homepage_footer, 1, 5);
-        mAdapters.add(footerAdapter);
-
         delegateAdapter.setAdapters(mAdapters);
 
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                if (page1 < pages1 || page2 < pages2) {
+                    isLoadMore = true;
+                    if (page1 < pages1) {
+                        page1++;
+                        initData("SPECIAL", page1);
+                    } else {
+                        count++;
+                    }
+                    if (page2 < pages2) {
+                        page2++;
+                        initData("FIRSTLOOK", page2);
+                    } else {
+                        count++;
+                    }
+                } else {
+                    refreshLayout.finishLoadMoreWithNoMoreData();
+                }
+            }
+
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 refreshLayout.finishRefresh(1000, true);
                 isRefresh = true;
-                initData("SPECIAL");
-                initData("FIRSTLOOK");
+                page1 = 1;
+                page2 = 1;
+                initData("SPECIAL", page1);
+                initData("FIRSTLOOK", page2);
             }
         });
-        refreshLayout.setEnableLoadMore(false);
 
     }
 
