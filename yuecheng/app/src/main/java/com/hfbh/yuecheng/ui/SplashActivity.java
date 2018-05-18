@@ -1,5 +1,8 @@
 package com.hfbh.yuecheng.ui;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+
 import com.hfbh.yuecheng.base.BaseActivity;
 
 /**
@@ -8,4 +11,9 @@ import com.hfbh.yuecheng.base.BaseActivity;
  * Describe：
  */
 public class SplashActivity extends BaseActivity{
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 }

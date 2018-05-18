@@ -2,11 +2,11 @@ package com.hfbh.yuecheng.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +14,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
-import com.github.jdsjlzx.interfaces.OnRefreshListener;
-import com.github.jdsjlzx.recyclerview.LRecyclerView;
-import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
-import com.github.jdsjlzx.util.RecyclerViewStateUtils;
-import com.github.jdsjlzx.view.LoadingFooter;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.view.SpaceItemDecoration;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -43,15 +42,19 @@ import okhttp3.Call;
 /**
  * Author：Libin on 2018/5/17 14:53
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：活动列表
  */
 public class ActivityListFragment extends BaseFragment {
 
-    @BindView(R.id.rv_activity_list)
-    LRecyclerView rvActivity;
     @BindView(R.id.sv_no_activity)
     NestedScrollView svNoActivity;
+    @BindView(R.id.rv_activity_list)
+    RecyclerView rvActivity;
+    @BindView(R.id.layout_refresh_activity)
+    SmartRefreshLayout refreshLayout;
+
     private Unbinder unbinder;
+    //标签id
     private int tagId;
     private int page = 1;
     //刷新
@@ -59,8 +62,11 @@ public class ActivityListFragment extends BaseFragment {
     //加载更多
     private boolean isLoadMore;
     private List<ActivityListBean.DataBean> dataList = new ArrayList<>();
-    private LRecyclerViewAdapter mLRecyclerViewAdapter;
-    private int pages= 1;
+    //总页数
+    private int pages;
+    //活动总数量
+    private int counts;
+    private CommonAdapter<ActivityListBean.DataBean> adapter;
 
     @Nullable
     @Override
@@ -72,6 +78,9 @@ public class ActivityListFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * 加载数据
+     */
     private void initData() {
         OkHttpUtils.get()
                 .url(Constant.ACTIVITY_LIST)
@@ -92,14 +101,19 @@ public class ActivityListFragment extends BaseFragment {
                     public void onResponse(String response, int id) {
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         pages = activityListBean.getPage().getPages();
+                        counts = activityListBean.getPage().getTotal();
                         if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
                             if (isRefresh) {
                                 dataList.clear();
                             }
                             dataList.addAll(activityListBean.getData());
-                            if (isRefresh || isLoadMore) {
-                                rvActivity.refreshComplete(0);
-                                mLRecyclerViewAdapter.notifyDataSetChanged();
+
+                            if (isRefresh) {
+                                refreshLayout.finishRefresh();
+                                adapter.notifyDataSetChanged();
+                            } else if (isLoadMore) {
+                                refreshLayout.finishLoadMore();
+                                adapter.notifyDataSetChanged();
                             } else {
                                 initView();
                             }
@@ -107,8 +121,8 @@ public class ActivityListFragment extends BaseFragment {
                             isLoadMore = false;
                             svNoActivity.setVisibility(View.GONE);
                         } else {
-                            RecyclerViewStateUtils.setFooterViewState(getParentFragment().getActivity(),
-                                    rvActivity, 0, LoadingFooter.State.NoMore, null);
+                            refreshLayout.finishLoadMoreWithNoMoreData();
+
                             if (page == 1) {
                                 svNoActivity.setVisibility(View.VISIBLE);
                             }
@@ -117,13 +131,16 @@ public class ActivityListFragment extends BaseFragment {
                 });
     }
 
+    /**
+     * 加载视图
+     */
     private void initView() {
         rvActivity.setLayoutManager(new LinearLayoutManager(getParentFragment().getActivity()));
         //添加自定义分割线
-        DividerItemDecoration divider = new DividerItemDecoration(getParentFragment().getActivity(),DividerItemDecoration.VERTICAL);
-        divider.setDrawable(ContextCompat.getDrawable(getParentFragment().getActivity(),R.drawable.custom_divider));
+        SpaceItemDecoration divider = new SpaceItemDecoration((int) DisplayUtils.dp2px(
+                getParentFragment().getActivity(), 10), counts);
         rvActivity.addItemDecoration(divider);
-        CommonAdapter<ActivityListBean.DataBean> adapter = new CommonAdapter<ActivityListBean.DataBean>
+        adapter = new CommonAdapter<ActivityListBean.DataBean>
                 (getParentFragment().getActivity(), R.layout.rv_activity_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, ActivityListBean.DataBean dataBean, int position) {
@@ -149,37 +166,27 @@ public class ActivityListFragment extends BaseFragment {
         };
 
 
-        mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
-        rvActivity.setAdapter(mLRecyclerViewAdapter);
+        rvActivity.setAdapter(adapter);
 
-        //刷新
-        rvActivity.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        isRefresh = true;
-                        page = 1;
-                        initData();
-                    }
-                }, 1000);
-            }
-        });
 
-        //加载更多
-        rvActivity.setOnLoadMoreListener(new OnLoadMoreListener() {
+        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
-            public void onLoadMore() {
-                if (page < pages){
-                    RecyclerViewStateUtils.setFooterViewState(getParentFragment().getActivity(), rvActivity,
-                            0, LoadingFooter.State.Loading, null);
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                if (page < pages) {
                     isLoadMore = true;
                     page++;
                     initData();
-                }else {
-                    RecyclerViewStateUtils.setFooterViewState(getParentFragment().getActivity(),
-                            rvActivity, 0, LoadingFooter.State.NoMore, null);
+                } else {
+                    refreshLayout.finishLoadMoreWithNoMoreData();
                 }
+            }
+
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                refreshLayout.finishRefresh(1000, true);
+                isRefresh = true;
+                page = 1;
+                initData();
             }
         });
 

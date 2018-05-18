@@ -45,7 +45,7 @@ import okhttp3.Call;
 /**
  * Author：Libin on 2018/5/17 09:51
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：好物
  */
 public class GoodsFragment extends BaseFragment {
     @BindView(R.id.rv_discovery_goods)
@@ -53,7 +53,7 @@ public class GoodsFragment extends BaseFragment {
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
     private Unbinder unbinder;
-
+    //好物模块数量
     private int count;
     private List<GoodsBean.DataBean> popGoods = new ArrayList<>();
     private List<GoodsBean.DataBean> newGoods = new ArrayList<>();
@@ -73,6 +73,10 @@ public class GoodsFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * @param type
+     * 加载数据
+     */
     private void initData(final String type) {
         OkHttpUtils.post()
                 .url(Constant.DISCOVERY_GOODS)
@@ -91,36 +95,38 @@ public class GoodsFragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
-                        switch (type) {
-                            case "SPECIAL":
-                                if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
-                                    if (goodsBean.getData().size() > 4) {
-                                        for (int i = 0; i < 4; i++) {
-                                            popGoods.add(goodsBean.getData().get(i));
+                        if (goodsBean.isFlag()){
+                            switch (type) {
+                                case "SPECIAL":
+                                    if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
+                                        if (goodsBean.getData().size() > 4) {
+                                            for (int i = 0; i < 4; i++) {
+                                                popGoods.add(goodsBean.getData().get(i));
+                                            }
+                                        } else {
+                                            popGoods.addAll(goodsBean.getData());
                                         }
-                                    } else {
-                                        popGoods.addAll(goodsBean.getData());
-                                    }
 
-                                }
-                                break;
-                            case "FIRSTLOOK":
-                                if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
-                                    if (goodsBean.getData().size() > 5) {
-                                        for (int i = 0; i < 5; i++) {
-                                            newGoods.add(goodsBean.getData().get(i));
-                                        }
-                                    } else {
-                                        newGoods.addAll(goodsBean.getData());
                                     }
-                                }
-                                break;
-                        }
-                        count++;
-                        if (count == 2) {
-                            loadingView.smoothToHide();
-                            initView();
-                            count = 0;
+                                    break;
+                                case "FIRSTLOOK":
+                                    if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
+                                        if (goodsBean.getData().size() > 5) {
+                                            for (int i = 0; i < 5; i++) {
+                                                newGoods.add(goodsBean.getData().get(i));
+                                            }
+                                        } else {
+                                            newGoods.addAll(goodsBean.getData());
+                                        }
+                                    }
+                                    break;
+                            }
+                            count++;
+                            if (count == 2) {
+                                loadingView.smoothToHide();
+                                initView();
+                                count = 0;
+                            }
                         }
                     }
                 });
@@ -145,9 +151,8 @@ public class GoodsFragment extends BaseFragment {
         DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, true);
         rvGoods.setAdapter(delegateAdapter);
 
+        //人气
         initTitle("人气", 1);
-
-
         GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
         gridLayoutHelper.setAutoExpand(false);
         gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getParentFragment().getActivity(), 12),
@@ -184,9 +189,8 @@ public class GoodsFragment extends BaseFragment {
         };
         mAdapters.add(popAdapter);
 
+        //新品
         initTitle("新品", 3);
-
-
         BaseDelegateAdapter newAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(),
                 new LinearLayoutHelper(), R.layout.rv_new_goods_item, newGoods.size(), 4) {
             @Override

@@ -4,11 +4,17 @@
                 android:layout_height="match_parent"
                 android:background="@color/gray_ed">
 
-    <com.github.jdsjlzx.recyclerview.LRecyclerView
-        android:id="@+id/rv_activity_list"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/layout_refresh_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.github.jdsjlzx.recyclerview.LRecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_activity_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/sv_no_activity"

@@ -187,7 +187,7 @@ public class LoadingFooter extends RelativeLayout implements ILoadMoreFooter {
                 mProgressView.addView(initIndicatorView(style));
 
                 mLoadingText.setText(TextUtils.isEmpty(loadingHint) ? getResources().getString(R.string.list_footer_loading) : loadingHint);
-                mLoadingText.setTextColor(0xffaaaaaa);
+                mLoadingText.setTextColor(0xff999999);
 
                 break;
             case NoMore:
@@ -211,7 +211,7 @@ public class LoadingFooter extends RelativeLayout implements ILoadMoreFooter {
 
                 mTheEndView.setVisibility(showView ? VISIBLE : GONE);
                 mNoMoreText.setText(TextUtils.isEmpty(noMoreHint) ? getResources().getString(R.string.list_footer_end) : noMoreHint);
-                mNoMoreText.setTextColor(0xffaaaaaa);
+                mNoMoreText.setTextColor(0xff999999);
                 break;
             case NetWorkError:
 
@@ -233,7 +233,7 @@ public class LoadingFooter extends RelativeLayout implements ILoadMoreFooter {
 
                 mNetworkErrorView.setVisibility(showView ? VISIBLE : GONE);
                 mNoNetWorkText.setText(TextUtils.isEmpty(noNetWorkHint) ? getResources().getString(R.string.list_footer_network_error) : noNetWorkHint);
-                mNoNetWorkText.setTextColor(0xffaaaaaa);
+                mNoNetWorkText.setTextColor(0xff999999);
                 break;
             default:
                 break;

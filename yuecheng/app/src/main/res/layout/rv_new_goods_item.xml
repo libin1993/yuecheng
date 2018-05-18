@@ -19,7 +19,7 @@
         android:orientation="vertical"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="4dp"
-        app:cardElevation="4dp">
+        app:cardElevation="5dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_discovery_new"

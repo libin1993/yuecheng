@@ -2,8 +2,9 @@ package com.hfbh.yuecheng.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -23,8 +24,6 @@ import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.github.jdsjlzx.interfaces.OnRefreshListener;
-import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.BaseDelegateAdapter;
 import com.hfbh.yuecheng.application.MyApp;
@@ -41,6 +40,10 @@ import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -68,30 +71,41 @@ public class HomepageFragment extends BaseFragment {
     AVLoadingIndicatorView loadingView;
     @BindView(R.id.rv_homepage)
     RecyclerView rvHomepage;
+    @BindView(R.id.layout_refresh_home)
+    SmartRefreshLayout refreshLayout;
+
 
     private Unbinder unbinder;
     private HomepageTypeBean typeBean;
-
+    //banner
     private BannerBean bannerBean;
+    //功能
     private FunctionBean functionBean;
+    //活动
     private ActivityBean activityBean;
+    //优惠券
     private CouponBean couponBean;
+    //礼品兑换
     private GiftBean giftBean;
-
+    //模块数量
     private int count;
     private List<DelegateAdapter.Adapter> mAdapters;
-
+    private boolean isRefresh;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
         unbinder = ButterKnife.bind(this, view);
-        initData();
+        initType();
+
         return view;
     }
 
-    private void initData() {
+    /**
+     * 加载模块
+     */
+    private void initType() {
         loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
         loadingView.setIndicatorColor(Color.GRAY);
         loadingView.smoothToShow();
@@ -112,14 +126,17 @@ public class HomepageFragment extends BaseFragment {
                     public void onResponse(String s, int i) {
                         typeBean = GsonUtils.jsonToBean(s, HomepageTypeBean.class);
                         if (typeBean.isFlag()) {
-                            initView();
+                            initData();
                         }
                     }
                 });
 
     }
 
-    private void initView() {
+    /**
+     * 加载模块数据
+     */
+    private void initData() {
 
         for (int i = 0; i < typeBean.getData().size(); i++) {
             final int type = i;
@@ -159,9 +176,19 @@ public class HomepageFragment extends BaseFragment {
                             }
                             count++;
                             if (count == 5) {
-                                loadingView.smoothToHide();
                                 count = 0;
-                                initType();
+                                loadingView.smoothToHide();
+                                if (isRefresh) {
+                                    refreshLayout.finishRefresh();
+                                    isRefresh = false;
+                                    for (int j = 0; j < mAdapters.size(); j++) {
+                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+                                } else {
+                                    initView();
+                                }
                             }
                         }
                     });
@@ -169,7 +196,10 @@ public class HomepageFragment extends BaseFragment {
 
     }
 
-    private void initType() {
+    /**
+     * 加载视图
+     */
+    private void initView() {
         mAdapters = new LinkedList<>();
 
         //初始化
@@ -210,7 +240,7 @@ public class HomepageFragment extends BaseFragment {
         };
         mAdapters.add(bannerAdapter);
 
-
+        //功能模块
         BaseDelegateAdapter functionAdapter = new BaseDelegateAdapter(getActivity(), new GridLayoutHelper(2, 1),
                 R.layout.layout_homepage_function, 1, 2) {
             @Override
@@ -246,6 +276,8 @@ public class HomepageFragment extends BaseFragment {
         };
         mAdapters.add(functionAdapter);
 
+
+        //优惠券
         initTitle("优惠券", 3);
 
         BaseDelegateAdapter couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
@@ -271,9 +303,8 @@ public class HomepageFragment extends BaseFragment {
         };
         mAdapters.add(couponAdapter);
 
-
+        //积分兑换
         initTitle("积分兑换", 5);
-
 
         GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
         gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getActivity(), 12),
@@ -305,7 +336,7 @@ public class HomepageFragment extends BaseFragment {
         };
         mAdapters.add(giftAdapter);
 
-
+        //精彩活动
         initTitle("精彩活动", 7);
         GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
         gridLayoutHelper1.setVGap((int) DisplayUtils.dp2px(getActivity(), 5));// 控制子元素之间的水平间距
@@ -338,18 +369,37 @@ public class HomepageFragment extends BaseFragment {
         };
 
         mAdapters.add(activityAdapter);
-
+        //底部
         BaseDelegateAdapter footerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.layout_homepage_footer, 1, 9);
         mAdapters.add(footerAdapter);
 
-
         delegateAdapter.setAdapters(mAdapters);
 
+//        ClassicsHeader classicsHeader = new ClassicsHeader(getActivity());
+//        classicsHeader.setEnableLastTime(false);
+//        classicsHeader.setArrowDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pulltorefresh_arrow));
+//        BallSpinFadeLoaderIndicator ball = new BallSpinFadeLoaderIndicator();
+//        ball.setColor(0xffaaaaaa);
+//        classicsHeader.setProgressDrawable(ball);
+//
+//        classicsHeader.setTextSizeTitle(12);
+//        classicsHeader.setAccentColor(0xffaaaaaa);
+//        refreshLayout.setRefreshHeader(classicsHeader);
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                refreshLayout.finishRefresh(1000, true);
+                isRefresh = true;
+                initData();
+
+            }
+        });
+        refreshLayout.setEnableLoadMore(false);
     }
 
     /**
-     * 动态添加布局
+     * 动态添加标签
      */
     private void addTextView(FlowLayout flowLayout, List<ActivityBean.DataBean.TagsBean> tagsBeans) {
 
@@ -369,6 +419,10 @@ public class HomepageFragment extends BaseFragment {
     }
 
 
+    /**
+     * @param title
+     * @param type  标题
+     */
     private void initTitle(final String title, int type) {
         BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.layout_homepage_title, 1, type) {

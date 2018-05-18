@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="gray_ed">#EDEDED</color>
+    <color name="gray_aa">#AAAAAA</color>
     <color name="gray_22">#222222</color>
     <color name="gray_10">#101010</color>
     <color name="red_99">#990000</color>
@@ -25,4 +26,5 @@
     <color name="blue_85">#859BAB</color>
     <color name="yellow_e0">#E0BE8D</color>
     <color name="red_c9">#C90000</color>
+    <color name="gray_66">#666666</color>
 </resources>

@@ -9,8 +9,19 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
+import android.support.v4.content.ContextCompat;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.hfbh.yuecheng.R;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.File;
@@ -29,6 +40,39 @@ public class MyApp extends Application {
     public static String appVersion;
     public static String appType = "Android";
     public static String organizeId = "2";
+
+    static {
+        //设置全局的Header构建器
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
+            @Override
+            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
+                layout.setPrimaryColorsId(R.color.gray_ed, R.color.gray_aa);//全局设置主题颜色
+
+                ClassicsHeader classicsHeader = new ClassicsHeader(context);
+                classicsHeader.setEnableLastTime(false);
+                classicsHeader.setArrowDrawable(ContextCompat.getDrawable(context, R.drawable.ic_pulltorefresh_arrow));
+                BallSpinFadeLoaderIndicator ball = new BallSpinFadeLoaderIndicator();
+                ball.setColor(0xffaaaaaa);
+                classicsHeader.setProgressDrawable(ball);
+                classicsHeader.setTextSizeTitle(12);
+                return classicsHeader;
+            }
+        });
+        //设置全局的Footer构建器
+        SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
+            @Override
+            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
+                layout.setPrimaryColorsId(R.color.gray_ed, R.color.gray_aa);//全局设置主题颜色
+                ClassicsFooter classicsFooter = new ClassicsFooter(context);
+                BallSpinFadeLoaderIndicator ball = new BallSpinFadeLoaderIndicator();
+                ball.setColor(0xffaaaaaa);
+                classicsFooter.setProgressDrawable(ball);
+                classicsFooter.setTextSizeTitle(12);
+
+                return classicsFooter;
+            }
+        });
+    }
 
     @Override
     public void onCreate() {
@@ -49,6 +93,7 @@ public class MyApp extends Application {
         OkHttpUtils.initClient(okHttpClient);
 
         getVersionName();
+
 
     }
 

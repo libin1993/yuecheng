@@ -45,6 +45,9 @@ public class DiscoveryFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * tab分类
+     */
     private void initTitle() {
         titleList = new ArrayList<>();
         fragmentList = new ArrayList<>();
@@ -61,7 +64,7 @@ public class DiscoveryFragment extends BaseFragment {
 
 
     /**
-     * 加载视图
+     * 绑定viewpager
      */
     private void initView() {
 
