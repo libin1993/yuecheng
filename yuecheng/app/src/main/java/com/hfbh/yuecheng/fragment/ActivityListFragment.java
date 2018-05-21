@@ -182,7 +182,6 @@ public class ActivityListFragment extends BaseFragment {
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                refreshLayout.finishRefresh(1000, true);
                 isRefresh = true;
                 page = 1;
                 initData();

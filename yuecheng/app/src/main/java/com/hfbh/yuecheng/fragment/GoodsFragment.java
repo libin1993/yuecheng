@@ -1,26 +1,16 @@
 package com.hfbh.yuecheng.fragment;
 
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.alibaba.android.vlayout.DelegateAdapter;
-import com.alibaba.android.vlayout.VirtualLayoutManager;
-import com.alibaba.android.vlayout.layout.GridLayoutHelper;
-import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
-import com.hfbh.yuecheng.adapter.BaseDelegateAdapter;
+import com.hfbh.yuecheng.adapter.MyRecycleAdapter;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.GoodsBean;
@@ -29,18 +19,15 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.view.GridItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.wang.avi.AVLoadingIndicatorView;
-import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
-import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,52 +36,59 @@ import butterknife.Unbinder;
 import okhttp3.Call;
 
 /**
- * Author：Libin on 2018/5/17 09:51
+ * Author：Libin on 2018/5/21 11:36
  * Email：1993911441@qq.com
  * Describe：好物
  */
 public class GoodsFragment extends BaseFragment {
+
+
     @BindView(R.id.rv_discovery_goods)
     RecyclerView rvGoods;
-    @BindView(R.id.view_loading)
-    AVLoadingIndicatorView loadingView;
     @BindView(R.id.layout_refresh_goods)
     SmartRefreshLayout refreshLayout;
+    @BindView(R.id.view_loading)
+    AVLoadingIndicatorView loadingView;
     private Unbinder unbinder;
-    //好物模块数量
-    private int count;
+
+
     private List<GoodsBean.DataBean> popGoods = new ArrayList<>();
     private List<GoodsBean.DataBean> newGoods = new ArrayList<>();
-    List<DelegateAdapter.Adapter> mAdapters = new LinkedList<>();;
+
+    private List<GoodsBean.DataBean> itemList = new ArrayList<>();
+
+    //好物模块数量
+    private int count;
+    //刷新
     private boolean isRefresh;
     //加载更多
     private boolean isLoadMore;
-
+    //人气当前页
     private int page1 = 1;
+    //新品当前页
     private int page2 = 1;
-
-
+    //人气总页数
     private int pages1;
+    //新品总页数
     private int pages2;
+    private MyRecycleAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_goods, container, false);
         unbinder = ButterKnife.bind(this, view);
-        loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
-        loadingView.setIndicatorColor(Color.GRAY);
-        loadingView.smoothToShow();
+
         initData("SPECIAL", page1);
         initData("FIRSTLOOK", page2);
-
         return view;
     }
+
 
     /**
      * @param type 加载数据
      */
-    private void initData(final String type, int page) {
+    private void initData(final String type, final int page) {
         OkHttpUtils.post()
                 .url(Constant.DISCOVERY_GOODS)
                 .addParams("appType", MyApp.appType)
@@ -113,6 +107,7 @@ public class GoodsFragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
+
                         if (goodsBean.isFlag()) {
                             switch (type) {
                                 case "SPECIAL":
@@ -135,31 +130,54 @@ public class GoodsFragment extends BaseFragment {
                                     break;
                             }
 
+
                             count++;
                             if (count == 2) {
                                 count = 0;
+
+                                //重新赋值
+                                itemList.clear();
+
+                                GoodsBean.DataBean dataBean1 = new GoodsBean.DataBean();
+                                dataBean1.setType(1);
+                                dataBean1.setTitle("人气");
+                                itemList.add(dataBean1);
+
+                                for (int i = 0; i < popGoods.size(); i++) {
+                                    GoodsBean.DataBean dataBean2 = popGoods.get(i);
+                                    dataBean2.setType(2);
+                                    itemList.add(dataBean2);
+                                }
+
+
+                                GoodsBean.DataBean dataBean3 = new GoodsBean.DataBean();
+                                dataBean3.setType(3);
+                                dataBean3.setTitle("新品");
+                                itemList.add(dataBean3);
+
+                                for (int j = 0; j < newGoods.size(); j++) {
+                                    GoodsBean.DataBean dataBean4 = newGoods.get(j);
+                                    dataBean4.setType(4);
+                                    itemList.add(dataBean4);
+                                }
+
+
                                 //是否刷新状态
                                 if (isRefresh) {
                                     refreshLayout.finishRefresh();
                                     isRefresh = false;
-                                    for (int j = 0; j < mAdapters.size(); j++) {
-                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                } else if (isLoadMore) {
-                                    LogUtils.log(popGoods.size()+","+newGoods.size());
+                                    adapter.notifyDataSetChanged();
+                                } else if (isLoadMore) { //加载更多
                                     refreshLayout.finishLoadMore();
                                     isLoadMore = false;
-                                    for (int j = 0; j < mAdapters.size(); j++) {
-                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
-                                        adapter.notifyDataSetChanged();
-                                    }
+                                    adapter.notifyDataSetChanged();
                                 } else {
                                     loadingView.smoothToHide();
                                     initView();
                                 }
                             }
                         }
+
                     }
                 });
     }
@@ -168,80 +186,38 @@ public class GoodsFragment extends BaseFragment {
      * 加载视图
      */
     private void initView() {
-
-        //初始化
-        VirtualLayoutManager layoutManager = new VirtualLayoutManager(getParentFragment().getActivity());
-        rvGoods.setLayoutManager(layoutManager);
-
-        //设置回收复用池大小，（如果一屏内相同类型的 View 个数比较多，需要设置一个合适的大小，防止来回滚动时重新创建 View）：
-        RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-        rvGoods.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(4, 20);
-
-        DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, true);
-        rvGoods.setAdapter(delegateAdapter);
-
-        //人气
-        initTitle("人气", 1);
-        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
-        gridLayoutHelper.setAutoExpand(false);
-        gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getParentFragment().getActivity(), 12),
-                0, (int) DisplayUtils.dp2px(getParentFragment().getActivity(), 12), 0);
-        gridLayoutHelper.setHGap((int) DisplayUtils.dp2px(getParentFragment().getActivity(), 11));// 控制子元素之间的水平间距
-        gridLayoutHelper.setBgColor(Color.WHITE);
-        BaseDelegateAdapter popAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(), gridLayoutHelper,
-                R.layout.rv_pop_goods_item, popGoods.size(), 2) {
-            //布局宽高
-            int widthPixels = DisplayUtils.getMetrics(getParentFragment().getActivity()).widthPixels;
-            final int width = (int) ((widthPixels - DisplayUtils.dp2px(getParentFragment().getActivity(), 35)) / 2);
-
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(getParentFragment().getActivity(), 2);
+        //SpanSize为多少，表示占用几个item
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                ImageView ivPop = holder.getView(R.id.iv_discovery_pop);
-                ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                layoutParams.width = width;
-                layoutParams.height = width;
-                ivPop.setLayoutParams(layoutParams);
-
-                Glide.with(getParentFragment().getActivity())
-                        .load(popGoods.get(position).getPicturePath())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(ivPop);
-                holder.setText(R.id.tv_discovery_pop_name, popGoods.get(position).getCommodityName());
-                holder.setText(R.id.tv_discovery_pop_price, "¥" + popGoods.get(position).getNowPrice());
-
-                TextView tvOld = holder.getView(R.id.tv_discovery_pop_original);
-                tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
-                tvOld.setText("¥" + popGoods.get(position).getOldPrice());
-
+            public int getSpanSize(int position) {
+                int type = rvGoods.getAdapter().getItemViewType(position);
+                switch (type) {
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 1;
+                    case 3:
+                        return 2;
+                    case 4:
+                        return 2;
+                }
+                return 1;
             }
-        };
-        mAdapters.add(popAdapter);
-
-        //新品
-        initTitle("新品", 3);
-        BaseDelegateAdapter newAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(),
-                new LinearLayoutHelper(), R.layout.rv_new_goods_item, newGoods.size(), 4) {
-            @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                SimpleDraweeView ivNewGoods = holder.getView(R.id.iv_discovery_new);
-                ivNewGoods.setImageURI(newGoods.get(position).getPicturePath());
-
-                holder.setText(R.id.tv_discovery_new_name, newGoods.get(position).getCommodityName());
-                holder.setText(R.id.tv_discovery_new_tip, newGoods.get(position).getIndustryName());
-                holder.setText(R.id.tv_discovery_new_time, newGoods.get(position).getModifyTime());
-
-            }
-        };
-        mAdapters.add(newAdapter);
-
-        delegateAdapter.setAdapters(mAdapters);
+        });
+        //间距
+        rvGoods.addItemDecoration(new GridItemDecoration((int) DisplayUtils.dp2px(getParentFragment()
+                .getActivity(), 6), popGoods.size()));
+        rvGoods.setLayoutManager(gridLayoutManager);
+        adapter = new MyRecycleAdapter(getParentFragment().getActivity(), itemList);
+        rvGoods.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                count = 0;
+                LogUtils.log(page1 + "," + page2);
                 if (page1 < pages1 || page2 < pages2) {
                     isLoadMore = true;
                     if (page1 < pages1) {
@@ -257,14 +233,14 @@ public class GoodsFragment extends BaseFragment {
                         count++;
                     }
                 } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();
+                    refreshLayout.finishLoadMore();
                 }
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                refreshLayout.finishRefresh(1000, true);
                 isRefresh = true;
+                count = 0;
                 page1 = 1;
                 page2 = 1;
                 initData("SPECIAL", page1);
@@ -273,24 +249,6 @@ public class GoodsFragment extends BaseFragment {
         });
 
     }
-
-    /**
-     * @param title
-     * @param type  标题
-     */
-    private void initTitle(final String title, int type) {
-        BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(), new LinearLayoutHelper(),
-                R.layout.layout_homepage_title, 1, type) {
-            @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                holder.setText(R.id.tv_home_title, title);
-            }
-        };
-        mAdapters.add(titleAdapter);
-
-    }
-
 
     public static GoodsFragment newInstance() {
         Bundle args = new Bundle();
@@ -304,4 +262,5 @@ public class GoodsFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
 }

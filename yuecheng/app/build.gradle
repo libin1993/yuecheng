@@ -93,4 +93,5 @@ dependencies {
     compile project(':slidingtablayout')
     compile project(':wheelpicker')
     compile project(':appbarbehavior')
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 }

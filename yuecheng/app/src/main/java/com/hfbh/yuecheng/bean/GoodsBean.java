@@ -167,6 +167,8 @@ public class GoodsBean {
          * verifyNum : 0
          */
 
+        private int type;
+        private String title;
         private Object activityDesc;
         private Object berthNo;
         private int buyLimitNum;
@@ -221,6 +223,22 @@ public class GoodsBean {
         private Object startTimeBegin;
         private Object startTimeEnd;
         private int verifyNum;
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
         public Object getActivityDesc() {
             return activityDesc;
