@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,6 +35,7 @@ import com.hfbh.yuecheng.bean.FunctionBean;
 import com.hfbh.yuecheng.bean.GiftBean;
 import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.ChangeMarketActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
@@ -55,6 +57,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import okhttp3.Call;
 
@@ -73,6 +76,8 @@ public class HomepageFragment extends BaseFragment {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.tv_home_location)
     TextView tvHomeLocation;
+    @BindView(R.id.iv_home_scan)
+    ImageView ivHomeScan;
 
 
     private Unbinder unbinder;
@@ -92,14 +97,13 @@ public class HomepageFragment extends BaseFragment {
     private List<DelegateAdapter.Adapter> mAdapters;
     private boolean isRefresh;
 
-
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
+            savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
         unbinder = ButterKnife.bind(this, view);
         initType();
-
         return view;
     }
 
@@ -433,10 +437,28 @@ public class HomepageFragment extends BaseFragment {
         return fragment;
     }
 
+    /**
+     * 刷新页面
+     */
+    public void updateUI() {
+        initType();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
+
+    @OnClick({R.id.tv_home_location, R.id.iv_home_scan})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_home_location:
+                startActivity(new Intent(getActivity(), ChangeMarketActivity.class));
+                break;
+            case R.id.iv_home_scan:
+                break;
+        }
+    }
 }

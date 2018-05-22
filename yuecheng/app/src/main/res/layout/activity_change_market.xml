@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white">
+
+    <include
+        layout="@layout/layout_widget_header"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_city_list"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:background="@android:color/white">
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_market_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="44dp"
+        android:layout_toRightOf="@id/rv_city_list"
+        android:background="@color/gray_ed">
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

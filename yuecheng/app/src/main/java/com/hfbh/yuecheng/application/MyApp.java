@@ -1,6 +1,7 @@
 package com.hfbh.yuecheng.application;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -25,6 +26,8 @@ import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -39,8 +42,11 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class MyApp extends Application {
     public static String appVersion;
     public static String appType = "Android";
-    public static String organizeId = "2";
+    public static String organizeId = "";
     public static String organizeName = "";
+
+    /**打开的activity**/
+    private List<Activity> activities = new ArrayList<Activity>();
 
     static {
         //设置全局的Header构建器

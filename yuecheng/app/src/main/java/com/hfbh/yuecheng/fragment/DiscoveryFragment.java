@@ -90,4 +90,11 @@ public class DiscoveryFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    /**
+     * 刷新页面
+     */
+    public void updateUI() {
+        initTitle();
+    }
 }

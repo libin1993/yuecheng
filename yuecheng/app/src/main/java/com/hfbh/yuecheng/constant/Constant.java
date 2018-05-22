@@ -12,5 +12,6 @@ public class Constant {
     public static final String HOMEPAGE_MODULE = HOST + "/wechat/homepage/queryByCode.json";
     public static final String DISCOVERY_GOODS = HOST + "/wechat/commodity/listCommodity.json";
     public static final String ACTIVITY_LIST = HOST + "/wechat/wechat/signup_activity/list.json";
+    public static final String CHANGE_CITY = HOST + "/wechat/cityConfig/cityList.json";
 
 }

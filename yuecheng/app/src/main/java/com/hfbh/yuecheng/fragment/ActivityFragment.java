@@ -19,6 +19,7 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
@@ -119,7 +120,6 @@ public class ActivityFragment extends BaseFragment {
         } else {
             tabActivity.setTabSpaceEqual(false);
         }
-
         MyFragmentAdapter adapter = new MyFragmentAdapter(getChildFragmentManager(),
                 fragmentList, titleList);
         vpActivity.setOffscreenPageLimit(titleList.size());
@@ -150,5 +150,12 @@ public class ActivityFragment extends BaseFragment {
             case R.id.iv_activity_calendar:
                 break;
         }
+    }
+
+    /**
+     * 刷新页面
+     */
+    public void updateUI() {
+        initTitle();
     }
 }

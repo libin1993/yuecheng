@@ -8,7 +8,7 @@
                 android:fitsSystemWindows="true">
 
     <include
-        layout="@layout/layout_header"/>
+        layout="@layout/layout_widget_header"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

@@ -108,7 +108,7 @@ public class GoodsFragment extends BaseFragment {
                     public void onResponse(String response, int id) {
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
 
-                        if (goodsBean.isFlag()) {
+                        if (goodsBean.isFlag() && goodsBean.getData().size() > 0) {
                             switch (type) {
                                 case "SPECIAL":
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {

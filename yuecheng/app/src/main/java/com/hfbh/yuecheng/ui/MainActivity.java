@@ -1,11 +1,13 @@
 package com.hfbh.yuecheng.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RadioGroup;
@@ -13,12 +15,14 @@ import android.widget.RadioGroup;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.bean.LocationBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.ActivityFragment;
 import com.hfbh.yuecheng.fragment.DiscoveryFragment;
 import com.hfbh.yuecheng.fragment.HomepageFragment;
 import com.hfbh.yuecheng.fragment.MineFragment;
+import com.hfbh.yuecheng.utils.AppManagerUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LocationUtils;
@@ -30,6 +34,9 @@ import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +59,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
 
-    private List<Fragment> fragmentList = new ArrayList<>();
-    private FragmentTabUtils fragmentUtils;
+
     //退出应用
     private long exitTime = 0;
     //读写权限，相机权限
@@ -63,13 +69,27 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private String longitude = "";
     //纬度
     private String latitude = "";
+    private List<Fragment> fragmentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        requestPermission();
+        EventBus.getDefault().register(this);
+        getData();
+
+    }
+
+    private void getData() {
+        exitTime = 0;
+        Intent intent = getIntent();
+        boolean isChangeCity = intent.getBooleanExtra("change_market", false);
+        if (isChangeCity) {
+            initView();
+        } else {
+            requestPermission();
+        }
     }
 
     private void requestPermission() {
@@ -96,6 +116,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      * 获取商场id ,hash值
      */
     private void initData() {
+
         loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
         loadingView.setIndicatorColor(Color.GRAY);
         loadingView.smoothToShow();
@@ -112,11 +133,10 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log(s);
                         loadingView.smoothToHide();
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
-//                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
+                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
                             MyApp.organizeName = locationBean.getData().getOrganizeName();
                             String hash = locationBean.getHash();
                             SharedPreUtils.saveStr(MainActivity.this, "hash", hash);
@@ -131,12 +151,12 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      * 加载视图
      */
     private void initView() {
-
+        fragmentList = new ArrayList<>();
         fragmentList.add(HomepageFragment.newInstance());
         fragmentList.add(ActivityFragment.newInstance());
         fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
-        fragmentUtils = new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
+        new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
                 R.id.fl_main_container, rgsMainTab);
     }
 
@@ -170,12 +190,26 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 ToastUtils.showToast(getApplicationContext(), "再按一次退出程序");
                 exitTime = System.currentTimeMillis();
             } else {
-                finish();
-                System.exit(0);
+                AppManagerUtils.getInstance().exitApp();
             }
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 切换商城,刷新页面
+     */
+    @Subscribe
+    public void changeMarket(String msg) {
+        if ("change_market".equals(msg)) {
+//            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }
