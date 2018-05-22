@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:fitsSystemWindows="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+    <include
+        layout="@layout/layout_widget_header"/>
+
+    <EditText
+        android:id="@+id/et_search_market"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/bound_gray_f5"
+        android:drawableLeft="@mipmap/ic_search_market"
+        android:drawablePadding="7dp"
+        android:hint="输入店铺名称搜索"
+        android:paddingLeft="7dp"
+        android:textColor="@color/gray_10"
+        android:textColorHint="@color/gray_99"
+        android:textSize="14sp"/>
+
+    <View
+        android:id="@+id/view_search_market"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/et_search_market"
+        android:background="@color/gray_ed"/>
+
+    <LinearLayout
+        android:id="@+id/ll_search_market"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@id/view_search_market"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_market_type"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:drawablePadding="5dp"
+                android:drawableRight="@mipmap/ic_triangle_graydown"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:textColor="@color/gray_15"
+                android:textSize="15sp"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/gray_ed"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_market_floor"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:drawablePadding="5dp"
+                android:drawableRight="@mipmap/ic_triangle_graydown"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+
+                android:textColor="@color/gray_15"
+                android:textSize="15sp"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/layout_refresh_market"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_search_market"
+        android:background="@color/gray_ed">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_search_market_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <TextView
+        android:id="@+id/tv_no_market"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="暂无数据"
+        android:textColor="@color/gray_10"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <include
+        layout="@layout/layout_loading"/>
+</RelativeLayout>

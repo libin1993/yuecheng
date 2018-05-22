@@ -87,7 +87,7 @@ dependencies {
     compile('com.alibaba.android:vlayout:1.2.8@aar') {
         transitive = true
     }
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
 
     compile project(':photopicker')
     compile project(':slidingtablayout')

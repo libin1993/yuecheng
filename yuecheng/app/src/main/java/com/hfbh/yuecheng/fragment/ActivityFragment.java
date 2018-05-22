@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -19,7 +20,6 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
@@ -53,6 +53,8 @@ public class ActivityFragment extends BaseFragment {
     ViewPager vpActivity;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
+    @BindView(R.id.iv_header_back)
+    ImageView ivHeaderBack;
 
     private Unbinder unbinder;
 
@@ -72,6 +74,7 @@ public class ActivityFragment extends BaseFragment {
      */
     private void initTitle() {
         tvHeaderTitle.setText("活动");
+        ivHeaderBack.setVisibility(View.GONE);
         loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
         loadingView.setIndicatorColor(Color.GRAY);
         loadingView.smoothToShow();
@@ -152,10 +155,4 @@ public class ActivityFragment extends BaseFragment {
         }
     }
 
-    /**
-     * 刷新页面
-     */
-    public void updateUI() {
-        initTitle();
-    }
 }

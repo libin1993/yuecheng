@@ -14,6 +14,7 @@
         android:textSize="18sp"/>
 
     <View
+        android:id="@+id/view_header_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
@@ -26,7 +27,6 @@
         android:paddingLeft="10dp"
         android:paddingRight="30dp"
         android:scaleType="center"
-        android:src="@mipmap/icon_back_gray"
-        android:visibility="gone"/>
+        android:src="@mipmap/icon_back_gray"/>
 
 </RelativeLayout>

@@ -91,10 +91,4 @@ public class DiscoveryFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    /**
-     * 刷新页面
-     */
-    public void updateUI() {
-        initTitle();
-    }
 }

@@ -69,16 +69,14 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private String longitude = "";
     //纬度
     private String latitude = "";
-    private List<Fragment> fragmentList;
+    private List<Fragment> fragmentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
         getData();
-
     }
 
     private void getData() {
@@ -136,7 +134,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                         loadingView.smoothToHide();
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
-                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
+//                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
                             MyApp.organizeName = locationBean.getData().getOrganizeName();
                             String hash = locationBean.getHash();
                             SharedPreUtils.saveStr(MainActivity.this, "hash", hash);
@@ -151,7 +149,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      * 加载视图
      */
     private void initView() {
-        fragmentList = new ArrayList<>();
+
         fragmentList.add(HomepageFragment.newInstance());
         fragmentList.add(ActivityFragment.newInstance());
         fragmentList.add(DiscoveryFragment.newInstance());
@@ -197,19 +195,4 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         return super.onKeyDown(keyCode, event);
     }
 
-    /**
-     * 切换商城,刷新页面
-     */
-    @Subscribe
-    public void changeMarket(String msg) {
-        if ("change_market".equals(msg)) {
-//            finish();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
 }

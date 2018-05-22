@@ -42,7 +42,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class MyApp extends Application {
     public static String appVersion;
     public static String appType = "Android";
-    public static String organizeId = "";
+    public static String organizeId = "2";
     public static String organizeName = "";
 
     /**打开的activity**/

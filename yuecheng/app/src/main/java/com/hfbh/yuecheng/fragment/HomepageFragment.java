@@ -36,6 +36,7 @@ import com.hfbh.yuecheng.bean.GiftBean;
 import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
+import com.hfbh.yuecheng.ui.SearchMarketActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
@@ -47,6 +48,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -276,6 +278,29 @@ public class HomepageFragment extends BaseFragment {
                 };
 
                 rvFunction.setAdapter(adapter);
+                adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                        switch (functionBean.getData().get(position).getFunctionCode()) {
+                            case "STORE"://找店铺
+                                startActivity(new Intent(getActivity(), SearchMarketActivity.class));
+                                break;
+                            case "SHOPPING"://我要买
+                                break;
+                            case "GUIDING"://室内导航
+                                break;
+                            case "PLAYING"://我要玩
+                                break;
+                            case "MEMBER_CODE"://会员吗
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                        return false;
+                    }
+                });
 
             }
         };
@@ -437,12 +462,6 @@ public class HomepageFragment extends BaseFragment {
         return fragment;
     }
 
-    /**
-     * 刷新页面
-     */
-    public void updateUI() {
-        initType();
-    }
 
     @Override
     public void onDestroyView() {

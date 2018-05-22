@@ -28,8 +28,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +58,6 @@ public class ChangeMarketActivity extends BaseActivity {
         setContentView(R.layout.activity_change_market);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("商场切换");
-        ivHeaderBack.setVisibility(View.VISIBLE);
         initData();
     }
 
@@ -167,8 +164,8 @@ public class ChangeMarketActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 int currentMarket = holder.getLayoutPosition();
-                MyApp.organizeId = String.valueOf(cityBean.getData().get(currentCity)
-                        .getOrganizeList().get(currentMarket).getOrganizeId());
+//                MyApp.organizeId = String.valueOf(cityBean.getData().get(currentCity)
+//                        .getOrganizeList().get(currentMarket).getOrganizeId());
                 MyApp.organizeName = cityBean.getData().get(currentCity)
                         .getOrganizeList().get(currentMarket).getOrganizeName();
                 EventBus.getDefault().post("change_market");

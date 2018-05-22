@@ -76,6 +76,7 @@
 
         <activity android:name=".ui.SplashActivity"/>
         <activity android:name=".ui.ChangeMarketActivity"/>
+        <activity android:name=".ui.SearchMarketActivity"/>
     </application>
 
 </manifest>
