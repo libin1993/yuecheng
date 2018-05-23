@@ -36,7 +36,8 @@ import com.hfbh.yuecheng.bean.GiftBean;
 import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
-import com.hfbh.yuecheng.ui.SearchMarketActivity;
+import com.hfbh.yuecheng.ui.MemberCardActivity;
+import com.hfbh.yuecheng.ui.SearchShopActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
@@ -114,8 +115,7 @@ public class HomepageFragment extends BaseFragment {
      */
     private void initType() {
         tvHomeLocation.setText(MyApp.organizeName);
-        loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
-        loadingView.setIndicatorColor(Color.GRAY);
+
         loadingView.smoothToShow();
         OkHttpUtils.post()
                 .url(Constant.HOMEPAGE_TYPE)
@@ -283,7 +283,7 @@ public class HomepageFragment extends BaseFragment {
                     public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                         switch (functionBean.getData().get(position).getFunctionCode()) {
                             case "STORE"://找店铺
-                                startActivity(new Intent(getActivity(), SearchMarketActivity.class));
+                                startActivity(new Intent(getActivity(), SearchShopActivity.class));
                                 break;
                             case "SHOPPING"://我要买
                                 break;
@@ -291,7 +291,8 @@ public class HomepageFragment extends BaseFragment {
                                 break;
                             case "PLAYING"://我要玩
                                 break;
-                            case "MEMBER_CODE"://会员吗
+                            case "MEMBER_CODE"://会员码
+                                startActivity(new Intent(getActivity(), MemberCardActivity.class));
                                 break;
                         }
                     }

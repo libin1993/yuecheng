@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_red_ver"
+                android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:id="@+id/rl_member_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/iv_member_back"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:scaleType="fitStart"
+            android:src="@mipmap/ic_back_white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="电子会员卡"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+    </RelativeLayout>
+
+    <RadioGroup
+        android:id="@+id/rgs_member_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="4dp"
+            android:drawableTop="@drawable/selector_member_code"
+            android:text="会员码"
+            android:textColor="@color/rgs_code_color"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:button="@null"/>
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="4dp"
+            android:drawableTop="@drawable/selector_pay_code"
+            android:text="付款码"
+            android:textColor="@color/rgs_code_color"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:button="@null"/>
+    </RadioGroup>
+
+    <FrameLayout
+        android:id="@+id/fl_member_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_member_code"
+        android:layout_marginTop="35dp"/>
+
+</RelativeLayout>

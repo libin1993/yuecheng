@@ -88,10 +88,12 @@ dependencies {
         transitive = true
     }
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
-
     compile project(':photopicker')
     compile project(':slidingtablayout')
     compile project(':wheelpicker')
     compile project(':appbarbehavior')
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile files('libs/barcode4j-2.1.jar')
+    compile files('libs/jbarcode-0.2.8.jar')
+    compile 'com.google.zxing:core:3.3.2'
 }

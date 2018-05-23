@@ -75,8 +75,6 @@ public class ActivityFragment extends BaseFragment {
     private void initTitle() {
         tvHeaderTitle.setText("活动");
         ivHeaderBack.setVisibility(View.GONE);
-        loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
-        loadingView.setIndicatorColor(Color.GRAY);
         loadingView.smoothToShow();
         OkHttpUtils.get()
                 .url(Constant.ACTIVITY_LIST)

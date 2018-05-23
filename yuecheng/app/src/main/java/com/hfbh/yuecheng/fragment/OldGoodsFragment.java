@@ -84,8 +84,6 @@ public class OldGoodsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_goods, container, false);
         unbinder = ButterKnife.bind(this, view);
-        loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
-        loadingView.setIndicatorColor(Color.GRAY);
         loadingView.smoothToShow();
         initData("SPECIAL", page1);
         initData("FIRSTLOOK", page2);

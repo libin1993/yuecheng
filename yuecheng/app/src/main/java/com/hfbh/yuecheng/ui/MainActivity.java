@@ -3,6 +3,7 @@ package com.hfbh.yuecheng.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.hfbh.yuecheng.R;
@@ -23,6 +25,7 @@ import com.hfbh.yuecheng.fragment.DiscoveryFragment;
 import com.hfbh.yuecheng.fragment.HomepageFragment;
 import com.hfbh.yuecheng.fragment.MineFragment;
 import com.hfbh.yuecheng.utils.AppManagerUtils;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LocationUtils;
@@ -69,7 +72,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private String longitude = "";
     //纬度
     private String latitude = "";
-    private List<Fragment> fragmentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +117,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      */
     private void initData() {
 
-        loadingView.setIndicator(new BallSpinFadeLoaderIndicator());
-        loadingView.setIndicatorColor(Color.GRAY);
         loadingView.smoothToShow();
         OkHttpUtils.post()
                 .url(Constant.LOCATION)
@@ -149,13 +149,38 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      * 加载视图
      */
     private void initView() {
-
+        initIcon();
+        List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(HomepageFragment.newInstance());
         fragmentList.add(ActivityFragment.newInstance());
         fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
         new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
                 R.id.fl_main_container, rgsMainTab);
+    }
+
+    /**
+     * 初始化icon
+     */
+    private void initIcon() {
+        int width = (int) DisplayUtils.dp2px(this, 22);
+        int height = (int) DisplayUtils.dp2px(this, 20);
+        Drawable drawableHome = getResources().getDrawable(R.drawable.selector_homepage_tab);
+        drawableHome.setBounds(0, 0, width, height);
+        ((RadioButton) rgsMainTab.getChildAt(0)).setCompoundDrawables(null, drawableHome, null, null);
+
+        Drawable drawableActivity = getResources().getDrawable(R.drawable.selector_activity_tab);
+        drawableActivity.setBounds(0, 0, width, height);
+        ((RadioButton) rgsMainTab.getChildAt(1)).setCompoundDrawables(null, drawableActivity, null, null);
+
+        Drawable drawableDiscovery = getResources().getDrawable(R.drawable.selector_discovery_tab);
+        drawableDiscovery.setBounds(0, 0, width, height);
+        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableDiscovery, null, null);
+
+        Drawable drawableMine = getResources().getDrawable(R.drawable.selector_mine_tab);
+        drawableMine.setBounds(0, 0, width, height);
+        ((RadioButton) rgsMainTab.getChildAt(3)).setCompoundDrawables(null, drawableMine, null, null);
+
     }
 
     @Override

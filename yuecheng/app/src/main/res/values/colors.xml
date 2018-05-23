@@ -31,4 +31,8 @@
     <color name="gray_f5">#F5F5F5</color>
     <color name="gray_15">#151515</color>
     <color name="gray_1a">#1A1A1A</color>
+    <color name="yellow_ff">#FFE9C0</color>
+    <color name="gray_4b">#4B360D</color>
+    <color name="blue_a4">#4A90E2</color>
+    <color name="pink_e3">#E39999</color>
 </resources>

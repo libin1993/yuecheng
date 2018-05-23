@@ -42,7 +42,7 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
         this.fragmentManager = fragmentManager;
         this.flContainerId = flContainerId;
 
-        initIcon();
+//        initIcon();
         rgs.setOnCheckedChangeListener(this);
 
         ((RadioButton) rgs.getChildAt(0)).setChecked(true);
