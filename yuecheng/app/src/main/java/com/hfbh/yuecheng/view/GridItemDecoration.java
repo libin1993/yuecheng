@@ -32,7 +32,6 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
             } else {
                 outRect.set(mSpace * 2, 0, mSpace, 0);
             }
-
         }else {
             outRect.set(0, 0, 0, 0);
         }

@@ -99,4 +99,5 @@ public class MemberCardActivity extends BaseActivity {
     public void onViewClicked() {
         finish();
     }
+
 }

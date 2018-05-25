@@ -7,7 +7,8 @@ import java.io.Serializable;
  * Email：1993911441@qq.com
  * Describe：
  */
-public class MemberCodeBean implements Serializable{
+public class MemberCodeBean implements Serializable {
+    public static final long serialVersionUID = 222L;
 
     /**
      * flag : true
@@ -53,7 +54,8 @@ public class MemberCodeBean implements Serializable{
         this.code = code;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
+        public static final long serialVersionUID = 224454652L;
         /**
          * accountBalance : 0
          * cardLevel : null

@@ -3,13 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="transparent">#00000000</color>
     <color name="gray_ed">#EDEDED</color>
     <color name="gray_aa">#AAAAAA</color>
     <color name="gray_22">#222222</color>
     <color name="gray_10">#101010</color>
     <color name="red_99">#990000</color>
     <color name="gray_95">#957E5E</color>
-    <color name="gray_00">#000000</color>
     <color name="gray_e0">#E0BE8D</color>
     <color name="gray_33">#333333</color>
     <color name="gray_99">#999999</color>
@@ -35,4 +35,17 @@
     <color name="gray_4b">#4B360D</color>
     <color name="blue_a4">#4A90E2</color>
     <color name="pink_e3">#E39999</color>
+    <color name="yellow_e4">#E4C995</color>
+    <color name="gray_ee">#EEEEEE</color>
+    <color name="yellow_ff5">#FFF5E4</color>
+    <color name="yellow_f2e2">#F2E2CC</color>
+    <color name="gray_e1">#E1C08F</color>
+    <color name="green_b4">#B4EC51</color>
+    <color name="green_42">#429321</color>
+    <color name="gray_f7">#F7E9D3</color>
+    <color name="red_d9">#D90000</color>
+    <color name="orange_e0">#E0BE8D</color>
+    <color name="gray_c9">#C98D8D</color>
+    <color name="black_99">#996B6B</color>
+    <color name="green_59">#59B300</color>
 </resources>

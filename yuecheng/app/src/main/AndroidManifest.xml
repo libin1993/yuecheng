@@ -79,6 +79,15 @@
         <activity android:name=".ui.SearchShopActivity"/>
         <activity android:name=".ui.MemberCardActivity"/>
         <activity android:name=".ui.ShopDetailActivity"/>
+        <activity android:name=".ui.NowActionActivity"/>
+        <activity android:name=".ui.CalendarActivity"/>
+        <activity android:name=".ui.ExchangeGiftActivity"/>
+        <activity android:name=".ui.GiftDetailActivity"/>
+        <activity android:name=".ui.LoginActivity"/>
+        <activity android:name=".ui.ExchangeCouponActivity"/>
+        <activity android:name=".ui.CouponDetailActivity"/>
+        <activity android:name=".ui.PopGoodsActivity"/>
+        <activity android:name=".ui.NewGoodsActivity"/>
     </application>
 
 </manifest>

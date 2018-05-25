@@ -2,6 +2,7 @@ package com.hfbh.yuecheng.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.bean.GoodsBean;
+import com.hfbh.yuecheng.ui.NewGoodsActivity;
+import com.hfbh.yuecheng.ui.PopGoodsActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
@@ -48,6 +51,12 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (viewType) {
             case 1:
                 View view1 = mInflater.inflate(R.layout.layout_homepage_title, parent, false);
+                view1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mContext.startActivity(new Intent(mContext, PopGoodsActivity.class));
+                    }
+                });
                 return new ViewHolder1(view1);
             case 2:
                 View view2 = mInflater.inflate(R.layout.rv_pop_goods_item, parent, false);
@@ -60,6 +69,12 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return new ViewHolder2(view2);
             case 3:
                 View view3 = mInflater.inflate(R.layout.layout_homepage_title, parent, false);
+                view3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mContext.startActivity(new Intent(mContext, NewGoodsActivity.class));
+                    }
+                });
                 return new ViewHolder3(view3);
             case 4:
                 View view4 = mInflater.inflate(R.layout.rv_new_goods_item, parent, false);
@@ -130,6 +145,8 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolder1(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_home_title);
+
+
         }
     }
 
@@ -141,12 +158,10 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public ViewHolder2(View itemView) {
             super(itemView);
-
             ivPop = (ImageView) itemView.findViewById(R.id.iv_discovery_pop);
             tvName = (TextView) itemView.findViewById(R.id.tv_discovery_pop_name);
             tvPrice = (TextView) itemView.findViewById(R.id.tv_discovery_pop_price);
             tvOld = (TextView) itemView.findViewById(R.id.tv_discovery_pop_original);
-
         }
     }
 

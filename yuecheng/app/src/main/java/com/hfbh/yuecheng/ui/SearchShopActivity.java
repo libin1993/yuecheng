@@ -275,7 +275,7 @@ public class SearchShopActivity extends BaseActivity {
                     page++;
                     initData();
                 } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();
+                    refreshLayout.finishLoadMore();
                 }
             }
 

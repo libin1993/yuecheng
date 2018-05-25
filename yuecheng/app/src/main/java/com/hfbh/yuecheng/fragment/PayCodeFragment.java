@@ -14,6 +14,7 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.MemberCodeBean;
 import com.hfbh.yuecheng.utils.BarcodeUtils;
+import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 
@@ -123,14 +124,15 @@ public class PayCodeFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        recycleBitmap();
+    }
 
-        if (barBmp != null) {
-            barBmp.recycle();
-            barBmp = null;
-        }
-        if (qrBmp != null) {
-            qrBmp.recycle();
-            qrBmp = null;
-        }
+
+    /**
+     * bitmap回收
+     */
+    private void recycleBitmap() {
+        DataManagerUtils.recycleBmp(barBmp);
+        DataManagerUtils.recycleBmp(qrBmp);
     }
 }

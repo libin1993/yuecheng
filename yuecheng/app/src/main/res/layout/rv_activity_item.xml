@@ -23,8 +23,8 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="10.5dp"
-        android:textColor="@color/gray_33"
         android:singleLine="true"
+        android:textColor="@color/gray_33"
         android:textSize="15sp"/>
 
     <com.hfbh.yuecheng.view.FlowLayout
@@ -39,25 +39,32 @@
         android:id="@+id/tv_home_activity_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/flow_home_activity"
         android:layout_marginBottom="11dp"
         android:layout_marginLeft="12dp"
-        android:textColor="@color/gray_99"
-        android:layout_below="@id/flow_home_activity"
         android:layout_marginTop="4dp"
+        android:textColor="@color/gray_99"
         android:textSize="12sp"/>
 
     <TextView
         android:id="@+id/tv_home_activity_receive"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="13sp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:background="@drawable/bound_red_15dp"
+        android:layout_alignBottom="@id/tv_home_activity_time"
         android:layout_alignParentRight="true"
         android:layout_marginRight="12dp"
-        android:layout_alignBottom="@id/tv_home_activity_time"/>
+        android:background="@drawable/bound_red_15dp"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_below="@id/tv_home_activity_time"
+        android:layout_marginTop="11dp"
+        android:background="@color/gray_ed"/>
 
 </RelativeLayout>

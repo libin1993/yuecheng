@@ -72,12 +72,14 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private String longitude = "";
     //纬度
     private String latitude = "";
+    private FragmentTabUtils fragmentTabUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         getData();
     }
 
@@ -155,7 +157,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         fragmentList.add(ActivityFragment.newInstance());
         fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
-        new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
+        fragmentTabUtils = new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
                 R.id.fl_main_container, rgsMainTab);
     }
 
@@ -220,4 +222,16 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void init(String msg) {
+        if ("activity".equals(msg)) {
+            fragmentTabUtils.setCurrentFragment(1);
+        }
+    }
 }

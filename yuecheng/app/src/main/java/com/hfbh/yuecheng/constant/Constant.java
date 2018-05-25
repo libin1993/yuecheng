@@ -17,6 +17,13 @@ public class Constant {
     public static final String SHOP_MORE = HOST + "/wechat/shop/loadMoreShop.json";
     public static final String SHOP_DETAIL = HOST + "/wechat/shop/shopDetail.json";
     public static final String QR_CODE = "https://pan.baidu.com/share/qrcode?w=150&h=150&url=http://www.xsyrz.cn";
-    public static final String MEMBER_CODE =  HOST + "/wechat/member/queryMember.json";
-    public static final String PAY_CODE =  HOST + "/wechat/scanCodePay/queryOrder.json";
+    public static final String MEMBER_CODE = HOST + "/wechat/member/queryMember.json";
+    public static final String PAY_CODE = HOST + "/wechat/scanCodePay/queryOrder.json";
+    public static final String EXCHANGE_GIFT_LIST = HOST + "/wechat/pointsReward/list.json";
+    public static final String GIFT_INFO = HOST + "/wechat/pointsReward/info.json";
+    public static final String EXCHANGE_GIFT = HOST + "/wechat/pointsReward/exchange.json";
+    public static final String REGISTER = HOST + "/wechat/appRequest/register.json";
+    public static final String IS_REGISTER = HOST + "/wechat/appRequest/queryByPhone.json";
+    public static final String UPDATE_PWD = HOST + "/wechat/appRequest/updatePwd.json";
+    public static final String LOGIN = HOST + "/wechat/appRequest/appLogin.json";
 }

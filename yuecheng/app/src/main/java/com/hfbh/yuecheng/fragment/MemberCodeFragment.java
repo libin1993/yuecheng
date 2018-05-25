@@ -15,6 +15,7 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.MemberCodeBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.BarcodeUtils;
+import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -69,12 +70,12 @@ public class MemberCodeFragment extends BaseFragment {
         qrBmp = QRCodeUtils.createQRCode(String.valueOf(memberId),
                 (int) DisplayUtils.dp2px(getActivity(), 200));
         ivMemberQrcode.setImageBitmap(qrBmp);
-        tvMemberQrcode.setText("卡号："+memberId);
+        tvMemberQrcode.setText("卡号：" + memberId);
     }
 
     public static MemberCodeFragment newInstance(MemberCodeBean memberCodeBean) {
         Bundle args = new Bundle();
-        args.putSerializable("member_code",memberCodeBean);
+        args.putSerializable("member_code", memberCodeBean);
         MemberCodeFragment fragment = new MemberCodeFragment();
         fragment.setArguments(args);
         return fragment;
@@ -85,13 +86,14 @@ public class MemberCodeFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
 
-        if (barBmp != null){
-            barBmp.recycle();
-            barBmp = null;
-        }
-        if (qrBmp != null){
-            qrBmp.recycle();
-            qrBmp = null;
-        }
+        recycleBitmap();
+    }
+
+    /**
+     * bitmap回收
+     */
+    private void recycleBitmap() {
+        DataManagerUtils.recycleBmp(barBmp);
+        DataManagerUtils.recycleBmp(qrBmp);
     }
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
@@ -36,6 +37,10 @@ import com.hfbh.yuecheng.bean.GiftBean;
 import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
+import com.hfbh.yuecheng.ui.CouponDetailActivity;
+import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
+import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
+import com.hfbh.yuecheng.ui.GiftDetailActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
@@ -53,6 +58,8 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -314,7 +321,7 @@ public class HomepageFragment extends BaseFragment {
         BaseDelegateAdapter couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.rv_coupon_item, couponBean.getData().size(), 4) {
             @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
+            public void onBindViewHolder(ViewHolder holder, final int position) {
                 super.onBindViewHolder(holder, position);
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_coupon);
                 ivCoupon.setImageURI(couponBean.getData().get(position).getCouponImage());
@@ -330,12 +337,21 @@ public class HomepageFragment extends BaseFragment {
                 } else {
                     tvReceive.setText("免费\n领取");
                 }
+                RelativeLayout rlCoupon = holder.getView(R.id.rl_coupon_item);
+                rlCoupon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
+                        intent.putExtra("coupon_id", giftBean.getData().get(position).getObjectId());
+                        startActivity(intent);
+                    }
+                });
             }
         };
         mAdapters.add(couponAdapter);
 
         //积分兑换
-        initTitle("积分兑换", 5);
+        initTitle("积分兑礼", 5);
 
         GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
         gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getActivity(), 12),
@@ -349,7 +365,7 @@ public class HomepageFragment extends BaseFragment {
             final int width = (int) ((widthPixels - DisplayUtils.dp2px(getActivity(), 35)) / 2);
 
             @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
+            public void onBindViewHolder(ViewHolder holder, final int position) {
                 super.onBindViewHolder(holder, position);
                 ImageView ivGift = holder.getView(R.id.iv_home_gift);
                 ViewGroup.LayoutParams layoutParams = ivGift.getLayoutParams();
@@ -363,6 +379,15 @@ public class HomepageFragment extends BaseFragment {
                         .into(ivGift);
                 holder.setText(R.id.tv_home_gift_name, giftBean.getData().get(position).getRelateName());
                 holder.setText(R.id.tv_home_gift_score, giftBean.getData().get(position).getNeedScore() + "积分");
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), GiftDetailActivity.class);
+                        intent.putExtra("gift_id", giftBean.getData().get(position).getObjectId());
+                        startActivity(intent);
+                    }
+                });
             }
         };
         mAdapters.add(giftAdapter);
@@ -370,7 +395,7 @@ public class HomepageFragment extends BaseFragment {
         //精彩活动
         initTitle("精彩活动", 7);
         GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
-        gridLayoutHelper1.setVGap((int) DisplayUtils.dp2px(getActivity(), 5));// 控制子元素之间的水平间距
+//        gridLayoutHelper1.setVGap((int) DisplayUtils.dp2px(getActivity(), 5));// 控制子元素之间的水平间距
 
         BaseDelegateAdapter activityAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper1,
                 R.layout.rv_activity_item, activityBean.getData().size(), 8) {
@@ -443,13 +468,32 @@ public class HomepageFragment extends BaseFragment {
      * @param title
      * @param type  标题
      */
-    private void initTitle(final String title, int type) {
+    private void initTitle(final String title, final int type) {
         BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.layout_homepage_title, 1, type) {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
-                holder.setText(R.id.tv_home_title, title);
+                TextView tvTitle = holder.getView(R.id.tv_home_title);
+                tvTitle.setText(title);
+
+                tvTitle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (type) {
+                            case 3:
+                                startActivity(new Intent(getActivity(), ExchangeCouponActivity.class));
+                                break;
+                            case 5:
+                                startActivity(new Intent(getActivity(), ExchangeGiftActivity.class));
+                                break;
+                            case 7:
+                                EventBus.getDefault().post("activity");
+                                break;
+                        }
+                    }
+                });
+
             }
         };
         mAdapters.add(titleAdapter);

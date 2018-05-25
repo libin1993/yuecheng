@@ -108,7 +108,7 @@ public class GiftBean {
         private Object endTime;
         private Object endTimeStr;
         private String giftPicturePath;
-        private Object id;
+        private int id;
         private Object limitNum;
         private Object limitPerDayNum;
         private Object memberBroughtNum;
@@ -262,11 +262,11 @@ public class GiftBean {
             this.giftPicturePath = giftPicturePath;
         }
 
-        public Object getId() {
+        public int getId() {
             return id;
         }
 
-        public void setId(Object id) {
+        public void setId(int id) {
             this.id = id;
         }
 

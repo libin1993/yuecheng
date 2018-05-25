@@ -18,37 +18,55 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/iv_home_coupon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            fresco:actualImageScaleType="centerCrop"
-            fresco:roundAsCircle="true"/>
-
-        <TextView
-            android:id="@+id/tv_home_coupon_title"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/rl_coupon_item"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
-            android:layout_marginTop="19dp"
-            android:layout_toRightOf="@id/iv_home_coupon"
-            android:textColor="@color/gray_95"
-            android:textSize="13sp"/>
+            android:layout_marginRight="80dp">
 
-        <TextView
-            android:id="@+id/tv_home_coupon_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_home_coupon_title"
-            android:layout_marginLeft="9dp"
-            android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/tv_home_coupon_receive"
-            android:layout_toRightOf="@id/iv_home_coupon"
-            android:singleLine="true"
-            android:textColor="@color/gray_00"
-            android:textSize="16sp"/>
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/iv_home_coupon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                fresco:actualImageScaleType="centerCrop"
+                fresco:roundAsCircle="true"/>
+
+            <TextView
+                android:id="@+id/tv_home_coupon_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="19dp"
+                android:layout_toRightOf="@id/iv_home_coupon"
+                android:textColor="@color/gray_95"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/tv_home_coupon_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_home_coupon_title"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/iv_home_coupon"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_home_coupon_remain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="14dp"
+                android:layout_marginRight="9dp"
+                android:textColor="@color/gray_95"
+                android:textSize="13sp"/>
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/tv_home_coupon_receive"
@@ -59,17 +77,6 @@
             android:gravity="center"
             android:textColor="@color/gray_e0"
             android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/tv_home_coupon_remain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="14dp"
-            android:layout_marginRight="9dp"
-            android:layout_toLeftOf="@id/tv_home_coupon_receive"
-            android:textColor="@color/gray_95"
-            android:textSize="13sp"/>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

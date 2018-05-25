@@ -121,7 +121,7 @@ public class ActivityListFragment extends BaseFragment {
                             }
                             svNoActivity.setVisibility(View.GONE);
                         } else {
-                            refreshLayout.finishLoadMoreWithNoMoreData();
+                            refreshLayout.finishLoadMore();
                             if (page == 1) {
                                 svNoActivity.setVisibility(View.VISIBLE);
                             }
@@ -136,9 +136,9 @@ public class ActivityListFragment extends BaseFragment {
     private void initView() {
         rvActivity.setLayoutManager(new LinearLayoutManager(getParentFragment().getActivity()));
         //添加自定义分割线
-        SpaceItemDecoration divider = new SpaceItemDecoration((int) DisplayUtils.dp2px(
-                getParentFragment().getActivity(), 10), counts);
-        rvActivity.addItemDecoration(divider);
+//        SpaceItemDecoration divider = new SpaceItemDecoration((int) DisplayUtils.dp2px(
+//                getParentFragment().getActivity(), 10), counts);
+//        rvActivity.addItemDecoration(divider);
         adapter = new CommonAdapter<ActivityListBean.DataBean>
                 (getParentFragment().getActivity(), R.layout.rv_activity_item, dataList) {
             @Override
@@ -176,7 +176,7 @@ public class ActivityListFragment extends BaseFragment {
                     page++;
                     initData();
                 } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();
+                    refreshLayout.finishLoadMore();
                 }
             }
 

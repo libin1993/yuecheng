@@ -26,7 +26,7 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
         super.getItemOffsets(outRect, view, parent, state);
 
         int position = parent.getChildAdapterPosition(view);
-        if (position > 0 && position < counts) {
+        if (position >= 0 && position < counts) {
             outRect.set(0, 0, 0, mSpace);
         }
     }

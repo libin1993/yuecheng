@@ -20,7 +20,7 @@
             android:background="@drawable/gradient_yellow_hor"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="电子会员卡"
+            android:text="电子会员码"
             android:textColor="@color/gray_4b"
             android:textSize="16sp"/>
 
@@ -30,7 +30,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="20dp"
-            android:text="VIP会员卡"
+            android:text="VIP积分卡"
             android:textColor="@color/gray_10"
             android:textSize="16sp"/>
 
@@ -46,8 +46,8 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center_horizontal"
-            android:scaleType="fitCenter"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:scaleType="fitCenter"/>
 
         <TextView
             android:id="@+id/tv_member_qrcode"

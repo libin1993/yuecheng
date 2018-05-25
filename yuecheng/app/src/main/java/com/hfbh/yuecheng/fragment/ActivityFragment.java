@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.NowActionActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -147,6 +149,7 @@ public class ActivityFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_activity_now:
+                startActivity(new Intent(getActivity(), NowActionActivity.class));
                 break;
             case R.id.iv_activity_calendar:
                 break;
