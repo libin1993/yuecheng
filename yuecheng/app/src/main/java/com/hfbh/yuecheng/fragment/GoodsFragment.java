@@ -219,7 +219,6 @@ public class GoodsFragment extends BaseFragment {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 count = 0;
-                LogUtils.log(page1 + "," + page2);
                 if (page1 < pages1 || page2 < pages2) {
                     isLoadMore = true;
                     if (page1 < pages1) {

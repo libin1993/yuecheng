@@ -209,7 +209,6 @@ public class GiftDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         try {
-                            LogUtils.log(response);
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");
                             if (flag) {

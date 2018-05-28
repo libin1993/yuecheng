@@ -64,7 +64,6 @@ public class NowActionActivity extends BaseActivity {
     //总页数
     private int pages;
     //活动总数量
-    private int counts;
     private CommonAdapter<ActivityListBean.DataBean> adapter;
 
     @Override
@@ -100,7 +99,6 @@ public class NowActionActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         pages = activityListBean.getPage().getPages();
-                        counts = activityListBean.getPage().getTotal();
                         if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
                             if (isRefresh) {
                                 dataList.clear();
@@ -131,10 +129,6 @@ public class NowActionActivity extends BaseActivity {
      */
     private void initView() {
         rvActivity.setLayoutManager(new LinearLayoutManager(this));
-        //添加自定义分割线
-//        SpaceItemDecoration divider = new SpaceItemDecoration((int) DisplayUtils.dp2px(
-//                this, 10), counts);
-//        rvActivity.addItemDecoration(divider);
         adapter = new CommonAdapter<ActivityListBean.DataBean>
                 (this, R.layout.rv_activity_item, dataList) {
             @Override

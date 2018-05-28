@@ -147,7 +147,6 @@ public class OldGoodsFragment extends BaseFragment {
                                         adapter.notifyDataSetChanged();
                                     }
                                 } else if (isLoadMore) {
-                                    LogUtils.log(rvGoods.getAdapter().getItemCount()+","+popGoods.size() + "," + newGoods.size());
                                     refreshLayout.finishLoadMore();
                                     isLoadMore = false;
                                     for (int j = 0; j < mAdapters.size(); j++) {

@@ -14,4 +14,5 @@
     <string name="score">分</string>
     <string name="receive_card">领取会员卡</string>
     <string name="user_grade">等级</string>
+    <string name="pwd_digits">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
 </resources>

@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="150dp"
-            android:text="暂无数据"
+            android:text="暂无活动"
             android:textColor="@color/gray_10"
             android:textSize="22sp"
             android:textStyle="bold"/>

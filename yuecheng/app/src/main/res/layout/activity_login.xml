@@ -120,7 +120,8 @@
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/gray_f7"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:digits="@string/pwd_digits"/>
 
             <RelativeLayout
                 android:id="@+id/rl_login_code"
@@ -148,7 +149,7 @@
 
             <ImageView
                 android:id="@+id/iv_login_code"
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/view_phone_line"

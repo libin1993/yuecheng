@@ -20,6 +20,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.CalendarActivity;
 import com.hfbh.yuecheng.ui.NowActionActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -152,6 +153,7 @@ public class ActivityFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), NowActionActivity.class));
                 break;
             case R.id.iv_activity_calendar:
+                startActivity(new Intent(getActivity(), CalendarActivity.class));
                 break;
         }
     }
