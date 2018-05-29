@@ -28,4 +28,5 @@ public class Constant {
     public static final String CODE_LOGIN = HOST + "/wechat/member/validatePhone.json";
     public static final String PWD_LOGIN = HOST + "/wechat/appRequest/appLogin.json";
     public static final String SECURITY_CODE = HOST + "/wechat/register/getSecurityCode.json";
+    public static final String USER_INFO = HOST + "/wechat/member/queryMember.json";
 }

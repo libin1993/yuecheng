@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,9 +18,11 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.view.FlowLayout;
 import com.necer.ncalendar.calendar.NCalendar;
 import com.necer.ncalendar.listener.OnCalendarChangedListener;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -127,7 +130,6 @@ public class CalendarActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(date + response);
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         pages = activityListBean.getPage().getPages();
                         if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
@@ -179,10 +181,12 @@ public class CalendarActivity extends BaseActivity {
                     tvReceive.setText("免费报名");
                 }
 
-//                FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
-//                if (flowLayout.getChildCount() == 0) {
-//                    addTextView(flowLayout, dataList.get(position).getTags());
-//                }
+                FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
+                flowLayout.removeAllViews();
+                if (dataBean.getTags() != null && dataBean.getTags().size() > 0){
+                    addTextView(flowLayout, dataBean.getTags());
+                }
+
             }
         };
 
@@ -246,22 +250,23 @@ public class CalendarActivity extends BaseActivity {
      * //     * 动态添加布局
      * //
      */
-//    private void addTextView(FlowLayout flowLayout, List<ActivityListBean.DataBean.> tagsBeans) {
-//
-//        for (int i = 0; i < tagsBeans.size(); i++) {
-//            TextView tvChild = new TextView(getActivity());
-//            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-//            params.setMargins(0, 0, (int) DisplayUtils.dp2px(getActivity(), 6), 0);
-//            tvChild.setLayoutParams(params);
-//            tvChild.setBackgroundResource(R.drawable.flowlayout_item);
-//            tvChild.setText(tagsBeans.get(i).getTagName());
-//            tvChild.setTextSize(12);
-//            tvChild.setTextColor(getActivity().getResources().getColor(R.color.red_e6));
-//
-//            flowLayout.addView(tvChild);
-//        }
-//
-//    }
+    private void addTextView(FlowLayout flowLayout, List<ActivityListBean.DataBean.TagsBean> tagsBeans) {
+
+        for (int i = 0; i < tagsBeans.size(); i++) {
+            TextView tvChild = new TextView(this);
+            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, (int) DisplayUtils.dp2px(this, 6), (int) DisplayUtils.dp2px(this, 2));
+            tvChild.setLayoutParams(params);
+            tvChild.setBackgroundResource(R.drawable.flowlayout_item);
+            tvChild.setText(tagsBeans.get(i).getTagName());
+            tvChild.setTextSize(12);
+            tvChild.setTextColor(getResources().getColor(R.color.red_e6));
+
+            flowLayout.addView(tvChild);
+        }
+
+    }
+
     @OnClick(R.id.iv_back_header)
     public void onViewClicked() {
         finish();

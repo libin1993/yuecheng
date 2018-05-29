@@ -1,25 +1,36 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
+import com.hfbh.yuecheng.bean.UserInfoBean;
+import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.LoginActivity;
+import com.hfbh.yuecheng.ui.MyActionActivity;
+import com.hfbh.yuecheng.ui.MyMemberCardActivity;
+import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.Call;
 
 /**
  * Author：Libin on 2018/5/14 16:10
@@ -35,8 +46,6 @@ public class MineFragment extends BaseFragment {
     TextView tvMineUsername;
     @BindView(R.id.iv_mine_avatar)
     SimpleDraweeView ivMineAvatar;
-    @BindView(R.id.tv_mine_money)
-    LinearLayout tvMineMoney;
     @BindView(R.id.tv_mine_score)
     TextView tvMineScore;
     @BindView(R.id.tv_mine_grade)
@@ -53,14 +62,64 @@ public class MineFragment extends BaseFragment {
     RelativeLayout rlMineActivity;
     @BindView(R.id.rl_mine_tool)
     RelativeLayout rlMineTool;
+    @BindView(R.id.tv_mine_money)
+    TextView tvMineMoney;
     private Unbinder unbinder;
+    private UserInfoBean userInfoBean;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initData();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    private void initData() {
+        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+            OkHttpUtils.post()
+                    .url(Constant.USER_INFO)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("organizeId", MyApp.organizeId)
+                    .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                            if (userInfoBean.isFlag()) {
+                                initView();
+                            }
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 用户信息
+     */
+    private void initView() {
+        tvMineUsername.setText(userInfoBean.getData().getMemberName() + "百大");
+        if (!TextUtils.isEmpty(userInfoBean.getData().getMemberHead())){
+            ivMineAvatar.setImageURI(userInfoBean.getData().getMemberHead());
+        }
+
+        tvMineMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
+        tvMineScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
+        tvMineGrade.setText(userInfoBean.getData().getCardLevel());
     }
 
     public static MineFragment newInstance() {
@@ -70,13 +129,10 @@ public class MineFragment extends BaseFragment {
         return fragment;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
-    @OnClick({R.id.iv_mine_set, R.id.iv_mine_msg, R.id.tv_mine_username, R.id.tv_mine_money, R.id.tv_mine_score, R.id.tv_mine_grade, R.id.rl_mine_paycode, R.id.rl_mine_ticket, R.id.rl_mine_order, R.id.rl_mine_exchange, R.id.rl_mine_activity, R.id.rl_mine_tool})
+    @OnClick({R.id.iv_mine_set, R.id.iv_mine_msg, R.id.tv_mine_username, R.id.tv_mine_money,
+            R.id.tv_mine_score, R.id.tv_mine_grade, R.id.rl_mine_paycode, R.id.rl_mine_ticket,
+            R.id.rl_mine_order, R.id.rl_mine_exchange, R.id.rl_mine_activity, R.id.rl_mine_tool})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_mine_set:
@@ -91,6 +147,7 @@ public class MineFragment extends BaseFragment {
             case R.id.tv_mine_score:
                 break;
             case R.id.tv_mine_grade:
+                toLogin(MyMemberCardActivity.class);
                 break;
             case R.id.rl_mine_paycode:
                 break;
@@ -101,9 +158,29 @@ public class MineFragment extends BaseFragment {
             case R.id.rl_mine_exchange:
                 break;
             case R.id.rl_mine_activity:
+                toLogin(MyActionActivity.class);
                 break;
             case R.id.rl_mine_tool:
                 break;
         }
+    }
+
+    /**
+     * @param cls 是否登录
+     */
+    private void toLogin(Class<?> cls) {
+        Intent intent;
+        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+            intent = new Intent(getActivity(), cls);
+        } else {
+            intent = new Intent(getActivity(), LoginActivity.class);
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

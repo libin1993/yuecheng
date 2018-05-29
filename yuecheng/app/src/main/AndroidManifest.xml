@@ -92,6 +92,10 @@
         <activity android:name=".ui.PopGoodsActivity"/>
         <activity android:name=".ui.NewGoodsActivity"/>
         <activity android:name=".ui.RegisterActivity"/>
+        <activity android:name=".ui.ForgetPwdActivity"/>
+        <activity android:name=".ui.MyActionActivity"/>
+        <activity android:name=".ui.MyMemberCardActivity"/>
+        <activity android:name=".ui.CloseActivity"/>
     </application>
 
 </manifest>

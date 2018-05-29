@@ -1,10 +1,10 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -19,19 +19,23 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.CloseActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
-import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,22 +45,23 @@ import butterknife.Unbinder;
 import okhttp3.Call;
 
 /**
- * Author：Libin on 2018/5/17 14:53
+ * Author：Libin on 2018/5/29 12:49
  * Email：1993911441@qq.com
- * Describe：活动列表
+ * Describe：
  */
-public class ActivityListFragment extends BaseFragment {
-
-    @BindView(R.id.sv_no_activity)
-    NestedScrollView svNoActivity;
-    @BindView(R.id.rv_activity_list)
+public class MyActivityFragment extends BaseFragment {
+    @BindView(R.id.rv_my_activity)
     RecyclerView rvActivity;
-    @BindView(R.id.layout_refresh_activity)
+    @BindView(R.id.layout_refresh_my_activity)
     SmartRefreshLayout refreshLayout;
-
+    @BindView(R.id.view_loading)
+    AVLoadingIndicatorView loadingView;
+    @BindView(R.id.tv_null_activity)
+    TextView tvNullActivity;
     private Unbinder unbinder;
-    //标签id
-    private int tagId;
+
+    //分类
+    private int type;
     private int page = 1;
     //刷新
     private boolean isRefresh;
@@ -65,22 +70,18 @@ public class ActivityListFragment extends BaseFragment {
     private List<ActivityListBean.DataBean> dataList = new ArrayList<>();
     //总页数
     private int pages;
-    //活动总数量
     private CommonAdapter<ActivityListBean.DataBean> adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_activity_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
         initData();
         return view;
     }
 
-    /**
-     * 加载数据
-     */
     private void initData() {
         OkHttpUtils.get()
                 .url(Constant.ACTIVITY_LIST)
@@ -89,7 +90,7 @@ public class ActivityListFragment extends BaseFragment {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
                 .addParams("pageNum", String.valueOf(page))
-                .addParams("tagId", String.valueOf(tagId))
+                .addParams("type", String.valueOf(type))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -119,11 +120,13 @@ public class ActivityListFragment extends BaseFragment {
                             } else {
                                 initView();
                             }
-                            svNoActivity.setVisibility(View.GONE);
+                            rvActivity.setVisibility(View.VISIBLE);
+                            tvNullActivity.setVisibility(View.GONE);
                         } else {
                             refreshLayout.finishLoadMore();
                             if (page == 1) {
-                                svNoActivity.setVisibility(View.VISIBLE);
+                                rvActivity.setVisibility(View.GONE);
+                                tvNullActivity.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -134,35 +137,61 @@ public class ActivityListFragment extends BaseFragment {
      * 加载视图
      */
     private void initView() {
-        rvActivity.setLayoutManager(new LinearLayoutManager(getParentFragment().getActivity()));
-        adapter = new CommonAdapter<ActivityListBean.DataBean>
-                (getParentFragment().getActivity(), R.layout.rv_activity_item, dataList) {
+        rvActivity.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new CommonAdapter<ActivityListBean.DataBean>(getActivity(),
+                R.layout.rv_my_activity_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, ActivityListBean.DataBean dataBean, int position) {
-                SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
+                SimpleDraweeView ivCoupon = holder.getView(R.id.iv_my_activity);
                 ivCoupon.setImageURI(dataBean.getActivityPicture());
-                holder.setText(R.id.tv_home_activity_name, dataBean.getActivityTitle());
-                holder.setText(R.id.tv_home_activity_time, dataBean
+
+                holder.setText(R.id.tv_my_activity_name, dataBean.getActivityTitle());
+                holder.setText(R.id.tv_activity_range, "有效时间： " + dataBean
                         .getStartTimeStr() + " - " + dataBean.getEndTimeStr());
 
-                TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
-                String needScore = (String) dataBean.getVerifyCode();
-                if (!TextUtils.isEmpty(needScore)) {
-                    tvReceive.setText(needScore + "积分报名");
-                } else {
-                    tvReceive.setText("免费报名");
-                }
-
-                FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
+                FlowLayout flowLayout = holder.getView(R.id.flow_my_activity);
                 flowLayout.removeAllViews();
                 if (dataBean.getTags() != null && dataBean.getTags().size() > 0){
                     addTextView(flowLayout, dataBean.getTags());
                 }
+
+                TextView tvCost = holder.getView(R.id.tv_activity_cost);
+                if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
+                    switch (dataBean.getAcivityType()) {
+                        case "NONEED":
+                            break;
+                        case "FREE":
+                            break;
+                        case "SCORE":
+                            tvCost.setText("已报名： " + dataBean.getEnrollScore() + "积分");
+                            break;
+                        case "CASH":
+                            tvCost.setText("已支付： ¥" + dataBean.getEnrollFee());
+                            break;
+                    }
+                }
+
             }
         };
 
 
         rvActivity.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent = new Intent(getActivity(), CloseActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("activity_info",  dataList.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
 
 
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
@@ -195,8 +224,10 @@ public class ActivityListFragment extends BaseFragment {
 
         for (int i = 0; i < tagsBeans.size(); i++) {
             TextView tvChild = new TextView(getActivity());
-            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, (int) DisplayUtils.dp2px(getActivity(), 6), (int) DisplayUtils.dp2px(getActivity(), 2));
+            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
+                    ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, (int) DisplayUtils.dp2px(getActivity(), 6),
+                    (int) DisplayUtils.dp2px(getActivity(), 2));
             tvChild.setLayoutParams(params);
             tvChild.setBackgroundResource(R.drawable.flowlayout_item);
             tvChild.setText(tagsBeans.get(i).getTagName());
@@ -209,14 +240,14 @@ public class ActivityListFragment extends BaseFragment {
     }
 
     private void getData() {
-        Bundle bundle = getArguments();
-        tagId = bundle.getInt("tag_id");
+        type = getArguments().getInt("type");
     }
 
-    public static ActivityListFragment newInstance(int tagId) {
+    public static MyActivityFragment newInstance(int type) {
+
         Bundle args = new Bundle();
-        args.putInt("tag_id", tagId);
-        ActivityListFragment fragment = new ActivityListFragment();
+        args.putInt("type", type);
+        MyActivityFragment fragment = new MyActivityFragment();
         fragment.setArguments(args);
         return fragment;
     }

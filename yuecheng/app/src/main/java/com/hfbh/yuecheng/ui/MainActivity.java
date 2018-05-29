@@ -138,13 +138,16 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                         if (locationBean.isFlag()) {
 //                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
                             MyApp.organizeName = locationBean.getData().getOrganizeName();
-                            String hash = locationBean.getHash();
-                            SharedPreUtils.saveStr(MainActivity.this, "hash", hash);
+                            boolean isLogin = SharedPreUtils.getBoolean(MainActivity.this, "is_login", false);
+                            //是否已经登录
+                            if (!isLogin) {
+                                SharedPreUtils.saveStr(MainActivity.this, "hash", locationBean.getHash());
+                            }
+
                             initView();
                         }
                     }
                 });
-
     }
 
     /**

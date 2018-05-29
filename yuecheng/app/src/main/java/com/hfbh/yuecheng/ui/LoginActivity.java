@@ -1,5 +1,7 @@
 package com.hfbh.yuecheng.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,12 +25,15 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.LogUtils;
+import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -242,16 +247,12 @@ public class LoginActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_forget_password:
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ForgetPwdActivity.class);
                 intent.putExtra("type", "forget");
                 startActivity(intent);
                 break;
             case R.id.tv_login:
-                if (loginType == 0) {
-                    codeLogin();
-                } else {
-                    pwdLogin();
-                }
+                isRegister(2);
                 break;
             case R.id.tv_login_sign:
                 Intent intent1 = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -261,6 +262,98 @@ public class LoginActivity extends BaseActivity {
             case R.id.tv_wechat_login:
                 break;
         }
+    }
+
+    /**
+     * 监测手机号是否注册
+     */
+    private void isRegister(final int type) {
+        OkHttpUtils.post()
+                .url(Constant.IS_REGISTER)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("memberPhone", etPhone.getText().toString().trim())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean flag = jsonObject.getBoolean("flag");
+                            //是否已注册 false已注册 true未注册
+                            if (flag) {
+                                toRegister();
+                            } else {
+                                if (type == 1) {
+                                    tvLoginCode.setClickable(false);
+                                    sendPhoneNumber();
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            for (int i = 60; i > 0; i--) {
+                                                Message msg = new Message();
+                                                msg.what = 1;
+                                                msg.arg1 = i;
+                                                mHandler.sendMessage(msg);
+                                                try {
+                                                    Thread.sleep(1000);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            mHandler.sendEmptyMessage(2);
+                                        }
+                                    }).start();
+                                } else if (type == 2) {
+                                    if (loginType == 0) {
+                                        codeLogin();
+                                    } else {
+                                        pwdLogin();
+                                    }
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+
+    }
+
+    /**
+     * 手机号未注册，提示用户注册
+     */
+    private void toRegister() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this,
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("该手机号尚未注册，请先去注册");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("去注册", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
     }
 
     /**
@@ -287,15 +380,18 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");
-                            String msg = jsonObject.getString("msg");
                             if (flag) {
-
+                                String hash = jsonObject.getString("hash");
+                                SharedPreUtils.saveStr(LoginActivity.this, "hash", hash);
+                                SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
+                                ToastUtils.showToast(LoginActivity.this, "登录成功");
+                                finish();
+                            } else {
+                                ToastUtils.showToast(LoginActivity.this, "登录失败");
                             }
-                            ToastUtils.showToast(LoginActivity.this, msg);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -310,14 +406,17 @@ public class LoginActivity extends BaseActivity {
      * 密码登录
      */
     private void pwdLogin() {
+        String phone = etPhone.getText().toString().trim();
+        String pwd = etCode.getText().toString().trim();
+        String md5 = MD5Utils.md5(pwd + phone.substring(7));
 
         Map<String, String> map = new HashMap<>();
         map.put("appType", MyApp.appType);
         map.put("appVersion", MyApp.appVersion);
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
-        map.put("memberPhone", etPhone.getText().toString().trim());
-        map.put("memberPwd", etCode.getText().toString().trim());
+        map.put("memberPhone", phone);
+        map.put("memberPwd", md5);
 
         OkHttpUtils.post()
                 .url(Constant.PWD_LOGIN)
@@ -331,12 +430,17 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");
                             String msg = jsonObject.getString("msg");
                             if (flag) {
-
+                                String hash = jsonObject.getString("hash");
+                                SharedPreUtils.saveStr(LoginActivity.this, "hash", hash);
+                                SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
+                                ToastUtils.showToast(LoginActivity.this, "登录成功");
+                                finish();
                             }
                             ToastUtils.showToast(LoginActivity.this, msg);
                         } catch (JSONException e) {
@@ -352,27 +456,8 @@ public class LoginActivity extends BaseActivity {
      * 获取验证码
      */
     private void getVerificationCode() {
-
-        if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {
-            tvLoginCode.setClickable(false);
-            sendPhoneNumber();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 60; i > 0; i--) {
-                        Message msg = new Message();
-                        msg.what = 1;
-                        msg.arg1 = i;
-                        mHandler.sendMessage(msg);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    mHandler.sendEmptyMessage(2);
-                }
-            }).start();
+        if (isPhone) {
+            isRegister(1);
         } else {
             ToastUtils.showToast(this, "手机号输入有误，请重新输入");
         }
@@ -403,5 +488,18 @@ public class LoginActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    @Subscribe
+    public void isLogin(String msg) {
+        if ("login_success".equals(msg)) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -418,9 +418,12 @@ public class HomepageFragment extends BaseFragment {
                 }
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
-                if (flowLayout.getChildCount() == 0) {
+                flowLayout.removeAllViews();
+                if (activityBean.getData().get(position).getTags() != null &&
+                        activityBean.getData().get(position).getTags().size() > 0) {
                     addTextView(flowLayout, activityBean.getData().get(position).getTags());
                 }
+
             }
         };
 
@@ -451,7 +454,8 @@ public class HomepageFragment extends BaseFragment {
         for (int i = 0; i < tagsBeans.size(); i++) {
             TextView tvChild = new TextView(getActivity());
             ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, (int) DisplayUtils.dp2px(getActivity(), 6), 0);
+            params.setMargins(0, 0, (int) DisplayUtils.dp2px(getActivity(), 6),
+                    (int) DisplayUtils.dp2px(getActivity(), 2));
             tvChild.setLayoutParams(params);
             tvChild.setBackgroundResource(R.drawable.flowlayout_item);
             tvChild.setText(tagsBeans.get(i).getTagName());

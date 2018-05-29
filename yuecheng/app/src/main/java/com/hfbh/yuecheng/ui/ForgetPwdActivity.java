@@ -2,6 +2,7 @@ package com.hfbh.yuecheng.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,18 +13,14 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -31,7 +28,6 @@ import com.hfbh.yuecheng.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,11 +39,11 @@ import butterknife.OnClick;
 import okhttp3.Call;
 
 /**
- * Author：Libin on 2018/5/28 11:17
+ * Author：Libin on 2018/5/29 09:28
  * Email：1993911441@qq.com
- * Describe：注册
+ * Describe：忘记密码
  */
-public class RegisterActivity extends BaseActivity {
+public class ForgetPwdActivity extends BaseActivity {
     @BindView(R.id.tv_register_title)
     TextView tvRegisterTitle;
     @BindView(R.id.tv_register_close)
@@ -64,13 +60,6 @@ public class RegisterActivity extends BaseActivity {
     ImageView ivRegisterCode;
     @BindView(R.id.tv_register)
     TextView tvRegister;
-    @BindView(R.id.checkbox_register)
-    CheckBox checkbox;
-    @BindView(R.id.tv_register_agreement)
-    TextView tvRegisterAgreement;
-    @BindView(R.id.rl_register_agreement)
-    LinearLayout rlRegisterAgreement;
-
 
     //是否输入手机号
     private boolean isPhone;
@@ -81,36 +70,18 @@ public class RegisterActivity extends BaseActivity {
     //是否显示密码
     private boolean isShow;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-
         initView();
     }
 
-
-    /**
-     * 加载视图
-     */
     private void initView() {
-        tvRegisterTitle.setText("注册");
-        etRegisterPwd.setHint("设置密码");
-        tvRegister.setText("注册");
-        rlRegisterAgreement.setVisibility(View.VISIBLE);
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked && isPhone && isCode && isPwd) {
-                    tvRegister.setEnabled(true);
-                } else {
-                    tvRegister.setEnabled(false);
-                }
-            }
-        });
-
+        tvRegisterTitle.setText("忘记密码");
+        etRegisterPwd.setHint("设置新密码");
+        tvRegister.setText("确定");
 
         etRegisterPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
@@ -129,7 +100,7 @@ public class RegisterActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 if (PhoneNumberUtils.judgePhoneNumber(etRegisterPhone.getText().toString().trim())) {
                     isPhone = true;
-                    if (isCode && isPwd && checkbox.isChecked()) {
+                    if (isCode && isPwd) {
                         tvRegister.setEnabled(true);
                     } else {
                         tvRegister.setEnabled(false);
@@ -156,7 +127,7 @@ public class RegisterActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(etRegisterCode.getText().toString().trim())) {
                     isCode = true;
-                    if (isPhone && isPwd && checkbox.isChecked()) {
+                    if (isPhone && isPwd) {
                         tvRegister.setEnabled(true);
                     } else {
                         tvRegister.setEnabled(false);
@@ -185,7 +156,7 @@ public class RegisterActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(etRegisterPwd.getText().toString().trim())) {
                     isPwd = true;
-                    if (isPhone && isCode && checkbox.isChecked()) {
+                    if (isPhone && isCode) {
                         tvRegister.setEnabled(true);
                     } else {
                         tvRegister.setEnabled(false);
@@ -197,22 +168,22 @@ public class RegisterActivity extends BaseActivity {
 
             }
         });
-
-
     }
+
 
     private MyHandler mHandler = new MyHandler(this);
 
-    private static class MyHandler extends Handler {
-        private WeakReference<RegisterActivity> mActivity;
 
-        private MyHandler(RegisterActivity activity) {
+    private static class MyHandler extends Handler {
+        private WeakReference<ForgetPwdActivity> mActivity;
+
+        private MyHandler(ForgetPwdActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            RegisterActivity activity = mActivity.get();
+            ForgetPwdActivity activity = mActivity.get();
             if (activity != null) {
                 if (msg.what == 1) {
                     activity.tvRegisterCode.setText(msg.arg1 + "s后重发");
@@ -226,8 +197,7 @@ public class RegisterActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.tv_register_close, R.id.tv_register_code, R.id.iv_register_code, R.id.tv_register,
-            R.id.tv_register_agreement})
+    @OnClick({R.id.tv_register_close, R.id.tv_register_code, R.id.iv_register_code, R.id.tv_register})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_register_close:
@@ -256,20 +226,18 @@ public class RegisterActivity extends BaseActivity {
             case R.id.tv_register:
                 isRegister(2);
                 break;
-            case R.id.tv_register_agreement:
-                break;
         }
     }
 
     /**
-     * 注册
+     * 修改密码
      */
-    private void register() {
+    private void updatePwd() {
         String phone = etRegisterPhone.getText().toString().trim();
         String pwd = etRegisterPwd.getText().toString().trim();
         String md5 = MD5Utils.md5(pwd + phone.substring(7));
         OkHttpUtils.post()
-                .url(Constant.REGISTER)
+                .url(Constant.UPDATE_PWD)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
@@ -292,13 +260,9 @@ public class RegisterActivity extends BaseActivity {
                             boolean flag = jsonObject.getBoolean("flag");
                             String msg = jsonObject.getString("msg");
                             if (flag) {
-                                String hash = jsonObject.getString("hash");
-                                SharedPreUtils.saveStr(RegisterActivity.this, "hash", hash);
-                                SharedPreUtils.saveBoolean(RegisterActivity.this, "is_login", true);
-                                EventBus.getDefault().post("login_success");
                                 finish();
                             }
-                            ToastUtils.showToast(RegisterActivity.this, msg);
+                            ToastUtils.showToast(ForgetPwdActivity.this, msg);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -320,7 +284,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     /**
-     * 监测手机号是否注册
+     * 检测手机号是否注册
      */
     private void isRegister(final int type) {
         OkHttpUtils.post()
@@ -344,6 +308,8 @@ public class RegisterActivity extends BaseActivity {
                             boolean flag = jsonObject.getBoolean("flag");
                             //是否已注册 false已注册 true未注册
                             if (flag) {
+                                toRegister();
+                            } else {
                                 if (type == 1) {
                                     tvRegisterCode.setClickable(false);
                                     sendPhoneNumber();
@@ -365,10 +331,8 @@ public class RegisterActivity extends BaseActivity {
                                         }
                                     }).start();
                                 } else if (type == 2) {
-                                    register();
+                                    updatePwd();
                                 }
-                            } else {
-                                toLogin();
                             }
 
                         } catch (JSONException e) {
@@ -381,18 +345,18 @@ public class RegisterActivity extends BaseActivity {
     }
 
     /**
-     * 手机号已注册，提示用户登录
+     * 手机号未注册，提示用户注册
      */
-    private void toLogin() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this,
+    private void toRegister() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(ForgetPwdActivity.this,
                 R.style.Theme_AppCompat_DayNight_Dialog_Alert);
         dialog.setTitle("提示");
-        dialog.setMessage("该手机号已经被注册，是否直接去登录");
+        dialog.setMessage("该手机号尚未注册，请先去注册");
         //为“确定”按钮注册监听事件
-        dialog.setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("去注册", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                startActivity(new Intent(ForgetPwdActivity.this, RegisterActivity.class));
             }
         });
 
@@ -432,7 +396,8 @@ public class RegisterActivity extends BaseActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String msg = jsonObject.getString("msg");
-                            ToastUtils.showToast(RegisterActivity.this, msg);
+
+                            ToastUtils.showToast(ForgetPwdActivity.this, msg);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

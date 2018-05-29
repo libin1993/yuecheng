@@ -177,20 +177,36 @@
 
     </RelativeLayout>
 
-    <CheckBox
-        android:id="@+id/checkbox_register"
+    <LinearLayout
+        android:id="@+id/rl_register_agreement"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/rl_card_register"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="30dp"
         android:layout_marginTop="25dp"
-        android:button="@null"
-        android:checked="true"
-        android:drawableLeft="@drawable/cb_register"
-        android:drawablePadding="3dp"
-        android:text="注册即同意《合肥百大xx用户服务协议》"
-        android:textColor="@color/gray_10"
-        android:visibility="gone"/>
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <CheckBox
+            android:id="@+id/checkbox_register"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:checked="true"
+            android:drawableLeft="@drawable/cb_register"
+            android:drawablePadding="3dp"
+            android:text="注册即同意"
+            android:textColor="@color/gray_10"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_register_agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:text="《合肥百大xx用户服务协议》"
+            android:textColor="@color/gray_10"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+
 </RelativeLayout>
