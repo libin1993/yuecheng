@@ -23,7 +23,10 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.LoginBean;
+import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
@@ -90,6 +93,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initView();
     }
 
@@ -380,20 +384,15 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            if (flag) {
-                                String hash = jsonObject.getString("hash");
-                                SharedPreUtils.saveStr(LoginActivity.this, "hash", hash);
-                                SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
-                                ToastUtils.showToast(LoginActivity.this, "登录成功");
-                                finish();
-                            } else {
-                                ToastUtils.showToast(LoginActivity.this, "登录失败");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response,UserInfoBean.class);
+                        if (userInfoBean.isFlag()){
+                            ToastUtils.showToast(LoginActivity.this, "登录成功");
+                            SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
+                            SharedPreUtils.saveStr(LoginActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
+                            SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
+                            finish();
+                        }else {
+                            ToastUtils.showToast(LoginActivity.this, "登录失败");
                         }
                     }
                 });
@@ -408,7 +407,7 @@ public class LoginActivity extends BaseActivity {
     private void pwdLogin() {
         String phone = etPhone.getText().toString().trim();
         String pwd = etCode.getText().toString().trim();
-        String md5 = MD5Utils.md5(pwd + phone.substring(7));
+        final String md5 = MD5Utils.md5(pwd + phone.substring(7));
 
         Map<String, String> map = new HashMap<>();
         map.put("appType", MyApp.appType);
@@ -430,26 +429,19 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            String msg = jsonObject.getString("msg");
-                            if (flag) {
-                                String hash = jsonObject.getString("hash");
-                                SharedPreUtils.saveStr(LoginActivity.this, "hash", hash);
-                                SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
-                                ToastUtils.showToast(LoginActivity.this, "登录成功");
-                                finish();
-                            }
-                            ToastUtils.showToast(LoginActivity.this, msg);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        LogUtils.log(md5+","+response);
+                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response,UserInfoBean.class);
+                        if (userInfoBean.isFlag()){
+                            ToastUtils.showToast(LoginActivity.this, "登录成功");
+                            SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
+                            SharedPreUtils.saveStr(LoginActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
+                            SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
+                            finish();
+                        }else {
+                            ToastUtils.showToast(LoginActivity.this, "登录失败");
                         }
                     }
                 });
-
-
     }
 
     /**
@@ -485,7 +477,13 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String msg = jsonObject.getString("msg");
+                            ToastUtils.showToast(LoginActivity.this, msg);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }

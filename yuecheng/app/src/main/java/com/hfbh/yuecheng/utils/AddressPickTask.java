@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.hfbh.yuecheng.R;
+
 import java.util.ArrayList;
 
 import cn.qqtheme.framework.entity.Province;
@@ -77,6 +79,8 @@ public class AddressPickTask extends AsyncTask<String, Void, ArrayList<Province>
     protected void onPostExecute(ArrayList<Province> result) {
         if (result.size() > 0) {
             AddressPicker picker = new AddressPicker((Activity) context, result);
+            picker.setSubmitTextColor(context.getResources().getColor(R.color.red_99));
+            picker.setTopLineColor(context.getResources().getColor(R.color.gray_ed));
             picker.setHideProvince(hideProvince);
             picker.setHideCounty(hideCounty);
             if (hideCounty) {

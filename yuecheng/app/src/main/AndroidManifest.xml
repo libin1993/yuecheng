@@ -96,6 +96,22 @@
         <activity android:name=".ui.MyActionActivity"/>
         <activity android:name=".ui.MyMemberCardActivity"/>
         <activity android:name=".ui.CloseActivity"/>
+        <activity android:name=".ui.UserInfoActivity"/>
+
+
+        <activity android:name="me.iwf.photopicker.PhotoPickerActivity"/>
+        <activity android:name="me.iwf.photopicker.PhotoPagerActivity"/>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"/>
+
+
+        <activity android:name=".ui.UpdateNameActivity"/>
+        <activity android:name=".ui.SetUpActivity"/>
+        <activity android:name=".ui.AboutUsActivity"/>
+        <activity
+            android:name=".ui.FeedBackActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".ui.SetPwdActivity"/>
+        <activity android:name=".ui.ResetPwdActivity"/>
     </application>
 
 </manifest>

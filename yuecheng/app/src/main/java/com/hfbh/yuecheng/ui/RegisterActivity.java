@@ -22,7 +22,9 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
@@ -286,21 +288,15 @@ public class RegisterActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            String msg = jsonObject.getString("msg");
-                            if (flag) {
-                                String hash = jsonObject.getString("hash");
-                                SharedPreUtils.saveStr(RegisterActivity.this, "hash", hash);
-                                SharedPreUtils.saveBoolean(RegisterActivity.this, "is_login", true);
-                                EventBus.getDefault().post("login_success");
-                                finish();
-                            }
-                            ToastUtils.showToast(RegisterActivity.this, msg);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                        if (userInfoBean.isFlag()) {
+                            ToastUtils.showToast(RegisterActivity.this, "注册成功");
+                            SharedPreUtils.saveStr(RegisterActivity.this, "hash", userInfoBean.getHash());
+                            SharedPreUtils.saveStr(RegisterActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
+                            SharedPreUtils.saveBoolean(RegisterActivity.this, "is_login", true);
+                            finish();
+                        } else {
+                            ToastUtils.showToast(RegisterActivity.this, "注册失败");
                         }
                     }
                 });
@@ -339,6 +335,7 @@ public class RegisterActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log("register" + response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");

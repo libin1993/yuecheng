@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/gray_ed"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
+
+    <include
+        layout="@layout/layout_widget_header"/>
+
+    <EditText
+        android:id="@+id/et_set_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:hint="设置昵称"
+        android:paddingLeft="12dp"
+        android:textColor="@color/gray_10"
+        android:textColorHint="@color/gray_cc"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/tv_update_name"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="107dp"
+        android:background="@drawable/gradient_red_33dp"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout>

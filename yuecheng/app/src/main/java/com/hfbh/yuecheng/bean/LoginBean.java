@@ -1,18 +1,17 @@
 package com.hfbh.yuecheng.bean;
 
 /**
- * Author：Libin on 2018/5/29 11:07
+ * Author：Libin on 2018/5/30 11:17
  * Email：1993911441@qq.com
  * Describe：
  */
-public class UserInfoBean {
-
+public class LoginBean {
 
     /**
      * flag : true
      * token : token
-     * hash : c07ed299d6364f04ba33869ed2f26fc9
-     * data : {"appUuid":"c07ed299d6364f04ba33869ed2f26fc9","balanceScore":1,"cardLevelId":null,"entityCardId":"600104165","idCardNumber":null,"isDelete":"N","isQuit":"N","isSubscribe":"N","memberBirthday":null,"memberCardNo":"9900000115","memberCity":null,"memberCountry":null,"memberHead":null,"memberId":179178,"memberName":null,"memberNickName":"合肥百大","memberPhone":"15167168495","memberProvince":null,"memberPwd":"9a72c6fa2fceb451e88472538fb2dbe7","memberScore":1,"memberSex":"UNKNOW","memberSource":"APP_ORDINARY_FOCUS","memberType":"MEMBER","modifyTime":null,"organizeId":0,"registerOrganizeId":null,"registerTime":"2018-05-30 16:21:35","subscribeChangeTime":null,"subscribeTime":null,"unionId":null,"unsubscribeChangeTime":null,"useScore":0}
+     * hash : ba2976c371084acea8860f88981fd12c
+     * data : {"appUuid":"ba2976c371084acea8860f88981fd12c","balanceScore":36,"cardLevelId":null,"entityCardId":"600104166","idCardNumber":null,"isDelete":"N","isQuit":"N","isSubscribe":"N","memberBirthday":null,"memberCardNo":"9900000116","memberCity":null,"memberCountry":null,"memberHead":null,"memberId":178988,"memberName":"餐厅的设计","memberNickName":"合肥百大","memberPhone":"13732113831","memberProvince":null,"memberPwd":"0317B4712E15B5A3DC7DA06B37AC6F98","memberScore":36,"memberSex":"UNKNOW","memberSource":"APP_ORDINARY_FOCUS","memberType":"MEMBER","modifyTime":null,"organizeId":0,"registerOrganizeId":null,"registerTime":"2018-05-29 15:00:36","subscribeChangeTime":null,"subscribeTime":null,"unionId":null,"unsubscribeChangeTime":null,"useScore":0}
      * code : 0
      */
 
@@ -64,33 +63,33 @@ public class UserInfoBean {
 
     public static class DataBean {
         /**
-         * appUuid : c07ed299d6364f04ba33869ed2f26fc9
-         * balanceScore : 1
+         * appUuid : ba2976c371084acea8860f88981fd12c
+         * balanceScore : 36
          * cardLevelId : null
-         * entityCardId : 600104165
+         * entityCardId : 600104166
          * idCardNumber : null
          * isDelete : N
          * isQuit : N
          * isSubscribe : N
          * memberBirthday : null
-         * memberCardNo : 9900000115
+         * memberCardNo : 9900000116
          * memberCity : null
          * memberCountry : null
          * memberHead : null
-         * memberId : 179178
-         * memberName : null
+         * memberId : 178988
+         * memberName : 餐厅的设计
          * memberNickName : 合肥百大
-         * memberPhone : 15167168495
+         * memberPhone : 13732113831
          * memberProvince : null
-         * memberPwd : 9a72c6fa2fceb451e88472538fb2dbe7
-         * memberScore : 1
+         * memberPwd : 0317B4712E15B5A3DC7DA06B37AC6F98
+         * memberScore : 36
          * memberSex : UNKNOW
          * memberSource : APP_ORDINARY_FOCUS
          * memberType : MEMBER
          * modifyTime : null
          * organizeId : 0
          * registerOrganizeId : null
-         * registerTime : 2018-05-30 16:21:35
+         * registerTime : 2018-05-29 15:00:36
          * subscribeChangeTime : null
          * subscribeTime : null
          * unionId : null
@@ -106,16 +105,16 @@ public class UserInfoBean {
         private String isDelete;
         private String isQuit;
         private String isSubscribe;
-        private String memberBirthday;
+        private Object memberBirthday;
         private String memberCardNo;
-        private String memberCity;
-        private String memberCountry;
-        private String memberHead;
+        private Object memberCity;
+        private Object memberCountry;
+        private Object memberHead;
         private int memberId;
         private String memberName;
         private String memberNickName;
         private String memberPhone;
-        private String memberProvince;
+        private Object memberProvince;
         private String memberPwd;
         private int memberScore;
         private String memberSex;
@@ -195,11 +194,11 @@ public class UserInfoBean {
             this.isSubscribe = isSubscribe;
         }
 
-        public String getMemberBirthday() {
+        public Object getMemberBirthday() {
             return memberBirthday;
         }
 
-        public void setMemberBirthday(String memberBirthday) {
+        public void setMemberBirthday(Object memberBirthday) {
             this.memberBirthday = memberBirthday;
         }
 
@@ -211,27 +210,27 @@ public class UserInfoBean {
             this.memberCardNo = memberCardNo;
         }
 
-        public String getMemberCity() {
+        public Object getMemberCity() {
             return memberCity;
         }
 
-        public void setMemberCity(String memberCity) {
+        public void setMemberCity(Object memberCity) {
             this.memberCity = memberCity;
         }
 
-        public String getMemberCountry() {
+        public Object getMemberCountry() {
             return memberCountry;
         }
 
-        public void setMemberCountry(String memberCountry) {
+        public void setMemberCountry(Object memberCountry) {
             this.memberCountry = memberCountry;
         }
 
-        public String getMemberHead() {
+        public Object getMemberHead() {
             return memberHead;
         }
 
-        public void setMemberHead(String memberHead) {
+        public void setMemberHead(Object memberHead) {
             this.memberHead = memberHead;
         }
 
@@ -267,11 +266,11 @@ public class UserInfoBean {
             this.memberPhone = memberPhone;
         }
 
-        public String getMemberProvince() {
+        public Object getMemberProvince() {
             return memberProvince;
         }
 
-        public void setMemberProvince(String memberProvince) {
+        public void setMemberProvince(Object memberProvince) {
             this.memberProvince = memberProvince;
         }
 

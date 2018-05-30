@@ -2,6 +2,7 @@ package com.hfbh.yuecheng.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -16,12 +17,16 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
+import com.hfbh.yuecheng.bean.LoginBean;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MyActionActivity;
 import com.hfbh.yuecheng.ui.MyMemberCardActivity;
+import com.hfbh.yuecheng.ui.SetUpActivity;
+import com.hfbh.yuecheng.ui.UserInfoActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -99,13 +104,21 @@ public class MineFragment extends BaseFragment {
 
                         @Override
                         public void onResponse(String response, int id) {
+                            LogUtils.log(response);
                             userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                             if (userInfoBean.isFlag()) {
                                 initView();
                             }
                         }
                     });
+        }else {
+            tvMineUsername.setText("注册/登录");
+            ivMineAvatar.setImageResource(R.mipmap.img_default_avatar);
+            tvMineMoney.setText("0.00");
+            tvMineScore.setText("0");
+            tvMineGrade.setText("领取会员卡");
         }
+
     }
 
     /**
@@ -117,9 +130,9 @@ public class MineFragment extends BaseFragment {
             ivMineAvatar.setImageURI(userInfoBean.getData().getMemberHead());
         }
 
-        tvMineMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
-        tvMineScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
-        tvMineGrade.setText(userInfoBean.getData().getCardLevel());
+//        tvMineMoney.setText(String.valueOf(userInfoBean.getData().ge));
+//        tvMineScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
+//        tvMineGrade.setText(userInfoBean.getData().getCardLevel());
     }
 
     public static MineFragment newInstance() {
@@ -136,11 +149,13 @@ public class MineFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_mine_set:
+                startActivity(new Intent(getActivity(), SetUpActivity.class));
                 break;
             case R.id.iv_mine_msg:
+                startActivity(new Intent(getActivity(), UserInfoActivity.class));
                 break;
             case R.id.tv_mine_username:
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                toLogin(UserInfoActivity.class);
                 break;
             case R.id.tv_mine_money:
                 break;

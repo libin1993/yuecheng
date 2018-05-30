@@ -44,6 +44,10 @@ public class MyApp extends Application {
     public static String appType = "Android";
     public static String organizeId = "2";
     public static String organizeName = "";
+    //更新链接
+    public static String updateUrl;
+    //更新内容
+    public static String updateContent;
 
     /**打开的activity**/
     private List<Activity> activities = new ArrayList<Activity>();
