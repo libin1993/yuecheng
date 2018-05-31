@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,8 +11,6 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,11 +19,11 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.MemberCodeBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
-import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
@@ -42,50 +41,50 @@ import butterknife.OnClick;
 import okhttp3.Call;
 
 /**
- * Author：Libin on 2018/5/30 15:05
+ * Author：Libin on 2018/5/31 12:20
  * Email：1993911441@qq.com
- * Describe：重置登录密码
+ * Describe：身份验证
  */
-public class ResetPwdActivity extends BaseActivity {
+public class ValidateActivity extends BaseActivity {
     @BindView(R.id.tv_header_title)
     TextView tvHeaderTitle;
     @BindView(R.id.iv_header_back)
     ImageView ivHeaderBack;
-    @BindView(R.id.et_reset_phone)
-    EditText etResetPhone;
-    @BindView(R.id.et_reset_code)
-    EditText etResetCode;
-    @BindView(R.id.tv_reset_code)
-    TextView tvResetCode;
-    @BindView(R.id.et_reset_pwd)
-    EditText etResetPwd;
-    @BindView(R.id.iv_reset_pwd)
-    ImageView ivResetPwd;
-    @BindView(R.id.tv_reset_pwd)
-    TextView tvResetPwd;
+    @BindView(R.id.et_validate_phone)
+    EditText etValidatePhone;
+    @BindView(R.id.et_validate_code)
+    EditText etValidateCode;
+    @BindView(R.id.tv_validate_code)
+    TextView tvValidateCode;
+    @BindView(R.id.tv_validate_next)
+    TextView tvValidateNext;
+    @BindView(R.id.tv_forget_phone)
+    TextView tvForgetPhone;
 
     //是否输入手机号
     private boolean isPhone;
     //是否输入验证码
     private boolean isCode;
-    //是否输入密码
-    private boolean isPwd;
-    //是否显示密码
-    private boolean isShow;
+
+    private String type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reset_login_pwd);
+        setContentView(R.layout.activity_validate);
         ButterKnife.bind(this);
+        getData();
         initView();
     }
 
-    private void initView() {
-        tvHeaderTitle.setText("重置密码");
-        etResetPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
+    private void getData() {
+        type = getIntent().getStringExtra("type");
+    }
 
-        etResetPhone.addTextChangedListener(new TextWatcher() {
+    private void initView() {
+        tvHeaderTitle.setText("身份验证");
+
+        etValidatePhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -98,21 +97,23 @@ public class ResetPwdActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (PhoneNumberUtils.judgePhoneNumber(etResetPhone.getText().toString().trim())) {
+                if (PhoneNumberUtils.judgePhoneNumber(etValidatePhone.getText().toString().trim())) {
                     isPhone = true;
-                    if (isCode && isPwd) {
-                        tvResetPwd.setEnabled(true);
+                    if (isCode) {
+                        tvValidateNext.setEnabled(true);
                     } else {
-                        tvResetPwd.setEnabled(false);
+                        tvValidateNext.setEnabled(false);
                     }
                 } else {
                     isPhone = false;
-                    tvResetPwd.setEnabled(false);
+                    tvValidateNext.setEnabled(false);
                 }
             }
         });
+        etValidatePhone.setText(SharedPreUtils.getStr(this,"phone"));
 
-        etResetCode.addTextChangedListener(new TextWatcher() {
+
+        etValidateCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -125,150 +126,66 @@ public class ResetPwdActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(etResetCode.getText().toString().trim())) {
+                if (TextUtils.isEmpty(etValidateCode.getText().toString().trim())) {
+                    isCode = false;
+                    tvValidateNext.setEnabled(false);
+                } else {
                     isCode = true;
-                    if (isPhone && isPwd) {
-                        tvResetPwd.setEnabled(true);
+                    if (isPhone) {
+                        tvValidateNext.setEnabled(true);
                     } else {
-                        tvResetPwd.setEnabled(false);
+                        tvValidateNext.setEnabled(false);
                     }
-
-                } else {
-                    isCode = false;
-                    tvResetPwd.setEnabled(false);
-                }
-
-            }
-        });
-
-        etResetPwd.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(etResetPwd.getText().toString().trim())) {
-                    isPwd = true;
-                    if (isPhone && isCode) {
-                        tvResetPwd.setEnabled(true);
-                    } else {
-                        tvResetPwd.setEnabled(false);
-                    }
-                } else {
-                    isCode = false;
-                    tvResetPwd.setEnabled(false);
                 }
 
             }
         });
     }
-
-
-    @OnClick({R.id.iv_header_back, R.id.tv_reset_code, R.id.iv_reset_pwd, R.id.tv_reset_pwd})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.iv_header_back:
-                finish();
-                break;
-            case R.id.tv_reset_code:
-                getVerificationCode();
-                break;
-            case R.id.iv_reset_pwd:
-                if (isShow) {
-                    ivResetPwd.setImageResource(R.mipmap.btn_signin_invisiable);
-                    //隐藏密码
-                    etResetPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    isShow = false;
-                } else {
-                    ivResetPwd.setImageResource(R.mipmap.btn_signin_visiable);
-                    //显示密码
-                    etResetPwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    isShow = true;
-                }
-
-                if (!TextUtils.isEmpty(etResetPwd.getText().toString().trim())) {
-                    etResetPwd.setSelection(etResetPwd.getText().toString().length());
-                }
-                break;
-            case R.id.tv_reset_pwd:
-                isRegister(2);
-                break;
-        }
-
-    }
-
 
     private MyHandler mHandler = new MyHandler(this);
 
 
     private static class MyHandler extends Handler {
-        private WeakReference<ResetPwdActivity> mActivity;
+        private WeakReference<ValidateActivity> mActivity;
 
-        private MyHandler(ResetPwdActivity activity) {
+        private MyHandler(ValidateActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            ResetPwdActivity activity = mActivity.get();
+            ValidateActivity activity = mActivity.get();
             if (activity != null) {
                 if (msg.what == 1) {
-                    activity.tvResetCode.setText(msg.arg1 + "s后重发");
-                    activity.tvResetCode.setTextColor(0xff999999);
+                    activity.tvValidateCode.setText(msg.arg1 + "s后重发");
+                    activity.tvValidateCode.setTextColor(0xff999999);
                 } else if (msg.what == 2) {
-                    activity.tvResetCode.setText("获取验证码");
-                    activity.tvResetCode.setClickable(true);
-                    activity.tvResetCode.setTextColor(0xff990000);
+                    activity.tvValidateCode.setText("获取验证码");
+                    activity.tvValidateCode.setClickable(true);
+                    activity.tvValidateCode.setTextColor(0xff990000);
                 }
             }
         }
     }
 
 
-    /**
-     * 修改密码
-     */
-    private void updatePwd() {
-        String phone = etResetPhone.getText().toString().trim();
-        String pwd = etResetPwd.getText().toString().trim();
-        String md5 = MD5Utils.md5(pwd + phone.substring(7));
-        OkHttpUtils.post()
-                .url(Constant.UPDATE_PWD)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("memberPhone", phone)
-                .addParams("vircode", etResetCode.getText().toString().trim())
-                .addParams("memberPwd", md5)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
-                        if (responseBean.isFlag()) {
-                            ToastUtils.showToast(ResetPwdActivity.this, "修改成功");
-                            finish();
-                        } else {
-                            ToastUtils.showToast(ResetPwdActivity.this, "修改失败");
-                        }
-                    }
-                });
-
+    @OnClick({R.id.iv_header_back, R.id.tv_validate_code, R.id.tv_validate_next, R.id.tv_forget_phone})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_header_back:
+                finish();
+                break;
+            case R.id.tv_validate_code:
+                getVerificationCode();
+                break;
+            case R.id.tv_validate_next:
+                isRegister(2);
+                break;
+            case R.id.tv_forget_phone:
+                forgetPhone();
+                break;
+        }
     }
-
 
     /**
      * 获取验证码
@@ -282,7 +199,7 @@ public class ResetPwdActivity extends BaseActivity {
     }
 
     /**
-     * 检测手机号是否注册
+     * 监测手机号是否注册
      */
     private void isRegister(final int type) {
         OkHttpUtils.post()
@@ -291,7 +208,7 @@ public class ResetPwdActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("memberPhone", etResetPhone.getText().toString().trim())
+                .addParams("memberPhone", etValidatePhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -309,7 +226,7 @@ public class ResetPwdActivity extends BaseActivity {
                                 toRegister();
                             } else {
                                 if (type == 1) {
-                                    tvResetCode.setClickable(false);
+                                    tvValidateCode.setClickable(false);
                                     sendPhoneNumber();
                                     new Thread(new Runnable() {
                                         @Override
@@ -329,7 +246,7 @@ public class ResetPwdActivity extends BaseActivity {
                                         }
                                     }).start();
                                 } else if (type == 2) {
-                                    updatePwd();
+                                    validatePhone();
                                 }
                             }
 
@@ -338,15 +255,49 @@ public class ResetPwdActivity extends BaseActivity {
                         }
                     }
                 });
+    }
 
+    /**
+     * 身份验证
+     */
+    private void validatePhone() {
+        OkHttpUtils.post()
+                .url(Constant.VALIDATE_PHONE)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("memberPhone", etValidatePhone.getText().toString().trim())
+                .addParams("vircode", etValidateCode.getText().toString().trim())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int i) {
 
+                    }
+
+                    @Override
+                    public void onResponse(String s, int i) {
+                        LogUtils.log("dddddd" + s);
+                        ResponseBean responseBean = GsonUtils.jsonToBean(s, ResponseBean.class);
+                        if (responseBean.isFlag()) {
+                            LogUtils.log("2222"+type);
+                            Intent intent = new Intent(ValidateActivity.this, ResetPayPwdActivity.class);
+                            intent.putExtra("type", type);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            ToastUtils.showToast(ValidateActivity.this, "验证失败");
+                        }
+                    }
+                });
     }
 
     /**
      * 手机号未注册，提示用户注册
      */
     private void toRegister() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this,
+        AlertDialog.Builder dialog = new AlertDialog.Builder(ValidateActivity.this,
                 R.style.Theme_AppCompat_DayNight_Dialog_Alert);
         dialog.setTitle("提示");
         dialog.setMessage("该手机号尚未注册，请先去注册");
@@ -354,7 +305,7 @@ public class ResetPwdActivity extends BaseActivity {
         dialog.setPositiveButton("去注册", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(ResetPwdActivity.this, RegisterActivity.class));
+                startActivity(new Intent(ValidateActivity.this, RegisterActivity.class));
             }
         });
 
@@ -380,7 +331,7 @@ public class ResetPwdActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("memberPhone", etResetPhone.getText().toString().trim())
+                .addParams("memberPhone", etValidatePhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
 
@@ -394,12 +345,31 @@ public class ResetPwdActivity extends BaseActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String msg = jsonObject.getString("msg");
-
-                            ToastUtils.showToast(ResetPwdActivity.this, msg);
+                            ToastUtils.showToast(ValidateActivity.this, msg);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 });
+    }
+
+    /**
+     * 已更换手机号
+     */
+    private void forgetPhone() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this,
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("为保证您的账户资金安全，请持本人身份证到服务台修改会员手机号");
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("知道了", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
     }
 }

@@ -60,7 +60,6 @@
             android:id="@+id/tv_mine_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/user_name"
             android:textColor="@color/gray_10"
             android:textSize="22sp"
             android:textStyle="bold"/>
@@ -110,6 +109,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/ll_mine_money"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -135,7 +135,6 @@
                     android:id="@+id/tv_mine_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/remain_money"
                     android:textColor="@color/gray_10"
                     android:textSize="20sp"/>
 
@@ -156,6 +155,7 @@
             android:background="@color/gray_b3"/>
 
         <LinearLayout
+            android:id="@+id/ll_mine_score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -180,7 +180,6 @@
                     android:id="@+id/tv_mine_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:textColor="@color/gray_10"
                     android:textSize="20sp"/>
 
@@ -201,6 +200,7 @@
             android:background="@color/gray_b3"/>
 
         <LinearLayout
+            android:id="@+id/ll_mine_grade"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -219,7 +219,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="@string/receive_card"
                 android:textColor="@color/gray_10"
                 android:textSize="18sp"/>
 

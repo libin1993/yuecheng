@@ -101,7 +101,9 @@ public class MyActivityFragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
-                        pages = activityListBean.getPage().getPages();
+                        if (activityListBean.getPage()!= null){
+                            pages = activityListBean.getPage().getPages();
+                        }
 
                         if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
                             if (isRefresh) {

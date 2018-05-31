@@ -390,7 +390,9 @@ public class LoginActivity extends BaseActivity {
                             SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
                             SharedPreUtils.saveStr(LoginActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
                             SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
-                            finish();
+                            SharedPreUtils.saveStr(LoginActivity.this, "phone", String.valueOf(userInfoBean.getData().getMemberPhone()));
+                            EventBus.getDefault().post("login_success");
+
                         }else {
                             ToastUtils.showToast(LoginActivity.this, "登录失败");
                         }
@@ -436,7 +438,8 @@ public class LoginActivity extends BaseActivity {
                             SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
                             SharedPreUtils.saveStr(LoginActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
                             SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
-                            finish();
+                            SharedPreUtils.saveStr(LoginActivity.this, "phone", String.valueOf(userInfoBean.getData().getMemberPhone()));
+                            EventBus.getDefault().post("login_success");
                         }else {
                             ToastUtils.showToast(LoginActivity.this, "登录失败");
                         }

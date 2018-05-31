@@ -1,23 +1,24 @@
 package com.hfbh.yuecheng.bean;
 
+import java.io.Serializable;
+
 /**
  * Author：Libin on 2018/5/29 11:07
  * Email：1993911441@qq.com
  * Describe：
  */
-public class UserInfoBean {
+public class UserInfoBean implements Serializable{
 
 
+    private static final long serialVersionUID = 2472656786375655038L;
     /**
      * flag : true
-     * token : token
      * hash : c07ed299d6364f04ba33869ed2f26fc9
-     * data : {"appUuid":"c07ed299d6364f04ba33869ed2f26fc9","balanceScore":1,"cardLevelId":null,"entityCardId":"600104165","idCardNumber":null,"isDelete":"N","isQuit":"N","isSubscribe":"N","memberBirthday":null,"memberCardNo":"9900000115","memberCity":null,"memberCountry":null,"memberHead":null,"memberId":179178,"memberName":null,"memberNickName":"合肥百大","memberPhone":"15167168495","memberProvince":null,"memberPwd":"9a72c6fa2fceb451e88472538fb2dbe7","memberScore":1,"memberSex":"UNKNOW","memberSource":"APP_ORDINARY_FOCUS","memberType":"MEMBER","modifyTime":null,"organizeId":0,"registerOrganizeId":null,"registerTime":"2018-05-30 16:21:35","subscribeChangeTime":null,"subscribeTime":null,"unionId":null,"unsubscribeChangeTime":null,"useScore":0}
+     * data : {"accountBalance":0,"cardLevel":"VIP积分卡","cardLevelDO":null,"cardLevelPic":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20171031134827341.png","cardNumber":"9900000115","couponCount":5,"currentLevel":null,"entityCardId":null,"gradeNo":3,"memberHead":null,"memberId":179178,"memberName":null,"memberPhone":"15167168495","payPassword":null,"points":0,"totalAccount":0,"version":null}
      * code : 0
      */
 
     private boolean flag;
-    private String token;
     private String hash;
     private DataBean data;
     private int code;
@@ -28,14 +29,6 @@ public class UserInfoBean {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getHash() {
@@ -62,169 +55,111 @@ public class UserInfoBean {
         this.code = code;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
+        private static final long serialVersionUID = 6659937028247274089L;
         /**
-         * appUuid : c07ed299d6364f04ba33869ed2f26fc9
-         * balanceScore : 1
-         * cardLevelId : null
-         * entityCardId : 600104165
-         * idCardNumber : null
-         * isDelete : N
-         * isQuit : N
-         * isSubscribe : N
-         * memberBirthday : null
-         * memberCardNo : 9900000115
-         * memberCity : null
-         * memberCountry : null
+         * accountBalance : 0
+         * cardLevel : VIP积分卡
+         * cardLevelDO : null
+         * cardLevelPic : http://wmalle.oss-cn-hangzhou.aliyuncs.com/20171031134827341.png
+         * cardNumber : 9900000115
+         * couponCount : 5
+         * currentLevel : null
+         * entityCardId : null
+         * gradeNo : 3
          * memberHead : null
          * memberId : 179178
          * memberName : null
-         * memberNickName : 合肥百大
          * memberPhone : 15167168495
-         * memberProvince : null
-         * memberPwd : 9a72c6fa2fceb451e88472538fb2dbe7
-         * memberScore : 1
-         * memberSex : UNKNOW
-         * memberSource : APP_ORDINARY_FOCUS
-         * memberType : MEMBER
-         * modifyTime : null
-         * organizeId : 0
-         * registerOrganizeId : null
-         * registerTime : 2018-05-30 16:21:35
-         * subscribeChangeTime : null
-         * subscribeTime : null
-         * unionId : null
-         * unsubscribeChangeTime : null
-         * useScore : 0
+         * payPassword : null
+         * points : 0
+         * totalAccount : 0
+         * version : null
          */
 
-        private String appUuid;
-        private int balanceScore;
-        private Object cardLevelId;
-        private String entityCardId;
-        private Object idCardNumber;
-        private String isDelete;
-        private String isQuit;
-        private String isSubscribe;
-        private String memberBirthday;
-        private String memberCardNo;
-        private String memberCity;
-        private String memberCountry;
+        private int accountBalance;
+        private String cardLevel;
+        private Object cardLevelDO;
+        private String cardLevelPic;
+        private String cardNumber;
+        private int couponCount;
+        private Object currentLevel;
+        private Object entityCardId;
+        private int gradeNo;
         private String memberHead;
         private int memberId;
         private String memberName;
-        private String memberNickName;
-        private String memberPhone;
-        private String memberProvince;
-        private String memberPwd;
-        private int memberScore;
-        private String memberSex;
-        private String memberSource;
-        private String memberType;
-        private Object modifyTime;
-        private int organizeId;
-        private Object registerOrganizeId;
-        private String registerTime;
-        private Object subscribeChangeTime;
-        private Object subscribeTime;
-        private Object unionId;
-        private Object unsubscribeChangeTime;
-        private int useScore;
 
-        public String getAppUuid() {
-            return appUuid;
+        public int getAccountBalance() {
+            return accountBalance;
         }
 
-        public void setAppUuid(String appUuid) {
-            this.appUuid = appUuid;
+        public void setAccountBalance(int accountBalance) {
+            this.accountBalance = accountBalance;
         }
 
-        public int getBalanceScore() {
-            return balanceScore;
+        public String getCardLevel() {
+            return cardLevel;
         }
 
-        public void setBalanceScore(int balanceScore) {
-            this.balanceScore = balanceScore;
+        public void setCardLevel(String cardLevel) {
+            this.cardLevel = cardLevel;
         }
 
-        public Object getCardLevelId() {
-            return cardLevelId;
+        public Object getCardLevelDO() {
+            return cardLevelDO;
         }
 
-        public void setCardLevelId(Object cardLevelId) {
-            this.cardLevelId = cardLevelId;
+        public void setCardLevelDO(Object cardLevelDO) {
+            this.cardLevelDO = cardLevelDO;
         }
 
-        public String getEntityCardId() {
+        public String getCardLevelPic() {
+            return cardLevelPic;
+        }
+
+        public void setCardLevelPic(String cardLevelPic) {
+            this.cardLevelPic = cardLevelPic;
+        }
+
+        public String getCardNumber() {
+            return cardNumber;
+        }
+
+        public void setCardNumber(String cardNumber) {
+            this.cardNumber = cardNumber;
+        }
+
+        public int getCouponCount() {
+            return couponCount;
+        }
+
+        public void setCouponCount(int couponCount) {
+            this.couponCount = couponCount;
+        }
+
+        public Object getCurrentLevel() {
+            return currentLevel;
+        }
+
+        public void setCurrentLevel(Object currentLevel) {
+            this.currentLevel = currentLevel;
+        }
+
+        public Object getEntityCardId() {
             return entityCardId;
         }
 
-        public void setEntityCardId(String entityCardId) {
+        public void setEntityCardId(Object entityCardId) {
             this.entityCardId = entityCardId;
         }
 
-        public Object getIdCardNumber() {
-            return idCardNumber;
+        public int getGradeNo() {
+            return gradeNo;
         }
 
-        public void setIdCardNumber(Object idCardNumber) {
-            this.idCardNumber = idCardNumber;
-        }
-
-        public String getIsDelete() {
-            return isDelete;
-        }
-
-        public void setIsDelete(String isDelete) {
-            this.isDelete = isDelete;
-        }
-
-        public String getIsQuit() {
-            return isQuit;
-        }
-
-        public void setIsQuit(String isQuit) {
-            this.isQuit = isQuit;
-        }
-
-        public String getIsSubscribe() {
-            return isSubscribe;
-        }
-
-        public void setIsSubscribe(String isSubscribe) {
-            this.isSubscribe = isSubscribe;
-        }
-
-        public String getMemberBirthday() {
-            return memberBirthday;
-        }
-
-        public void setMemberBirthday(String memberBirthday) {
-            this.memberBirthday = memberBirthday;
-        }
-
-        public String getMemberCardNo() {
-            return memberCardNo;
-        }
-
-        public void setMemberCardNo(String memberCardNo) {
-            this.memberCardNo = memberCardNo;
-        }
-
-        public String getMemberCity() {
-            return memberCity;
-        }
-
-        public void setMemberCity(String memberCity) {
-            this.memberCity = memberCity;
-        }
-
-        public String getMemberCountry() {
-            return memberCountry;
-        }
-
-        public void setMemberCountry(String memberCountry) {
-            this.memberCountry = memberCountry;
+        public void setGradeNo(int gradeNo) {
+            this.gradeNo = gradeNo;
         }
 
         public String getMemberHead() {
@@ -251,14 +186,6 @@ public class UserInfoBean {
             this.memberName = memberName;
         }
 
-        public String getMemberNickName() {
-            return memberNickName;
-        }
-
-        public void setMemberNickName(String memberNickName) {
-            this.memberNickName = memberNickName;
-        }
-
         public String getMemberPhone() {
             return memberPhone;
         }
@@ -267,124 +194,44 @@ public class UserInfoBean {
             this.memberPhone = memberPhone;
         }
 
-        public String getMemberProvince() {
-            return memberProvince;
+        public String getPayPassword() {
+            return payPassword;
         }
 
-        public void setMemberProvince(String memberProvince) {
-            this.memberProvince = memberProvince;
+        public void setPayPassword(String payPassword) {
+            this.payPassword = payPassword;
         }
 
-        public String getMemberPwd() {
-            return memberPwd;
+        public int getPoints() {
+            return points;
         }
 
-        public void setMemberPwd(String memberPwd) {
-            this.memberPwd = memberPwd;
+        public void setPoints(int points) {
+            this.points = points;
         }
 
-        public int getMemberScore() {
-            return memberScore;
+        public int getTotalAccount() {
+            return totalAccount;
         }
 
-        public void setMemberScore(int memberScore) {
-            this.memberScore = memberScore;
+        public void setTotalAccount(int totalAccount) {
+            this.totalAccount = totalAccount;
         }
 
-        public String getMemberSex() {
-            return memberSex;
+        public String getVersion() {
+            return version;
         }
 
-        public void setMemberSex(String memberSex) {
-            this.memberSex = memberSex;
+        public void setVersion(String version) {
+            this.version = version;
         }
 
-        public String getMemberSource() {
-            return memberSource;
-        }
+        private String memberPhone;
+        private String payPassword;
+        private int points;
+        private int totalAccount;
+        private String version;
 
-        public void setMemberSource(String memberSource) {
-            this.memberSource = memberSource;
-        }
 
-        public String getMemberType() {
-            return memberType;
-        }
-
-        public void setMemberType(String memberType) {
-            this.memberType = memberType;
-        }
-
-        public Object getModifyTime() {
-            return modifyTime;
-        }
-
-        public void setModifyTime(Object modifyTime) {
-            this.modifyTime = modifyTime;
-        }
-
-        public int getOrganizeId() {
-            return organizeId;
-        }
-
-        public void setOrganizeId(int organizeId) {
-            this.organizeId = organizeId;
-        }
-
-        public Object getRegisterOrganizeId() {
-            return registerOrganizeId;
-        }
-
-        public void setRegisterOrganizeId(Object registerOrganizeId) {
-            this.registerOrganizeId = registerOrganizeId;
-        }
-
-        public String getRegisterTime() {
-            return registerTime;
-        }
-
-        public void setRegisterTime(String registerTime) {
-            this.registerTime = registerTime;
-        }
-
-        public Object getSubscribeChangeTime() {
-            return subscribeChangeTime;
-        }
-
-        public void setSubscribeChangeTime(Object subscribeChangeTime) {
-            this.subscribeChangeTime = subscribeChangeTime;
-        }
-
-        public Object getSubscribeTime() {
-            return subscribeTime;
-        }
-
-        public void setSubscribeTime(Object subscribeTime) {
-            this.subscribeTime = subscribeTime;
-        }
-
-        public Object getUnionId() {
-            return unionId;
-        }
-
-        public void setUnionId(Object unionId) {
-            this.unionId = unionId;
-        }
-
-        public Object getUnsubscribeChangeTime() {
-            return unsubscribeChangeTime;
-        }
-
-        public void setUnsubscribeChangeTime(Object unsubscribeChangeTime) {
-            this.unsubscribeChangeTime = unsubscribeChangeTime;
-        }
-
-        public int getUseScore() {
-            return useScore;
-        }
-
-        public void setUseScore(int useScore) {
-            this.useScore = useScore;
-        }
     }
 }

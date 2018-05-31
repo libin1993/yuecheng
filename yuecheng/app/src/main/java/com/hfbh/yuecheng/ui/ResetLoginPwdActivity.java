@@ -2,6 +2,7 @@ package com.hfbh.yuecheng.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,20 +13,16 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.bean.UserInfoBean;
+import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -33,7 +30,6 @@ import com.hfbh.yuecheng.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,34 +41,27 @@ import butterknife.OnClick;
 import okhttp3.Call;
 
 /**
- * Author：Libin on 2018/5/28 11:17
+ * Author：Libin on 2018/5/30 15:05
  * Email：1993911441@qq.com
- * Describe：注册
+ * Describe：重置登录密码
  */
-public class RegisterActivity extends BaseActivity {
-    @BindView(R.id.tv_register_title)
-    TextView tvRegisterTitle;
-    @BindView(R.id.tv_register_close)
-    ImageView tvRegisterClose;
-    @BindView(R.id.et_register_phone)
-    EditText etRegisterPhone;
-    @BindView(R.id.et_register_code)
-    EditText etRegisterCode;
-    @BindView(R.id.tv_register_code)
-    TextView tvRegisterCode;
-    @BindView(R.id.et_register_pwd)
-    EditText etRegisterPwd;
-    @BindView(R.id.iv_register_code)
-    ImageView ivRegisterCode;
-    @BindView(R.id.tv_register)
-    TextView tvRegister;
-    @BindView(R.id.checkbox_register)
-    CheckBox checkbox;
-    @BindView(R.id.tv_register_agreement)
-    TextView tvRegisterAgreement;
-    @BindView(R.id.rl_register_agreement)
-    LinearLayout rlRegisterAgreement;
-
+public class ResetLoginPwdActivity extends BaseActivity {
+    @BindView(R.id.tv_header_title)
+    TextView tvHeaderTitle;
+    @BindView(R.id.iv_header_back)
+    ImageView ivHeaderBack;
+    @BindView(R.id.et_reset_phone)
+    EditText etResetPhone;
+    @BindView(R.id.et_reset_code)
+    EditText etResetCode;
+    @BindView(R.id.tv_reset_code)
+    TextView tvResetCode;
+    @BindView(R.id.et_reset_pwd)
+    EditText etResetPwd;
+    @BindView(R.id.iv_reset_pwd)
+    ImageView ivResetPwd;
+    @BindView(R.id.tv_reset_pwd)
+    TextView tvResetPwd;
 
     //是否输入手机号
     private boolean isPhone;
@@ -83,40 +72,19 @@ public class RegisterActivity extends BaseActivity {
     //是否显示密码
     private boolean isShow;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_reset_login_pwd);
         ButterKnife.bind(this);
-
         initView();
     }
 
-
-    /**
-     * 加载视图
-     */
     private void initView() {
-        tvRegisterTitle.setText("注册");
-        etRegisterPwd.setHint("设置密码");
-        tvRegister.setText("注册");
-        rlRegisterAgreement.setVisibility(View.VISIBLE);
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked && isPhone && isCode && isPwd) {
-                    tvRegister.setEnabled(true);
-                } else {
-                    tvRegister.setEnabled(false);
-                }
-            }
-        });
+        tvHeaderTitle.setText("重置密码");
+        etResetPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-
-        etRegisterPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
-        etRegisterPhone.addTextChangedListener(new TextWatcher() {
+        etResetPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -129,21 +97,23 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (PhoneNumberUtils.judgePhoneNumber(etRegisterPhone.getText().toString().trim())) {
+                if (PhoneNumberUtils.judgePhoneNumber(etResetPhone.getText().toString().trim())) {
                     isPhone = true;
-                    if (isCode && isPwd && checkbox.isChecked()) {
-                        tvRegister.setEnabled(true);
+                    if (isCode && isPwd) {
+                        tvResetPwd.setEnabled(true);
                     } else {
-                        tvRegister.setEnabled(false);
+                        tvResetPwd.setEnabled(false);
                     }
                 } else {
                     isPhone = false;
-                    tvRegister.setEnabled(false);
+                    tvResetPwd.setEnabled(false);
                 }
             }
         });
 
-        etRegisterCode.addTextChangedListener(new TextWatcher() {
+        etResetPhone.setText(SharedPreUtils.getStr(this,"phone"));
+
+        etResetCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -156,23 +126,23 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(etRegisterCode.getText().toString().trim())) {
+                if (!TextUtils.isEmpty(etResetCode.getText().toString().trim())) {
                     isCode = true;
-                    if (isPhone && isPwd && checkbox.isChecked()) {
-                        tvRegister.setEnabled(true);
+                    if (isPhone && isPwd) {
+                        tvResetPwd.setEnabled(true);
                     } else {
-                        tvRegister.setEnabled(false);
+                        tvResetPwd.setEnabled(false);
                     }
 
                 } else {
                     isCode = false;
-                    tvRegister.setEnabled(false);
+                    tvResetPwd.setEnabled(false);
                 }
 
             }
         });
 
-        etRegisterPwd.addTextChangedListener(new TextWatcher() {
+        etResetPwd.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -185,99 +155,99 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(etRegisterPwd.getText().toString().trim())) {
+                if (!TextUtils.isEmpty(etResetPwd.getText().toString().trim())) {
                     isPwd = true;
-                    if (isPhone && isCode && checkbox.isChecked()) {
-                        tvRegister.setEnabled(true);
+                    if (isPhone && isCode) {
+                        tvResetPwd.setEnabled(true);
                     } else {
-                        tvRegister.setEnabled(false);
+                        tvResetPwd.setEnabled(false);
                     }
                 } else {
                     isCode = false;
-                    tvRegister.setEnabled(false);
+                    tvResetPwd.setEnabled(false);
                 }
 
             }
         });
+    }
 
+
+    @OnClick({R.id.iv_header_back, R.id.tv_reset_code, R.id.iv_reset_pwd, R.id.tv_reset_pwd})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_header_back:
+                finish();
+                break;
+            case R.id.tv_reset_code:
+                getVerificationCode();
+                break;
+            case R.id.iv_reset_pwd:
+                if (isShow) {
+                    ivResetPwd.setImageResource(R.mipmap.btn_signin_invisiable);
+                    //隐藏密码
+                    etResetPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    isShow = false;
+                } else {
+                    ivResetPwd.setImageResource(R.mipmap.btn_signin_visiable);
+                    //显示密码
+                    etResetPwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    isShow = true;
+                }
+
+                if (!TextUtils.isEmpty(etResetPwd.getText().toString().trim())) {
+                    etResetPwd.setSelection(etResetPwd.getText().toString().length());
+                }
+                break;
+            case R.id.tv_reset_pwd:
+                isRegister(2);
+                break;
+        }
 
     }
 
+
     private MyHandler mHandler = new MyHandler(this);
 
-    private static class MyHandler extends Handler {
-        private WeakReference<RegisterActivity> mActivity;
 
-        private MyHandler(RegisterActivity activity) {
+    private static class MyHandler extends Handler {
+        private WeakReference<ResetLoginPwdActivity> mActivity;
+
+        private MyHandler(ResetLoginPwdActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            RegisterActivity activity = mActivity.get();
+            ResetLoginPwdActivity activity = mActivity.get();
             if (activity != null) {
                 if (msg.what == 1) {
-                    activity.tvRegisterCode.setText(msg.arg1 + "s后重发");
-                    activity.tvRegisterCode.setTextColor(0xff999999);
+                    activity.tvResetCode.setText(msg.arg1 + "s后重发");
+                    activity.tvResetCode.setTextColor(0xff999999);
                 } else if (msg.what == 2) {
-                    activity.tvRegisterCode.setText("获取验证码");
-                    activity.tvRegisterCode.setClickable(true);
-                    activity.tvRegisterCode.setTextColor(0xff990000);
+                    activity.tvResetCode.setText("获取验证码");
+                    activity.tvResetCode.setClickable(true);
+                    activity.tvResetCode.setTextColor(0xff990000);
                 }
             }
         }
     }
 
-    @OnClick({R.id.tv_register_close, R.id.tv_register_code, R.id.iv_register_code, R.id.tv_register,
-            R.id.tv_register_agreement})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_register_close:
-                finish();
-                break;
-            case R.id.tv_register_code:
-                getVerificationCode();
-                break;
-            case R.id.iv_register_code:
-                if (isShow) {
-                    ivRegisterCode.setImageResource(R.mipmap.btn_signin_invisiable);
-                    //隐藏密码
-                    etRegisterPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    isShow = false;
-                } else {
-                    ivRegisterCode.setImageResource(R.mipmap.btn_signin_visiable);
-                    //显示密码
-                    etRegisterPwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    isShow = true;
-                }
-
-                if (!TextUtils.isEmpty(etRegisterPwd.getText().toString().trim())) {
-                    etRegisterPwd.setSelection(etRegisterPwd.getText().toString().length());
-                }
-                break;
-            case R.id.tv_register:
-                isRegister(2);
-                break;
-            case R.id.tv_register_agreement:
-                break;
-        }
-    }
 
     /**
-     * 注册
+     * 修改密码
      */
-    private void register() {
-        String phone = etRegisterPhone.getText().toString().trim();
-        String pwd = etRegisterPwd.getText().toString().trim();
+    private void updatePwd() {
+        String phone = etResetPhone.getText().toString().trim();
+        String pwd = etResetPwd.getText().toString().trim();
         String md5 = MD5Utils.md5(pwd + phone.substring(7));
         OkHttpUtils.post()
-                .url(Constant.REGISTER)
+                .url(Constant.UPDATE_PWD)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("memberPhone", phone)
-                .addParams("vircode", etRegisterCode.getText().toString().trim())
+                .addParams("vircode", etResetCode.getText().toString().trim())
                 .addParams("memberPwd", md5)
                 .build()
                 .execute(new StringCallback() {
@@ -288,17 +258,12 @@ public class RegisterActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
-                        if (userInfoBean.isFlag()) {
-                            ToastUtils.showToast(RegisterActivity.this, "注册成功");
-                            EventBus.getDefault().post("login_success");
-                            SharedPreUtils.saveStr(RegisterActivity.this, "hash", userInfoBean.getHash());
-                            SharedPreUtils.saveStr(RegisterActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
-                            SharedPreUtils.saveBoolean(RegisterActivity.this, "is_login", true);
-                            SharedPreUtils.saveStr(RegisterActivity.this, "phone", String.valueOf(userInfoBean.getData().getMemberPhone()));
+                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+                        if (responseBean.isFlag()) {
+                            ToastUtils.showToast(ResetLoginPwdActivity.this, "修改成功");
                             finish();
                         } else {
-                            ToastUtils.showToast(RegisterActivity.this, "注册失败");
+                            ToastUtils.showToast(ResetLoginPwdActivity.this, "修改失败");
                         }
                     }
                 });
@@ -318,7 +283,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     /**
-     * 监测手机号是否注册
+     * 检测手机号是否注册
      */
     private void isRegister(final int type) {
         OkHttpUtils.post()
@@ -327,7 +292,7 @@ public class RegisterActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("memberPhone", etRegisterPhone.getText().toString().trim())
+                .addParams("memberPhone", etResetPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -337,14 +302,15 @@ public class RegisterActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log("register" + response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");
                             //是否已注册 false已注册 true未注册
                             if (flag) {
+                                toRegister();
+                            } else {
                                 if (type == 1) {
-                                    tvRegisterCode.setClickable(false);
+                                    tvResetCode.setClickable(false);
                                     sendPhoneNumber();
                                     new Thread(new Runnable() {
                                         @Override
@@ -364,10 +330,8 @@ public class RegisterActivity extends BaseActivity {
                                         }
                                     }).start();
                                 } else if (type == 2) {
-                                    register();
+                                    updatePwd();
                                 }
-                            } else {
-                                toLogin();
                             }
 
                         } catch (JSONException e) {
@@ -380,18 +344,18 @@ public class RegisterActivity extends BaseActivity {
     }
 
     /**
-     * 手机号已注册，提示用户登录
+     * 手机号未注册，提示用户注册
      */
-    private void toLogin() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this,
+    private void toRegister() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this,
                 R.style.Theme_AppCompat_DayNight_Dialog_Alert);
         dialog.setTitle("提示");
-        dialog.setMessage("该手机号已经被注册，是否直接去登录");
+        dialog.setMessage("该手机号尚未注册，请先去注册");
         //为“确定”按钮注册监听事件
-        dialog.setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("去注册", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                startActivity(new Intent(ResetLoginPwdActivity.this, RegisterActivity.class));
             }
         });
 
@@ -417,7 +381,7 @@ public class RegisterActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("memberPhone", etRegisterPhone.getText().toString().trim())
+                .addParams("memberPhone", etResetPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
 
@@ -431,7 +395,8 @@ public class RegisterActivity extends BaseActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String msg = jsonObject.getString("msg");
-                            ToastUtils.showToast(RegisterActivity.this, msg);
+
+                            ToastUtils.showToast(ResetLoginPwdActivity.this, msg);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -16,6 +16,9 @@ import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -52,6 +55,7 @@ public class SetUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_up);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initView();
     }
 
@@ -59,7 +63,7 @@ public class SetUpActivity extends BaseActivity {
         tvHeaderTitle.setText("设置");
         String totalCacheSize = DataManagerUtils.getTotalCacheSize(this);
         tvClearCache.setText(totalCacheSize);
-        if (SharedPreUtils.getBoolean(this,"is_login",false)){
+        if (SharedPreUtils.getBoolean(this, "is_login", false)) {
             tvLogOut.setVisibility(View.VISIBLE);
         }
     }
@@ -72,7 +76,7 @@ public class SetUpActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_set_pwd:
-                startActivity(new Intent(this,SetPwdActivity.class));
+                toLogin(SetPwdActivity.class);
                 break;
             case R.id.ll_set_pay_type:
                 break;
@@ -80,14 +84,29 @@ public class SetUpActivity extends BaseActivity {
                 clearAppCache();
                 break;
             case R.id.ll_feed_back:
-                startActivity(new Intent(this,FeedBackActivity.class));
+                startActivity(new Intent(this, FeedBackActivity.class));
                 break;
             case R.id.ll_about_app:
-                startActivity(new Intent(this,AboutUsActivity.class));
+                startActivity(new Intent(this, AboutUsActivity.class));
                 break;
             case R.id.tv_log_out:
+                SharedPreUtils.deleteStr(this, "is_login");
+                tvLogOut.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    /**
+     * @param cls 是否登录
+     */
+    private void toLogin(Class<?> cls) {
+        Intent intent;
+        if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+            intent = new Intent(this, cls);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+        }
+        startActivity(intent);
     }
 
     /**
@@ -116,5 +135,19 @@ public class SetUpActivity extends BaseActivity {
         });
         dialog.create();
         dialog.show();
+    }
+
+
+    @Subscribe
+    public void isLogin(String msg) {
+        if ("login_success".equals(msg)) {
+            tvLogOut.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

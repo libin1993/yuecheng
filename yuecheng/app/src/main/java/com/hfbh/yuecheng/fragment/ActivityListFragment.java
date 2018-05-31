@@ -21,6 +21,7 @@ import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.hfbh.yuecheng.view.SpaceItemDecoration;
@@ -99,9 +100,12 @@ public class ActivityListFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
-                        pages = activityListBean.getPage().getPages();
-
+                        if (activityListBean.getPage() != null){
+                            pages = activityListBean.getPage().getPages();
+                        }
+                        
                         if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
                             if (isRefresh) {
                                 dataList.clear();

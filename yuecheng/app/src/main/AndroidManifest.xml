@@ -46,7 +46,7 @@
         android:name=".application.MyApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_tab_home_checked"
+        android:icon="@mipmap/ic_app_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
@@ -111,7 +111,9 @@
             android:name=".ui.FeedBackActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".ui.SetPwdActivity"/>
-        <activity android:name=".ui.ResetPwdActivity"/>
+        <activity android:name=".ui.ResetLoginPwdActivity"/>
+        <activity android:name=".ui.ResetPayPwdActivity"/>
+        <activity android:name=".ui.ValidateActivity"/>
     </application>
 
 </manifest>

@@ -174,7 +174,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
      * 用户信息
      */
     private void initView() {
-        tvUserName.setText(userInfoBean.getData().getMemberNickName());
+        tvUserName.setText(userInfoBean.getData().getMemberName());
         if (!TextUtils.isEmpty(userInfoBean.getData().getMemberHead())) {
             ivUserAvatar.setImageURI(userInfoBean.getData().getMemberHead());
         }
