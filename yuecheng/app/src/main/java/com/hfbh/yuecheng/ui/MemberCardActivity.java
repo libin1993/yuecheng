@@ -10,13 +10,9 @@ import android.widget.RadioGroup;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.bean.MemberCodeBean;
+import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.fragment.ActivityFragment;
-import com.hfbh.yuecheng.fragment.DiscoveryFragment;
-import com.hfbh.yuecheng.fragment.HomepageFragment;
 import com.hfbh.yuecheng.fragment.MemberCodeFragment;
-import com.hfbh.yuecheng.fragment.MineFragment;
 import com.hfbh.yuecheng.fragment.PayCodeFragment;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -47,7 +43,7 @@ public class MemberCardActivity extends BaseActivity {
     RadioGroup rgsMemberCode;
     @BindView(R.id.fl_member_container)
     FrameLayout flMemberContainer;
-    private MemberCodeBean memberCodeBean;
+    private UserInfoBean userInfoBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +55,7 @@ public class MemberCardActivity extends BaseActivity {
 
     private void initData() {
         OkHttpUtils.post()
-                .url(Constant.MEMBER_CODE)
+                .url(Constant.USER_INFO)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
@@ -73,8 +69,8 @@ public class MemberCardActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        memberCodeBean = GsonUtils.jsonToBean(s, MemberCodeBean.class);
-                        if (memberCodeBean.isFlag()) {
+                        userInfoBean = GsonUtils.jsonToBean(s, UserInfoBean.class);
+                        if (userInfoBean.isFlag()) {
                             initView();
                         }
 
@@ -88,8 +84,8 @@ public class MemberCardActivity extends BaseActivity {
     private void initView() {
 
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(MemberCodeFragment.newInstance(memberCodeBean));
-        fragmentList.add(PayCodeFragment.newInstance(memberCodeBean));
+        fragmentList.add(MemberCodeFragment.newInstance(userInfoBean));
+        fragmentList.add(PayCodeFragment.newInstance(userInfoBean));
         new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
                 R.id.fl_member_container, rgsMemberCode);
     }

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseFragment;
-import com.hfbh.yuecheng.bean.MemberCodeBean;
+import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.utils.BarcodeUtils;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
@@ -48,7 +48,7 @@ public class PayCodeFragment extends BaseFragment {
     @BindView(R.id.ll_paycode_ticket)
     LinearLayout llPaycodeTicket;
     private Unbinder unbinder;
-    private MemberCodeBean memberCodeBean;
+    private UserInfoBean userInfoBean;
 
     private boolean isShow;
 
@@ -67,11 +67,11 @@ public class PayCodeFragment extends BaseFragment {
     }
 
     private void getData() {
-        memberCodeBean = (MemberCodeBean) getArguments().getSerializable("pay_code");
+        userInfoBean = (UserInfoBean) getArguments().getSerializable("pay_code");
     }
 
     private void initView() {
-        int memberId = memberCodeBean.getData().getMemberId();
+        int memberId = userInfoBean.getData().getMemberId();
 
         barBmp = BarcodeUtils.creatBarcode(String.valueOf(memberId),
                 (int) DisplayUtils.dp2px(getActivity(), 225),
@@ -83,14 +83,14 @@ public class PayCodeFragment extends BaseFragment {
 
         ivPayQrcode.setImageBitmap(qrBmp);
 
-        tvPaycodeMoney.setText(String.valueOf(memberCodeBean.getData().getAccountBalance()));
-        tvPaycodeScore.setText(String.valueOf(memberCodeBean.getData().getPoints()));
-        tvPaycodeTicket.setText(String.valueOf(memberCodeBean.getData().getCouponCount()));
+        tvPaycodeMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
+        tvPaycodeScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
+        tvPaycodeTicket.setText(String.valueOf(userInfoBean.getData().getCouponCount()));
     }
 
-    public static PayCodeFragment newInstance(MemberCodeBean memberCodeBean) {
+    public static PayCodeFragment newInstance(UserInfoBean userInfoBean) {
         Bundle args = new Bundle();
-        args.putSerializable("pay_code", memberCodeBean);
+        args.putSerializable("pay_code", userInfoBean);
         PayCodeFragment fragment = new PayCodeFragment();
         fragment.setArguments(args);
         return fragment;
@@ -102,7 +102,7 @@ public class PayCodeFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tv_pay_barcode:
                 if (isShow) {
-                    tvPayBarcode.setText(String.valueOf(memberCodeBean.getData().getMemberId()));
+                    tvPayBarcode.setText(String.valueOf(userInfoBean.getData().getMemberId()));
                     tvPayBarcode.setTextColor(getResources().getColor(R.color.gray_10));
                     isShow = false;
                 } else {

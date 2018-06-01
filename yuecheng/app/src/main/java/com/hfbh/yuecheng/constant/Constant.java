@@ -27,8 +27,6 @@ public class Constant {
     public static final String SHOP_DETAIL = HOST + "/wechat/shop/shopDetail.json";
     //
     public static final String QR_CODE = "https://pan.baidu.com/share/qrcode?w=150&h=150&url=http://www.xsyrz.cn";
-    //会员码
-    public static final String MEMBER_CODE = HOST + "/wechat/member/queryMember.json";
     //
     public static final String PAY_CODE = HOST + "/wechat/scanCodePay/queryOrder.json";
     //优惠券列表

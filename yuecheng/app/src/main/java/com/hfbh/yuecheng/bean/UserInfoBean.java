@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,9 +8,10 @@ import java.util.List;
  * Email：1993911441@qq.com
  * Describe：
  */
-public class UserInfoBean {
+public class UserInfoBean implements Serializable{
 
 
+    private static final long serialVersionUID = 2472656786375655038L;
     /**
      * flag : true
      * hash : c07ed299d6364f04ba33869ed2f26fc9
@@ -54,7 +56,8 @@ public class UserInfoBean {
         this.code = code;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
+        private static final long serialVersionUID = 1637596220579495100L;
         /**
          * accountBalance : 1487.89
          * cardLevel : VIP积分卡
@@ -299,7 +302,8 @@ public class UserInfoBean {
             this.version = version;
         }
 
-        public static class MemberCardGradeDTOBean {
+        public static class MemberCardGradeDTOBean implements Serializable{
+            private static final long serialVersionUID = 2014496416043004504L;
             /**
              * appPic : http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180329134056834.png
              * gradeId : 3
@@ -384,7 +388,8 @@ public class UserInfoBean {
                 this.listPrivilege = listPrivilege;
             }
 
-            public static class ListPrivilegeBean {
+            public static class ListPrivilegeBean implements Serializable{
+                private static final long serialVersionUID = 5383658936716515758L;
                 /**
                  * appPic : http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180409110248008.png
                  * createId : null

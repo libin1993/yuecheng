@@ -10,24 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
-import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
-import com.hfbh.yuecheng.bean.MemberCodeBean;
-import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.utils.BarcodeUtils;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
-import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
-import com.hfbh.yuecheng.utils.SharedPreUtils;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import okhttp3.Call;
 
 /**
  * Author：Libin on 2018/5/23 16:20
@@ -42,7 +34,7 @@ public class MemberCodeFragment extends BaseFragment {
     @BindView(R.id.tv_member_qrcode)
     TextView tvMemberQrcode;
     private Unbinder unbinder;
-    private MemberCodeBean memberCodeBean;
+    private UserInfoBean memberCodeBean;
     private Bitmap barBmp;
     private Bitmap qrBmp;
 
@@ -57,7 +49,7 @@ public class MemberCodeFragment extends BaseFragment {
     }
 
     private void getData() {
-        memberCodeBean = (MemberCodeBean) getArguments().getSerializable("member_code");
+        memberCodeBean = (UserInfoBean) getArguments().getSerializable("member_code");
     }
 
     private void initView() {
@@ -73,9 +65,9 @@ public class MemberCodeFragment extends BaseFragment {
         tvMemberQrcode.setText("卡号：" + memberId);
     }
 
-    public static MemberCodeFragment newInstance(MemberCodeBean memberCodeBean) {
+    public static MemberCodeFragment newInstance(UserInfoBean userInfoBean) {
         Bundle args = new Bundle();
-        args.putSerializable("member_code", memberCodeBean);
+        args.putSerializable("member_code", userInfoBean);
         MemberCodeFragment fragment = new MemberCodeFragment();
         fragment.setArguments(args);
         return fragment;

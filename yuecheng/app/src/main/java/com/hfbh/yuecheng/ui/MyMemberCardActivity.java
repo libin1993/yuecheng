@@ -20,7 +20,6 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -63,6 +62,10 @@ public class MyMemberCardActivity extends BaseActivity {
     RecyclerView rvMemberRights;
     @BindView(R.id.rl_member_recode)
     RelativeLayout rlMemberRecode;
+    @BindView(R.id.iv_member_card_code)
+    ImageView ivMemberCardCode;
+    @BindView(R.id.tv_member_card_no)
+    TextView tvMemberCardNo;
     private UserInfoBean userInfoBean;
 
     @Override
@@ -103,33 +106,34 @@ public class MyMemberCardActivity extends BaseActivity {
     private void initView() {
 
         tvTitleHeaderWhite.setText("电子会员卡");
-        ivMemberCard.setImageURI(userInfoBean.getData().getCardLevelPic());
+        ivMemberCard.setImageURI(userInfoBean.getData().getMemberCardGradeDTO().getAppPic());
         tvMemberCardMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
         tvMemberCardScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
         tvMemberCardGrade.setText(String.valueOf(userInfoBean.getData().getCardLevel()));
+        tvMemberCardNo.setText("NO." + userInfoBean.getData().getCardNumber());
 
         rvMemberRights.setLayoutManager(new GridLayoutManager(this, 3));
         CommonAdapter<UserInfoBean.DataBean.MemberCardGradeDTOBean.ListPrivilegeBean> adapter = new
                 CommonAdapter<UserInfoBean.DataBean.MemberCardGradeDTOBean.ListPrivilegeBean>(
-                MyMemberCardActivity.this, R.layout.rv_member_rights_item,
-                userInfoBean.getData().getMemberCardGradeDTO().getListPrivilege()) {
-            @Override
-            protected void convert(ViewHolder holder, UserInfoBean.DataBean.MemberCardGradeDTOBean
-                    .ListPrivilegeBean listPrivilegeBean, int position) {
+                        MyMemberCardActivity.this, R.layout.rv_member_rights_item,
+                        userInfoBean.getData().getMemberCardGradeDTO().getListPrivilege()) {
+                    @Override
+                    protected void convert(ViewHolder holder, UserInfoBean.DataBean.MemberCardGradeDTOBean
+                            .ListPrivilegeBean listPrivilegeBean, int position) {
 
-                Glide.with(MyMemberCardActivity.this)
-                        .load(listPrivilegeBean.getAppPic())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into((ImageView) holder.getView(R.id.iv_member_rights));
+                        Glide.with(MyMemberCardActivity.this)
+                                .load(listPrivilegeBean.getAppPic())
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .into((ImageView) holder.getView(R.id.iv_member_rights));
 
-                holder.setText(R.id.tv_member_rights, listPrivilegeBean.getPrivilegeName());
-            }
-        };
+                        holder.setText(R.id.tv_member_rights, listPrivilegeBean.getPrivilegeName());
+                    }
+                };
         rvMemberRights.setAdapter(adapter);
     }
 
     @OnClick({R.id.iv_back_header_white, R.id.ll_member_card_money, R.id.ll_member_card_score,
-            R.id.ll_member_card_grade, R.id.ll_member_card_rights, R.id.rl_member_recode})
+            R.id.ll_member_card_grade, R.id.ll_member_card_rights, R.id.rl_member_recode, R.id.iv_member_card_code})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back_header_white:
@@ -146,6 +150,9 @@ public class MyMemberCardActivity extends BaseActivity {
             case R.id.ll_member_card_rights:
                 break;
             case R.id.rl_member_recode:
+                break;
+            case R.id.iv_member_card_code:
+                startActivity(new Intent(this, MemberCardActivity.class));
                 break;
         }
     }
@@ -171,4 +178,5 @@ public class MyMemberCardActivity extends BaseActivity {
             startActivity(intent);
         }
     }
+
 }
