@@ -130,6 +130,8 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
     private String countAddress;
     //性别
     private String sex;
+    //头像
+    private String avatar;
 
     private ArrayList<String> selectedPhotos = new ArrayList<>();
     //相机权限
@@ -174,11 +176,10 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
      * 用户信息
      */
     private void initView() {
-        tvUserName.setText(userInfoBean.getData().getMemberName());
+        tvUserName.setText(userInfoBean.getData().getMemberNickname());
         if (!TextUtils.isEmpty(userInfoBean.getData().getMemberHead())) {
             ivUserAvatar.setImageURI(userInfoBean.getData().getMemberHead());
         }
-
     }
 
 
@@ -355,7 +356,6 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                     ivUserAvatar.setImageURI(Crop.getOutput(data));
                     File file = new File(Crop.getOutput(data).getPath());
 
-//                    updateUserInfo(builder);
                     uploadImg(file);
                 }
             } catch (Exception e) {
@@ -368,50 +368,30 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
      * 图片上传oss
      */
     private void uploadImg(File file) {
-//        OkHttpUtils.post()
-//                .url(Constant.UPLOAD_FILE)
-//                .addFile("tempFiles",file.getName(),file)
-//                .build()
-//                .execute(new StringCallback() {
-//                    @Override
-//                    public void onError(Call call, Exception e, int id) {
-//                        LogUtils.log(e.toString());
-//                    }
-//
-//                    @Override
-//                    public void onResponse(String response, int id) {
-//                        LogUtils.log(response);
-//                    }
-//                });
-
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("tempFiles", file.getName(),
-                        RequestBody.create(MediaType.parse("image/png"), file));
-
-        RequestBody requestBody = builder.build();
-        //构建请求
-        Request request = new Request.Builder()
+        OkHttpUtils.post()
                 .url(Constant.UPLOAD_FILE)
-                .post(requestBody)
-                .build();
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtils.log(e.toString());
-            }
+                .addFile("contentType", file.getName(), file)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
 
-            @Override
-            public void onResponse(Call call, final Response response) {
-                try {
-                    LogUtils.log(response.body().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+                        if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
+                            Map<String, String> map = new HashMap<>();
 
-            }
-        });
+                            map.put("memberHead", responseBean.getData());
+                            avatar = responseBean.getData();
+                            updateUserInfo("avatar", map);
+                        } else {
+                            ToastUtils.showToast(UserInfoActivity.this, "修改失败");
+                        }
+
+                    }
+                });
     }
 
     /**
@@ -473,6 +453,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                 if (responseBean.isFlag()) {
                     switch (key) {
                         case "avatar":
+                            ivUserAvatar.setImageURI(avatar);
                             break;
                         case "sex":
                             tvUserSex.setText(sex);

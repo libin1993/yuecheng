@@ -19,6 +19,8 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.LoginActivity;
+import com.hfbh.yuecheng.ui.MemberBalanceActivity;
+import com.hfbh.yuecheng.ui.MemberPointsActivity;
 import com.hfbh.yuecheng.ui.MyActionActivity;
 import com.hfbh.yuecheng.ui.MyMemberCardActivity;
 import com.hfbh.yuecheng.ui.SetUpActivity;
@@ -129,7 +131,7 @@ public class MineFragment extends BaseFragment {
      * 用户信息
      */
     private void initView() {
-        tvMineUsername.setText(userInfoBean.getData().getMemberName());
+        tvMineUsername.setText(userInfoBean.getData().getMemberNickname());
         if (!TextUtils.isEmpty(userInfoBean.getData().getMemberHead())) {
             ivMineAvatar.setImageURI(userInfoBean.getData().getMemberHead());
         }
@@ -173,33 +175,50 @@ public class MineFragment extends BaseFragment {
             case R.id.rl_mine_tool:
                 break;
             case R.id.ll_mine_money:
+                toMemberBalance();
                 break;
             case R.id.ll_mine_score:
+                toMemberPoints();
                 break;
             case R.id.ll_mine_grade:
-                toMemberCard();
+                toLogin(MyMemberCardActivity.class);
 
                 break;
         }
     }
 
     /**
-     * 会员卡
+     * 会员余额
      */
-    private void toMemberCard() {
+    private void toMemberBalance() {
         Intent intent;
         if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
             if (userInfoBean != null) {
-                intent = new Intent(getActivity(), MyMemberCardActivity.class);
-                intent.putExtra("user_info", userInfoBean);
+                intent = new Intent(getActivity(), MemberBalanceActivity.class);
+                intent.putExtra("balance", userInfoBean.getData().getAccountBalance());
                 startActivity(intent);
             }
-
         } else {
             intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
         }
+    }
 
+    /**
+     * 会员积分
+     */
+    private void toMemberPoints() {
+        Intent intent;
+        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+            if (userInfoBean != null) {
+                intent = new Intent(getActivity(), MemberPointsActivity.class);
+                intent.putExtra("points", userInfoBean.getData().getPoints());
+                startActivity(intent);
+            }
+        } else {
+            intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/gray_ed"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@drawable/gradient_yellow_ver">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:singleLine="true"
+            android:text="绑定预付卡"
+            android:textColor="@color/gray_10"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/iv_bind_card_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="12dp"
+            android:paddingRight="30dp"
+            android:scaleType="center"
+            android:src="@mipmap/ic_back_gray"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="22dp"
+            android:scaleType="center"
+            android:src="@mipmap/ic_user_card"/>
+
+        <EditText
+            android:id="@+id/et_bind_card_number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="输入储值卡卡号"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:textColor="@color/gray_10"
+            android:textColorHint="@color/gray_cc"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="22dp"
+            android:scaleType="center"
+            android:src="@mipmap/ic_user_verificationcode"/>
+
+        <EditText
+            android:id="@+id/et_bind_card_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="输入储值卡密码"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:textColor="@color/gray_10"
+            android:textColorHint="@color/gray_cc"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="19dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="绑定您的储值卡，储值卡金额将累计于会员卡中，可用余\n额在“支持会员卡特权及优惠”的店铺消费。"
+        android:textColor="@color/gray_10"
+        android:textSize="10sp"/>
+
+    <TextView
+        android:id="@+id/tv_bind_pay_card"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/layout_selector_login"
+        android:enabled="false"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
+
+</LinearLayout>

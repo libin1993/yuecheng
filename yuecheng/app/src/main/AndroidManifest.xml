@@ -114,6 +114,11 @@
         <activity android:name=".ui.ResetLoginPwdActivity"/>
         <activity android:name=".ui.ResetPayPwdActivity"/>
         <activity android:name=".ui.ValidateActivity"/>
+        <activity android:name=".ui.MemberBalanceActivity"/>
+        <activity android:name=".ui.MemberPointsActivity"/>
+        <activity android:name=".ui.PayCardActivity"/>
+        <activity android:name=".ui.BindCardActivity"/>
+        <activity android:name=".ui.BalanceRecordActivity"/>
     </application>
 
 </manifest>

@@ -22,6 +22,7 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
@@ -33,6 +34,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +47,13 @@ import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 import me.iwf.photopicker.utils.AndroidLifecycleUtils;
 import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
@@ -74,6 +83,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
     private ArrayList<String> photoList = new ArrayList<>();
 
     static final String[] permissionStr = {Manifest.permission.CAMERA};
+    private String imgUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -144,52 +154,104 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
 
                 break;
             case R.id.tv_confirm_feedback:
-                submitData();
+                if (!TextUtils.isEmpty(etContent.getText().toString().trim())) {
+                    loadingView.smoothToShow();
+                    if (photoList.size() > 0) {
+                        uploadImg();
+                    } else {
+                        submitData();
+                    }
+                } else {
+                    ToastUtils.showToast(this, "请留下您的宝贵意见");
+                }
+
                 break;
         }
+    }
+
+    /**
+     * 图片上传
+     */
+    private void uploadImg() {
+
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+        for (int i = 0; i < photoList.size(); i++) {
+            File file = new File(photoList.get(i));
+            builder.addFormDataPart("img" + i, file.getName(),
+                    RequestBody.create(MediaType.parse("image/png"), file));
+        }
+
+        MultipartBody requestBody = builder.build();
+        //构建请求
+        final Request request = new Request.Builder()
+                .url(Constant.UPLOAD_FILE)
+                .post(requestBody)
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ResponseBean responseBean = GsonUtils.jsonToBean(response.body().string(),
+                                    ResponseBean.class);
+                            if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
+                                submitData();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     /**
      * 提交反馈
      */
     private void submitData() {
-        String content = etContent.getText().toString().trim();
         String phone = etFeedbackPhone.getText().toString().trim();
-        if (!TextUtils.isEmpty(content)) {
-            Map<String, String> map = new HashMap<>();
-            map.put("appType", MyApp.appType);
-            map.put("appVersion", MyApp.appVersion);
-            map.put("organizeId", MyApp.organizeId);
-            map.put("hash", SharedPreUtils.getStr(this, "hash"));
-            map.put("content", content);
-            if (!TextUtils.isEmpty(phone)) {
-                map.put("phone", phone);
-            }
-
-            OkHttpUtils.post()
-                    .url(Constant.FEED_BACK)
-                    .params(map)
-                    .build()
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onError(Call call, Exception e, int id) {
-
-                        }
-
-                        @Override
-                        public void onResponse(String response, int id) {
-                            ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
-                            if (responseBean.isFlag()) {
-                                ToastUtils.showToast(FeedBackActivity.this, "反馈成功");
-                                finish();
-                            } else {
-                                ToastUtils.showToast(FeedBackActivity.this, "反馈失败");
-                            }
-                        }
-                    });
-        } else {
-            ToastUtils.showToast(this, "请输入反馈内容");
+        Map<String, String> map = new HashMap<>();
+        map.put("appType", MyApp.appType);
+        map.put("appVersion", MyApp.appVersion);
+        map.put("organizeId", MyApp.organizeId);
+        map.put("hash", SharedPreUtils.getStr(this, "hash"));
+        map.put("content", etContent.getText().toString().trim());
+        if (!TextUtils.isEmpty(phone)) {
+            map.put("phone", phone);
         }
+
+        OkHttpUtils.post()
+                .url(Constant.FEED_BACK)
+                .params(map)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        loadingView.smoothToHide();
+                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+                        if (responseBean.isFlag()) {
+                            ToastUtils.showToast(FeedBackActivity.this, "反馈成功");
+                            finish();
+                        } else {
+                            ToastUtils.showToast(FeedBackActivity.this, "反馈失败");
+                        }
+                    }
+                });
+
     }
 
 
@@ -223,7 +285,8 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
      * @param grantResults 结果
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }

@@ -83,6 +83,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
+            android:background="@null"
             android:hint="请留下您的手机号"
             android:inputType="phone"
             android:maxLength="11"
@@ -91,8 +92,7 @@
             android:src="@mipmap/img_user_addpic"
             android:textColor="@color/gray_10"
             android:textColorHint="@color/gray_cc"
-            android:textSize="15sp"
-            android:background="@null"/>
+            android:textSize="15sp"/>
 
     </LinearLayout>
 

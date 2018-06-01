@@ -15,13 +15,18 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 import static java.util.ResourceBundle.clearCache;
 
@@ -90,8 +95,7 @@ public class SetUpActivity extends BaseActivity {
                 startActivity(new Intent(this, AboutUsActivity.class));
                 break;
             case R.id.tv_log_out:
-                SharedPreUtils.deleteStr(this, "is_login");
-                tvLogOut.setVisibility(View.GONE);
+                logout();
                 break;
         }
     }
@@ -107,6 +111,33 @@ public class SetUpActivity extends BaseActivity {
             intent = new Intent(this, LoginActivity.class);
         }
         startActivity(intent);
+    }
+
+    /**
+     * 退出登录
+     */
+    public void logout() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("退出登录");
+        dialog.setMessage("您确定要退出登录吗？");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreUtils.deleteStr(SetUpActivity.this, "is_login");
+                tvLogOut.setVisibility(View.GONE);
+            }
+        });
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
+
     }
 
     /**

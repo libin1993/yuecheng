@@ -54,7 +54,7 @@ public class Constant {
     //修改用户信息
     public static final String UPDATE_USER_INFO = HOST + "/wechat/appRequest/updateMemberInfo.json";
     //图片上传
-    public static final String UPLOAD_FILE = HOST + "/wechat/wechatCommon/saveImgToOSS.json";
+    public static final String UPLOAD_FILE = HOST + "/wechat/wechatCommon/saveAppImgToLocal.json";
     //意见反馈
     public static final String FEED_BACK = HOST + "/wechat/feedback/save.json";
     //是否绑定支付密码
@@ -69,4 +69,14 @@ public class Constant {
     public static final String VALIDATE_PWD = HOST + "/wechat/member/validatePassword.json";
     //会员卡
     public static final String MEMBER_CARD = HOST + "/wechat/member/accountChangeRecord.json";
+    //积分记录
+    public static final String MEMBER_POINTS_RECORD = HOST + "/wechat/member/pointsRecord.json";
+    //预付卡
+    public static final String MEMBER_BALANCE = HOST + "/wechat/member/prePaidCardList.json";
+    //删除预付卡
+    public static final String DELETE_PAY_CARD = HOST + "/wechat/member/deleteCard.json";
+    //绑定预付卡
+    public static final String BIND_PAY_CARD = HOST + "/wechat/member/savePrePaidCard.json";
+    //余额明细
+    public static final String BALANCE_RECORD = HOST +"/wechat/member/accountChangeRecord.json";
 }

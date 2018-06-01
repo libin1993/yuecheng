@@ -1,7 +1,9 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,14 +11,26 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.UserInfoBean;
+import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
+import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Author：Libin on 2018/5/29 12:41
@@ -56,22 +70,62 @@ public class MyMemberCardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_member_card);
         ButterKnife.bind(this);
-        getData();
-        initView();
+        initData();
     }
 
-    private void getData() {
-        userInfoBean = (UserInfoBean) getIntent().getSerializableExtra("user_info");
+    private void initData() {
+
+        OkHttpUtils.post()
+                .url(Constant.USER_INFO)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                        if (userInfoBean.isFlag()) {
+                            initView();
+                        }
+                    }
+                });
+
     }
+
 
     private void initView() {
-        if (userInfoBean != null){
-            ivMemberCard.setImageURI(userInfoBean.getData().getCardLevelPic());
-            tvMemberCardMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
-            tvMemberCardScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
-            tvMemberCardGrade.setText(String.valueOf(userInfoBean.getData().getCardLevel()));
-        }
 
+        tvTitleHeaderWhite.setText("电子会员卡");
+        ivMemberCard.setImageURI(userInfoBean.getData().getCardLevelPic());
+        tvMemberCardMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
+        tvMemberCardScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
+        tvMemberCardGrade.setText(String.valueOf(userInfoBean.getData().getCardLevel()));
+
+        rvMemberRights.setLayoutManager(new GridLayoutManager(this, 3));
+        CommonAdapter<UserInfoBean.DataBean.MemberCardGradeDTOBean.ListPrivilegeBean> adapter = new
+                CommonAdapter<UserInfoBean.DataBean.MemberCardGradeDTOBean.ListPrivilegeBean>(
+                MyMemberCardActivity.this, R.layout.rv_member_rights_item,
+                userInfoBean.getData().getMemberCardGradeDTO().getListPrivilege()) {
+            @Override
+            protected void convert(ViewHolder holder, UserInfoBean.DataBean.MemberCardGradeDTOBean
+                    .ListPrivilegeBean listPrivilegeBean, int position) {
+
+                Glide.with(MyMemberCardActivity.this)
+                        .load(listPrivilegeBean.getAppPic())
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into((ImageView) holder.getView(R.id.iv_member_rights));
+
+                holder.setText(R.id.tv_member_rights, listPrivilegeBean.getPrivilegeName());
+            }
+        };
+        rvMemberRights.setAdapter(adapter);
     }
 
     @OnClick({R.id.iv_back_header_white, R.id.ll_member_card_money, R.id.ll_member_card_score,
@@ -82,8 +136,10 @@ public class MyMemberCardActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_member_card_money:
+                toMemberBalance();
                 break;
             case R.id.ll_member_card_score:
+                toMemberPoints();
                 break;
             case R.id.ll_member_card_grade:
                 break;
@@ -91,6 +147,28 @@ public class MyMemberCardActivity extends BaseActivity {
                 break;
             case R.id.rl_member_recode:
                 break;
+        }
+    }
+
+    /**
+     * 会员余额
+     */
+    private void toMemberBalance() {
+        if (userInfoBean != null) {
+            Intent intent = new Intent(this, MemberBalanceActivity.class);
+            intent.putExtra("balance", userInfoBean.getData().getAccountBalance());
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * 会员积分
+     */
+    private void toMemberPoints() {
+        if (userInfoBean != null) {
+            Intent intent = new Intent(this, MemberPointsActivity.class);
+            intent.putExtra("points", userInfoBean.getData().getPoints());
+            startActivity(intent);
         }
     }
 }
