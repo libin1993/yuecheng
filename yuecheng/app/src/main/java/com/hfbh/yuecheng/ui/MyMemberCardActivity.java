@@ -148,6 +148,7 @@ public class MyMemberCardActivity extends BaseActivity {
             case R.id.ll_member_card_grade:
                 break;
             case R.id.ll_member_card_rights:
+                startActivity(new Intent(this, MemberRightsActivity.class));
                 break;
             case R.id.rl_member_recode:
                 break;

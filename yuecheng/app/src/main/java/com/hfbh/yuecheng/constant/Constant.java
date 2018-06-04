@@ -29,8 +29,10 @@ public class Constant {
     public static final String QR_CODE = "https://pan.baidu.com/share/qrcode?w=150&h=150&url=http://www.xsyrz.cn";
     //
     public static final String PAY_CODE = HOST + "/wechat/scanCodePay/queryOrder.json";
-    //优惠券列表
+    //礼品列表
     public static final String EXCHANGE_GIFT_LIST = HOST + "/wechat/pointsReward/list.json";
+    //兑换优惠券列表
+    public static final String EXCHANGE_COUPON_LIST = HOST + "/wechat/webcoupon/listCouponDefault.json";
     //礼品信息
     public static final String GIFT_INFO = HOST + "/wechat/pointsReward/info.json";
     //兑换礼品
@@ -76,5 +78,15 @@ public class Constant {
     //绑定预付卡
     public static final String BIND_PAY_CARD = HOST + "/wechat/member/savePrePaidCard.json";
     //余额明细
-    public static final String BALANCE_RECORD = HOST +"/wechat/member/accountChangeRecord.json";
+    public static final String BALANCE_RECORD = HOST + "/wechat/member/accountChangeRecord.json";
+    //权限列表
+    public static final String MEMBER_RIGHTS = HOST + "/wechat/memberCard/listCardLevel.json";
+
+
+    //WebView
+    //活动详情
+    public static final String ACTIVITY_DETAIL = HOST + "/mall/baida-app-h5/index.html#/activity";
+    //商品详情
+    public static final String GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/specialDetail";
+
 }

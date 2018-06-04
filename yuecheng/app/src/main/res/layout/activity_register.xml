@@ -203,7 +203,7 @@
             android:id="@+id/tv_register_agreement"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:text="《合肥百大xx用户服务协议》"
+            android:text="《合肥百大悦城用户服务协议》"
             android:textColor="@color/gray_10"
             android:textSize="12sp"/>
     </LinearLayout>

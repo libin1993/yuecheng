@@ -20,7 +20,9 @@ import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberBalanceActivity;
+import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.MemberPointsActivity;
+import com.hfbh.yuecheng.ui.MsgCenterActivity;
 import com.hfbh.yuecheng.ui.MyActionActivity;
 import com.hfbh.yuecheng.ui.MyMemberCardActivity;
 import com.hfbh.yuecheng.ui.SetUpActivity;
@@ -75,6 +77,8 @@ public class MineFragment extends BaseFragment {
     LinearLayout llMineScore;
     @BindView(R.id.ll_mine_grade)
     LinearLayout llMineGrade;
+    @BindView(R.id.rl_mine_info)
+    RelativeLayout rlMineInfo;
     private Unbinder unbinder;
     private UserInfoBean userInfoBean;
 
@@ -148,7 +152,7 @@ public class MineFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.iv_mine_set, R.id.iv_mine_msg, R.id.rl_mine_username, R.id.rl_mine_paycode,
+    @OnClick({R.id.iv_mine_set, R.id.iv_mine_msg, R.id.rl_mine_info, R.id.rl_mine_paycode,
             R.id.rl_mine_ticket, R.id.rl_mine_order, R.id.rl_mine_exchange, R.id.rl_mine_activity,
             R.id.rl_mine_tool, R.id.ll_mine_money, R.id.ll_mine_score, R.id.ll_mine_grade})
     public void onViewClicked(View view) {
@@ -157,11 +161,13 @@ public class MineFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), SetUpActivity.class));
                 break;
             case R.id.iv_mine_msg:
+                startActivity(new Intent(getActivity(), MsgCenterActivity.class));
                 break;
-            case R.id.rl_mine_username:
+            case R.id.rl_mine_info:
                 toLogin(UserInfoActivity.class);
                 break;
             case R.id.rl_mine_paycode:
+                toLogin(MemberCardActivity.class);
                 break;
             case R.id.rl_mine_ticket:
                 break;
@@ -182,7 +188,6 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.ll_mine_grade:
                 toLogin(MyMemberCardActivity.class);
-
                 break;
         }
     }

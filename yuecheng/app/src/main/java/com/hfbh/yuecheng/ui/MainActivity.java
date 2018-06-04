@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     private void requestPermission() {
         if (!EasyPermissions.hasPermissions(this, permissionStr)) {
-            EasyPermissions.requestPermissions(this, "", 123, permissionStr);
+            EasyPermissions.requestPermissions(this, "", 1234, permissionStr);
         } else {
             getLocation();
         }
@@ -203,8 +203,11 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        PermissionDialog.showPermissionDialog(this, "读写内存和定位");
-        initData();
+        if (requestCode == 1234){
+            PermissionDialog.showPermissionDialog(this, "读写内存和定位");
+            initData();
+        }
+
     }
 
     @Override

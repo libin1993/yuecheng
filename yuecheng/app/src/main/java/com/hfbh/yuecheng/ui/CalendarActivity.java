@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
@@ -183,7 +184,7 @@ public class CalendarActivity extends BaseActivity {
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
                 flowLayout.removeAllViews();
-                if (dataBean.getTags() != null && dataBean.getTags().size() > 0){
+                if (dataBean.getTags() != null && dataBean.getTags().size() > 0) {
                     addTextView(flowLayout, dataBean.getTags());
                 }
 
@@ -209,7 +210,9 @@ public class CalendarActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
+                Intent intent = new Intent(CalendarActivity.this, ActionDetailActivity.class);
+                intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
+                startActivity(intent);
             }
 
             @Override

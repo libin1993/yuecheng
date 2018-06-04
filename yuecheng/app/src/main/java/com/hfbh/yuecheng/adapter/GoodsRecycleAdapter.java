@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.bean.GoodsBean;
+import com.hfbh.yuecheng.ui.GoodsDetailActivity;
 import com.hfbh.yuecheng.ui.NewGoodsActivity;
 import com.hfbh.yuecheng.ui.PopGoodsActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
@@ -63,7 +64,10 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 view2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtils.showToast(mContext, "" + v.getTag());
+                        int position = (int) v.getTag();
+                        Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+                        intent.putExtra("goods_id", dataList.get(position).getCommodityId());
+                        mContext.startActivity(intent);
                     }
                 });
                 return new ViewHolder2(view2);
@@ -81,7 +85,10 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 view4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToastUtils.showToast(mContext, "" + v.getTag());
+                        int position = (int) v.getTag();
+                        Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+                        intent.putExtra("goods_id", dataList.get(position).getCommodityId());
+                        mContext.startActivity(intent);
                     }
                 });
                 return new ViewHolder4(view4);

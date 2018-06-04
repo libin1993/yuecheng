@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -166,7 +167,9 @@ public class NowActionActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
+                Intent intent = new Intent(NowActionActivity.this, ActionDetailActivity.class);
+                intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
+                startActivity(intent);
             }
 
             @Override

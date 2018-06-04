@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,18 +37,23 @@ import com.hfbh.yuecheng.bean.FunctionBean;
 import com.hfbh.yuecheng.bean.GiftBean;
 import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
 import com.hfbh.yuecheng.ui.CouponDetailActivity;
 import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
+import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
+import com.hfbh.yuecheng.ui.ScanCodeActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
+import com.hfbh.yuecheng.view.PermissionDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -70,13 +76,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import okhttp3.Call;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Author：Libin on 2018/5/14 16:08
  * Email：1993911441@qq.com
  * Describe：首页
  */
-public class HomepageFragment extends BaseFragment {
+public class HomepageFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks {
 
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
@@ -106,6 +113,8 @@ public class HomepageFragment extends BaseFragment {
     private int count;
     private List<DelegateAdapter.Adapter> mAdapters;
     private boolean isRefresh;
+    //相机权限
+    private String[] permissionStr = {Manifest.permission.CAMERA};
 
     @Nullable
     @Override
@@ -171,7 +180,7 @@ public class HomepageFragment extends BaseFragment {
 
                         @Override
                         public void onResponse(String response, int id) {
-
+                            LogUtils.log(response);
                             switch (typeBean.getData().get(type).getModuleCode()) {
                                 case "BANNER":
                                     bannerBean = GsonUtils.jsonToBean(response, BannerBean.class);
@@ -299,7 +308,7 @@ public class HomepageFragment extends BaseFragment {
                             case "PLAYING"://我要玩
                                 break;
                             case "MEMBER_CODE"://会员码
-                                startActivity(new Intent(getActivity(), MemberCardActivity.class));
+                                toMemberCard();
                                 break;
                         }
                     }
@@ -331,14 +340,34 @@ public class HomepageFragment extends BaseFragment {
                 holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData().get(position).getStock());
 
                 TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
-                int needScore = couponBean.getData().get(position).getNeedScore();
-                if (needScore > 0) {
-                    tvReceive.setText(needScore + "积分\n领取");
-                } else {
-                    tvReceive.setText("免费\n领取");
+
+                String accessType = couponBean.getData().get(position).getAccessType();
+                int needScore = couponBean.getData().get(position).getAccessValue();
+
+                if (!TextUtils.isEmpty(accessType)) {
+                    switch (accessType) {
+                        case "FREE":
+                            tvReceive.setText("免费\n领取");
+                            break;
+                        case "POINT":
+                            tvReceive.setText(needScore + "积分\n领取");
+                            break;
+                        case "BUY":
+                            tvReceive.setText(needScore + "元\n领取");
+                            break;
+                    }
                 }
-                RelativeLayout rlCoupon = holder.getView(R.id.rl_coupon_item);
-                rlCoupon.setOnClickListener(new View.OnClickListener() {
+
+//                RelativeLayout rlCoupon = holder.getView(R.id.rl_coupon_item);
+//                rlCoupon.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
+//                        intent.putExtra("coupon_id", giftBean.getData().get(position).getObjectId());
+//                        startActivity(intent);
+//                    }
+//                });
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
@@ -394,14 +423,14 @@ public class HomepageFragment extends BaseFragment {
 
         //精彩活动
         initTitle("精彩活动", 7);
-        GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
-//        gridLayoutHelper1.setVGap((int) DisplayUtils.dp2px(getActivity(), 5));// 控制子元素之间的水平间距
 
+
+        GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
         BaseDelegateAdapter activityAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper1,
                 R.layout.rv_activity_item, activityBean.getData().size(), 8) {
 
             @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
+            public void onBindViewHolder(ViewHolder holder, final int position) {
                 super.onBindViewHolder(holder, position);
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
                 ivCoupon.setImageURI(activityBean.getData().get(position).getActivityPic());
@@ -424,6 +453,15 @@ public class HomepageFragment extends BaseFragment {
                     addTextView(flowLayout, activityBean.getData().get(position).getTags());
                 }
 
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
+                        intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
+                        startActivity(intent);
+                    }
+                });
+
             }
         };
 
@@ -444,6 +482,19 @@ public class HomepageFragment extends BaseFragment {
             }
         });
         refreshLayout.setEnableLoadMore(false);
+    }
+
+    /**
+     * 会员卡
+     */
+    private void toMemberCard() {
+        Intent intent;
+        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+            intent = new Intent(getActivity(), MemberCardActivity.class);
+        } else {
+            intent = new Intent(getActivity(), LoginActivity.class);
+        }
+        startActivity(intent);
     }
 
     /**
@@ -526,7 +577,33 @@ public class HomepageFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), ChangeMarketActivity.class));
                 break;
             case R.id.iv_home_scan:
+                if (!EasyPermissions.hasPermissions(getActivity(), permissionStr)) {
+                    EasyPermissions.requestPermissions(this, "", 123, permissionStr);
+                } else {
+                    startActivity(new Intent(getActivity(), ScanCodeActivity.class));
+                }
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        PermissionDialog.showPermissionDialog(getActivity(), "相机");
+    }
+
+    @Override
+    public boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
+        return false;
     }
 }

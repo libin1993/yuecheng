@@ -180,6 +180,29 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
         if (!TextUtils.isEmpty(userInfoBean.getData().getMemberHead())) {
             ivUserAvatar.setImageURI(userInfoBean.getData().getMemberHead());
         }
+        provinceAddress = userInfoBean.getData().getMemberProvince();
+        cityAddress = userInfoBean.getData().getMemberCity();
+        countAddress = userInfoBean.getData().getMemberCountry();
+        tvUserAddress.setText(provinceAddress + " " + cityAddress + " " + countAddress);
+
+        String memberSex = userInfoBean.getData().getMemberSex();
+        if (!TextUtils.isEmpty(memberSex)) {
+            switch (memberSex) {
+                case "MAN":
+                    tvUserSex.setText("男");
+                    break;
+                case "WOMAN":
+                    tvUserSex.setText("女");
+                    break;
+                case "UNKNOW":
+                    tvUserSex.setText("保密");
+                    break;
+            }
+        }
+
+        userBirthday = userInfoBean.getData().getMemberBirthday();
+        tvUserBirthday.setText(userBirthday);
+
     }
 
 

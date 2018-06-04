@@ -85,7 +85,6 @@ public class ChangeMarketActivity extends BaseActivity {
                         if (cityBean.isFlag()) {
                             initView();
                         }
-
                     }
                 });
 

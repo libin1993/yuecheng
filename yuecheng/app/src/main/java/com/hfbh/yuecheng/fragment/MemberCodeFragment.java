@@ -53,16 +53,16 @@ public class MemberCodeFragment extends BaseFragment {
     }
 
     private void initView() {
-        int memberId = memberCodeBean.getData().getMemberId();
-        barBmp = BarcodeUtils.creatBarcode(String.valueOf(memberId),
+        String cardNumber = memberCodeBean.getData().getCardNumber();
+        barBmp = BarcodeUtils.creatBarcode(cardNumber,
                 (int) DisplayUtils.dp2px(getActivity(), 225),
                 (int) DisplayUtils.dp2px(getActivity(), 41));
         ivMemberBarcode.setImageBitmap(barBmp);
 
-        qrBmp = QRCodeUtils.createQRCode(String.valueOf(memberId),
+        qrBmp = QRCodeUtils.createQRCode(cardNumber,
                 (int) DisplayUtils.dp2px(getActivity(), 200));
         ivMemberQrcode.setImageBitmap(qrBmp);
-        tvMemberQrcode.setText("卡号：" + memberId);
+        tvMemberQrcode.setText("卡号：" + cardNumber);
     }
 
     public static MemberCodeFragment newInstance(UserInfoBean userInfoBean) {

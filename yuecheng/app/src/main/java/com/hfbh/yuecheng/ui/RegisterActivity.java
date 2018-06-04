@@ -2,6 +2,7 @@ package com.hfbh.yuecheng.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -73,7 +74,6 @@ public class RegisterActivity extends BaseActivity {
     @BindView(R.id.rl_register_agreement)
     LinearLayout rlRegisterAgreement;
 
-
     //是否输入手机号
     private boolean isPhone;
     //是否输入验证码
@@ -82,7 +82,6 @@ public class RegisterActivity extends BaseActivity {
     private boolean isPwd;
     //是否显示密码
     private boolean isShow;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -259,6 +258,7 @@ public class RegisterActivity extends BaseActivity {
                 isRegister(2);
                 break;
             case R.id.tv_register_agreement:
+                startActivity(new Intent(this, UserAgreementActivity.class));
                 break;
         }
     }

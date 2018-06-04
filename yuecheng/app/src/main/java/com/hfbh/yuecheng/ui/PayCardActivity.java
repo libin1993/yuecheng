@@ -176,6 +176,7 @@ public class PayCardActivity extends BaseActivity {
 
             @Override
             public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                deleteCard(position,dataList.get(position).getId());
                 return false;
             }
         });
@@ -230,7 +231,6 @@ public class PayCardActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                         if (responseBean.isFlag()) {
                             dataList.remove(position);

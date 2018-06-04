@@ -2,7 +2,6 @@ package com.hfbh.yuecheng.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,10 +18,9 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.ui.CloseActivity;
+import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -35,7 +33,6 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,8 +158,10 @@ public class MyActivityFragment extends BaseFragment {
                 if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                     switch (dataBean.getAcivityType()) {
                         case "NONEED":
+                            tvCost.setText("无需报名");
                             break;
                         case "FREE":
+                            tvCost.setText("免费");
                             break;
                         case "SCORE":
                             tvCost.setText("已报名： " + dataBean.getEnrollScore() + "积分");
@@ -172,6 +171,8 @@ public class MyActivityFragment extends BaseFragment {
                             break;
                     }
                 }
+                TextView tvJoin = holder.getView(R.id.tv_activity_join);
+                tvJoin.setText(dataBean.getMemberSignupState());
 
             }
         };
@@ -182,10 +183,14 @@ public class MyActivityFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(getActivity(), CloseActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("activity_info",  dataList.get(position));
-                intent.putExtras(bundle);
+//                Intent intent = new Intent(getActivity(), CloseActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("activity_info",  dataList.get(position));
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+
+                Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
+                intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
                 startActivity(intent);
             }
 

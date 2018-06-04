@@ -29,10 +29,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
+                android:singleLine="true"
                 android:text="@string/app_name"
                 android:textColor="@color/red_99"
-                android:textSize="16sp"
-                android:singleLine="true"/>
+                android:textSize="16sp"/>
 
             <ImageView
                 android:layout_width="9dp"
@@ -45,10 +45,12 @@
         <ImageView
             android:id="@+id/iv_home_scan"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:scaleType="center"
             android:src="@mipmap/ic_home_scan"/>
 
     </RelativeLayout>

@@ -50,58 +50,68 @@
         android:src="@mipmap/ic_mine_msg"/>
 
     <RelativeLayout
-        android:id="@+id/rl_mine_username"
-        android:layout_width="wrap_content"
+        android:id="@+id/rl_mine_info"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="66.5dp">
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp">
 
-        <TextView
-            android:id="@+id/tv_mine_username"
+        <RelativeLayout
+            android:id="@+id/rl_mine_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_10"
-            android:textSize="22sp"
-            android:textStyle="bold"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="26dp">
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@id/tv_mine_username"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_home_more"/>
+            <TextView
+                android:id="@+id/tv_mine_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_10"
+                android:textSize="22sp"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/tv_mine_username"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_home_more"/>
+        </RelativeLayout>
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_mine_avatar"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="17dp"
+            fresco:actualImageScaleType="centerCrop"
+            fresco:placeholderImage="@mipmap/img_default_avatar"
+            fresco:roundAsCircle="true"
+            fresco:roundingBorderColor="@color/gray_b3"
+            fresco:roundingBorderWidth="1dp"/>
+
+        <TextView
+            android:id="@+id/tv_mine_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/rl_mine_username"
+            android:layout_below="@id/rl_mine_username"
+            android:layout_marginTop="5dp"
+            android:text="@string/user_tips"
+            android:textColor="@color/gray_95"
+            android:textSize="12sp"/>
     </RelativeLayout>
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/iv_mine_avatar"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="52dp"
-        android:layout_marginTop="59.5dp"
-        fresco:actualImageScaleType="centerCrop"
-        fresco:placeholderImage="@mipmap/img_default_avatar"
-        fresco:roundAsCircle="true"
-        fresco:roundingBorderColor="@color/gray_b3"
-        fresco:roundingBorderWidth="1dp"/>
-
-    <TextView
-        android:id="@+id/tv_mine_tips"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/rl_mine_username"
-        android:layout_below="@id/rl_mine_username"
-        android:layout_marginTop="5dp"
-        android:text="@string/user_tips"
-        android:textColor="@color/gray_95"
-        android:textSize="12sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_mine_tips"
+        android:layout_below="@id/rl_mine_info"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="16dp"

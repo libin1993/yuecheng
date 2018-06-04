@@ -105,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="暂无数据"
+        android:text="暂无店铺"
         android:textColor="@color/gray_10"
         android:textSize="22sp"
         android:textStyle="bold"

@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -29,6 +31,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -100,12 +103,11 @@ public class ActivityListFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
-                        if (activityListBean.getPage() != null){
+                        if (activityListBean.getPage() != null) {
                             pages = activityListBean.getPage().getPages();
                         }
-                        
+
                         if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
                             if (isRefresh) {
                                 dataList.clear();
@@ -159,7 +161,7 @@ public class ActivityListFragment extends BaseFragment {
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
                 flowLayout.removeAllViews();
-                if (dataBean.getTags() != null && dataBean.getTags().size() > 0){
+                if (dataBean.getTags() != null && dataBean.getTags().size() > 0) {
                     addTextView(flowLayout, dataBean.getTags());
                 }
             }
@@ -167,6 +169,20 @@ public class ActivityListFragment extends BaseFragment {
 
 
         rvActivity.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent = new Intent(getParentFragment().getActivity(), ActionDetailActivity.class);
+                intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
 
 
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {

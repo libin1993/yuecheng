@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -78,6 +79,7 @@ public class AboutUsActivity extends BaseActivity {
                 checkUpdate();
                 break;
             case R.id.ll_user_agreement:
+                startActivity(new Intent(this, UserAgreementActivity.class));
                 break;
         }
     }

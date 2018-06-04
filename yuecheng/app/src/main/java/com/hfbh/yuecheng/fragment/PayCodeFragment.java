@@ -71,15 +71,14 @@ public class PayCodeFragment extends BaseFragment {
     }
 
     private void initView() {
-        int memberId = userInfoBean.getData().getMemberId();
+        String cardNumber = userInfoBean.getData().getCardNumber();
 
-        barBmp = BarcodeUtils.creatBarcode(String.valueOf(memberId),
+        barBmp = BarcodeUtils.creatBarcode(cardNumber,
                 (int) DisplayUtils.dp2px(getActivity(), 225),
                 (int) DisplayUtils.dp2px(getActivity(), 41));
         ivPayBarcode.setImageBitmap(barBmp);
 
-        qrBmp = QRCodeUtils.createQRCode(String.valueOf(memberId),
-                (int) DisplayUtils.dp2px(getActivity(), 200));
+        qrBmp = QRCodeUtils.createQRCode(cardNumber, (int) DisplayUtils.dp2px(getActivity(), 200));
 
         ivPayQrcode.setImageBitmap(qrBmp);
 
@@ -102,7 +101,7 @@ public class PayCodeFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tv_pay_barcode:
                 if (isShow) {
-                    tvPayBarcode.setText(String.valueOf(userInfoBean.getData().getMemberId()));
+                    tvPayBarcode.setText(String.valueOf(userInfoBean.getData().getCardNumber()));
                     tvPayBarcode.setTextColor(getResources().getColor(R.color.gray_10));
                     isShow = false;
                 } else {

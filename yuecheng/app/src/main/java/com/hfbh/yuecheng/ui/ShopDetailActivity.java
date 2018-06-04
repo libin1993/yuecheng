@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -189,7 +191,8 @@ public class ShopDetailActivity extends BaseActivity {
      */
     private void initGoodsList() {
         rvShopDetail.setLayoutManager(new LinearLayoutManager(this));
-        CommonAdapter<GoodsBean.DataBean> adapter = new CommonAdapter<GoodsBean.DataBean>(this, R.layout.rv_new_goods_item, goodsList) {
+        CommonAdapter<GoodsBean.DataBean> adapter = new CommonAdapter<GoodsBean.DataBean>(
+                this, R.layout.rv_new_goods_item, goodsList) {
             @Override
             protected void convert(ViewHolder holder, GoodsBean.DataBean dataBean, int position) {
                 SimpleDraweeView ivGoods = holder.getView(R.id.iv_discovery_new);
@@ -207,6 +210,22 @@ public class ShopDetailActivity extends BaseActivity {
         mHeaderAndFooterWrapper.addHeaderView(initShopInfo());
 
         rvShopDetail.setAdapter(mHeaderAndFooterWrapper);
+
+
+        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent = new Intent(ShopDetailActivity.this, GoodsDetailActivity.class);
+                intent.putExtra("goods_id", goodsList.get(position).getCommodityId());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
+
 
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override

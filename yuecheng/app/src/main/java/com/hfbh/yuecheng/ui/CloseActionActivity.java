@@ -26,7 +26,7 @@ import butterknife.OnClick;
  * Email：1993911441@qq.com
  * Describe：核销
  */
-public class CloseActivity extends BaseActivity {
+public class CloseActionActivity extends BaseActivity {
     @BindView(R.id.tv_header_title)
     TextView tvHeaderTitle;
     @BindView(R.id.iv_header_back)
