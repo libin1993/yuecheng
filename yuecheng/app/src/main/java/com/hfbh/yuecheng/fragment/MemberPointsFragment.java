@@ -61,6 +61,7 @@ public class MemberPointsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_member_points, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
+        viewLoading.smoothToShow();
         initData();
         return view;
     }
@@ -72,7 +73,7 @@ public class MemberPointsFragment extends BaseFragment {
     }
 
     private void initData() {
-        viewLoading.smoothToShow();
+
         OkHttpUtils.post()
                 .url(Constant.MEMBER_POINTS_RECORD)
                 .addParams("appType", MyApp.appType)

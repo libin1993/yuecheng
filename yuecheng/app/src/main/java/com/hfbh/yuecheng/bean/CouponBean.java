@@ -11,8 +11,8 @@ public class CouponBean {
 
     /**
      * flag : true
-     * hash : 54ccdc1dfaef4addb104e0a9f9d1ffea
-     * data : [{"accessType":"FREE","accessValue":0,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":95,"broughtNum":5,"couponDesc":"2","couponImage":"http://yjwang.wmalle.com/image/20180514/6772728606142893.png","couponName":"礼券","couponTypeCy":1,"couponTypeKind":"ELEC","couponValue":1,"dayBroughtNum":0,"endTime":null,"endTimeStr":null,"giftPicturePath":null,"id":null,"limitNum":1,"limitPerDayNum":null,"memberBroughtNum":0,"memberSignupState":null,"needScore":0,"objectId":496,"relateName":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":100,"tags":null,"useRange":"2","voteStartTime":null},{"accessType":"POINT","accessValue":111111,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":72,"broughtNum":28,"couponDesc":"1","couponImage":"http://yjwang.wmalle.com/image/20180514/6775368397833198.png","couponName":"专享券","couponTypeCy":13,"couponTypeKind":"ELEC","couponValue":20,"dayBroughtNum":0,"endTime":null,"endTimeStr":null,"giftPicturePath":null,"id":null,"limitNum":0,"limitPerDayNum":null,"memberBroughtNum":0,"memberSignupState":null,"needScore":111111,"objectId":502,"relateName":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":"POINTS","stock":100,"tags":null,"useRange":"1","voteStartTime":null},{"accessType":"FREE","accessValue":0,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":0,"broughtNum":1,"couponDesc":"1","couponImage":"http://yjwang.wmalle.com/image/20180514/6773058231567001.png","couponName":"家电券","couponTypeCy":2,"couponTypeKind":"ELEC","couponValue":4,"dayBroughtNum":0,"endTime":null,"endTimeStr":null,"giftPicturePath":null,"id":null,"limitNum":0,"limitPerDayNum":null,"memberBroughtNum":0,"memberSignupState":null,"needScore":0,"objectId":498,"relateName":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":"ROB","stock":1,"tags":null,"useRange":"1","voteStartTime":null},{"accessType":"FREE","accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":0,"broughtNum":1,"couponDesc":"1、使用范围\n2、就覅玩发几万就覅我我案件佛我啊我范加尔拉我发拉我就覅哦啊我\n3、就覅垃圾爱覅偶啊我","couponImage":"http://yjwang.wmalle.com/image/20180514/6772994027677170.png","couponName":"家电券","couponTypeCy":2,"couponTypeKind":"ELEC","couponValue":3,"dayBroughtNum":0,"endTime":null,"endTimeStr":null,"giftPicturePath":null,"id":null,"limitNum":1,"limitPerDayNum":null,"memberBroughtNum":0,"memberSignupState":null,"needScore":null,"objectId":497,"relateName":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":"UNDO","stock":1,"tags":null,"useRange":"1、使用范围\n2、就覅玩发几万就覅我我案件佛我啊我范加尔拉我发拉我就覅哦啊我\n3、就覅垃圾爱覅偶啊我","voteStartTime":null}]
+     * hash : c07ed299d6364f04ba33869ed2f26fc9
+     * data : [{"accessType":"FREE","accessValue":0,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":93,"broughtNum":7,"couponDesc":"2","couponImage":"http://yjwang.wmalle.com/image/20180514/6772728606142893.png","couponName":"礼券","couponTypeCy":1,"couponTypeKind":"ELEC","couponValue":1,"dayBroughtNum":0,"endTime":null,"endTimeStr":null,"giftPicturePath":null,"id":null,"limitNum":1,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":0,"memberSignupState":null,"needScore":0,"objectId":496,"relateName":null,"serviceAmount":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":100,"tags":null,"useRange":"2","voteStartTime":null},{"accessType":"POINT","accessValue":111111,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":52,"broughtNum":48,"couponDesc":"1","couponImage":"http://yjwang.wmalle.com/image/20180514/6775368397833198.png","couponName":"专享券","couponTypeCy":13,"couponTypeKind":"ELEC","couponValue":20,"dayBroughtNum":0,"endTime":null,"endTimeStr":null,"giftPicturePath":null,"id":null,"limitNum":0,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":0,"memberSignupState":null,"needScore":111111,"objectId":502,"relateName":null,"serviceAmount":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":"POINTS","stock":100,"tags":null,"useRange":"1","voteStartTime":null},{"accessType":"FREE","accessValue":0,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":0,"broughtNum":1,"couponDesc":"1","couponImage":"http://yjwang.wmalle.com/image/20180514/6773058231567001.png","couponName":"家电券","couponTypeCy":2,"couponTypeKind":"ELEC","couponValue":4,"dayBroughtNum":0,"endTime":null,"endTimeStr":null,"giftPicturePath":null,"id":null,"limitNum":0,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":0,"memberSignupState":null,"needScore":0,"objectId":498,"relateName":null,"serviceAmount":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":"ROB","stock":1,"tags":null,"useRange":"1","voteStartTime":null},{"accessType":"FREE","accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":0,"broughtNum":1,"couponDesc":"1、使用范围\n2、就覅玩发几万就覅我我案件佛我啊我范加尔拉我发拉我就覅哦啊我\n3、就覅垃圾爱覅偶啊我","couponImage":"http://yjwang.wmalle.com/image/20180514/6772994027677170.png","couponName":"家电券","couponTypeCy":2,"couponTypeKind":"ELEC","couponValue":3,"dayBroughtNum":0,"endTime":null,"endTimeStr":null,"giftPicturePath":null,"id":null,"limitNum":1,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":0,"memberSignupState":null,"needScore":null,"objectId":497,"relateName":null,"serviceAmount":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":"ROB","stock":1,"tags":null,"useRange":"1、使用范围\n2、就覅玩发几万就覅我我案件佛我啊我范加尔拉我发拉我就覅哦啊我\n3、就覅垃圾爱覅偶啊我","voteStartTime":null}]
      * code : 0
      */
 
@@ -60,8 +60,8 @@ public class CouponBean {
          * acivityType : null
          * activityName : null
          * activityPic : null
-         * balanceNum : 95
-         * broughtNum : 5
+         * balanceNum : 93
+         * broughtNum : 7
          * couponDesc : 2
          * couponImage : http://yjwang.wmalle.com/image/20180514/6772728606142893.png
          * couponName : 礼券
@@ -75,11 +75,13 @@ public class CouponBean {
          * id : null
          * limitNum : 1
          * limitPerDayNum : null
+         * listCouponShop : null
          * memberBroughtNum : 0
          * memberSignupState : null
          * needScore : 0
          * objectId : 496
          * relateName : null
+         * serviceAmount : null
          * signup : false
          * sort : null
          * startTime : null
@@ -111,11 +113,13 @@ public class CouponBean {
         private Object id;
         private int limitNum;
         private Object limitPerDayNum;
+        private Object listCouponShop;
         private int memberBroughtNum;
         private Object memberSignupState;
         private int needScore;
         private int objectId;
         private Object relateName;
+        private Object serviceAmount;
         private boolean signup;
         private Object sort;
         private Object startTime;
@@ -286,6 +290,14 @@ public class CouponBean {
             this.limitPerDayNum = limitPerDayNum;
         }
 
+        public Object getListCouponShop() {
+            return listCouponShop;
+        }
+
+        public void setListCouponShop(Object listCouponShop) {
+            this.listCouponShop = listCouponShop;
+        }
+
         public int getMemberBroughtNum() {
             return memberBroughtNum;
         }
@@ -302,7 +314,7 @@ public class CouponBean {
             this.memberSignupState = memberSignupState;
         }
 
-        public int  getNeedScore() {
+        public int getNeedScore() {
             return needScore;
         }
 
@@ -324,6 +336,14 @@ public class CouponBean {
 
         public void setRelateName(Object relateName) {
             this.relateName = relateName;
+        }
+
+        public Object getServiceAmount() {
+            return serviceAmount;
+        }
+
+        public void setServiceAmount(Object serviceAmount) {
+            this.serviceAmount = serviceAmount;
         }
 
         public boolean isSignup() {

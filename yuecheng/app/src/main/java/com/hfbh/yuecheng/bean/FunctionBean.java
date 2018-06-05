@@ -9,10 +9,11 @@ import java.util.List;
  */
 public class FunctionBean {
 
+
     /**
      * flag : true
-     * hash : 44c68ff36c8e40bfa6629d2593fab955
-     * data : [{"functionCode":"STORE","functionIco":"http://yjwang.wmalle.com/image/20180514/6779753848088661.png","functionName":"找店铺","functionType":"PROJECT","id":192,"name":"找店铺","organizeId":null,"sort":1},{"functionCode":"PARKING","functionIco":"http://yjwang.wmalle.com/image/20180514/6779764073740853.png","functionName":"停车缴费","functionType":"PROJECT","id":190,"name":"停车缴费","organizeId":null,"sort":2},{"functionCode":"GUIDING","functionIco":null,"functionName":"室内导航","functionType":"PROJECT","id":195,"name":"室内导航","organizeId":null,"sort":null},{"functionCode":"PLAYING","functionIco":"http://yjwang.wmalle.com/image/20180514/6779831967592216.png","functionName":"我要玩","functionType":"PRODUCT","id":194,"name":"我要玩","organizeId":null,"sort":null},{"functionCode":"MEMBER_CODE","functionIco":"http://yjwang.wmalle.com/image/20180515/6875175240042319.png","functionName":"会员码","functionType":"PROJECT","id":193,"name":"会员码","organizeId":null,"sort":null}]
+     * hash : c07ed299d6364f04ba33869ed2f26fc9
+     * data : [{"functionCode":"STORE","functionIco":"http://yjwang.wmalle.com/image/20180514/6779753848088661.png","functionIcoExtra":null,"functionMark":"MAIN","functionName":"找店铺","functionType":"PROJECT","id":192,"isOpen":"Y","name":null,"organizeId":null,"sort":1},{"functionCode":"SHOPPING","functionIco":null,"functionIcoExtra":null,"functionMark":"MAIN","functionName":"我要买","functionType":"PRODUCT","id":197,"isOpen":"Y","name":null,"organizeId":null,"sort":null},{"functionCode":"GUIDING","functionIco":null,"functionIcoExtra":null,"functionMark":"MAIN","functionName":"室内导航","functionType":"PROJECT","id":195,"isOpen":"Y","name":null,"organizeId":null,"sort":null},{"functionCode":"PLAYING","functionIco":"http://yjwang.wmalle.com/image/20180514/6779831967592216.png","functionIcoExtra":null,"functionMark":"MAIN","functionName":"我要玩","functionType":"PRODUCT","id":194,"isOpen":"Y","name":null,"organizeId":null,"sort":null},{"functionCode":"MEMBER_CODE","functionIco":"http://yjwang.wmalle.com/image/20180515/6875175240042319.png","functionIcoExtra":null,"functionMark":"MAIN","functionName":"会员码","functionType":"PROJECT","id":193,"isOpen":"Y","name":null,"organizeId":null,"sort":null},{"functionCode":null,"functionIco":null,"functionIcoExtra":null,"functionMark":"EXTRA","functionName":"自助积分","functionType":null,"id":201,"isOpen":"Y","name":null,"organizeId":null,"sort":1},{"functionCode":null,"functionIco":null,"functionIcoExtra":null,"functionMark":"EXTRA","functionName":"发票助手","functionType":null,"id":202,"isOpen":"Y","name":null,"organizeId":null,"sort":2},{"functionCode":"WIFI","functionIco":null,"functionIcoExtra":null,"functionMark":"EXTRA","functionName":"免费Wi-Fi","functionType":null,"id":200,"isOpen":"Y","name":null,"organizeId":null,"sort":null}]
      * code : 0
      */
 
@@ -57,20 +58,26 @@ public class FunctionBean {
         /**
          * functionCode : STORE
          * functionIco : http://yjwang.wmalle.com/image/20180514/6779753848088661.png
+         * functionIcoExtra : null
+         * functionMark : MAIN
          * functionName : 找店铺
          * functionType : PROJECT
          * id : 192
-         * name : 找店铺
+         * isOpen : Y
+         * name : null
          * organizeId : null
          * sort : 1
          */
 
         private String functionCode;
         private String functionIco;
+        private Object functionIcoExtra;
+        private String functionMark;
         private String functionName;
         private String functionType;
         private int id;
-        private String name;
+        private String isOpen;
+        private Object name;
         private Object organizeId;
         private int sort;
 
@@ -88,6 +95,22 @@ public class FunctionBean {
 
         public void setFunctionIco(String functionIco) {
             this.functionIco = functionIco;
+        }
+
+        public Object getFunctionIcoExtra() {
+            return functionIcoExtra;
+        }
+
+        public void setFunctionIcoExtra(Object functionIcoExtra) {
+            this.functionIcoExtra = functionIcoExtra;
+        }
+
+        public String getFunctionMark() {
+            return functionMark;
+        }
+
+        public void setFunctionMark(String functionMark) {
+            this.functionMark = functionMark;
         }
 
         public String getFunctionName() {
@@ -114,11 +137,19 @@ public class FunctionBean {
             this.id = id;
         }
 
-        public String getName() {
+        public String getIsOpen() {
+            return isOpen;
+        }
+
+        public void setIsOpen(String isOpen) {
+            this.isOpen = isOpen;
+        }
+
+        public Object getName() {
             return name;
         }
 
-        public void setName(String name) {
+        public void setName(Object name) {
             this.name = name;
         }
 

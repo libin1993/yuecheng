@@ -20,6 +20,7 @@ public class ResponseBean {
     private String msg;
     private String data;
 
+
     public String getData() {
         return data;
     }

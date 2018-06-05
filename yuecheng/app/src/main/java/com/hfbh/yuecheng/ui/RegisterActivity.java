@@ -291,11 +291,17 @@ public class RegisterActivity extends BaseActivity {
                         UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             ToastUtils.showToast(RegisterActivity.this, "注册成功");
-                            EventBus.getDefault().post("login_success");
+
                             SharedPreUtils.saveStr(RegisterActivity.this, "hash", userInfoBean.getHash());
-                            SharedPreUtils.saveStr(RegisterActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
+                            SharedPreUtils.saveStr(RegisterActivity.this, "member_id",
+                                    String.valueOf(userInfoBean.getData().getMemberId()));
                             SharedPreUtils.saveBoolean(RegisterActivity.this, "is_login", true);
-                            SharedPreUtils.saveStr(RegisterActivity.this, "phone", String.valueOf(userInfoBean.getData().getMemberPhone()));
+                            SharedPreUtils.saveStr(RegisterActivity.this, "phone",
+                                    String.valueOf(userInfoBean.getData().getMemberPhone()));
+                            SharedPreUtils.saveStr(RegisterActivity.this, "avatar",
+                                    userInfoBean.getData().getMemberHead());
+
+                            EventBus.getDefault().post("login_success");
                             finish();
                         } else {
                             ToastUtils.showToast(RegisterActivity.this, "注册失败");

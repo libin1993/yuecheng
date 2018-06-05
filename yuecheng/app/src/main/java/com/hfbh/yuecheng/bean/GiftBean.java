@@ -9,10 +9,11 @@ import java.util.List;
  */
 public class GiftBean {
 
+
     /**
      * flag : true
-     * hash : 54ccdc1dfaef4addb104e0a9f9d1ffea
-     * data : [{"accessType":null,"accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":null,"endTimeStr":null,"giftPicturePath":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180408145742729.png","id":null,"limitNum":null,"limitPerDayNum":null,"memberBroughtNum":null,"memberSignupState":null,"needScore":20,"objectId":99,"relateName":"大礼包","signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":null,"tags":null,"useRange":null,"voteStartTime":null},{"accessType":null,"accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":null,"endTimeStr":null,"giftPicturePath":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180408151052728.jpg","id":null,"limitNum":null,"limitPerDayNum":null,"memberBroughtNum":null,"memberSignupState":null,"needScore":10,"objectId":98,"relateName":"型男鞋","signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":null,"tags":null,"useRange":null,"voteStartTime":null},{"accessType":null,"accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":null,"endTimeStr":null,"giftPicturePath":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180511092220944.png","id":null,"limitNum":null,"limitPerDayNum":null,"memberBroughtNum":null,"memberSignupState":null,"needScore":1,"objectId":171,"relateName":"11111111111111111111111111111111111111111111111111","signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":null,"tags":null,"useRange":null,"voteStartTime":null},{"accessType":null,"accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":null,"endTimeStr":null,"giftPicturePath":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180511091805427.png","id":null,"limitNum":null,"limitPerDayNum":null,"memberBroughtNum":null,"memberSignupState":null,"needScore":100000,"objectId":173,"relateName":"礼品","signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":null,"tags":null,"useRange":null,"voteStartTime":null}]
+     * hash : c07ed299d6364f04ba33869ed2f26fc9
+     * data : [{"accessType":null,"accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":null,"endTimeStr":null,"giftPicturePath":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180408145742729.png","id":null,"limitNum":null,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":null,"memberSignupState":null,"needScore":20,"objectId":99,"relateName":"大礼包","serviceAmount":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":null,"tags":null,"useRange":null,"voteStartTime":null},{"accessType":null,"accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":null,"endTimeStr":null,"giftPicturePath":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180408151052728.jpg","id":null,"limitNum":null,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":null,"memberSignupState":null,"needScore":10,"objectId":98,"relateName":"型男鞋","serviceAmount":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":null,"tags":null,"useRange":null,"voteStartTime":null},{"accessType":null,"accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":null,"endTimeStr":null,"giftPicturePath":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180511092220944.png","id":null,"limitNum":null,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":null,"memberSignupState":null,"needScore":1,"objectId":171,"relateName":"11111111111111111111111111111111111111111111111111","serviceAmount":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":null,"tags":null,"useRange":null,"voteStartTime":null},{"accessType":null,"accessValue":null,"acivityType":null,"activityName":null,"activityPic":null,"balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":null,"endTimeStr":null,"giftPicturePath":"http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180511091805427.png","id":null,"limitNum":null,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":null,"memberSignupState":null,"needScore":100000,"objectId":173,"relateName":"礼品","serviceAmount":null,"signup":false,"sort":null,"startTime":null,"startTimeStr":null,"state":null,"stock":null,"tags":null,"useRange":null,"voteStartTime":null}]
      * code : 0
      */
 
@@ -75,11 +76,13 @@ public class GiftBean {
          * id : null
          * limitNum : null
          * limitPerDayNum : null
+         * listCouponShop : null
          * memberBroughtNum : null
          * memberSignupState : null
          * needScore : 20
          * objectId : 99
          * relateName : 大礼包
+         * serviceAmount : null
          * signup : false
          * sort : null
          * startTime : null
@@ -108,14 +111,16 @@ public class GiftBean {
         private Object endTime;
         private Object endTimeStr;
         private String giftPicturePath;
-        private int id;
+        private Object id;
         private Object limitNum;
         private Object limitPerDayNum;
+        private Object listCouponShop;
         private Object memberBroughtNum;
         private Object memberSignupState;
-        private String needScore;
+        private int needScore;
         private int objectId;
         private String relateName;
+        private Object serviceAmount;
         private boolean signup;
         private Object sort;
         private Object startTime;
@@ -262,11 +267,11 @@ public class GiftBean {
             this.giftPicturePath = giftPicturePath;
         }
 
-        public int getId() {
+        public Object getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(Object id) {
             this.id = id;
         }
 
@@ -286,6 +291,14 @@ public class GiftBean {
             this.limitPerDayNum = limitPerDayNum;
         }
 
+        public Object getListCouponShop() {
+            return listCouponShop;
+        }
+
+        public void setListCouponShop(Object listCouponShop) {
+            this.listCouponShop = listCouponShop;
+        }
+
         public Object getMemberBroughtNum() {
             return memberBroughtNum;
         }
@@ -302,11 +315,11 @@ public class GiftBean {
             this.memberSignupState = memberSignupState;
         }
 
-        public String getNeedScore() {
+        public int getNeedScore() {
             return needScore;
         }
 
-        public void setNeedScore(String needScore) {
+        public void setNeedScore(int needScore) {
             this.needScore = needScore;
         }
 
@@ -324,6 +337,14 @@ public class GiftBean {
 
         public void setRelateName(String relateName) {
             this.relateName = relateName;
+        }
+
+        public Object getServiceAmount() {
+            return serviceAmount;
+        }
+
+        public void setServiceAmount(Object serviceAmount) {
+            this.serviceAmount = serviceAmount;
         }
 
         public boolean isSignup() {

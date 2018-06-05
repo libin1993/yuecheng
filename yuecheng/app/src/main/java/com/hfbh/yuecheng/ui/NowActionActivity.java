@@ -169,6 +169,9 @@ public class NowActionActivity extends BaseActivity {
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(NowActionActivity.this, ActionDetailActivity.class);
                 intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
+                intent.putExtra("type", dataList.get(position).getAcivityType());
+                intent.putExtra("money", dataList.get(position).getEnrollFee());
+                intent.putExtra("score", dataList.get(position).getEnrollScore());
                 startActivity(intent);
             }
 

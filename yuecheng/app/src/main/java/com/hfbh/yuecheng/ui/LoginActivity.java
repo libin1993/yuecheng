@@ -384,16 +384,20 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response,UserInfoBean.class);
-                        if (userInfoBean.isFlag()){
+                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                        if (userInfoBean.isFlag()) {
                             ToastUtils.showToast(LoginActivity.this, "登录成功");
                             SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
-                            SharedPreUtils.saveStr(LoginActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
+                            SharedPreUtils.saveStr(LoginActivity.this, "member_id",
+                                    String.valueOf(userInfoBean.getData().getMemberId()));
                             SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
-                            SharedPreUtils.saveStr(LoginActivity.this, "phone", String.valueOf(userInfoBean.getData().getMemberPhone()));
+                            SharedPreUtils.saveStr(LoginActivity.this, "phone",
+                                    String.valueOf(userInfoBean.getData().getMemberPhone()));
+                            SharedPreUtils.saveStr(LoginActivity.this, "avatar",
+                                    userInfoBean.getData().getMemberHead());
                             EventBus.getDefault().post("login_success");
 
-                        }else {
+                        } else {
                             ToastUtils.showToast(LoginActivity.this, "登录失败");
                         }
                     }
@@ -431,16 +435,20 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(md5+","+response);
-                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response,UserInfoBean.class);
-                        if (userInfoBean.isFlag()){
+                        LogUtils.log(md5 + "," + response);
+                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                        if (userInfoBean.isFlag()) {
                             ToastUtils.showToast(LoginActivity.this, "登录成功");
                             SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
-                            SharedPreUtils.saveStr(LoginActivity.this, "member_id", String.valueOf(userInfoBean.getData().getMemberId()));
+                            SharedPreUtils.saveStr(LoginActivity.this, "member_id",
+                                    String.valueOf(userInfoBean.getData().getMemberId()));
                             SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
-                            SharedPreUtils.saveStr(LoginActivity.this, "phone", String.valueOf(userInfoBean.getData().getMemberPhone()));
+                            SharedPreUtils.saveStr(LoginActivity.this, "phone",
+                                    String.valueOf(userInfoBean.getData().getMemberPhone()));
+                            SharedPreUtils.saveStr(LoginActivity.this, "avatar",
+                                    userInfoBean.getData().getMemberHead());
                             EventBus.getDefault().post("login_success");
-                        }else {
+                        } else {
                             ToastUtils.showToast(LoginActivity.this, "登录失败");
                         }
                     }

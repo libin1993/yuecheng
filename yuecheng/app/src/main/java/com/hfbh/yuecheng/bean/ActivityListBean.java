@@ -177,7 +177,7 @@ public class ActivityListBean implements Serializable {
         private int creatorId;
         private String endTime;
         private String endTimeStr;
-        private Object enrollFee;
+        private double enrollFee;
         private int enrollScore;
         private String extraIntroduce;
         private String isAudit;
@@ -293,11 +293,11 @@ public class ActivityListBean implements Serializable {
             this.endTimeStr = endTimeStr;
         }
 
-        public Object getEnrollFee() {
+        public double getEnrollFee() {
             return enrollFee;
         }
 
-        public void setEnrollFee(Object enrollFee) {
+        public void setEnrollFee(double enrollFee) {
             this.enrollFee = enrollFee;
         }
 

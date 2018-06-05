@@ -25,7 +25,8 @@
         android:text="暂无活动"
         android:textColor="@color/gray_10"
         android:textSize="22sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:visibility="gone"/>
 
     <include
         layout="@layout/layout_loading"/>

@@ -98,7 +98,7 @@ public class GiftDetailActivity extends BaseActivity {
 
     private void initData() {
         OkHttpUtils.get()
-                .url(Constant.GIFT_INFO)
+                .url(Constant.GIFT_DETAIL)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
@@ -243,8 +243,8 @@ public class GiftDetailActivity extends BaseActivity {
         mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
         DisplayUtils.setBackgroundAlpha(this, true);
 
-        TextView tvSuccess = (TextView) contentView.findViewById(R.id.tv_exchange_success);
-
+        final TextView tvSuccess = (TextView) contentView.findViewById(R.id.tv_exchange_success);
+        tvSuccess.setText("去查看");
         tvSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

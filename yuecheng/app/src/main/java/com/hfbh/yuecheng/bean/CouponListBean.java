@@ -137,7 +137,7 @@ public class CouponListBean {
          */
 
         private String accessType;
-        private int accessValue;
+        private double accessValue;
         private int balanceNum;
         private int broughtNum;
         private int couponId;
@@ -168,11 +168,11 @@ public class CouponListBean {
             this.accessType = accessType;
         }
 
-        public int getAccessValue() {
+        public double getAccessValue() {
             return accessValue;
         }
 
-        public void setAccessValue(int accessValue) {
+        public void setAccessValue(double accessValue) {
             this.accessValue = accessValue;
         }
 

@@ -32,10 +32,13 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityBean;
 import com.hfbh.yuecheng.bean.BannerBean;
+import com.hfbh.yuecheng.bean.BroadcastBean;
 import com.hfbh.yuecheng.bean.CouponBean;
 import com.hfbh.yuecheng.bean.FunctionBean;
 import com.hfbh.yuecheng.bean.GiftBean;
 import com.hfbh.yuecheng.bean.HomepageTypeBean;
+import com.hfbh.yuecheng.bean.ResponseBean;
+import com.hfbh.yuecheng.bean.TopicBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
@@ -52,11 +55,13 @@ import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.hfbh.yuecheng.view.PermissionDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.sunfusheng.marqueeview.MarqueeView;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -66,6 +71,8 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -103,6 +110,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     private BannerBean bannerBean;
     //功能
     private FunctionBean functionBean;
+    //广播
+    private BroadcastBean broadcastBean;
+    //主题
+    private TopicBean topicBean;
     //活动
     private ActivityBean activityBean;
     //优惠券
@@ -115,6 +126,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     private boolean isRefresh;
     //相机权限
     private String[] permissionStr = {Manifest.permission.CAMERA};
+    private BaseDelegateAdapter couponAdapter;
 
     @Nullable
     @Override
@@ -188,6 +200,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 case "FUNCTION":
                                     functionBean = GsonUtils.jsonToBean(response, FunctionBean.class);
                                     break;
+                                case "BROAD":
+                                    broadcastBean = GsonUtils.jsonToBean(response, BroadcastBean.class);
+                                    break;
+                                case "TOPIC":
+                                    topicBean = GsonUtils.jsonToBean(response, TopicBean.class);
+                                    break;
                                 case "COUPON":
                                     couponBean = GsonUtils.jsonToBean(response, CouponBean.class);
                                     break;
@@ -199,7 +217,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                     break;
                             }
                             count++;
-                            if (count == 5) {
+                            if (count == 7) {
                                 count = 0;
                                 if (isRefresh) {
                                     refreshLayout.finishRefresh();
@@ -322,27 +340,41 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         };
         mAdapters.add(functionAdapter);
+        final List<String> dataList = new ArrayList<>();
+        for (int i = 0; i < broadcastBean.getData().size(); i++) {
+            dataList.add(broadcastBean.getData().get(i).getContent());
+        }
+        BaseDelegateAdapter broadAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+                R.layout.layout_homepage_broad, 1, 3) {
+            @Override
+            public void onBindViewHolder(ViewHolder holder, int position) {
+                super.onBindViewHolder(holder, position);
+                MarqueeView marqueeView = holder.getView(R.id.marqueeView);
+                marqueeView.startWithList(dataList);
+            }
+        };
+        mAdapters.add(broadAdapter);
 
 
         //优惠券
-        initTitle("优惠券", 3);
+        initTitle("优惠券", 5);
 
-        BaseDelegateAdapter couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
-                R.layout.rv_coupon_item, couponBean.getData().size(), 4) {
+        couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+                R.layout.rv_coupon_item, couponBean.getData().size(), 6) {
             @Override
-            public void onBindViewHolder(ViewHolder holder, final int position) {
+            public void onBindViewHolder(final ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_coupon);
                 ivCoupon.setImageURI(couponBean.getData().get(position).getCouponImage());
 
                 holder.setText(R.id.tv_home_coupon_title, couponBean.getData().get(position).getCouponName());
                 holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getCouponDesc());
-                holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData().get(position).getStock());
+                holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData().get(position).getBalanceNum());
 
                 TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
 
                 String accessType = couponBean.getData().get(position).getAccessType();
-                int needScore = couponBean.getData().get(position).getAccessValue();
+                double needScore = couponBean.getData().get(position).getAccessValue();
 
                 if (!TextUtils.isEmpty(accessType)) {
                     switch (accessType) {
@@ -358,21 +390,22 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     }
                 }
 
-//                RelativeLayout rlCoupon = holder.getView(R.id.rl_coupon_item);
-//                rlCoupon.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
-//                        intent.putExtra("coupon_id", giftBean.getData().get(position).getObjectId());
-//                        startActivity(intent);
-//                    }
-//                });
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
-                        intent.putExtra("coupon_id", giftBean.getData().get(position).getObjectId());
+                        intent.putExtra("coupon_id", couponBean.getData().get(holder.getAdapterPosition()).getObjectId());
                         startActivity(intent);
+                    }
+                });
+                tvReceive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                            exchangeCoupon(holder.getAdapterPosition());
+                        } else {
+                            startActivity(new Intent(getActivity(), LoginActivity.class));
+                        }
                     }
                 });
             }
@@ -380,7 +413,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         mAdapters.add(couponAdapter);
 
         //积分兑换
-        initTitle("积分兑礼", 5);
+        initTitle("积分兑礼", 7);
 
         GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
         gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getActivity(), 12),
@@ -388,7 +421,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         gridLayoutHelper.setHGap((int) DisplayUtils.dp2px(getActivity(), 11));// 控制子元素之间的水平间距
         gridLayoutHelper.setBgColor(Color.WHITE);
         BaseDelegateAdapter giftAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper,
-                R.layout.rv_gift_item, giftBean.getData().size(), 6) {
+                R.layout.rv_gift_item, giftBean.getData().size(), 8) {
             //布局宽高
             int widthPixels = DisplayUtils.getMetrics(getActivity()).widthPixels;
             final int width = (int) ((widthPixels - DisplayUtils.dp2px(getActivity(), 35)) / 2);
@@ -422,12 +455,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         mAdapters.add(giftAdapter);
 
         //精彩活动
-        initTitle("精彩活动", 7);
+        initTitle("精彩活动", 9);
 
 
         GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
         BaseDelegateAdapter activityAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper1,
-                R.layout.rv_activity_item, activityBean.getData().size(), 8) {
+                R.layout.rv_activity_item, activityBean.getData().size(), 10) {
 
             @Override
             public void onBindViewHolder(ViewHolder holder, final int position) {
@@ -458,6 +491,9 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
                         intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
+                        intent.putExtra("type", activityBean.getData().get(position).getAcivityType());
+//                        intent.putExtra("money", activityBean.getData().get(position).getEnrollFee());
+//                        intent.putExtra("score", activityBean.getData().get(position).getEnrollScore());
                         startActivity(intent);
                     }
                 });
@@ -482,6 +518,47 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         });
         refreshLayout.setEnableLoadMore(false);
+    }
+
+    /**
+     * 领取优惠券
+     */
+    private void exchangeCoupon(final int position) {
+        OkHttpUtils.post()
+                .url(Constant.EXCHANGE_COUPON)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("couponId", String.valueOf(couponBean.getData().get(position).getObjectId()))
+                .addParams("exchangeValue", String.valueOf(couponBean.getData().get(position).getAccessValue()))
+                .addParams("exchangeNum", "1")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int i) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String s, int i) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(s);
+                            boolean flag = jsonObject.getBoolean("flag");
+                            String msg = jsonObject.getString("msg");
+                            ToastUtils.showToast(getActivity(), msg);
+                            if (flag) {
+                                int data = jsonObject.getInt("data");
+                                couponBean.getData().get(position).setBalanceNum(data);
+                                couponAdapter.notifyDataSetChanged();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
     }
 
     /**

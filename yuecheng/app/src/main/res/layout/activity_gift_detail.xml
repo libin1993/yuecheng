@@ -275,6 +275,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="3dp"
             android:layout_toRightOf="@id/tv_exchange_need_score"
+            android:layout_alignBottom="@id/tv_exchange_need_score"
             android:text="积分"
             android:textColor="@android:color/white"
             android:textSize="14sp"/>

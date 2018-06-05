@@ -22,9 +22,12 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.CouponListBean;
+import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -34,6 +37,9 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,7 +161,7 @@ public class ExchangeCouponActivity extends BaseActivity {
         adapter = new CommonAdapter<CouponListBean.DataBean>(ExchangeCouponActivity.this,
                 R.layout.rv_coupon_item, dataList) {
             @Override
-            protected void convert(ViewHolder holder, final CouponListBean.DataBean dataBean, int position) {
+            protected void convert(ViewHolder holder, final CouponListBean.DataBean dataBean, final int position) {
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_coupon);
                 ivCoupon.setImageURI(dataBean.getCouponImage());
 
@@ -166,7 +172,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                 TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
 
                 String accessType = dataBean.getAccessType();
-                int needScore = dataBean.getAccessValue();
+                double needScore = dataBean.getAccessValue();
 
                 if (!TextUtils.isEmpty(accessType)) {
                     switch (accessType) {
@@ -182,6 +188,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                     }
                 }
 
+
                 RelativeLayout rlCoupon = holder.getView(R.id.rl_coupon_item);
                 rlCoupon.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -189,6 +196,17 @@ public class ExchangeCouponActivity extends BaseActivity {
                         Intent intent = new Intent(ExchangeCouponActivity.this, CouponDetailActivity.class);
                         intent.putExtra("coupon_id", dataBean.getCouponId());
                         startActivity(intent);
+                    }
+                });
+
+                tvReceive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (SharedPreUtils.getBoolean(ExchangeCouponActivity.this, "is_login", false)) {
+                            exchangeCoupon(position);
+                        } else {
+                            startActivity(new Intent(ExchangeCouponActivity.this, LoginActivity.class));
+                        }
                     }
                 });
 
@@ -247,6 +265,49 @@ public class ExchangeCouponActivity extends BaseActivity {
                 initData();
             }
         });
+    }
+
+
+    /**
+     * 领取优惠券
+     */
+    private void exchangeCoupon(final int position) {
+        OkHttpUtils.post()
+                .url(Constant.EXCHANGE_COUPON)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("couponId", String.valueOf(dataList.get(position).getCouponId()))
+                .addParams("exchangeValue", String.valueOf(dataList.get(position).getAccessValue()))
+                .addParams("exchangeNum", "1")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int i) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String s, int i) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(s);
+                            boolean flag = jsonObject.getBoolean("flag");
+                            String msg = jsonObject.getString("msg");
+                            ToastUtils.showToast(ExchangeCouponActivity.this, msg);
+                            if (flag) {
+                                int data = jsonObject.getInt("data");
+                                dataList.get(position).setBalanceNum(data);
+                                adapter.notifyDataSetChanged();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
     }
 
 

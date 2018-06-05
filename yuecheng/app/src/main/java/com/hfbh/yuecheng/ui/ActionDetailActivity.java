@@ -1,7 +1,9 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -10,14 +12,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Author：Libin on 2018/6/4 14:13
@@ -39,7 +47,15 @@ public class ActionDetailActivity extends BaseActivity {
     TextView tvExchangeType;
     @BindView(R.id.tv_exchange_activity)
     TextView tvExchange;
+    //活动id
     private int activityId;
+    //活动类型
+    private String type;
+    //报名费用
+    private double enrollFee;
+    //报名积分
+    private int enrollScore;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +70,25 @@ public class ActionDetailActivity extends BaseActivity {
 
 
     private void initView() {
+
+        if (!TextUtils.isEmpty(type)) {
+            switch (type) {
+                case "NONEED":
+                    tvExchangeScore.setText("无需报名");
+                    break;
+                case "FREE":
+                    tvExchangeScore.setText("免费");
+                    break;
+                case "SCORE":
+                    tvExchangeScore.setText(String.valueOf(enrollScore));
+                    tvExchangeType.setVisibility(View.VISIBLE);
+                    break;
+                case "CASH":
+                    tvExchangeScore.setText("¥" + enrollFee);
+                    break;
+            }
+        }
+
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
         ws.setAllowFileAccess(true);
@@ -61,7 +96,7 @@ public class ActionDetailActivity extends BaseActivity {
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
-        String url = Constant.ACTIVITY_DETAIL + "?id=" + activityId;
+        String url = Constant.ACTIVITY_DETAIL + "?&appType=Android&id=" + activityId;
         if (SharedPreUtils.getBoolean(this, "is_login", false)) {
             url += "&hash=" + SharedPreUtils.getStr(this, "hash");
         }
@@ -76,8 +111,11 @@ public class ActionDetailActivity extends BaseActivity {
     }
 
     private void getData() {
-        activityId = getIntent().getIntExtra("activity_id", 0);
-        LogUtils.log("acti" + activityId);
+        Intent intent = getIntent();
+        activityId = intent.getIntExtra("activity_id", 0);
+        type = intent.getStringExtra("type");
+        enrollFee = intent.getDoubleExtra("money", 0.00);
+        enrollScore = intent.getIntExtra("score", 0);
     }
 
     @OnClick({R.id.iv_back_header, R.id.tv_exchange_activity})
@@ -91,8 +129,21 @@ public class ActionDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_exchange_activity:
+                if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+                    enrollActivity();
+                } else {
+                    startActivity(new Intent(this, LoginActivity.class));
+                }
                 break;
         }
+    }
+
+    /**
+     * 活动报名
+     */
+    private void enrollActivity() {
+
+
     }
 
 }

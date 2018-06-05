@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
+import com.hfbh.yuecheng.utils.SharedPreUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,10 +51,10 @@ public class CloseActionActivity extends BaseActivity {
     TextView tvActivityDetail;
     @BindView(R.id.tv_activity_exchange_time)
     TextView tvExchangeTime;
-    @BindView(R.id.tv_activity_exchange_type)
-    TextView tvExchangeType;
     @BindView(R.id.tv_activity_tip)
     TextView tvActivityTip;
+    @BindView(R.id.tv_activity_exchange_type)
+    TextView tvExchangeType;
     private ActivityListBean.DataBean dataBean;
 
     private Bitmap qrBmp;
@@ -74,8 +76,15 @@ public class CloseActionActivity extends BaseActivity {
 
     private void initView() {
         if (dataBean != null) {
-            ivActivityAvatar.setImageURI(dataBean.getActivityPicture());
-            tvActivityPhone.setText(dataBean.getActivityTitle());
+            String avatar = SharedPreUtils.getStr(this, "avatar");
+            String phone = SharedPreUtils.getStr(this, "phone");
+            if (!TextUtils.isEmpty(avatar)) {
+                ivActivityAvatar.setImageURI(avatar);
+            }
+            if (!TextUtils.isEmpty(phone)) {
+                tvActivityPhone.setText(phone);
+            }
+
             tvActivityName.setText(dataBean.getActivityTitle());
 
             qrBmp = QRCodeUtils.createQRCode(String.valueOf(dataBean.getVerifyCode()),
@@ -91,11 +100,12 @@ public class CloseActionActivity extends BaseActivity {
             if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                 switch (dataBean.getAcivityType()) {
                     case "NONEED":
-                        break;
+                        tvExchangeType.setText("报名费用： 无需报名");
                     case "FREE":
+                        tvExchangeType.setText("报名费用： 免费");
                         break;
                     case "SCORE":
-                        tvExchangeType.setText("消耗积分： " + dataBean.getEnrollScore() + "积分");
+                        tvExchangeType.setText("报名费用： " + dataBean.getEnrollScore() + "积分");
                         break;
                     case "CASH":
                         tvExchangeType.setText("报名费用： ¥" + dataBean.getEnrollFee());
@@ -113,6 +123,12 @@ public class CloseActionActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_activity_detail:
+                Intent intent = new Intent(this, ActionDetailActivity.class);
+                intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
+                intent.putExtra("type", dataBean.getAcivityType());
+                intent.putExtra("money", dataBean.getEnrollFee());
+                intent.putExtra("score", dataBean.getEnrollScore());
+                startActivity(intent);
                 break;
         }
     }

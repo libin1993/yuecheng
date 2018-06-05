@@ -19,6 +19,7 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
+import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -75,6 +76,7 @@ public class MyActivityFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
+        loadingView.smoothToShow();
         initData();
         return view;
     }
@@ -98,7 +100,7 @@ public class MyActivityFragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
-                        if (activityListBean.getPage()!= null){
+                        if (activityListBean.getPage() != null) {
                             pages = activityListBean.getPage().getPages();
                         }
 
@@ -117,6 +119,7 @@ public class MyActivityFragment extends BaseFragment {
                                 isLoadMore = false;
                                 adapter.notifyDataSetChanged();
                             } else {
+                                loadingView.smoothToHide();
                                 initView();
                             }
                             rvActivity.setVisibility(View.VISIBLE);
@@ -140,7 +143,7 @@ public class MyActivityFragment extends BaseFragment {
         adapter = new CommonAdapter<ActivityListBean.DataBean>(getActivity(),
                 R.layout.rv_my_activity_item, dataList) {
             @Override
-            protected void convert(ViewHolder holder, ActivityListBean.DataBean dataBean, int position) {
+            protected void convert(ViewHolder holder, ActivityListBean.DataBean dataBean, final int position) {
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_my_activity);
                 ivCoupon.setImageURI(dataBean.getActivityPicture());
 
@@ -150,7 +153,7 @@ public class MyActivityFragment extends BaseFragment {
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_my_activity);
                 flowLayout.removeAllViews();
-                if (dataBean.getTags() != null && dataBean.getTags().size() > 0){
+                if (dataBean.getTags() != null && dataBean.getTags().size() > 0) {
                     addTextView(flowLayout, dataBean.getTags());
                 }
 
@@ -173,6 +176,16 @@ public class MyActivityFragment extends BaseFragment {
                 }
                 TextView tvJoin = holder.getView(R.id.tv_activity_join);
                 tvJoin.setText(dataBean.getMemberSignupState());
+                tvJoin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), CloseActionActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("activity_info", dataList.get(position));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                });
 
             }
         };
@@ -183,14 +196,13 @@ public class MyActivityFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-//                Intent intent = new Intent(getActivity(), CloseActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("activity_info",  dataList.get(position));
-//                intent.putExtras(bundle);
-//                startActivity(intent);
+
 
                 Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
                 intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
+                intent.putExtra("type", dataList.get(position).getAcivityType());
+                intent.putExtra("money", dataList.get(position).getEnrollFee());
+                intent.putExtra("score", dataList.get(position).getEnrollScore());
                 startActivity(intent);
             }
 

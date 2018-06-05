@@ -10,13 +10,15 @@ public class Constant {
     //定位
     public static final String LOCATION = HOST + "/wechat/appRequest/nearestMall.json";
     //首页分类
-    public static final String HOMEPAGE_TYPE = HOST + "/wechat/homepage/homePage.json";
+    public static final String HOMEPAGE_TYPE = HOST + "/wechat/app/homepage/homePage.json";
     //首页内容
-    public static final String HOMEPAGE_MODULE = HOST + "/wechat/homepage/queryByCode.json";
+    public static final String HOMEPAGE_MODULE = HOST + "/wechat/app/homepage/queryByCode.json";
     //发现商品
     public static final String DISCOVERY_GOODS = HOST + "/wechat/commodity/listCommodity.json";
     //活动列表
     public static final String ACTIVITY_LIST = HOST + "/wechat/wechat/signup_activity/list.json";
+    //活动报名
+    public static final String ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/signup_form.json";
     //切换城市
     public static final String CHANGE_CITY = HOST + "/wechat/cityConfig/cityList.json";
     //店铺列表
@@ -34,7 +36,9 @@ public class Constant {
     //兑换优惠券列表
     public static final String EXCHANGE_COUPON_LIST = HOST + "/wechat/webcoupon/listCouponDefault.json";
     //礼品信息
-    public static final String GIFT_INFO = HOST + "/wechat/pointsReward/info.json";
+    public static final String GIFT_DETAIL = HOST + "/wechat/pointsReward/info.json";
+    //优惠券详情
+    public static final String COUPON_DETAIL = HOST + "/wechat/webcoupon/getCouponDesc.json";
     //兑换礼品
     public static final String EXCHANGE_GIFT = HOST + "/wechat/pointsReward/exchange.json";
     //注册
@@ -81,6 +85,8 @@ public class Constant {
     public static final String BALANCE_RECORD = HOST + "/wechat/member/accountChangeRecord.json";
     //权限列表
     public static final String MEMBER_RIGHTS = HOST + "/wechat/memberCard/listCardLevel.json";
+    //领取优惠券
+    public static final String EXCHANGE_COUPON = HOST + "/wechat/webcoupon/exchangeByPoints.json";
 
 
     //WebView

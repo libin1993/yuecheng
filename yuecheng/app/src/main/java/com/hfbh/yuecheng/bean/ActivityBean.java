@@ -11,8 +11,8 @@ public class ActivityBean {
 
     /**
      * flag : true
-     * hash : 44c68ff36c8e40bfa6629d2593fab955
-     * data : [{"accessType":null,"accessValue":null,"acivityType":"NONEED","activityName":"不要报名","activityPic":"http://m.hfbh.com.cn/image/20180425/1312842440275216.jpg","balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":"2018-04-30 00:00:00","endTimeStr":"2018.04.30","giftPicturePath":null,"id":null,"limitNum":null,"limitPerDayNum":null,"memberBroughtNum":null,"memberSignupState":"已结束","needScore":null,"objectId":397,"relateName":null,"signup":false,"sort":null,"startTime":"2018-04-28 00:00:00","startTimeStr":"2018.04.28","state":null,"stock":null,"tags":[{"activityTagsId":null,"createTime":null,"creatorId":null,"id":null,"isDelete":null,"marketingActivitySignupId":null,"modifierId":null,"modifyTime":null,"organizeId":null,"tagName":"五一欢庆"}],"useRange":null,"voteStartTime":"2018-04-18 00:00:00"},{"accessType":null,"accessValue":null,"acivityType":"SCORE","activityName":"活动报名565655656556565565655656556565565655656556565","activityPic":"http://yjwang.wmalle.com/image/20180514/6795404613975448.jpg","balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":"2018-05-31 00:00:00","endTimeStr":"2018.05.31","giftPicturePath":null,"id":null,"limitNum":null,"limitPerDayNum":null,"memberBroughtNum":null,"memberSignupState":"去报名","needScore":null,"objectId":509,"relateName":null,"signup":false,"sort":null,"startTime":"2018-05-14 00:00:00","startTimeStr":"2018.05.14","state":null,"stock":null,"tags":[{"activityTagsId":null,"createTime":null,"creatorId":null,"id":null,"isDelete":null,"marketingActivitySignupId":null,"modifierId":null,"modifyTime":null,"organizeId":null,"tagName":"啤酒节"},{"activityTagsId":null,"createTime":null,"creatorId":null,"id":null,"isDelete":null,"marketingActivitySignupId":null,"modifierId":null,"modifyTime":null,"organizeId":null,"tagName":"清明节"},{"activityTagsId":null,"createTime":null,"creatorId":null,"id":null,"isDelete":null,"marketingActivitySignupId":null,"modifierId":null,"modifyTime":null,"organizeId":null,"tagName":"1啦啦啦啦啦"}],"useRange":null,"voteStartTime":"2018-05-14 00:00:00"}]
+     * hash : c07ed299d6364f04ba33869ed2f26fc9
+     * data : [{"accessType":null,"accessValue":null,"acivityType":"NONEED","activityName":"不要报名","activityPic":"http://m.hfbh.com.cn/image/20180425/1312842440275216.jpg","balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":"2018-04-30 00:00:00","endTimeStr":"2018.04.30","giftPicturePath":null,"id":null,"limitNum":null,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":null,"memberSignupState":"已结束","needScore":null,"objectId":397,"relateName":null,"serviceAmount":null,"signup":false,"sort":null,"startTime":"2018-04-28 00:00:00","startTimeStr":"2018.04.28","state":null,"stock":null,"tags":[{"activityTagsId":null,"createTime":null,"creatorId":null,"id":null,"isDelete":null,"marketingActivitySignupId":null,"modifierId":null,"modifyTime":null,"organizeId":null,"tagName":"五一欢庆"}],"useRange":null,"voteStartTime":"2018-04-18 00:00:00"},{"accessType":null,"accessValue":null,"acivityType":"SCORE","activityName":"活动报名565655656556565565655656556565565655656556565","activityPic":"http://yjwang.wmalle.com/image/20180514/6795404613975448.jpg","balanceNum":null,"broughtNum":null,"couponDesc":null,"couponImage":null,"couponName":null,"couponTypeCy":null,"couponTypeKind":null,"couponValue":null,"dayBroughtNum":null,"endTime":"2018-05-31 00:00:00","endTimeStr":"2018.05.31","giftPicturePath":null,"id":null,"limitNum":null,"limitPerDayNum":null,"listCouponShop":null,"memberBroughtNum":null,"memberSignupState":"已结束","needScore":null,"objectId":509,"relateName":null,"serviceAmount":null,"signup":false,"sort":null,"startTime":"2018-05-14 00:00:00","startTimeStr":"2018.05.14","state":null,"stock":null,"tags":[{"activityTagsId":null,"createTime":null,"creatorId":null,"id":null,"isDelete":null,"marketingActivitySignupId":null,"modifierId":null,"modifyTime":null,"organizeId":null,"tagName":"啤酒节"},{"activityTagsId":null,"createTime":null,"creatorId":null,"id":null,"isDelete":null,"marketingActivitySignupId":null,"modifierId":null,"modifyTime":null,"organizeId":null,"tagName":"清明节"},{"activityTagsId":null,"createTime":null,"creatorId":null,"id":null,"isDelete":null,"marketingActivitySignupId":null,"modifierId":null,"modifyTime":null,"organizeId":null,"tagName":"1啦啦啦啦啦"}],"useRange":null,"voteStartTime":"2018-05-14 00:00:00"}]
      * code : 0
      */
 
@@ -75,11 +75,13 @@ public class ActivityBean {
          * id : null
          * limitNum : null
          * limitPerDayNum : null
+         * listCouponShop : null
          * memberBroughtNum : null
          * memberSignupState : 已结束
          * needScore : null
          * objectId : 397
          * relateName : null
+         * serviceAmount : null
          * signup : false
          * sort : null
          * startTime : 2018-04-28 00:00:00
@@ -111,11 +113,13 @@ public class ActivityBean {
         private Object id;
         private Object limitNum;
         private Object limitPerDayNum;
+        private Object listCouponShop;
         private Object memberBroughtNum;
         private String memberSignupState;
         private Object needScore;
         private int objectId;
         private Object relateName;
+        private Object serviceAmount;
         private boolean signup;
         private Object sort;
         private String startTime;
@@ -286,6 +290,14 @@ public class ActivityBean {
             this.limitPerDayNum = limitPerDayNum;
         }
 
+        public Object getListCouponShop() {
+            return listCouponShop;
+        }
+
+        public void setListCouponShop(Object listCouponShop) {
+            this.listCouponShop = listCouponShop;
+        }
+
         public Object getMemberBroughtNum() {
             return memberBroughtNum;
         }
@@ -324,6 +336,14 @@ public class ActivityBean {
 
         public void setRelateName(Object relateName) {
             this.relateName = relateName;
+        }
+
+        public Object getServiceAmount() {
+            return serviceAmount;
+        }
+
+        public void setServiceAmount(Object serviceAmount) {
+            this.serviceAmount = serviceAmount;
         }
 
         public boolean isSignup() {

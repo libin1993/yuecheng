@@ -38,7 +38,6 @@
         android:layout_marginTop="33dp"
         android:background="@drawable/bound_gradient_green"
         android:gravity="center"
-        android:text="兑换成功"
         android:textColor="@android:color/white"
         android:textSize="15sp"
         android:layout_marginBottom="30dp"/>
