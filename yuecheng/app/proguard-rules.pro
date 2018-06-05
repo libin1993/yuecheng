@@ -518,6 +518,10 @@ public void xxxxxx(**);
 -keep class android.support.v7.widget.RecyclerView$LayoutManager { *; }
 
 
--keepclasseswithmembers class * {
-public (android.content.Context);
-}
+-dontwarn org.joda.convert.**
+-dontwarn org.joda.time.**
+-keep class org.joda.time.** { *; }
+-keep interface org.joda.time.** { *;}
+
+-keep class com.wang.avi.** { *; }
+-keep class com.wang.avi.indicators.** { *; }

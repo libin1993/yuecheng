@@ -16,7 +16,9 @@
         android:layout_marginTop="10dp"
         android:background="@android:color/white"
         android:hint="设置昵称"
+        android:maxLength="12"
         android:paddingLeft="12dp"
+        android:singleLine="true"
         android:textColor="@color/gray_10"
         android:textColorHint="@color/gray_cc"
         android:textSize="15sp"/>
