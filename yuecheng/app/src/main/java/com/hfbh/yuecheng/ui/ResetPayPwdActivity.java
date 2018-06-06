@@ -62,7 +62,6 @@ public class ResetPayPwdActivity extends BaseActivity {
     }
 
     private void initView() {
-        LogUtils.log("111" + type);
         switch (type) {
             case "validate":
                 switch (count) {
@@ -118,7 +117,6 @@ public class ResetPayPwdActivity extends BaseActivity {
 
             @Override
             public void onInputFinish(String s) {
-                LogUtils.log(s);
                 switch (type) {
                     case "validate":
                         switch (count) {
@@ -191,7 +189,6 @@ public class ResetPayPwdActivity extends BaseActivity {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.log("pppppp" + response);
                             ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                             if (responseBean.isFlag()) {
                                 ToastUtils.showToast(ResetPayPwdActivity.this, "修改成功");
@@ -227,7 +224,6 @@ public class ResetPayPwdActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(validatePwd + "," + response);
                         ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                         if (responseBean.isFlag()) {
                             count++;

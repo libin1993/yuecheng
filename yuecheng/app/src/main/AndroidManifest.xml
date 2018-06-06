@@ -126,6 +126,7 @@
         <activity android:name=".ui.ScanCodeActivity"/>
         <activity android:name=".ui.UserAgreementActivity"/>
         <activity android:name=".ui.MsgCenterActivity"/>
+        <activity android:name=".ui.NewCalendarActivity"/>
     </application>
 
 </manifest>

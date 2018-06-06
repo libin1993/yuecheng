@@ -127,6 +127,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     //相机权限
     private String[] permissionStr = {Manifest.permission.CAMERA};
     private BaseDelegateAdapter couponAdapter;
+    private MarqueeView marqueeView;
 
     @Nullable
     @Override
@@ -137,6 +138,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         initType();
         return view;
     }
+
 
     /**
      * 加载模块
@@ -192,7 +194,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.log(response);
                             switch (typeBean.getData().get(type).getModuleCode()) {
                                 case "BANNER":
                                     bannerBean = GsonUtils.jsonToBean(response, BannerBean.class);
@@ -294,7 +295,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 //布局宽高
                 final int width = DisplayUtils.getMetrics(getActivity()).widthPixels / 4;
                 CommonAdapter<FunctionBean.DataBean> adapter = new CommonAdapter<FunctionBean
-                        .DataBean>(getActivity(), R.layout.rv_founction_item, functionBean.getData()) {
+                        .DataBean>(getActivity(),
+                        R.layout.rv_founction_item, functionBean.getData()) {
                     @Override
                     protected void convert(ViewHolder holder, FunctionBean.DataBean dataBean, int position) {
                         LinearLayout llFunction = holder.getView(R.id.ll_function_item);
@@ -340,6 +342,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         };
         mAdapters.add(functionAdapter);
+
         final List<String> dataList = new ArrayList<>();
         for (int i = 0; i < broadcastBean.getData().size(); i++) {
             dataList.add(broadcastBean.getData().get(i).getContent());
@@ -349,7 +352,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
-                MarqueeView marqueeView = holder.getView(R.id.marqueeView);
+                marqueeView = holder.getView(R.id.marqueeView);
                 marqueeView.startWithList(dataList);
             }
         };
@@ -382,10 +385,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             tvReceive.setText("免费\n领取");
                             break;
                         case "POINT":
-                            tvReceive.setText(needScore + "积分\n领取");
+                            tvReceive.setText(DisplayUtils.isInteger(needScore) + "积分\n领取");
                             break;
                         case "BUY":
-                            tvReceive.setText(needScore + "元\n领取");
+                            tvReceive.setText(DisplayUtils.isInteger(needScore) + "元\n领取");
                             break;
                     }
                 }
@@ -439,7 +442,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(ivGift);
                 holder.setText(R.id.tv_home_gift_name, giftBean.getData().get(position).getRelateName());
-                holder.setText(R.id.tv_home_gift_score, giftBean.getData().get(position).getNeedScore() + "积分");
+                holder.setText(R.id.tv_home_gift_score, DisplayUtils.isInteger(giftBean.getData().get(position).getNeedScore()) + "积分");
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -471,11 +474,21 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         .getStartTimeStr() + " - " + activityBean.getData().get(position).getEndTimeStr());
 
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
-                String needScore = (String) activityBean.getData().get(position).getNeedScore();
-                if (!TextUtils.isEmpty(needScore)) {
-                    tvReceive.setText(needScore + "积分报名");
-                } else {
-                    tvReceive.setText("免费报名");
+                if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
+                    switch (activityBean.getData().get(position).getAcivityType()) {
+                        case "NONEED":
+                            tvReceive.setText("无需报名");
+                            break;
+                        case "FREE":
+                            tvReceive.setText("免费报名");
+                            break;
+                        case "SCORE":
+                            tvReceive.setText(DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollScore()) + "积分报名");
+                            break;
+                        case "CASH":
+                            tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollFee()) + "报名");
+                            break;
+                    }
                 }
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
@@ -491,8 +504,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
                         intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
                         intent.putExtra("type", activityBean.getData().get(position).getAcivityType());
-//                        intent.putExtra("money", activityBean.getData().get(position).getEnrollFee());
-//                        intent.putExtra("score", activityBean.getData().get(position).getEnrollScore());
+                        intent.putExtra("money", activityBean.getData().get(position).getEnrollFee());
+                        intent.putExtra("score", activityBean.getData().get(position).getEnrollScore());
                         startActivity(intent);
                     }
                 });
@@ -612,13 +625,13 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     @Override
                     public void onClick(View v) {
                         switch (type) {
-                            case 3:
+                            case 5:
                                 startActivity(new Intent(getActivity(), ExchangeCouponActivity.class));
                                 break;
-                            case 5:
+                            case 7:
                                 startActivity(new Intent(getActivity(), ExchangeGiftActivity.class));
                                 break;
-                            case 7:
+                            case 9:
                                 EventBus.getDefault().post("activity");
                                 break;
                         }
@@ -681,5 +694,21 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     @Override
     public boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
         return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (marqueeView != null) {
+            marqueeView.startFlipping();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (marqueeView != null) {
+            marqueeView.stopFlipping();
+        }
     }
 }

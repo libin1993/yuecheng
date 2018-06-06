@@ -117,7 +117,7 @@ public class GiftBean {
         private Object listCouponShop;
         private Object memberBroughtNum;
         private Object memberSignupState;
-        private int needScore;
+        private double needScore;
         private int objectId;
         private String relateName;
         private Object serviceAmount;
@@ -315,11 +315,11 @@ public class GiftBean {
             this.memberSignupState = memberSignupState;
         }
 
-        public int getNeedScore() {
+        public double getNeedScore() {
             return needScore;
         }
 
-        public void setNeedScore(int needScore) {
+        public void setNeedScore(double needScore) {
             this.needScore = needScore;
         }
 

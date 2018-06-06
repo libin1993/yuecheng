@@ -8,7 +8,7 @@ import java.util.List;
  * Email：1993911441@qq.com
  * Describe：
  */
-public class UserInfoBean implements Serializable{
+public class UserInfoBean implements Serializable {
 
 
     private static final long serialVersionUID = 2472656786375655038L;
@@ -56,7 +56,7 @@ public class UserInfoBean implements Serializable{
         this.code = code;
     }
 
-    public static class DataBean implements Serializable{
+    public static class DataBean implements Serializable {
         private static final long serialVersionUID = 1637596220579495100L;
         /**
          * accountBalance : 1487.89
@@ -106,7 +106,7 @@ public class UserInfoBean implements Serializable{
         private String memberProvince;
         private String memberSex;
         private String payPassword;
-        private int points;
+        private double points;
         private int totalAccount;
         private Object version;
 
@@ -278,11 +278,11 @@ public class UserInfoBean implements Serializable{
             this.payPassword = payPassword;
         }
 
-        public int getPoints() {
+        public double getPoints() {
             return points;
         }
 
-        public void setPoints(int points) {
+        public void setPoints(double points) {
             this.points = points;
         }
 
@@ -302,7 +302,7 @@ public class UserInfoBean implements Serializable{
             this.version = version;
         }
 
-        public static class MemberCardGradeDTOBean implements Serializable{
+        public static class MemberCardGradeDTOBean implements Serializable {
             private static final long serialVersionUID = 2014496416043004504L;
             /**
              * appPic : http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180329134056834.png
@@ -388,7 +388,7 @@ public class UserInfoBean implements Serializable{
                 this.listPrivilege = listPrivilege;
             }
 
-            public static class ListPrivilegeBean implements Serializable{
+            public static class ListPrivilegeBean implements Serializable {
                 private static final long serialVersionUID = 5383658936716515758L;
                 /**
                  * appPic : http://wmalle.oss-cn-hangzhou.aliyuncs.com/20180409110248008.png

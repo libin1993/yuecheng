@@ -19,6 +19,7 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.MemberBalanceBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -141,7 +142,7 @@ public class PayCardActivity extends BaseActivity {
                 ivBg.setImageResource(imgCard[position % 5]);
                 holder.setText(R.id.tv_pay_card_number, dataBean.getAccountId());
                 holder.setText(R.id.tv_pay_card_name, dataBean.getAccountName());
-                holder.setText(R.id.tv_pay_card_money, dataBean.getBalance() + "元");
+                holder.setText(R.id.tv_pay_card_money, DisplayUtils.isInteger(dataBean.getBalance()) + "元");
             }
         };
         rvCard.setAdapter(adapter);
@@ -176,7 +177,7 @@ public class PayCardActivity extends BaseActivity {
 
             @Override
             public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-                deleteCard(position,dataList.get(position).getId());
+                deleteCard(position, dataList.get(position).getId());
                 return false;
             }
         });

@@ -152,11 +152,21 @@ public class ActivityListFragment extends BaseFragment {
                         .getStartTimeStr() + " - " + dataBean.getEndTimeStr());
 
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
-                String needScore = (String) dataBean.getVerifyCode();
-                if (!TextUtils.isEmpty(needScore)) {
-                    tvReceive.setText(needScore + "积分报名");
-                } else {
-                    tvReceive.setText("免费报名");
+                if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
+                    switch (dataBean.getAcivityType()) {
+                        case "NONEED":
+                            tvReceive.setText("无需报名");
+                            break;
+                        case "FREE":
+                            tvReceive.setText("免费报名");
+                            break;
+                        case "SCORE":
+                            tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+                            break;
+                        case "CASH":
+                            tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+                            break;
+                    }
                 }
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);

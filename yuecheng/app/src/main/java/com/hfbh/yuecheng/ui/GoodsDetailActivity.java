@@ -70,7 +70,6 @@ public class GoodsDetailActivity extends BaseActivity {
 
     private void getData() {
         goodsId = getIntent().getIntExtra("goods_id", 0);
-        LogUtils.log("goods" + goodsId);
     }
 
     @OnClick({R.id.iv_goods_back, R.id.iv_goods_share, R.id.tv_buy_goods})

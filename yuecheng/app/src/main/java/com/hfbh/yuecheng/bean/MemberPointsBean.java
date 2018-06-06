@@ -100,7 +100,7 @@ public class MemberPointsBean {
             private Object createTimeStr;
             private Object memberId;
             private Object organizeId;
-            private int points;
+            private double points;
             private Object pointsChangeId;
             private String pointsRemark;
             private String pointsStr;
@@ -154,11 +154,11 @@ public class MemberPointsBean {
                 this.organizeId = organizeId;
             }
 
-            public int getPoints() {
+            public double getPoints() {
                 return points;
             }
 
-            public void setPoints(int points) {
+            public void setPoints(double points) {
                 this.points = points;
             }
 

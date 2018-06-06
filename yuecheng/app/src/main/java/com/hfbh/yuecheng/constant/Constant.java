@@ -87,7 +87,10 @@ public class Constant {
     public static final String MEMBER_RIGHTS = HOST + "/wechat/memberCard/listCardLevel.json";
     //领取优惠券
     public static final String EXCHANGE_COUPON = HOST + "/wechat/webcoupon/exchangeByPoints.json";
-
+    //退出登录
+    public static final String LOG_OUT = HOST + "/wechat/appRequest/loginOut.json";
+    //检测是否登录
+    public static final String IS_LOGIN = HOST + "/wechat/appRequest/memberIsLogin.json";
 
     //WebView
     //活动详情

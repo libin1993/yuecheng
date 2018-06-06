@@ -116,7 +116,7 @@ public class ActivityBean {
         private Object listCouponShop;
         private Object memberBroughtNum;
         private String memberSignupState;
-        private Object needScore;
+        private double needScore;
         private int objectId;
         private Object relateName;
         private Object serviceAmount;
@@ -129,6 +129,25 @@ public class ActivityBean {
         private Object useRange;
         private String voteStartTime;
         private List<TagsBean> tags;
+        private double enrollFee;
+
+        public double getEnrollFee() {
+            return enrollFee;
+        }
+
+        public void setEnrollFee(double enrollFee) {
+            this.enrollFee = enrollFee;
+        }
+
+        public double getEnrollScore() {
+            return enrollScore;
+        }
+
+        public void setEnrollScore(double enrollScore) {
+            this.enrollScore = enrollScore;
+        }
+
+        private double enrollScore;
 
         public Object getAccessType() {
             return accessType;
@@ -314,11 +333,11 @@ public class ActivityBean {
             this.memberSignupState = memberSignupState;
         }
 
-        public Object getNeedScore() {
+        public double getNeedScore() {
             return needScore;
         }
 
-        public void setNeedScore(Object needScore) {
+        public void setNeedScore(double needScore) {
             this.needScore = needScore;
         }
 

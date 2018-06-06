@@ -2,14 +2,11 @@ package com.hfbh.yuecheng.ui;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -17,7 +14,6 @@ import android.widget.RadioGroup;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.bean.LocationBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.ActivityFragment;
@@ -29,21 +25,20 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LocationUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
 import com.wang.avi.AVLoadingIndicatorView;
-import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,17 +79,22 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         getData();
     }
 
+    /**
+     * 首次进入或者切换商城
+     */
     private void getData() {
-        exitTime = 0;
         Intent intent = getIntent();
         boolean isChangeCity = intent.getBooleanExtra("change_market", false);
         if (isChangeCity) {
             initView();
         } else {
-            requestPermission();
+            isLogin();
         }
     }
 
+    /**
+     * 请求权限
+     */
     private void requestPermission() {
         if (!EasyPermissions.hasPermissions(this, permissionStr)) {
             EasyPermissions.requestPermissions(this, "", 1234, permissionStr);
@@ -111,16 +111,53 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         if (location != null) {
             longitude = String.valueOf(location.getLongitude());
             latitude = String.valueOf(location.getLatitude());
-            initData();
+            initLocation();
         }
+    }
+
+    /**
+     * 检测是否登录
+     */
+    private void isLogin() {
+        loadingView.smoothToShow();
+        if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+            OkHttpUtils.post()
+                    .url(Constant.IS_LOGIN)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int i) {
+
+                        }
+
+                        @Override
+                        public void onResponse(String s, int i) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(s);
+                                boolean isLogin = jsonObject.getBoolean("data");
+                                if (!isLogin) {
+                                    SharedPreUtils.deleteStr(MainActivity.this, "is_login");
+                                }
+                                requestPermission();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        } else {
+            requestPermission();
+        }
+
     }
 
     /**
      * 获取商场id ,hash值
      */
-    private void initData() {
+    private void initLocation() {
 
-        loadingView.smoothToShow();
         OkHttpUtils.post()
                 .url(Constant.LOCATION)
                 .addParams("lng", longitude)
@@ -203,9 +240,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        if (requestCode == 1234){
+        if (requestCode == 1234) {
             PermissionDialog.showPermissionDialog(this, "读写内存和定位");
-            initData();
+            initLocation();
         }
 
     }
@@ -235,8 +272,11 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * @param msg 点击跳转活动页面
+     */
     @Subscribe
-    public void init(String msg) {
+    public void toActivity(String msg) {
         if ("activity".equals(msg)) {
             fragmentTabUtils.setCurrentFragment(1);
         }

@@ -525,3 +525,8 @@ public void xxxxxx(**);
 
 -keep class com.wang.avi.** { *; }
 -keep class com.wang.avi.indicators.** { *; }
+
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context);
+}

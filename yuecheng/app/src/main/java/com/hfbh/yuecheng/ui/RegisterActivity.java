@@ -343,7 +343,6 @@ public class RegisterActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log("register" + response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");

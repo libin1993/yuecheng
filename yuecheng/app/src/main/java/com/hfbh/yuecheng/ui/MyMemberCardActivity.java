@@ -19,6 +19,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -107,8 +108,8 @@ public class MyMemberCardActivity extends BaseActivity {
 
         tvTitleHeaderWhite.setText("电子会员卡");
         ivMemberCard.setImageURI(userInfoBean.getData().getMemberCardGradeDTO().getAppPic());
-        tvMemberCardMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
-        tvMemberCardScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
+        tvMemberCardMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
+        tvMemberCardScore.setText(DisplayUtils.isInteger(userInfoBean.getData().getPoints()));
         tvMemberCardGrade.setText(String.valueOf(userInfoBean.getData().getCardLevel()));
         tvMemberCardNo.setText("NO." + userInfoBean.getData().getCardNumber());
 

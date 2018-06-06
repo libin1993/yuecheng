@@ -16,6 +16,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.MemberBalanceBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -70,7 +71,7 @@ public class MemberBalanceActivity extends BaseActivity {
 
     private void getData() {
         tvTitleHeader.setText("会员卡余额");
-        tvMemberBalance.setText(String.valueOf(getIntent().getDoubleExtra("balance", 0)));
+        tvMemberBalance.setText(DisplayUtils.isInteger(getIntent().getDoubleExtra("balance", 0)));
     }
 
     private void initData() {
@@ -119,7 +120,7 @@ public class MemberBalanceActivity extends BaseActivity {
                 ivBg.setImageResource(imgCard[position % 5]);
                 holder.setText(R.id.tv_pay_card_number, dataBean.getAccountId());
                 holder.setText(R.id.tv_pay_card_name, dataBean.getAccountName());
-                holder.setText(R.id.tv_pay_card_money, dataBean.getBalance() + "元");
+                holder.setText(R.id.tv_pay_card_money, DisplayUtils.isInteger(dataBean.getBalance()) + "元");
             }
         };
         rvMemberBalance.setAdapter(adapter);

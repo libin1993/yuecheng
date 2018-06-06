@@ -15,6 +15,7 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.bean.MemberPointsBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -91,7 +92,6 @@ public class MemberPointsFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log(type + time + s);
                         viewLoading.smoothToHide();
                         MemberPointsBean memberPointsBean = GsonUtils.jsonToBean(s, MemberPointsBean.class);
                         if (memberPointsBean.isFlag() && memberPointsBean.getData().getPointsChangeList()
@@ -133,10 +133,10 @@ public class MemberPointsFragment extends BaseFragment {
                 if (pointsChangeListBean.getChangeType() != null) {
                     if (pointsChangeListBean.getChangeType().equals("INCREASE")) {
                         tvPoints.setTextColor(getActivity().getResources().getColor(R.color.red_99));
-                        tvPoints.setText("+" + pointsChangeListBean.getPoints());
+                        tvPoints.setText("+" + DisplayUtils.isInteger(pointsChangeListBean.getPoints()));
                     } else {
                         tvPoints.setTextColor(getActivity().getResources().getColor(R.color.gray_10));
-                        tvPoints.setText("-" + pointsChangeListBean.getPoints());
+                        tvPoints.setText("-" + DisplayUtils.isInteger(pointsChangeListBean.getPoints()));
                     }
                 }
             }

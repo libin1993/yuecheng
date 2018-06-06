@@ -14,6 +14,7 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.MyFragmentAdapter;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.fragment.MemberPointsFragment;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 
 import org.joda.time.YearMonth;
 
@@ -72,7 +73,7 @@ public class MemberPointsActivity extends BaseActivity {
     private void initTitle() {
 
         tvTitleHeader.setText("会员卡积分");
-        tvMemberPoints.setText(String.valueOf(getIntent().getIntExtra("points", 0)));
+        tvMemberPoints.setText(DisplayUtils.isInteger(getIntent().getDoubleExtra("points", 0)));
 
         titleList = new ArrayList<>();
         fragmentList = new ArrayList<>();

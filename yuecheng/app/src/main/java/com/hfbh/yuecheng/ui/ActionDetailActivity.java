@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.JsResult;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -15,6 +19,7 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -54,7 +59,7 @@ public class ActionDetailActivity extends BaseActivity {
     //报名费用
     private double enrollFee;
     //报名积分
-    private int enrollScore;
+    private double enrollScore;
 
 
     @Override
@@ -80,11 +85,11 @@ public class ActionDetailActivity extends BaseActivity {
                     tvExchangeScore.setText("免费");
                     break;
                 case "SCORE":
-                    tvExchangeScore.setText(String.valueOf(enrollScore));
+                    tvExchangeScore.setText(DisplayUtils.isInteger(enrollScore));
                     tvExchangeType.setVisibility(View.VISIBLE);
                     break;
                 case "CASH":
-                    tvExchangeScore.setText("¥" + enrollFee);
+                    tvExchangeScore.setText("¥" + DisplayUtils.isInteger(enrollFee));
                     break;
             }
         }
@@ -95,6 +100,7 @@ public class ActionDetailActivity extends BaseActivity {
         ws.setBuiltInZoomControls(false);
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webView.addJavascriptInterface(new JsInterface(), "android");
 
         String url = Constant.ACTIVITY_DETAIL + "?&appType=Android&id=" + activityId;
         if (SharedPreUtils.getBoolean(this, "is_login", false)) {
@@ -108,14 +114,42 @@ public class ActionDetailActivity extends BaseActivity {
                 return true;
             }
         });
+
     }
+
+    public class JsInterface {
+        /**
+         * @param phone 手机号
+         */
+        @JavascriptInterface
+        public void getPhone(String phone) {
+
+        }
+
+        /**
+         * @param name 姓名
+         */
+        @JavascriptInterface
+        public void getName(String name) {
+
+        }
+
+        /**
+         * @param data
+         */
+        @JavascriptInterface
+        public void getData(String data) {
+
+        }
+    }
+
 
     private void getData() {
         Intent intent = getIntent();
         activityId = intent.getIntExtra("activity_id", 0);
         type = intent.getStringExtra("type");
-        enrollFee = intent.getDoubleExtra("money", 0.00);
-        enrollScore = intent.getIntExtra("score", 0);
+        enrollFee = intent.getDoubleExtra("money", 0);
+        enrollScore = intent.getDoubleExtra("score", 0);
     }
 
     @OnClick({R.id.iv_back_header, R.id.tv_exchange_activity})

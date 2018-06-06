@@ -75,7 +75,7 @@ public class ActivityListBean implements Serializable {
         this.tagList = tagList;
     }
 
-    public static class PageBean implements Serializable{
+    public static class PageBean implements Serializable {
         public static final long serialVersionUID = 222177733332L;
         /**
          * pageNum : 1
@@ -178,7 +178,7 @@ public class ActivityListBean implements Serializable {
         private String endTime;
         private String endTimeStr;
         private double enrollFee;
-        private int enrollScore;
+        private double enrollScore;
         private String extraIntroduce;
         private String isAudit;
         private String isDelete;
@@ -301,11 +301,11 @@ public class ActivityListBean implements Serializable {
             this.enrollFee = enrollFee;
         }
 
-        public int getEnrollScore() {
+        public double getEnrollScore() {
             return enrollScore;
         }
 
-        public void setEnrollScore(int enrollScore) {
+        public void setEnrollScore(double enrollScore) {
             this.enrollScore = enrollScore;
         }
 
@@ -509,7 +509,7 @@ public class ActivityListBean implements Serializable {
             this.tags = tags;
         }
 
-        public static class TagsBean implements Serializable{
+        public static class TagsBean implements Serializable {
             private static final long serialVersionUID = -1526062096545617263L;
             /**
              * tagType : public
@@ -537,7 +537,7 @@ public class ActivityListBean implements Serializable {
         }
     }
 
-    public static class TagListBean implements Serializable{
+    public static class TagListBean implements Serializable {
 
         private static final long serialVersionUID = -2350695627016684110L;
         /**

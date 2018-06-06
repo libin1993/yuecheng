@@ -152,7 +152,6 @@ public class BindCardActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                         if (responseBean.isFlag()) {
                             ToastUtils.showToast(BindCardActivity.this, "绑定成功");

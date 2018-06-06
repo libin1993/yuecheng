@@ -277,10 +277,8 @@ public class ValidateActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log("dddddd" + s);
                         ResponseBean responseBean = GsonUtils.jsonToBean(s, ResponseBean.class);
                         if (responseBean.isFlag()) {
-                            LogUtils.log("2222"+type);
                             Intent intent = new Intent(ValidateActivity.this, ResetPayPwdActivity.class);
                             intent.putExtra("type", type);
                             startActivity(intent);

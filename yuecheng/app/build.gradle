@@ -99,4 +99,5 @@ dependencies {
     compile 'com.necer.ncalendar:ncalendar:2.4.6'
     compile 'com.jungly:gridPasswordView:0.3'
     compile 'com.sunfusheng:marqueeview:1.3.3'
+    compile project(':calendarview')
 }

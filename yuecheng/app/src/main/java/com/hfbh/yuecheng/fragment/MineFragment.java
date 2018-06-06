@@ -27,6 +27,7 @@ import com.hfbh.yuecheng.ui.MyActionActivity;
 import com.hfbh.yuecheng.ui.MyMemberCardActivity;
 import com.hfbh.yuecheng.ui.SetUpActivity;
 import com.hfbh.yuecheng.ui.UserInfoActivity;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -114,7 +115,6 @@ public class MineFragment extends BaseFragment {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.log(response);
                             userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                             if (userInfoBean.isFlag()) {
                                 initView();
@@ -139,8 +139,8 @@ public class MineFragment extends BaseFragment {
         if (!TextUtils.isEmpty(userInfoBean.getData().getMemberHead())) {
             ivMineAvatar.setImageURI(userInfoBean.getData().getMemberHead());
         }
-        tvMineMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
-        tvMineScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
+        tvMineMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
+        tvMineScore.setText(DisplayUtils.isInteger(userInfoBean.getData().getPoints()));
         tvMineGrade.setText(userInfoBean.getData().getCardLevel());
     }
 

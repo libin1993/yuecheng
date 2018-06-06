@@ -82,7 +82,6 @@ public class MemberRightsActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         memberBean = GsonUtils.jsonToBean(response, MemberRightsBean.class);
                         if (memberBean.isFlag() && memberBean.getData() != null && memberBean.getData().size() > 0) {
                             initView();

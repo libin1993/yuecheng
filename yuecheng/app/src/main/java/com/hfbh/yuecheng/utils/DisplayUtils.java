@@ -96,4 +96,11 @@ public class DisplayUtils {
     public static String decimalFormat(Float value) {
         return new DecimalFormat("0.00").format(value);
     }
+
+    /**
+     * @return double是否为整数
+     */
+    public static String isInteger(double value) {
+        return (int) value == value ? String.valueOf((int) value) : decimalFormat((float) value);
+    }
 }

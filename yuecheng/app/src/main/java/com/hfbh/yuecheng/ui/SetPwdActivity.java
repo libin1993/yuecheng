@@ -81,7 +81,6 @@ public class SetPwdActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log("llll" + response);
                         ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                         Intent intent;
                         if (responseBean.isFlag()) {

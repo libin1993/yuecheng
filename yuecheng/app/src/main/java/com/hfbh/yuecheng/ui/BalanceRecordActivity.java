@@ -99,7 +99,6 @@ public class BalanceRecordActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log(s);
                         BalanceRecordBean balanceBean = GsonUtils.jsonToBean(s, BalanceRecordBean.class);
                         if (balanceBean.getPage() != null) {
                             pages = balanceBean.getPage().getPages();

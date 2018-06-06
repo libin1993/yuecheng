@@ -11,8 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.ResponseBean;
+import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
+import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -20,8 +25,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,7 +98,7 @@ public class SetUpActivity extends BaseActivity {
                 startActivity(new Intent(this, AboutUsActivity.class));
                 break;
             case R.id.tv_log_out:
-                logout();
+                logoutDialog();
                 break;
         }
     }
@@ -114,9 +117,9 @@ public class SetUpActivity extends BaseActivity {
     }
 
     /**
-     * 退出登录
+     * 退出登录提示
      */
-    public void logout() {
+    public void logoutDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_Alert);
         dialog.setTitle("退出登录");
         dialog.setMessage("您确定要退出登录吗？");
@@ -124,8 +127,11 @@ public class SetUpActivity extends BaseActivity {
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreUtils.deleteStr(SetUpActivity.this, "is_login");
-                tvLogOut.setVisibility(View.GONE);
+
+
+                logOut();
+
+
             }
         });
         //为“取消”按钮注册监听事件
@@ -138,6 +144,38 @@ public class SetUpActivity extends BaseActivity {
         dialog.create();
         dialog.show();
 
+    }
+
+    /**
+     * 退出登录
+     */
+    private void logOut() {
+
+        OkHttpUtils.post()
+                .url(Constant.LOG_OUT)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+                        if (responseBean.isFlag()) {
+                            SharedPreUtils.deleteStr(SetUpActivity.this, "is_login");
+                            tvLogOut.setVisibility(View.GONE);
+                            ToastUtils.showToast(SetUpActivity.this, "退出成功");
+                        } else {
+                            ToastUtils.showToast(SetUpActivity.this, "退出失败");
+                        }
+                    }
+                });
     }
 
     /**

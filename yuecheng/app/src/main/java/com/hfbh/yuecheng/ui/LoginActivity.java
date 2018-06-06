@@ -435,7 +435,6 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(md5 + "," + response);
                         UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             ToastUtils.showToast(LoginActivity.this, "登录成功");
