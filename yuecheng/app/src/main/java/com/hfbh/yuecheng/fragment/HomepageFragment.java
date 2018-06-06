@@ -362,7 +362,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.rv_coupon_item, couponBean.getData().size(), 6) {
             @Override
-            public void onBindViewHolder(final ViewHolder holder, int position) {
+            public void onBindViewHolder(final ViewHolder holder, final int position) {
                 super.onBindViewHolder(holder, position);
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_coupon);
                 ivCoupon.setImageURI(couponBean.getData().get(position).getCouponImage());
@@ -394,7 +394,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
-                        intent.putExtra("coupon_id", couponBean.getData().get(holder.getAdapterPosition()).getObjectId());
+                        intent.putExtra("coupon_id", couponBean.getData().get(position).getObjectId());
                         startActivity(intent);
                     }
                 });
@@ -402,7 +402,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     @Override
                     public void onClick(View v) {
                         if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                            exchangeCoupon(holder.getAdapterPosition());
+                            exchangeCoupon(position);
                         } else {
                             startActivity(new Intent(getActivity(), LoginActivity.class));
                         }
@@ -420,12 +420,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 0, (int) DisplayUtils.dp2px(getActivity(), 12), 0);
         gridLayoutHelper.setHGap((int) DisplayUtils.dp2px(getActivity(), 11));// 控制子元素之间的水平间距
         gridLayoutHelper.setBgColor(Color.WHITE);
+        //布局宽高
+        int widthPixels = DisplayUtils.getMetrics(getActivity()).widthPixels;
+        final int width = (int) ((widthPixels - DisplayUtils.dp2px(getActivity(), 35)) / 2);
         BaseDelegateAdapter giftAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper,
                 R.layout.rv_gift_item, giftBean.getData().size(), 8) {
-            //布局宽高
-            int widthPixels = DisplayUtils.getMetrics(getActivity()).widthPixels;
-            final int width = (int) ((widthPixels - DisplayUtils.dp2px(getActivity(), 35)) / 2);
-
             @Override
             public void onBindViewHolder(ViewHolder holder, final int position) {
                 super.onBindViewHolder(holder, position);

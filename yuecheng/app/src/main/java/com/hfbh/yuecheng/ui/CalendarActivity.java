@@ -131,8 +131,12 @@ public class CalendarActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(date + response);
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
-                        pages = activityListBean.getPage().getPages();
+                        if (activityListBean.getPage() != null) {
+                            pages = activityListBean.getPage().getPages();
+                        }
+
                         if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
                             if (selectDate) {
                                 dataList.clear();
@@ -150,8 +154,10 @@ public class CalendarActivity extends BaseActivity {
                                 initView();
                             }
                             svNoCalendar.setVisibility(View.GONE);
+                            rvCalendar.setVisibility(View.VISIBLE);
                         } else {
                             if (page == 1) {
+                                rvCalendar.setVisibility(View.GONE);
                                 svNoCalendar.setVisibility(View.VISIBLE);
                             }
                         }
@@ -246,6 +252,7 @@ public class CalendarActivity extends BaseActivity {
 
                 date = localDate.getYear() + "-" + month + "-" + day;
                 selectDate = true;
+                page = 1;
                 initData();
             }
         });
