@@ -18,6 +18,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.CouponActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberBalanceActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
@@ -170,6 +171,7 @@ public class MineFragment extends BaseFragment {
                 toLogin(MemberCardActivity.class);
                 break;
             case R.id.rl_mine_ticket:
+                toLogin(CouponActivity.class);
                 break;
             case R.id.rl_mine_order:
                 break;

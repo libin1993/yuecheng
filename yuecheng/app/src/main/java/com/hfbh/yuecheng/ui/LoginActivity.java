@@ -212,11 +212,10 @@ public class LoginActivity extends BaseActivity {
             if (activity != null) {
                 if (msg.what == 1) {
                     activity.tvLoginCode.setText(msg.arg1 + "s后重发");
-                    activity.tvLoginCode.setTextColor(0xff999999);
+                    activity.tvLoginCode.setEnabled(false);
                 } else if (msg.what == 2) {
                     activity.tvLoginCode.setText("获取验证码");
-                    activity.tvLoginCode.setClickable(true);
-                    activity.tvLoginCode.setTextColor(0xff990000);
+                    activity.tvLoginCode.setEnabled(true);
                 }
             }
         }
@@ -296,7 +295,6 @@ public class LoginActivity extends BaseActivity {
                                 toRegister();
                             } else {
                                 if (type == 1) {
-                                    tvLoginCode.setClickable(false);
                                     sendPhoneNumber();
                                     new Thread(new Runnable() {
                                         @Override

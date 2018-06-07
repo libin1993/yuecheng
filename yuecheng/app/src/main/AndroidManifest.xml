@@ -127,6 +127,10 @@
         <activity android:name=".ui.UserAgreementActivity"/>
         <activity android:name=".ui.MsgCenterActivity"/>
         <activity android:name=".ui.NewCalendarActivity"/>
+        <activity
+            android:name=".ui.EnrollActionActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".ui.CouponActivity"/>
     </application>
 
 </manifest>

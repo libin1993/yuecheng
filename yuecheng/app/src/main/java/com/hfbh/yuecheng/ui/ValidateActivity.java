@@ -157,11 +157,10 @@ public class ValidateActivity extends BaseActivity {
             if (activity != null) {
                 if (msg.what == 1) {
                     activity.tvValidateCode.setText(msg.arg1 + "s后重发");
-                    activity.tvValidateCode.setTextColor(0xff999999);
+                    activity.tvValidateCode.setEnabled(false);
                 } else if (msg.what == 2) {
                     activity.tvValidateCode.setText("获取验证码");
-                    activity.tvValidateCode.setClickable(true);
-                    activity.tvValidateCode.setTextColor(0xff990000);
+                    activity.tvValidateCode.setEnabled(true);
                 }
             }
         }
@@ -225,7 +224,6 @@ public class ValidateActivity extends BaseActivity {
                                 toRegister();
                             } else {
                                 if (type == 1) {
-                                    tvValidateCode.setClickable(false);
                                     sendPhoneNumber();
                                     new Thread(new Runnable() {
                                         @Override

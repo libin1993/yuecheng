@@ -98,7 +98,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
-            android:text="已失效"
             android:textColor="@color/gray_9f"
             android:textSize="12sp"
             android:visibility="gone"/>
@@ -112,10 +111,9 @@
             android:layout_marginRight="12dp"
             android:background="@drawable/gradient_red_15dp"
             android:gravity="center"
-            android:text="去参加"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

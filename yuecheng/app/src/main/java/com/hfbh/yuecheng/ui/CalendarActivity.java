@@ -155,6 +155,7 @@ public class CalendarActivity extends BaseActivity {
                             rvCalendar.setVisibility(View.VISIBLE);
                         } else {
                             if (page == 1) {
+                                loadingView.smoothToHide();
                                 rvCalendar.setVisibility(View.GONE);
                                 svNoCalendar.setVisibility(View.VISIBLE);
                             }

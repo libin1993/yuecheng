@@ -208,17 +208,19 @@ public class GiftDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");
+                            String msg = jsonObject.getString("msg");
                             if (flag) {
                                 JSONObject data = jsonObject.getJSONObject("data");
                                 totalNum = data.getInt("balanceGetNum");
                                 limitNum = data.getInt("limitGetNum");
                                 initCount();
-                                exChangeSuccess();
+                                exChangeResult(true, "您兑换的礼品已放置于“我的-兑换”，记得到店核销兑换哦！");
                             } else {
-                                ToastUtils.showToast(GiftDetailActivity.this, "兑换失败");
+                                exChangeResult(false, msg);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -228,12 +230,13 @@ public class GiftDetailActivity extends BaseActivity {
     }
 
     /**
-     * 选择分类
+     * 兑换结果
      */
-    private void exChangeSuccess() {
+    private void exChangeResult(boolean flag, String msg) {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_exchange_success, null);
-        final PopupWindow mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+        int widthPixels = DisplayUtils.getMetrics(this).widthPixels;
+        final PopupWindow mPopupWindow = new PopupWindow(contentView, (int) (widthPixels
+                - DisplayUtils.dp2px(this, 66)), ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
@@ -242,8 +245,24 @@ public class GiftDetailActivity extends BaseActivity {
         mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
         DisplayUtils.setBackgroundAlpha(this, true);
 
+        ImageView ivResult = (ImageView) contentView.findViewById(R.id.iv_exchange_result);
+        TextView tvResult = (TextView) contentView.findViewById(R.id.tv_exchange_result);
+        TextView tvMsg = (TextView) contentView.findViewById(R.id.tv_exchange_reason);
         final TextView tvSuccess = (TextView) contentView.findViewById(R.id.tv_exchange_success);
-        tvSuccess.setText("去查看");
+        if (flag) {
+            ivResult.setImageResource(R.mipmap.img_success);
+            tvResult.setText("兑换成功");
+            tvSuccess.setText("去查看");
+            tvSuccess.setBackgroundResource(R.drawable.bound_gradient_green);
+        } else {
+            ivResult.setImageResource(R.mipmap.img_failure);
+            tvResult.setText("兑换失败");
+            tvSuccess.setText("返回");
+            tvSuccess.setBackgroundResource(R.drawable.bound_gradient_yellow);
+        }
+        tvMsg.setText(msg);
+
+
         tvSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -206,12 +206,10 @@ public class SearchShopActivity extends BaseActivity {
                             tvNoMarket.setVisibility(View.GONE);
                         } else {
                             if (page == 1) {
+                                loadingView.smoothToHide();
                                 rvMarketList.setVisibility(View.GONE);
                                 tvNoMarket.setVisibility(View.VISIBLE);
-                            }
-                            if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
+                                refreshLayout.finishRefresh();
                             }
                         }
                     }

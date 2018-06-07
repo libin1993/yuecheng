@@ -56,4 +56,7 @@
     <color name="gray_45">#454A4D</color>
     <color name="gray_42">#424450</color>
     <color name="red_d4">#D40000</color>
+    <color name="red_d0">#D0021B</color>
+    <color name="yellow_ffe">#FEE000</color>
+    <color name="yellow_ffb">#FFBF2F</color>
 </resources>

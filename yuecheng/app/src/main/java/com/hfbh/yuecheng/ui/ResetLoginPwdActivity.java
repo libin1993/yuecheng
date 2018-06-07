@@ -222,11 +222,10 @@ public class ResetLoginPwdActivity extends BaseActivity {
             if (activity != null) {
                 if (msg.what == 1) {
                     activity.tvResetCode.setText(msg.arg1 + "s后重发");
-                    activity.tvResetCode.setTextColor(0xff999999);
+                    activity.tvResetCode.setEnabled(false);
                 } else if (msg.what == 2) {
                     activity.tvResetCode.setText("获取验证码");
-                    activity.tvResetCode.setClickable(true);
-                    activity.tvResetCode.setTextColor(0xff990000);
+                    activity.tvResetCode.setEnabled(true);
                 }
             }
         }
@@ -310,7 +309,6 @@ public class ResetLoginPwdActivity extends BaseActivity {
                                 toRegister();
                             } else {
                                 if (type == 1) {
-                                    tvResetCode.setClickable(false);
                                     sendPhoneNumber();
                                     new Thread(new Runnable() {
                                         @Override

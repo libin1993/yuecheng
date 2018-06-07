@@ -105,10 +105,10 @@ public class CloseActionActivity extends BaseActivity {
                         tvExchangeType.setText("报名费用： 免费");
                         break;
                     case "SCORE":
-                        tvExchangeType.setText("报名费用： " + dataBean.getEnrollScore() + "积分");
+                        tvExchangeType.setText("报名费用： " + DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分");
                         break;
                     case "CASH":
-                        tvExchangeType.setText("报名费用： ¥" + dataBean.getEnrollFee());
+                        tvExchangeType.setText("报名费用： ¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()));
                         break;
                 }
             }

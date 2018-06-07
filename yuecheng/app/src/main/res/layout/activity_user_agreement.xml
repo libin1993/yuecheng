@@ -2,32 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/gray_ed"
+              android:background="@android:color/white"
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
     <include
         layout="@layout/layout_widget_header"/>
 
-    <ScrollView
+    <WebView
+        android:id="@+id/webview_user_agreement"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_user_agreement"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/gray_10"
-                android:textSize="13sp"
-                android:lineSpacingExtra="3dp"
-                android:padding="10dp"/>
-        </LinearLayout>
-    </ScrollView>
-
+        android:layout_height="match_parent">
+    </WebView>
 </LinearLayout>

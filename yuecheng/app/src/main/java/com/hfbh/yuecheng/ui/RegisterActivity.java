@@ -217,11 +217,10 @@ public class RegisterActivity extends BaseActivity {
             if (activity != null) {
                 if (msg.what == 1) {
                     activity.tvRegisterCode.setText(msg.arg1 + "s后重发");
-                    activity.tvRegisterCode.setTextColor(0xff999999);
+                    activity.tvRegisterCode.setEnabled(false);
                 } else if (msg.what == 2) {
                     activity.tvRegisterCode.setText("获取验证码");
-                    activity.tvRegisterCode.setClickable(true);
-                    activity.tvRegisterCode.setTextColor(0xff990000);
+                    activity.tvRegisterCode.setEnabled(true);
                 }
             }
         }
@@ -349,7 +348,6 @@ public class RegisterActivity extends BaseActivity {
                             //是否已注册 false已注册 true未注册
                             if (flag) {
                                 if (type == 1) {
-                                    tvRegisterCode.setClickable(false);
                                     sendPhoneNumber();
                                     new Thread(new Runnable() {
                                         @Override

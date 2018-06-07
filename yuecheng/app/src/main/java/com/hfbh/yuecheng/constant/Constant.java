@@ -17,6 +17,8 @@ public class Constant {
     public static final String DISCOVERY_GOODS = HOST + "/wechat/commodity/listCommodity.json";
     //活动列表
     public static final String ACTIVITY_LIST = HOST + "/wechat/wechat/signup_activity/list.json";
+    //活动详情
+    public static final String ACTIVITY_INFO = HOST + "/wechat/wechat/signup_activity/detail.json";
     //活动报名
     public static final String ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/signup_form.json";
     //切换城市
@@ -97,5 +99,7 @@ public class Constant {
     public static final String ACTIVITY_DETAIL = HOST + "/mall/baida-app-h5/index.html#/activity";
     //商品详情
     public static final String GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/specialDetail";
+    //用户协议
+    public static final String USER_AGREEMENT = HOST + "/mall/baida-app-h5/index.html#/protocol";
 
 }

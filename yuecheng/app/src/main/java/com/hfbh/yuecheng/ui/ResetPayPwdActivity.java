@@ -191,10 +191,10 @@ public class ResetPayPwdActivity extends BaseActivity {
                         public void onResponse(String response, int id) {
                             ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                             if (responseBean.isFlag()) {
-                                ToastUtils.showToast(ResetPayPwdActivity.this, "修改成功");
+                                ToastUtils.showToast(ResetPayPwdActivity.this, "密码设置成功");
                                 finish();
                             } else {
-                                ToastUtils.showToast(ResetPayPwdActivity.this, "修改失败");
+                                ToastUtils.showToast(ResetPayPwdActivity.this, "密码设置失败");
                             }
                         }
                     });

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,8 +21,10 @@ import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.ui.CloseActionActivity;
+import com.hfbh.yuecheng.ui.EnrollActionActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -88,13 +91,14 @@ public class MyActivityFragment extends BaseFragment {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("type", String.valueOf(type))
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-
+// .addParams("memberId", SharedPreUtils.getStr(getActivity(), "member_id"))
                     }
 
                     @Override
@@ -127,6 +131,7 @@ public class MyActivityFragment extends BaseFragment {
                         } else {
                             refreshLayout.finishLoadMore();
                             if (page == 1) {
+                                loadingView.smoothToHide();
                                 rvActivity.setVisibility(View.GONE);
                                 tvNullActivity.setVisibility(View.VISIBLE);
                             }
@@ -167,22 +172,53 @@ public class MyActivityFragment extends BaseFragment {
                             tvCost.setText("免费");
                             break;
                         case "SCORE":
-                            tvCost.setText("已报名： " + dataBean.getEnrollScore() + "积分");
+                            tvCost.setText("已报名： " + DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分");
                             break;
                         case "CASH":
-                            tvCost.setText("已支付： ¥" + dataBean.getEnrollFee());
+                            tvCost.setText("已支付： ¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()));
                             break;
                     }
                 }
-                TextView tvJoin = holder.getView(R.id.tv_activity_join);
-                tvJoin.setText(dataBean.getMemberSignupState());
+                final TextView tvJoin = holder.getView(R.id.tv_activity_join);
+                final TextView tvStatus = holder.getView(R.id.tv_activity_status);
+
+                final String status = dataBean.getMemberSignupState();
+                if (!TextUtils.isEmpty(status)) {
+                    switch (status) {
+                        case "待报名":
+                        case "已结束":
+                            tvStatus.setVisibility(View.VISIBLE);
+                            tvJoin.setVisibility(View.GONE);
+                            tvStatus.setText(status);
+                            break;
+                        case "去报名":
+                        case "去参加":
+                            tvStatus.setVisibility(View.GONE);
+                            tvJoin.setVisibility(View.VISIBLE);
+                            tvJoin.setText(status);
+                            break;
+
+                    }
+                }
+
                 tvJoin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), CloseActionActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("activity_info", dataList.get(position));
-                        intent.putExtras(bundle);
+                        Intent intent = null;
+                        if (!TextUtils.isEmpty(status)) {
+                            switch (status) {
+                                case "去报名":
+                                    intent = new Intent(getActivity(), EnrollActionActivity.class);
+                                    intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
+                                    break;
+                                case "去参加":
+                                    intent = new Intent(getActivity(), CloseActionActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("activity_info", dataList.get(position));
+                                    intent.putExtras(bundle);
+                                    break;
+                            }
+                        }
                         startActivity(intent);
                     }
                 });

@@ -100,7 +100,6 @@ public class ActionDetailActivity extends BaseActivity {
         ws.setBuiltInZoomControls(false);
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webView.addJavascriptInterface(new JsInterface(), "android");
 
         String url = Constant.ACTIVITY_DETAIL + "?&appType=Android&id=" + activityId;
         if (SharedPreUtils.getBoolean(this, "is_login", false)) {
@@ -115,32 +114,6 @@ public class ActionDetailActivity extends BaseActivity {
             }
         });
 
-    }
-
-    public class JsInterface {
-        /**
-         * @param phone 手机号
-         */
-        @JavascriptInterface
-        public void getPhone(String phone) {
-
-        }
-
-        /**
-         * @param name 姓名
-         */
-        @JavascriptInterface
-        public void getName(String name) {
-
-        }
-
-        /**
-         * @param data
-         */
-        @JavascriptInterface
-        public void getData(String data) {
-
-        }
     }
 
 
@@ -163,11 +136,7 @@ public class ActionDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_exchange_activity:
-                if (SharedPreUtils.getBoolean(this, "is_login", false)) {
-                    enrollActivity();
-                } else {
-                    startActivity(new Intent(this, LoginActivity.class));
-                }
+                enrollActivity();
                 break;
         }
     }
@@ -176,8 +145,14 @@ public class ActionDetailActivity extends BaseActivity {
      * 活动报名
      */
     private void enrollActivity() {
-
-
+        Intent intent;
+        if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+            intent = new Intent(this, EnrollActionActivity.class);
+            intent.putExtra("activity_id", activityId);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+        }
+        startActivity(intent);
     }
 
 }

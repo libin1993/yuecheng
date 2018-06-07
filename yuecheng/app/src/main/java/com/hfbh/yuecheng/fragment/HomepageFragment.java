@@ -43,6 +43,7 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
 import com.hfbh.yuecheng.ui.CouponDetailActivity;
+import com.hfbh.yuecheng.ui.EnrollActionActivity;
 import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
@@ -506,6 +507,20 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         intent.putExtra("type", activityBean.getData().get(position).getAcivityType());
                         intent.putExtra("money", activityBean.getData().get(position).getEnrollFee());
                         intent.putExtra("score", activityBean.getData().get(position).getEnrollScore());
+                        startActivity(intent);
+                    }
+                });
+
+                tvReceive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent;
+                        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                            intent = new Intent(getActivity(), EnrollActionActivity.class);
+                            intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
+                        } else {
+                            intent = new Intent(getActivity(), LoginActivity.class);
+                        }
                         startActivity(intent);
                     }
                 });

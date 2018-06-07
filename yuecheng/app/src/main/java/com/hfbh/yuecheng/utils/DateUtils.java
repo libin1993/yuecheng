@@ -23,26 +23,16 @@ public class DateUtils {
     }
 
     /**
-     * @param type
      * @param time
-     * @return 毫秒
+     * @return 字符串转时间戳毫秒
      */
-    public static long getMillisecond(String type, String time) {
-        SimpleDateFormat sdf = new SimpleDateFormat(type, Locale.CHINA);
-        long seconds = 0;
+    public static long getTime(String time) {
         try {
-            seconds = sdf.parse(time).getTime();
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).parse(time).getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        return seconds;
+        return 0;
     }
 
-    /**
-     * @return 当前时间，精确都秒
-     */
-    public static long getCurrentTime() {
-        return System.currentTimeMillis();
-    }
 }
