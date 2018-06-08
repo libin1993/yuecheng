@@ -24,8 +24,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/gradient_orange_hor"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:visibility="gone">
+        android:focusableInTouchMode="true">
 
         <TextView
             android:id="@+id/tv_exchange_activity_score"
@@ -58,10 +57,7 @@
             android:layout_marginRight="36dp"
             android:background="@drawable/bound_gradient_red"
             android:gravity="center"
-            android:text="立即报名"
             android:textColor="@android:color/white"
             android:textSize="16sp"/>
     </RelativeLayout>
-
-
 </RelativeLayout>

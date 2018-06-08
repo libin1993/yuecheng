@@ -21,6 +21,9 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
+import com.hfbh.yuecheng.ui.EnrollActionActivity;
+import com.hfbh.yuecheng.ui.LoginActivity;
+import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -144,7 +147,7 @@ public class ActivityListFragment extends BaseFragment {
         adapter = new CommonAdapter<ActivityListBean.DataBean>
                 (getParentFragment().getActivity(), R.layout.rv_activity_item, dataList) {
             @Override
-            protected void convert(ViewHolder holder, ActivityListBean.DataBean dataBean, int position) {
+            protected void convert(ViewHolder holder, final ActivityListBean.DataBean dataBean, final int position) {
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
                 ivCoupon.setImageURI(dataBean.getActivityPicture());
                 holder.setText(R.id.tv_home_activity_name, dataBean.getActivityTitle());
@@ -152,31 +155,59 @@ public class ActivityListFragment extends BaseFragment {
                         .getStartTimeStr() + " - " + dataBean.getEndTimeStr());
 
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
-                if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
-                    switch (dataBean.getAcivityType()) {
-                        case "NONEED":
-                            tvReceive.setVisibility(View.GONE);
-                            break;
-                        case "FREE":
-                            tvReceive.setVisibility(View.VISIBLE);
-                            tvReceive.setText("免费报名");
-                            break;
-                        case "SCORE":
-                            tvReceive.setVisibility(View.VISIBLE);
-                            tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
-                            break;
-                        case "CASH":
-                            tvReceive.setVisibility(View.VISIBLE);
-                            tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
-                            break;
+                final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
+                        "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                if (!isFinish) {
+                    if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
+                        tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                        switch (dataBean.getAcivityType()) {
+                            case "NONEED":
+                                tvReceive.setVisibility(View.GONE);
+                                break;
+                            case "FREE":
+                                tvReceive.setVisibility(View.VISIBLE);
+                                tvReceive.setText("免费报名");
+                                break;
+                            case "SCORE":
+                                tvReceive.setVisibility(View.VISIBLE);
+                                tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+                                break;
+                            case "CASH":
+                                tvReceive.setVisibility(View.VISIBLE);
+                                tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+                                break;
+                        }
                     }
+                } else {
+                    tvReceive.setVisibility(View.VISIBLE);
+                    tvReceive.setText("已结束");
+                    tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                 }
+
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
                 flowLayout.removeAllViews();
                 if (dataBean.getTags() != null && dataBean.getTags().size() > 0) {
                     addTextView(flowLayout, dataBean.getTags());
                 }
+
+                tvReceive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!isFinish){
+                            Intent intent;
+                            if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                                intent = new Intent(getActivity(), EnrollActionActivity.class);
+                                intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
+                            } else {
+                                intent = new Intent(getActivity(), LoginActivity.class);
+                            }
+                            startActivity(intent);
+
+                        }
+                    }
+                });
+
             }
         };
 

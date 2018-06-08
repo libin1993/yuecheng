@@ -51,6 +51,7 @@ import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.ScanCodeActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
+import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -258,7 +259,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, true);
         rvHomepage.setAdapter(delegateAdapter);
 
-        if (bannerBean!= null && bannerBean.getData().size() > 0) {
+        if (bannerBean != null && bannerBean.getData().size() > 0) {
             BaseDelegateAdapter bannerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                     R.layout.layout_homepage_banner, 1, 1) {
                 @Override
@@ -286,7 +287,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             mAdapters.add(bannerAdapter);
         }
 
-        if (functionBean!= null && functionBean.getData().size() > 0) {
+        if (functionBean != null && functionBean.getData().size() > 0) {
             //功能模块
             BaseDelegateAdapter functionAdapter = new BaseDelegateAdapter(getActivity(), new
                     GridLayoutHelper(2, 1), R.layout.layout_homepage_function,
@@ -351,7 +352,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
 
-        if (broadcastBean!= null && broadcastBean.getData().size() > 0) {
+        if (broadcastBean != null && broadcastBean.getData().size() > 0) {
             if (broadcastBean.getData() != null && broadcastBean.getData().size() > 0) {
                 final List<String> dataList = new ArrayList<>();
                 for (int i = 0; i < broadcastBean.getData().size(); i++) {
@@ -370,7 +371,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         }
 
-        if (couponBean!= null && couponBean.getData().size() > 0) {
+        if (couponBean != null && couponBean.getData().size() > 0) {
             //优惠券
             initTitle("优惠券", 5);
 
@@ -491,25 +492,35 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             .getStartTimeStr() + " - " + activityBean.getData().get(position).getEndTimeStr());
 
                     TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
-                    if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
-                        switch (activityBean.getData().get(position).getAcivityType()) {
-                            case "NONEED":
-                                tvReceive.setVisibility(View.GONE);
-                                break;
-                            case "FREE":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText("免费报名");
-                                break;
-                            case "SCORE":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText(DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollScore()) + "积分报名");
-                                break;
-                            case "CASH":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollFee()) + "报名");
-                                break;
+                    final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
+                            "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getEndTime());
+                    if (!isFinish) {
+                        if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
+                            tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                            switch (activityBean.getData().get(position).getAcivityType()) {
+                                case "NONEED":
+                                    tvReceive.setVisibility(View.GONE);
+                                    break;
+                                case "FREE":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText("免费报名");
+                                    break;
+                                case "SCORE":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText(DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollScore()) + "积分报名");
+                                    break;
+                                case "CASH":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollFee()) + "报名");
+                                    break;
+                            }
                         }
+                    } else {
+                        tvReceive.setVisibility(View.VISIBLE);
+                        tvReceive.setText("已结束");
+                        tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                     }
+
 
                     FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
                     flowLayout.removeAllViews();
@@ -527,17 +538,21 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         }
                     });
 
+
                     tvReceive.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent;
-                            if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                                intent = new Intent(getActivity(), EnrollActionActivity.class);
-                                intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
-                            } else {
-                                intent = new Intent(getActivity(), LoginActivity.class);
+                            if (!isFinish) {
+                                Intent intent;
+                                if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                                    intent = new Intent(getActivity(), EnrollActionActivity.class);
+                                    intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
+                                } else {
+                                    intent = new Intent(getActivity(), LoginActivity.class);
+                                }
+                                startActivity(intent);
                             }
-                            startActivity(intent);
+
                         }
                     });
 

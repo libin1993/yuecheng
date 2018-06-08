@@ -17,6 +17,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.ActivityDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -53,6 +54,7 @@ public class ActionDetailActivity extends BaseActivity {
     //活动id
     private int activityId;
     private ActivityDetailBean activityBean;
+    private boolean isFinish;
 
 
     @Override
@@ -116,29 +118,40 @@ public class ActionDetailActivity extends BaseActivity {
 
 
     private void initView() {
-
-        if (!TextUtils.isEmpty(activityBean.getData().getSignupDo().getAcivityType())) {
-            switch (activityBean.getData().getSignupDo().getAcivityType()) {
-                case "NONEED":
-                    rlActionJoin.setVisibility(View.GONE);
-                    break;
-                case "FREE":
-                    rlActionJoin.setVisibility(View.VISIBLE);
-                    tvExchangeScore.setText("免费");
-                    break;
-                case "SCORE":
-                    rlActionJoin.setVisibility(View.VISIBLE);
-                    tvExchangeScore.setText(DisplayUtils.isInteger(activityBean.getData()
-                            .getSignupDo().getEnrollScore()));
-                    tvExchangeType.setVisibility(View.VISIBLE);
-                    break;
-                case "CASH":
-                    rlActionJoin.setVisibility(View.VISIBLE);
-                    tvExchangeScore.setText("¥" + DisplayUtils.isInteger(activityBean.getData()
-                            .getSignupDo().getEnrollFee()));
-                    break;
+        isFinish = System.currentTimeMillis() > DateUtils.getTime(
+                "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getEndTime());
+        if (!isFinish) {
+            if (!TextUtils.isEmpty(activityBean.getData().getSignupDo().getAcivityType())) {
+                tvExchange.setBackgroundResource(R.drawable.bound_red_15dp);
+                tvExchange.setText("立即报名");
+                switch (activityBean.getData().getSignupDo().getAcivityType()) {
+                    case "NONEED":
+                        rlActionJoin.setVisibility(View.GONE);
+                        break;
+                    case "FREE":
+                        rlActionJoin.setVisibility(View.VISIBLE);
+                        tvExchangeScore.setText("免费");
+                        break;
+                    case "SCORE":
+                        rlActionJoin.setVisibility(View.VISIBLE);
+                        tvExchangeScore.setText(DisplayUtils.isInteger(activityBean.getData()
+                                .getSignupDo().getEnrollScore()));
+                        tvExchangeType.setVisibility(View.VISIBLE);
+                        break;
+                    case "CASH":
+                        rlActionJoin.setVisibility(View.VISIBLE);
+                        tvExchangeScore.setText("¥" + DisplayUtils.isInteger(activityBean.getData()
+                                .getSignupDo().getEnrollFee()));
+                        break;
+                }
             }
+        } else {
+            tvExchange.setVisibility(View.VISIBLE);
+            tvExchange.setText("已结束");
+            tvExchange.setBackgroundResource(R.drawable.bound_gray_15dp);
+
         }
+
 
     }
 
@@ -168,14 +181,16 @@ public class ActionDetailActivity extends BaseActivity {
      * 活动报名
      */
     private void enrollActivity() {
-        Intent intent;
-        if (SharedPreUtils.getBoolean(this, "is_login", false)) {
-            intent = new Intent(this, EnrollActionActivity.class);
-            intent.putExtra("activity_id", activityId);
-        } else {
-            intent = new Intent(this, LoginActivity.class);
-        }
-        startActivity(intent);
+       if (!isFinish){
+           Intent intent;
+           if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+               intent = new Intent(this, EnrollActionActivity.class);
+               intent.putExtra("activity_id", activityId);
+           } else {
+               intent = new Intent(this, LoginActivity.class);
+           }
+           startActivity(intent);
+       }
     }
 
 }
