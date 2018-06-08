@@ -12,7 +12,7 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.MyFragmentAdapter;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.fragment.CouponFragment;
-import com.hfbh.yuecheng.fragment.MyActivityFragment;
+import com.hfbh.yuecheng.fragment.ExchangeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +22,19 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Author：Libin on 2018/6/7 17:24
+ * Author：Libin on 2018/6/8 18:24
  * Email：1993911441@qq.com
- * Describe：优惠券
+ * Describe：我的兑换
  */
-public class CouponActivity extends BaseActivity {
+public class MyExchangeActivity extends BaseActivity {
     @BindView(R.id.tv_header_title)
     TextView tvHeaderTitle;
     @BindView(R.id.iv_header_back)
     ImageView ivHeaderBack;
     @BindView(R.id.tab_my_activity)
-    SlidingTabLayout tabCoupon;
+    SlidingTabLayout tabGift;
     @BindView(R.id.vp_my_activity)
-    ViewPager vpCoupon;
+    ViewPager vpGift;
 
 
     private List<String> titleList;
@@ -48,19 +48,18 @@ public class CouponActivity extends BaseActivity {
         initTitle();
     }
 
+
     /**
      * tab分类
      */
     private void initTitle() {
-        tvHeaderTitle.setText("我的票券");
+        tvHeaderTitle.setText("我的兑换");
         titleList = new ArrayList<>();
         fragmentList = new ArrayList<>();
-        titleList.add("未使用");
-        titleList.add("已使用");
-        titleList.add("已过期");
-        fragmentList.add(CouponFragment.newInstance(0));
-        fragmentList.add(CouponFragment.newInstance(1));
-        fragmentList.add(CouponFragment.newInstance(0));
+        titleList.add("待兑换");
+        titleList.add("全部兑换");
+        fragmentList.add(ExchangeFragment.newInstance(0));
+        fragmentList.add(ExchangeFragment.newInstance(1));
 
         initView();
     }
@@ -73,10 +72,10 @@ public class CouponActivity extends BaseActivity {
 
         MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),
                 fragmentList, titleList);
-        vpCoupon.setOffscreenPageLimit(titleList.size());
-        vpCoupon.setAdapter(adapter);
-        tabCoupon.setViewPager(vpCoupon);
-        tabCoupon.setCurrentTab(0);
+        vpGift.setOffscreenPageLimit(titleList.size());
+        vpGift.setAdapter(adapter);
+        tabGift.setViewPager(vpGift);
+        tabGift.setCurrentTab(0);
     }
 
     @OnClick(R.id.iv_header_back)

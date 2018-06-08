@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author：Libin on 2018/5/14 17:25
@@ -35,6 +36,19 @@ public class GsonUtils {
         String gsonString = null;
         if (gson != null) {
             gsonString = gson.toJson(object);
+        }
+        return gsonString;
+    }
+
+    /**
+     * 转成json
+     *
+     * @return
+     */
+    public static String mapToJson(Map<String, String> map) {
+        String gsonString = null;
+        if (gson != null) {
+            gsonString = gson.toJson(map);
         }
         return gsonString;
     }

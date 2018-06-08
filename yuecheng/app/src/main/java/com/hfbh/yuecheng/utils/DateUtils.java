@@ -26,9 +26,9 @@ public class DateUtils {
      * @param time
      * @return 字符串转时间戳毫秒
      */
-    public static long getTime(String time) {
+    public static long getTime(String type, String time) {
         try {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).parse(time).getTime();
+            return new SimpleDateFormat(type, Locale.CHINA).parse(time).getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }

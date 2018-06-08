@@ -163,6 +163,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                     @Override
                     public void onResponse(String s, int i) {
+                        LogUtils.log(s);
                         typeBean = GsonUtils.jsonToBean(s, HomepageTypeBean.class);
                         if (typeBean.isFlag()) {
                             initData();
@@ -195,11 +196,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                         @Override
                         public void onResponse(String response, int id) {
+                            LogUtils.log(response);
                             switch (typeBean.getData().get(type).getModuleCode()) {
                                 case "BANNER":
                                     bannerBean = GsonUtils.jsonToBean(response, BannerBean.class);
                                     break;
-                                case "FUNCTION":
+                                case "MAIN":
                                     functionBean = GsonUtils.jsonToBean(response, FunctionBean.class);
                                     break;
                                 case "BROAD":
@@ -219,7 +221,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                     break;
                             }
                             count++;
-                            if (count == 7) {
+                            if (count == typeBean.getData().size()) {
                                 count = 0;
                                 if (isRefresh) {
                                     refreshLayout.finishRefresh();
@@ -253,282 +255,298 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
         rvHomepage.setRecycledViewPool(viewPool);
         viewPool.setMaxRecycledViews(0, 10);
-
         DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, true);
         rvHomepage.setAdapter(delegateAdapter);
 
-        BaseDelegateAdapter bannerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
-                R.layout.layout_homepage_banner, 1, 1) {
-            @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                ConvenientBanner banner = holder.getView(R.id.banner_homepage);
-                banner.startTurning(4000);
-                List<String> bannerImg = new ArrayList<>();
-                for (int i = 0; i < bannerBean.getData().size(); i++) {
-                    bannerImg.add(bannerBean.getData().get(i).getAdvertPic());
-                }
-
-                banner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
-                    @Override
-                    public NetworkImageHolderView createHolder() {
-                        return new NetworkImageHolderView();
+        if (bannerBean!= null && bannerBean.getData().size() > 0) {
+            BaseDelegateAdapter bannerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+                    R.layout.layout_homepage_banner, 1, 1) {
+                @Override
+                public void onBindViewHolder(ViewHolder holder, int position) {
+                    super.onBindViewHolder(holder, position);
+                    ConvenientBanner banner = holder.getView(R.id.banner_homepage);
+                    banner.startTurning(4000);
+                    List<String> bannerImg = new ArrayList<>();
+                    for (int i = 0; i < bannerBean.getData().size(); i++) {
+                        bannerImg.add(bannerBean.getData().get(i).getAdvertPic());
                     }
-                }, bannerImg)
-                        //设置两个点图片作为翻页指示器
-                        .setPageIndicator(new int[]{R.drawable.indicator_normal, R.drawable.indicator_focus})
-                        //设置指示器的方向
-                        .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
-            }
-        };
-        mAdapters.add(bannerAdapter);
 
-        //功能模块
-        BaseDelegateAdapter functionAdapter = new BaseDelegateAdapter(getActivity(), new GridLayoutHelper(2, 1),
-                R.layout.layout_homepage_function, 1, 2) {
-            @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                RecyclerView rvFunction = holder.getView(R.id.rv_homepage_function);
-                rvFunction.setLayoutManager(new LinearLayoutManager(getActivity(),
-                        LinearLayout.HORIZONTAL, false));
+                    banner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
+                        @Override
+                        public NetworkImageHolderView createHolder() {
+                            return new NetworkImageHolderView();
+                        }
+                    }, bannerImg)
+                            //设置两个点图片作为翻页指示器
+                            .setPageIndicator(new int[]{R.drawable.indicator_normal, R.drawable.indicator_focus})
+                            //设置指示器的方向
+                            .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
+                }
+            };
+            mAdapters.add(bannerAdapter);
+        }
 
-                //布局宽高
-                final int width = DisplayUtils.getMetrics(getActivity()).widthPixels / 4;
-                CommonAdapter<FunctionBean.DataBean> adapter = new CommonAdapter<FunctionBean
-                        .DataBean>(getActivity(),
-                        R.layout.rv_founction_item, functionBean.getData()) {
+        if (functionBean!= null && functionBean.getData().size() > 0) {
+            //功能模块
+            BaseDelegateAdapter functionAdapter = new BaseDelegateAdapter(getActivity(), new
+                    GridLayoutHelper(2, 1), R.layout.layout_homepage_function,
+                    1, 2) {
+                @Override
+                public void onBindViewHolder(ViewHolder holder, int position) {
+                    super.onBindViewHolder(holder, position);
+                    RecyclerView rvFunction = holder.getView(R.id.rv_homepage_function);
+                    rvFunction.setLayoutManager(new LinearLayoutManager(getActivity(),
+                            LinearLayout.HORIZONTAL, false));
+
+                    //布局宽高
+                    final int width = DisplayUtils.getMetrics(getActivity()).widthPixels / 4;
+                    CommonAdapter<FunctionBean.DataBean> adapter = new CommonAdapter<FunctionBean
+                            .DataBean>(getActivity(),
+                            R.layout.rv_founction_item, functionBean.getData()) {
+                        @Override
+                        protected void convert(ViewHolder holder, FunctionBean.DataBean dataBean, int position) {
+                            LinearLayout llFunction = holder.getView(R.id.ll_function_item);
+
+                            ViewGroup.LayoutParams layoutParams = llFunction.getLayoutParams();
+                            layoutParams.width = width;
+                            llFunction.setLayoutParams(layoutParams);
+
+                            Glide.with(getActivity())
+                                    .load(dataBean.getFunctionIco())
+                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                    .into((ImageView) holder.getView(R.id.iv_function_item));
+                            holder.setText(R.id.tv_function_name, dataBean.getFunctionName());
+                        }
+                    };
+
+                    rvFunction.setAdapter(adapter);
+                    adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                            switch (functionBean.getData().get(position).getFunctionCode()) {
+                                case "STORE"://找店铺
+                                    startActivity(new Intent(getActivity(), SearchShopActivity.class));
+                                    break;
+                                case "SHOPPING"://我要买
+                                    break;
+                                case "GUIDING"://室内导航
+                                    break;
+                                case "PLAYING"://我要玩
+                                    break;
+                                case "MEMBER_CODE"://会员码
+                                    toMemberCard();
+                                    break;
+                            }
+                        }
+
+                        @Override
+                        public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                            return false;
+                        }
+                    });
+
+                }
+            };
+            mAdapters.add(functionAdapter);
+        }
+
+
+        if (broadcastBean!= null && broadcastBean.getData().size() > 0) {
+            if (broadcastBean.getData() != null && broadcastBean.getData().size() > 0) {
+                final List<String> dataList = new ArrayList<>();
+                for (int i = 0; i < broadcastBean.getData().size(); i++) {
+                    dataList.add(broadcastBean.getData().get(i).getContent());
+                }
+                BaseDelegateAdapter broadAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+                        R.layout.layout_homepage_broad, 1, 3) {
                     @Override
-                    protected void convert(ViewHolder holder, FunctionBean.DataBean dataBean, int position) {
-                        LinearLayout llFunction = holder.getView(R.id.ll_function_item);
-
-                        ViewGroup.LayoutParams layoutParams = llFunction.getLayoutParams();
-                        layoutParams.width = width;
-                        llFunction.setLayoutParams(layoutParams);
-
-                        Glide.with(getActivity())
-                                .load(dataBean.getFunctionIco())
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                .into((ImageView) holder.getView(R.id.iv_function_item));
-                        holder.setText(R.id.tv_function_name, dataBean.getFunctionName());
+                    public void onBindViewHolder(ViewHolder holder, int position) {
+                        super.onBindViewHolder(holder, position);
+                        marqueeView = holder.getView(R.id.marqueeView);
+                        marqueeView.startWithList(dataList);
                     }
                 };
-
-                rvFunction.setAdapter(adapter);
-                adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                        switch (functionBean.getData().get(position).getFunctionCode()) {
-                            case "STORE"://找店铺
-                                startActivity(new Intent(getActivity(), SearchShopActivity.class));
-                                break;
-                            case "SHOPPING"://我要买
-                                break;
-                            case "GUIDING"://室内导航
-                                break;
-                            case "PLAYING"://我要玩
-                                break;
-                            case "MEMBER_CODE"://会员码
-                                toMemberCard();
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-                        return false;
-                    }
-                });
-
+                mAdapters.add(broadAdapter);
             }
-        };
-        mAdapters.add(functionAdapter);
-
-        final List<String> dataList = new ArrayList<>();
-        for (int i = 0; i < broadcastBean.getData().size(); i++) {
-            dataList.add(broadcastBean.getData().get(i).getContent());
         }
-        BaseDelegateAdapter broadAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
-                R.layout.layout_homepage_broad, 1, 3) {
-            @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                marqueeView = holder.getView(R.id.marqueeView);
-                marqueeView.startWithList(dataList);
-            }
-        };
-        mAdapters.add(broadAdapter);
 
+        if (couponBean!= null && couponBean.getData().size() > 0) {
+            //优惠券
+            initTitle("优惠券", 5);
 
-        //优惠券
-        initTitle("优惠券", 5);
+            couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+                    R.layout.rv_coupon_item, couponBean.getData().size(), 6) {
+                @Override
+                public void onBindViewHolder(final ViewHolder holder, final int position) {
+                    super.onBindViewHolder(holder, position);
+                    SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_coupon);
+                    ivCoupon.setImageURI(couponBean.getData().get(position).getCouponImage());
 
-        couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
-                R.layout.rv_coupon_item, couponBean.getData().size(), 6) {
-            @Override
-            public void onBindViewHolder(final ViewHolder holder, final int position) {
-                super.onBindViewHolder(holder, position);
-                SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_coupon);
-                ivCoupon.setImageURI(couponBean.getData().get(position).getCouponImage());
+                    holder.setText(R.id.tv_home_coupon_title, couponBean.getData().get(position).getCouponName());
+                    holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getCouponDesc());
+                    holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData().get(position).getBalanceNum());
 
-                holder.setText(R.id.tv_home_coupon_title, couponBean.getData().get(position).getCouponName());
-                holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getCouponDesc());
-                holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData().get(position).getBalanceNum());
+                    TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
 
-                TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
+                    String accessType = couponBean.getData().get(position).getAccessType();
+                    double needScore = couponBean.getData().get(position).getAccessValue();
 
-                String accessType = couponBean.getData().get(position).getAccessType();
-                double needScore = couponBean.getData().get(position).getAccessValue();
-
-                if (!TextUtils.isEmpty(accessType)) {
-                    switch (accessType) {
-                        case "FREE":
-                            tvReceive.setText("免费\n领取");
-                            break;
-                        case "POINT":
-                            tvReceive.setText(DisplayUtils.isInteger(needScore) + "积分\n领取");
-                            break;
-                        case "BUY":
-                            tvReceive.setText(DisplayUtils.isInteger(needScore) + "元\n领取");
-                            break;
-                    }
-                }
-
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
-                        intent.putExtra("coupon_id", couponBean.getData().get(position).getObjectId());
-                        startActivity(intent);
-                    }
-                });
-                tvReceive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                            exchangeCoupon(position);
-                        } else {
-                            startActivity(new Intent(getActivity(), LoginActivity.class));
+                    if (!TextUtils.isEmpty(accessType)) {
+                        switch (accessType) {
+                            case "FREE":
+                                tvReceive.setText("免费\n领取");
+                                break;
+                            case "POINT":
+                                tvReceive.setText(DisplayUtils.isInteger(needScore) + "积分\n领取");
+                                break;
+                            case "BUY":
+                                tvReceive.setText(DisplayUtils.isInteger(needScore) + "元\n领取");
+                                break;
                         }
                     }
-                });
-            }
-        };
-        mAdapters.add(couponAdapter);
 
-        //积分兑换
-        initTitle("积分兑礼", 7);
-
-        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
-        gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getActivity(), 12),
-                0, (int) DisplayUtils.dp2px(getActivity(), 12), 0);
-        gridLayoutHelper.setHGap((int) DisplayUtils.dp2px(getActivity(), 11));// 控制子元素之间的水平间距
-        gridLayoutHelper.setBgColor(Color.WHITE);
-        //布局宽高
-        int widthPixels = DisplayUtils.getMetrics(getActivity()).widthPixels;
-        final int width = (int) ((widthPixels - DisplayUtils.dp2px(getActivity(), 35)) / 2);
-        BaseDelegateAdapter giftAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper,
-                R.layout.rv_gift_item, giftBean.getData().size(), 8) {
-            @Override
-            public void onBindViewHolder(ViewHolder holder, final int position) {
-                super.onBindViewHolder(holder, position);
-                ImageView ivGift = holder.getView(R.id.iv_home_gift);
-                ViewGroup.LayoutParams layoutParams = ivGift.getLayoutParams();
-                layoutParams.width = width;
-                layoutParams.height = width;
-                ivGift.setLayoutParams(layoutParams);
-
-                Glide.with(getActivity())
-                        .load(giftBean.getData().get(position).getGiftPicturePath())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(ivGift);
-                holder.setText(R.id.tv_home_gift_name, giftBean.getData().get(position).getRelateName());
-                holder.setText(R.id.tv_home_gift_score, DisplayUtils.isInteger(giftBean.getData().get(position).getNeedScore()) + "积分");
-
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), GiftDetailActivity.class);
-                        intent.putExtra("gift_id", giftBean.getData().get(position).getObjectId());
-                        startActivity(intent);
-                    }
-                });
-            }
-        };
-        mAdapters.add(giftAdapter);
-
-        //精彩活动
-        initTitle("精彩活动", 9);
-
-
-        GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
-        BaseDelegateAdapter activityAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper1,
-                R.layout.rv_activity_item, activityBean.getData().size(), 10) {
-
-            @Override
-            public void onBindViewHolder(ViewHolder holder, final int position) {
-                super.onBindViewHolder(holder, position);
-                SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
-                ivCoupon.setImageURI(activityBean.getData().get(position).getActivityPic());
-                holder.setText(R.id.tv_home_activity_name, activityBean.getData().get(position).getActivityName());
-                holder.setText(R.id.tv_home_activity_time, activityBean.getData().get(position)
-                        .getStartTimeStr() + " - " + activityBean.getData().get(position).getEndTimeStr());
-
-                TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
-                if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
-                    switch (activityBean.getData().get(position).getAcivityType()) {
-                        case "NONEED":
-                            tvReceive.setText("无需报名");
-                            break;
-                        case "FREE":
-                            tvReceive.setText("免费报名");
-                            break;
-                        case "SCORE":
-                            tvReceive.setText(DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollScore()) + "积分报名");
-                            break;
-                        case "CASH":
-                            tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollFee()) + "报名");
-                            break;
-                    }
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
+                            intent.putExtra("coupon_id", couponBean.getData().get(position).getObjectId());
+                            startActivity(intent);
+                        }
+                    });
+                    tvReceive.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                                exchangeCoupon(position);
+                            } else {
+                                startActivity(new Intent(getActivity(), LoginActivity.class));
+                            }
+                        }
+                    });
                 }
+            };
+            mAdapters.add(couponAdapter);
+        }
 
-                FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
-                flowLayout.removeAllViews();
-                if (activityBean.getData().get(position).getTags() != null &&
-                        activityBean.getData().get(position).getTags().size() > 0) {
-                    addTextView(flowLayout, activityBean.getData().get(position).getTags());
+        if (giftBean != null && giftBean.getData().size() > 0) {
+            //积分兑换
+            initTitle("积分兑礼", 7);
+
+            GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
+            gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getActivity(), 12),
+                    0, (int) DisplayUtils.dp2px(getActivity(), 12), 0);
+            gridLayoutHelper.setHGap((int) DisplayUtils.dp2px(getActivity(), 11));// 控制子元素之间的水平间距
+            gridLayoutHelper.setAutoExpand(false);
+            gridLayoutHelper.setBgColor(Color.WHITE);
+            //布局宽高
+            int widthPixels = DisplayUtils.getMetrics(getActivity()).widthPixels;
+            final int width = (int) ((widthPixels - DisplayUtils.dp2px(getActivity(), 35)) / 2);
+            BaseDelegateAdapter giftAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper,
+                    R.layout.rv_gift_item, giftBean.getData().size(), 8) {
+                @Override
+                public void onBindViewHolder(ViewHolder holder, final int position) {
+                    super.onBindViewHolder(holder, position);
+                    ImageView ivGift = holder.getView(R.id.iv_home_gift);
+                    ViewGroup.LayoutParams layoutParams = ivGift.getLayoutParams();
+                    layoutParams.width = width;
+                    layoutParams.height = width;
+                    ivGift.setLayoutParams(layoutParams);
+
+                    Glide.with(getActivity())
+                            .load(giftBean.getData().get(position).getGiftPicturePath())
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .into(ivGift);
+                    holder.setText(R.id.tv_home_gift_name, giftBean.getData().get(position).getRelateName());
+                    holder.setText(R.id.tv_home_gift_score, DisplayUtils.isInteger(giftBean.getData().get(position).getNeedScore()) + "积分");
+
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), GiftDetailActivity.class);
+                            intent.putExtra("gift_id", giftBean.getData().get(position).getObjectId());
+                            startActivity(intent);
+                        }
+                    });
                 }
+            };
+            mAdapters.add(giftAdapter);
+        }
 
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
-                        intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
-                        intent.putExtra("type", activityBean.getData().get(position).getAcivityType());
-                        intent.putExtra("money", activityBean.getData().get(position).getEnrollFee());
-                        intent.putExtra("score", activityBean.getData().get(position).getEnrollScore());
-                        startActivity(intent);
+
+        if (activityBean != null && activityBean.getData().size() > 0) {
+            //精彩活动
+            initTitle("精彩活动", 9);
+
+            GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
+            BaseDelegateAdapter activityAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper1,
+                    R.layout.rv_activity_item, activityBean.getData().size(), 10) {
+
+                @Override
+                public void onBindViewHolder(ViewHolder holder, final int position) {
+                    super.onBindViewHolder(holder, position);
+                    SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
+                    ivCoupon.setImageURI(activityBean.getData().get(position).getActivityPic());
+                    holder.setText(R.id.tv_home_activity_name, activityBean.getData().get(position).getActivityName());
+                    holder.setText(R.id.tv_home_activity_time, activityBean.getData().get(position)
+                            .getStartTimeStr() + " - " + activityBean.getData().get(position).getEndTimeStr());
+
+                    TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
+                    if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
+                        switch (activityBean.getData().get(position).getAcivityType()) {
+                            case "NONEED":
+                                tvReceive.setVisibility(View.GONE);
+                                break;
+                            case "FREE":
+                                tvReceive.setVisibility(View.VISIBLE);
+                                tvReceive.setText("免费报名");
+                                break;
+                            case "SCORE":
+                                tvReceive.setVisibility(View.VISIBLE);
+                                tvReceive.setText(DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollScore()) + "积分报名");
+                                break;
+                            case "CASH":
+                                tvReceive.setVisibility(View.VISIBLE);
+                                tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollFee()) + "报名");
+                                break;
+                        }
                     }
-                });
 
-                tvReceive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent;
-                        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                            intent = new Intent(getActivity(), EnrollActionActivity.class);
+                    FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
+                    flowLayout.removeAllViews();
+                    if (activityBean.getData().get(position).getTags() != null &&
+                            activityBean.getData().get(position).getTags().size() > 0) {
+                        addTextView(flowLayout, activityBean.getData().get(position).getTags());
+                    }
+
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
                             intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
-                        } else {
-                            intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
                         }
-                        startActivity(intent);
-                    }
-                });
+                    });
 
-            }
-        };
+                    tvReceive.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent;
+                            if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                                intent = new Intent(getActivity(), EnrollActionActivity.class);
+                                intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
+                            } else {
+                                intent = new Intent(getActivity(), LoginActivity.class);
+                            }
+                            startActivity(intent);
+                        }
+                    });
 
-        mAdapters.add(activityAdapter);
+                }
+            };
+
+            mAdapters.add(activityAdapter);
+        }
+
         //底部
         BaseDelegateAdapter footerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.layout_homepage_footer, 1, 9);

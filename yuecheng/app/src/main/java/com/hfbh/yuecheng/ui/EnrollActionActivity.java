@@ -1,29 +1,49 @@
 package com.hfbh.yuecheng.ui;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.bean.ActivityBean;
-import com.hfbh.yuecheng.bean.ActivityDetailBean;
+import com.hfbh.yuecheng.bean.EnrollActivityBean;
+import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,27 +60,22 @@ public class EnrollActionActivity extends BaseActivity {
     TextView tvHeaderTitle;
     @BindView(R.id.iv_header_back)
     ImageView ivHeaderBack;
-    @BindView(R.id.tv_action_name)
-    TextView tvActionName;
-    @BindView(R.id.flow_layout_activity)
-    FlowLayout flowLayout;
-    @BindView(R.id.tv_action_time)
-    TextView tvActionTime;
-    @BindView(R.id.tv_action_address)
-    TextView tvActionAddress;
-    @BindView(R.id.et_action_username)
-    EditText etUsername;
-    @BindView(R.id.et_action_phone)
-    EditText etPhone;
+
     @BindView(R.id.tv_enroll_score)
     TextView tvEnrollScore;
     @BindView(R.id.tv_enroll_type)
     TextView tvEnrollType;
     @BindView(R.id.tv_enroll_activity)
     TextView tvEnrollActivity;
+    @BindView(R.id.rv_enroll_activity)
+    RecyclerView rvActivity;
     //活动id
     private int activityId;
-    private ActivityDetailBean activityBean;
+    private EnrollActivityBean activityBean;
+    private List<EnrollActivityBean.DataBean.OptionListBean> dataList = new ArrayList<>();
+    private EditText etUsername;
+    private EditText etPhone;
+    private Map<String, String> map = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,11 +85,12 @@ public class EnrollActionActivity extends BaseActivity {
         tvHeaderTitle.setText("活动报名");
         getData();
         initData();
+
     }
 
     private void initData() {
         OkHttpUtils.get()
-                .url(Constant.ACTIVITY_INFO)
+                .url(Constant.ENROLL_ACTIVITY_INFO)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
@@ -89,8 +105,12 @@ public class EnrollActionActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        activityBean = GsonUtils.jsonToBean(response, ActivityDetailBean.class);
+                        activityBean = GsonUtils.jsonToBean(response, EnrollActivityBean.class);
                         if (activityBean.isFlag()) {
+                            if (activityBean.getData().getOptionList() != null && activityBean
+                                    .getData().getOptionList().size() > 0) {
+                                dataList.addAll(activityBean.getData().getOptionList());
+                            }
                             initView();
                         }
                     }
@@ -101,17 +121,116 @@ public class EnrollActionActivity extends BaseActivity {
      * 加载视图
      */
     private void initView() {
-        tvActionName.setText(activityBean.getData().getSignupDo().getActivityTitle());
-        if (activityBean.getData().getSignupDo().getTags() != null &&
-                activityBean.getData().getSignupDo().getTags().size() > 0) {
-            addTextView(activityBean.getData().getSignupDo().getTags());
+        rvActivity.setLayoutManager(new LinearLayoutManager(this));
+        CommonAdapter<EnrollActivityBean.DataBean.OptionListBean> adapter = new CommonAdapter
+                <EnrollActivityBean.DataBean.OptionListBean>(EnrollActionActivity.this,
+                R.layout.rv_enroll_activity_item, dataList) {
+            @Override
+            protected void convert(ViewHolder holder, final EnrollActivityBean.DataBean.OptionListBean
+                    optionListBean, int position) {
+                holder.setText(R.id.tv_enroll_activity_title, optionListBean.getTitle());
+                EditText etValue = holder.getView(R.id.tv_enroll_activity_value);
+                RadioGroup rgsValue = holder.getView(R.id.rgs_activity);
+                switch (optionListBean.getType()) {
+                    case "SINGLE":
+                        etValue.setVisibility(View.VISIBLE);
+                        rgsValue.setVisibility(View.GONE);
+                        etValue.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                if (!TextUtils.isEmpty(s.toString().trim())) {
+                                    map.put(optionListBean.getTitle(), s.toString().trim());
+                                    map.put(optionListBean.getTitle() + "id", String.valueOf(optionListBean.getId()));
+                                } else {
+                                    if (map.containsKey(optionListBean.getTitle())) {
+                                        map.remove(optionListBean.getTitle());
+                                        map.remove(optionListBean.getTitle() + "id");
+                                    }
+                                }
+                            }
+                        });
+                        break;
+                    case "RADIO":
+                        etValue.setVisibility(View.GONE);
+                        rgsValue.setVisibility(View.VISIBLE);
+                        rgsValue.removeAllViews();
+                        addView(rgsValue, optionListBean);
+                        break;
+                }
+            }
+        };
+        HeaderAndFooterWrapper headerAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
+        headerAndFooterWrapper.addHeaderView(initHeader());
+        rvActivity.setAdapter(headerAndFooterWrapper);
+
+    }
+
+    /**
+     * @param rgsValue
+     * @param optionListBean RadioGroup动态添加
+     */
+    private void addView(final RadioGroup rgsValue, final EnrollActivityBean.DataBean.OptionListBean optionListBean) {
+        for (int i = 0; i < optionListBean.getItemList().size(); i++) {
+            RadioButton radioButton = new RadioButton(this);
+            RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
+                    RadioGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(50, 0, 0, 0);
+            radioButton.setLayoutParams(layoutParams);
+            radioButton.setButtonDrawable(getResources().getDrawable(R.drawable.cb_register));
+            radioButton.setText(optionListBean.getItemList().get(i).getTitle());
+            radioButton.setTextColor(getResources().getColor(R.color.gray_10));
+            radioButton.setTextSize(13);
+            rgsValue.addView(radioButton);
         }
 
-        tvActionTime.setText(activityBean.getData().getSignupDo().getStartTimeStr() + " - "
-                + activityBean.getData().getSignupDo().getEndTimeStr());
-        tvActionAddress.setText(activityBean.getData().getSignupDo().getAcivityAddress());
+        rgsValue.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                for (int i = 0; i < rgsValue.getChildCount(); i++) {
+                    if (rgsValue.getChildAt(i).getId() == checkedId) {
+                        map.put(optionListBean.getTitle(), optionListBean.getItemList().get(i).getTitle());
+                        map.put(optionListBean.getTitle() + "id", String.valueOf(optionListBean.getId()));
+                    }
+                }
+            }
+        });
+    }
 
-        String type = activityBean.getData().getSignupDo().getAcivityType();
+    /**
+     * 店铺信息
+     */
+    private View initHeader() {
+
+        View view = LayoutInflater.from(this).inflate(R.layout.rv_activity_header, null);
+        TextView tvActionName = (TextView) view.findViewById(R.id.tv_action_name);
+        TextView tvActionTime = (TextView) view.findViewById(R.id.tv_action_time);
+        TextView tvActionAddress = (TextView) view.findViewById(R.id.tv_action_address);
+        FlowLayout flowLayout = (FlowLayout) view.findViewById(R.id.flow_layout_activity);
+        etUsername = (EditText) view.findViewById(R.id.et_action_username);
+        etPhone = (EditText) view.findViewById(R.id.et_action_phone);
+
+
+        tvActionName.setText(activityBean.getData().getSignupActivity().getActivityTitle());
+        if (activityBean.getData().getSignupActivity().getTags() != null &&
+                activityBean.getData().getSignupActivity().getTags().size() > 0) {
+            addTextView(flowLayout, activityBean.getData().getSignupActivity().getTags());
+        }
+
+        tvActionTime.setText(activityBean.getData().getSignupActivity().getStartTimeStr() + " - "
+                + activityBean.getData().getSignupActivity().getEndTimeStr());
+        tvActionAddress.setText(activityBean.getData().getSignupActivity().getAcivityAddress());
+
+        String type = activityBean.getData().getSignupActivity().getAcivityType();
         if (!TextUtils.isEmpty(type)) {
             switch (type) {
                 case "NONEED":
@@ -121,27 +240,30 @@ public class EnrollActionActivity extends BaseActivity {
                     tvEnrollScore.setText("免费");
                     break;
                 case "SCORE":
-                    tvEnrollScore.setText(DisplayUtils.isInteger(activityBean.getData().getSignupDo()
+                    tvEnrollScore.setText(DisplayUtils.isInteger(activityBean.getData().getSignupActivity()
                             .getEnrollScore()));
                     tvEnrollType.setVisibility(View.VISIBLE);
                     break;
                 case "CASH":
                     tvEnrollScore.setText("¥" + DisplayUtils.isInteger(activityBean.getData()
-                            .getSignupDo().getEnrollFee()));
+                            .getSignupActivity().getEnrollFee()));
                     break;
             }
         }
 
+        return view;
     }
 
     /**
      * 动态添加标签
      */
-    private void addTextView(List<ActivityDetailBean.DataBean.SignupDoBean.TagsBean> tagsBeans) {
+    private void addTextView(FlowLayout flowLayout, List<EnrollActivityBean.DataBean
+            .SignupActivityBean.TagsBean> tagsBeans) {
 
         for (int i = 0; i < tagsBeans.size(); i++) {
             TextView tvChild = new TextView(this);
-            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup
+                    .MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, (int) DisplayUtils.dp2px(this, 6),
                     (int) DisplayUtils.dp2px(this, 2));
             tvChild.setLayoutParams(params);
@@ -152,11 +274,11 @@ public class EnrollActionActivity extends BaseActivity {
 
             flowLayout.addView(tvChild);
         }
-
     }
 
     private void getData() {
         activityId = getIntent().getIntExtra("activity_id", 0);
+        LogUtils.log("ssss" + activityId);
     }
 
     @OnClick({R.id.iv_header_back, R.id.tv_enroll_activity})
@@ -166,7 +288,65 @@ public class EnrollActionActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_enroll_activity:
+                enrollActivity();
                 break;
         }
+    }
+
+    /**
+     * 活动报名
+     */
+    private void enrollActivity() {
+        if (etUsername != null && etPhone != null && !TextUtils.isEmpty(etUsername.getText().toString().trim())
+                && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && map.size() / 2 == dataList.size()) {
+
+            Map<String, String> paramMap = new HashMap<>();
+            paramMap.put("appType", MyApp.appType);
+            paramMap.put("appVersion", MyApp.appVersion);
+            paramMap.put("organizeId", MyApp.organizeId);
+            paramMap.put("hash", SharedPreUtils.getStr(this, "hash"));
+            paramMap.put("realname", etUsername.getText().toString().trim());
+            paramMap.put("mobile", etPhone.getText().toString().trim());
+            paramMap.put("id", String.valueOf(activityId));
+
+            if (map.size() > 0) {
+                String info = GsonUtils.mapToJson(map).replaceAll(":", "=");
+                info = info.replaceAll(",", ";");
+                LogUtils.log(info);
+                paramMap.put("appData", info);
+            }
+
+            OkHttpUtils.post()
+                    .url(Constant.ENROLL_ACTIVITY)
+                    .params(paramMap)
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            LogUtils.log(e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                boolean flag = jsonObject.getBoolean("flag");
+                                {
+                                    if (flag) {
+                                        ToastUtils.showToast(EnrollActionActivity.this, "报名成功");
+                                    } else {
+                                        String msg = jsonObject.getString("msg");
+                                        ToastUtils.showToast(EnrollActionActivity.this, msg);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        } else {
+            ToastUtils.showToast(this, "请完善报名信息");
+        }
+
     }
 }

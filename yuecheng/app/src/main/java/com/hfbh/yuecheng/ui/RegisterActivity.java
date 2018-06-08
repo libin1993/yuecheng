@@ -299,6 +299,8 @@ public class RegisterActivity extends BaseActivity {
                                     String.valueOf(userInfoBean.getData().getMemberPhone()));
                             SharedPreUtils.saveStr(RegisterActivity.this, "avatar",
                                     userInfoBean.getData().getMemberHead());
+                            SharedPreUtils.saveStr(RegisterActivity.this, "card_number",
+                                    userInfoBean.getData().getMemberCardNo());
 
                             EventBus.getDefault().post("login_success");
                             finish();

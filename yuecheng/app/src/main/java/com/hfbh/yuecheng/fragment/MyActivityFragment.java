@@ -91,14 +91,14 @@ public class MyActivityFragment extends BaseFragment {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
-
+                .addParams("memberId", SharedPreUtils.getStr(getActivity(), "member_id"))
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("type", String.valueOf(type))
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-// .addParams("memberId", SharedPreUtils.getStr(getActivity(), "member_id"))
+
                     }
 
                     @Override
@@ -166,15 +166,18 @@ public class MyActivityFragment extends BaseFragment {
                 if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                     switch (dataBean.getAcivityType()) {
                         case "NONEED":
-                            tvCost.setText("无需报名");
+                            tvCost.setVisibility(View.GONE);
                             break;
                         case "FREE":
+                            tvCost.setVisibility(View.VISIBLE);
                             tvCost.setText("免费");
                             break;
                         case "SCORE":
+                            tvCost.setVisibility(View.VISIBLE);
                             tvCost.setText("已报名： " + DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分");
                             break;
                         case "CASH":
+                            tvCost.setVisibility(View.VISIBLE);
                             tvCost.setText("已支付： ¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()));
                             break;
                     }
@@ -236,9 +239,6 @@ public class MyActivityFragment extends BaseFragment {
 
                 Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
                 intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
-                intent.putExtra("type", dataList.get(position).getAcivityType());
-                intent.putExtra("money", dataList.get(position).getEnrollFee());
-                intent.putExtra("score", dataList.get(position).getEnrollScore());
                 startActivity(intent);
             }
 

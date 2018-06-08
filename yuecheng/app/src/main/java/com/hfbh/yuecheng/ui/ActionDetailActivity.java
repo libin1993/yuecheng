@@ -5,27 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.JsResult;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.ActivityDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
+import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +36,6 @@ import okhttp3.Call;
  */
 public class ActionDetailActivity extends BaseActivity {
 
-
     @BindView(R.id.webview_activity_detail)
     WebView webView;
     @BindView(R.id.tv_title_header)
@@ -52,14 +48,11 @@ public class ActionDetailActivity extends BaseActivity {
     TextView tvExchangeType;
     @BindView(R.id.tv_exchange_activity)
     TextView tvExchange;
+    @BindView(R.id.rl_action_join)
+    RelativeLayout rlActionJoin;
     //活动id
     private int activityId;
-    //活动类型
-    private String type;
-    //报名费用
-    private double enrollFee;
-    //报名积分
-    private double enrollScore;
+    private ActivityDetailBean activityBean;
 
 
     @Override
@@ -69,31 +62,11 @@ public class ActionDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         tvTitleHeader.setText("活动详情");
         getData();
-        initView();
-
+        initData();
+        initWebView();
     }
 
-
-    private void initView() {
-
-        if (!TextUtils.isEmpty(type)) {
-            switch (type) {
-                case "NONEED":
-                    tvExchangeScore.setText("无需报名");
-                    break;
-                case "FREE":
-                    tvExchangeScore.setText("免费");
-                    break;
-                case "SCORE":
-                    tvExchangeScore.setText(DisplayUtils.isInteger(enrollScore));
-                    tvExchangeType.setVisibility(View.VISIBLE);
-                    break;
-                case "CASH":
-                    tvExchangeScore.setText("¥" + DisplayUtils.isInteger(enrollFee));
-                    break;
-            }
-        }
-
+    private void initWebView() {
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
         ws.setAllowFileAccess(true);
@@ -113,6 +86,59 @@ public class ActionDetailActivity extends BaseActivity {
                 return true;
             }
         });
+    }
+
+    private void initData() {
+        OkHttpUtils.get()
+                .url(Constant.ACTIVITY_INFO)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("id", String.valueOf(activityId))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        LogUtils.log(response);
+                        activityBean = GsonUtils.jsonToBean(response, ActivityDetailBean.class);
+                        if (activityBean.isFlag()) {
+                            initView();
+                        }
+                    }
+                });
+    }
+
+
+    private void initView() {
+
+        if (!TextUtils.isEmpty(activityBean.getData().getSignupDo().getAcivityType())) {
+            switch (activityBean.getData().getSignupDo().getAcivityType()) {
+                case "NONEED":
+                    rlActionJoin.setVisibility(View.GONE);
+                    break;
+                case "FREE":
+                    rlActionJoin.setVisibility(View.VISIBLE);
+                    tvExchangeScore.setText("免费");
+                    break;
+                case "SCORE":
+                    rlActionJoin.setVisibility(View.VISIBLE);
+                    tvExchangeScore.setText(DisplayUtils.isInteger(activityBean.getData()
+                            .getSignupDo().getEnrollScore()));
+                    tvExchangeType.setVisibility(View.VISIBLE);
+                    break;
+                case "CASH":
+                    rlActionJoin.setVisibility(View.VISIBLE);
+                    tvExchangeScore.setText("¥" + DisplayUtils.isInteger(activityBean.getData()
+                            .getSignupDo().getEnrollFee()));
+                    break;
+            }
+        }
 
     }
 
@@ -120,9 +146,6 @@ public class ActionDetailActivity extends BaseActivity {
     private void getData() {
         Intent intent = getIntent();
         activityId = intent.getIntExtra("activity_id", 0);
-        type = intent.getStringExtra("type");
-        enrollFee = intent.getDoubleExtra("money", 0);
-        enrollScore = intent.getDoubleExtra("score", 0);
     }
 
     @OnClick({R.id.iv_back_header, R.id.tv_exchange_activity})

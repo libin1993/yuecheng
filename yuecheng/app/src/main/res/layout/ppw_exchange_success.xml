@@ -9,10 +9,19 @@
               android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/iv_exchange_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:padding="10dp"
+        android:scaleType="center"
+        android:src="@mipmap/ic_close_gray"/>
+
+    <ImageView
         android:id="@+id/iv_exchange_result"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:scaleType="fitCenter"/>
 
     <TextView

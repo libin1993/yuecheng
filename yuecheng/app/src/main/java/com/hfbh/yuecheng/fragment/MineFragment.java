@@ -25,6 +25,7 @@ import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.MemberPointsActivity;
 import com.hfbh.yuecheng.ui.MsgCenterActivity;
 import com.hfbh.yuecheng.ui.MyActionActivity;
+import com.hfbh.yuecheng.ui.MyExchangeActivity;
 import com.hfbh.yuecheng.ui.MyMemberCardActivity;
 import com.hfbh.yuecheng.ui.SetUpActivity;
 import com.hfbh.yuecheng.ui.UserInfoActivity;
@@ -176,6 +177,7 @@ public class MineFragment extends BaseFragment {
             case R.id.rl_mine_order:
                 break;
             case R.id.rl_mine_exchange:
+                toLogin(MyExchangeActivity.class);
                 break;
             case R.id.rl_mine_activity:
                 toLogin(MyActionActivity.class);

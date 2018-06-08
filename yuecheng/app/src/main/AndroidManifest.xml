@@ -131,6 +131,7 @@
             android:name=".ui.EnrollActionActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".ui.CouponActivity"/>
+        <activity android:name=".ui.MyExchangeActivity"/>
     </application>
 
 </manifest>

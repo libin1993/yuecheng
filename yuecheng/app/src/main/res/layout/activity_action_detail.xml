@@ -7,23 +7,25 @@
                 android:orientation="vertical">
 
     <WebView
-    android:id="@+id/webview_activity_detail"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="50dp">
-</WebView>
+        android:id="@+id/webview_activity_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_action_join">
+    </WebView>
 
 
     <include
         layout="@layout/layout_header_gray"/>
 
     <RelativeLayout
+        android:id="@+id/rl_action_join"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/gradient_orange_hor"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_exchange_activity_score"
@@ -38,10 +40,11 @@
             android:id="@+id/tv_exchange_activity_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tv_exchange_activity_score"
+            android:layout_alignBaseline="@id/tv_exchange_activity_score"
             android:layout_centerVertical="true"
             android:layout_marginLeft="3dp"
             android:layout_toRightOf="@id/tv_exchange_activity_score"
+            android:text="积分"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:visibility="gone"/>

@@ -149,15 +149,18 @@ public class NowActionActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                     switch (dataBean.getAcivityType()) {
                         case "NONEED":
-                            tvReceive.setText("无需报名");
+                            tvReceive.setVisibility(View.GONE);
                             break;
                         case "FREE":
+                            tvReceive.setVisibility(View.VISIBLE);
                             tvReceive.setText("免费报名");
                             break;
                         case "SCORE":
+                            tvReceive.setVisibility(View.VISIBLE);
                             tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
                             break;
                         case "CASH":
+                            tvReceive.setVisibility(View.VISIBLE);
                             tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
                             break;
                     }
@@ -179,9 +182,6 @@ public class NowActionActivity extends BaseActivity {
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(NowActionActivity.this, ActionDetailActivity.class);
                 intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
-                intent.putExtra("type", dataList.get(position).getAcivityType());
-                intent.putExtra("money", dataList.get(position).getEnrollFee());
-                intent.putExtra("score", dataList.get(position).getEnrollScore());
                 startActivity(intent);
             }
 

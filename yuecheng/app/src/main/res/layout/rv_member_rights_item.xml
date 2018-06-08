@@ -21,5 +21,4 @@
         android:textColor="@color/gray_10"
         android:textSize="14dp"/>
 
-
 </LinearLayout>

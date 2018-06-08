@@ -156,6 +156,7 @@ public class GiftDetailActivity extends BaseActivity {
         tvGiftCount.setText("还剩" + totalNum + "件");
         tvExchangeGiftCount.setText(String.valueOf(num));
         tvTotalScore.setText(String.valueOf(score * num));
+
     }
 
     @OnClick({R.id.tv_gift_reduce, R.id.tv_gift_add, R.id.iv_exchange_back, R.id.iv_exchange_share,
@@ -246,6 +247,7 @@ public class GiftDetailActivity extends BaseActivity {
         DisplayUtils.setBackgroundAlpha(this, true);
 
         ImageView ivResult = (ImageView) contentView.findViewById(R.id.iv_exchange_result);
+        ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_exchange_cancel);
         TextView tvResult = (TextView) contentView.findViewById(R.id.tv_exchange_result);
         TextView tvMsg = (TextView) contentView.findViewById(R.id.tv_exchange_reason);
         final TextView tvSuccess = (TextView) contentView.findViewById(R.id.tv_exchange_success);
@@ -264,6 +266,13 @@ public class GiftDetailActivity extends BaseActivity {
 
 
         tvSuccess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
+        ivCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPopupWindow.dismiss();

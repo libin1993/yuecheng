@@ -100,14 +100,17 @@ public class CloseActionActivity extends BaseActivity {
             if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                 switch (dataBean.getAcivityType()) {
                     case "NONEED":
-                        tvExchangeType.setText("报名费用： 无需报名");
+                        tvExchangeType.setVisibility(View.GONE);
                     case "FREE":
+                        tvExchangeType.setVisibility(View.VISIBLE);
                         tvExchangeType.setText("报名费用： 免费");
                         break;
                     case "SCORE":
+                        tvExchangeType.setVisibility(View.VISIBLE);
                         tvExchangeType.setText("报名费用： " + DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分");
                         break;
                     case "CASH":
+                        tvExchangeType.setVisibility(View.VISIBLE);
                         tvExchangeType.setText("报名费用： ¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()));
                         break;
                 }
@@ -125,9 +128,6 @@ public class CloseActionActivity extends BaseActivity {
             case R.id.tv_activity_detail:
                 Intent intent = new Intent(this, ActionDetailActivity.class);
                 intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
-                intent.putExtra("type", dataBean.getAcivityType());
-                intent.putExtra("money", dataBean.getEnrollFee());
-                intent.putExtra("score", dataBean.getEnrollScore());
                 startActivity(intent);
                 break;
         }

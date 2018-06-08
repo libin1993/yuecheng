@@ -90,6 +90,7 @@ public class UserInfoBean implements Serializable {
         private Object cardLevelDO;
         private String cardLevelPic;
         private String cardNumber;
+        private String memberCardNo;
         private int couponCount;
         private Object currentLevel;
         private Object entityCardId;
@@ -105,6 +106,19 @@ public class UserInfoBean implements Serializable {
         private String memberPhone;
         private String memberProvince;
         private String memberSex;
+
+        public static long getSerialVersionUID() {
+            return serialVersionUID;
+        }
+
+        public String getMemberCardNo() {
+            return memberCardNo;
+        }
+
+        public void setMemberCardNo(String memberCardNo) {
+            this.memberCardNo = memberCardNo;
+        }
+
         private String payPassword;
         private double points;
         private int totalAccount;

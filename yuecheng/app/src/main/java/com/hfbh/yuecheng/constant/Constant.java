@@ -19,8 +19,10 @@ public class Constant {
     public static final String ACTIVITY_LIST = HOST + "/wechat/wechat/signup_activity/list.json";
     //活动详情
     public static final String ACTIVITY_INFO = HOST + "/wechat/wechat/signup_activity/detail.json";
+    //活动报名数据
+    public static final String ENROLL_ACTIVITY_INFO = HOST + "/wechat/wechat/signup_activity/signup_form.json";
     //活动报名
-    public static final String ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/signup_form.json";
+    public static final String ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/signup_submit.json";
     //切换城市
     public static final String CHANGE_CITY = HOST + "/wechat/cityConfig/cityList.json";
     //店铺列表
@@ -37,6 +39,8 @@ public class Constant {
     public static final String EXCHANGE_GIFT_LIST = HOST + "/wechat/pointsReward/list.json";
     //兑换优惠券列表
     public static final String EXCHANGE_COUPON_LIST = HOST + "/wechat/webcoupon/listCouponDefault.json";
+    //我的优惠券
+    public static final String MY_COUPON = HOST + "/wechat/memberCoupon/memberCoupon.json";
     //礼品信息
     public static final String GIFT_DETAIL = HOST + "/wechat/pointsReward/info.json";
     //优惠券详情
