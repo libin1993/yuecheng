@@ -23,6 +23,7 @@ import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -113,6 +114,7 @@ public class GiftDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         giftBean = GsonUtils.jsonToBean(response, GiftDetailBean.class);
                         if (giftBean.isFlag()) {
                             score = giftBean.getData().getNeedScore();
@@ -164,18 +166,23 @@ public class GiftDetailActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_gift_reduce:
-                if (num > 1) {
-                    num--;
+                if (giftBean.getData() != null){
+                    if (num > 1) {
+                        num--;
+                    }
+                    initCount();
                 }
-                initCount();
+
                 break;
             case R.id.tv_gift_add:
-                if (num < limitNum) {
-                    num++;
-                } else {
-                    ToastUtils.showToast(this, "每人限制兑换" + limitNum + "个哦~");
+                if (giftBean.getData() != null){
+                    if (num < limitNum) {
+                        num++;
+                    } else {
+                        ToastUtils.showToast(this, "每人限制兑换" + limitNum + "个哦~");
+                    }
+                    initCount();
                 }
-                initCount();
                 break;
             case R.id.iv_exchange_back:
                 finish();
@@ -192,42 +199,45 @@ public class GiftDetailActivity extends BaseActivity {
      * 兑换礼品
      */
     private void exChangeGift() {
-        OkHttpUtils.post()
-                .url(Constant.EXCHANGE_GIFT)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("pointsRewardId", String.valueOf(giftId))
-                .addParams("exchangeNum", String.valueOf(num))
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
+        if (giftBean.getData() != null){
+            OkHttpUtils.post()
+                    .url(Constant.EXCHANGE_GIFT)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("organizeId", MyApp.organizeId)
+                    .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("pointsRewardId", String.valueOf(giftId))
+                    .addParams("exchangeNum", String.valueOf(num))
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
 
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        LogUtils.log(response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            String msg = jsonObject.getString("msg");
-                            if (flag) {
-                                JSONObject data = jsonObject.getJSONObject("data");
-                                totalNum = data.getInt("balanceGetNum");
-                                limitNum = data.getInt("limitGetNum");
-                                initCount();
-                                exChangeResult(true, "您兑换的礼品已放置于“我的-兑换”，记得到店核销兑换哦！");
-                            } else {
-                                exChangeResult(false, msg);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            LogUtils.log(response);
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                boolean flag = jsonObject.getBoolean("flag");
+                                String msg = jsonObject.getString("msg");
+                                if (flag) {
+                                    JSONObject data = jsonObject.getJSONObject("data");
+                                    totalNum = data.getInt("balanceGetNum");
+                                    limitNum = data.getInt("limitGetNum");
+                                    initCount();
+                                    exChangeResult(true, "您兑换的礼品已放置于“我的-兑换”，记得到店核销兑换哦！");
+                                } else {
+                                    exChangeResult(false, msg);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        }
+
     }
 
     /**

@@ -200,7 +200,7 @@ public class ShopDetailActivity extends BaseActivity {
 
                 holder.setText(R.id.tv_discovery_new_name, dataBean.getCommodityName());
                 holder.setText(R.id.tv_discovery_new_tip, dataBean.getIndustryName());
-                holder.setText(R.id.tv_discovery_new_tip, dataBean.getModifyTime());
+                holder.setText(R.id.tv_discovery_new_time, dataBean.getModifyTime());
 
             }
         };
