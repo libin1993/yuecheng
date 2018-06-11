@@ -16,7 +16,6 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.fragment.MemberPointsFragment;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 
-import org.joda.time.YearMonth;
 
 import java.util.ArrayList;
 import java.util.Calendar;

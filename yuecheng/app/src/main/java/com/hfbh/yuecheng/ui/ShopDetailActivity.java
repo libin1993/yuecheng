@@ -215,7 +215,7 @@ public class ShopDetailActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(ShopDetailActivity.this, GoodsDetailActivity.class);
+                Intent intent = new Intent(ShopDetailActivity.this, NewGoodsDetailActivity.class);
                 intent.putExtra("goods_id", goodsList.get(position).getCommodityId());
                 startActivity(intent);
             }

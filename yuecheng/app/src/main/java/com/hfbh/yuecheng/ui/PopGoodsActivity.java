@@ -1,12 +1,10 @@
 package com.hfbh.yuecheng.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +13,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
-import com.hfbh.yuecheng.adapter.GoodsRecycleAdapter;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.bean.GoodsBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
@@ -34,7 +29,6 @@ import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
-import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -169,7 +163,7 @@ public class PopGoodsActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(PopGoodsActivity.this, GoodsDetailActivity.class);
+                Intent intent = new Intent(PopGoodsActivity.this, PopGoodsDetailActivity.class);
                 intent.putExtra("goods_id", goodsList.get(position).getCommodityId());
                 startActivity(intent);
             }

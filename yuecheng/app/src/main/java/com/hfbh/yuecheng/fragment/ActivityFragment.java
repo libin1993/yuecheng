@@ -1,7 +1,6 @@
 package com.hfbh.yuecheng.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,13 +19,11 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.ui.CalendarActivity;
 import com.hfbh.yuecheng.ui.NewCalendarActivity;
 import com.hfbh.yuecheng.ui.NowActionActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.wang.avi.AVLoadingIndicatorView;
-import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

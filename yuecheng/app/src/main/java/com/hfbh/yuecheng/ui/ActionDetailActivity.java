@@ -76,10 +76,8 @@ public class ActionDetailActivity extends BaseActivity {
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
-        String url = Constant.ACTIVITY_DETAIL + "?&appType=Android&id=" + activityId;
-        if (SharedPreUtils.getBoolean(this, "is_login", false)) {
-            url += "&hash=" + SharedPreUtils.getStr(this, "hash");
-        }
+        String url = Constant.ACTIVITY_DETAIL + "?appType=Android&id=" + activityId
+                + "&hash=" + SharedPreUtils.getStr(this, "hash");
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -181,16 +179,16 @@ public class ActionDetailActivity extends BaseActivity {
      * 活动报名
      */
     private void enrollActivity() {
-       if (!isFinish){
-           Intent intent;
-           if (SharedPreUtils.getBoolean(this, "is_login", false)) {
-               intent = new Intent(this, EnrollActionActivity.class);
-               intent.putExtra("activity_id", activityId);
-           } else {
-               intent = new Intent(this, LoginActivity.class);
-           }
-           startActivity(intent);
-       }
+        if (!isFinish) {
+            Intent intent;
+            if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+                intent = new Intent(this, EnrollActionActivity.class);
+                intent.putExtra("activity_id", activityId);
+            } else {
+                intent = new Intent(this, LoginActivity.class);
+            }
+            startActivity(intent);
+        }
     }
 
 }

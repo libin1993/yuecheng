@@ -39,6 +39,14 @@ import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
+import com.smarttop.library.bean.City;
+import com.smarttop.library.bean.County;
+import com.smarttop.library.bean.Province;
+import com.smarttop.library.bean.Street;
+import com.smarttop.library.utils.LogUtil;
+import com.smarttop.library.widget.AddressSelector;
+import com.smarttop.library.widget.BottomDialog;
+import com.smarttop.library.widget.OnAddressSelectedListener;
 import com.soundcloud.android.crop.Crop;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -63,20 +71,10 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.qqtheme.framework.entity.City;
-import cn.qqtheme.framework.entity.County;
-import cn.qqtheme.framework.entity.Province;
 import cn.qqtheme.framework.picker.DatePicker;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
@@ -239,18 +237,49 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
      * 选择地址
      */
     private void updateAddress() {
-        AddressPickTask task = new AddressPickTask(this);
-        task.setCallback(new AddressPickTask.Callback() {
-            @Override
-            public void onAddressInitFailed() {
+//        AddressPickTask task = new AddressPickTask(this);
+//        task.setCallback(new AddressPickTask.Callback() {
+//            @Override
+//            public void onAddressInitFailed() {
+//
+//            }
+//
+//            @Override
+//            public void onAddressPicked(Province province, City city, County county) {
+//                provinceAddress = province.getAreaName();
+//                cityAddress = city.getAreaName();
+//                countAddress = county.getAreaName();
+//
+//                Map<String, String> map = new HashMap<>();
+//
+//                map.put("memberProvince", provinceAddress);
+//                map.put("memberCity", cityAddress);
+//                map.put("memberCountry", countAddress);
+//                updateUserInfo("address", map);
+//
+//            }
+//        });
+//
+//
+//        if (!TextUtils.isEmpty(provinceAddress)) {
+//            task.execute(provinceAddress, cityAddress, countAddress);
+//        } else {
+//            task.execute("北京市", "北京市", "朝阳区");
+//        }
 
+        final BottomDialog dialog = new BottomDialog(this);
+        dialog.setDialogDismisListener(new AddressSelector.OnDialogCloseListener() {
+            @Override
+            public void dialogclose() {
+                dialog.dismiss();
             }
-
+        });
+        dialog.setOnAddressSelectedListener(new OnAddressSelectedListener() {
             @Override
-            public void onAddressPicked(Province province, City city, County county) {
-                provinceAddress = province.getAreaName();
-                cityAddress = city.getAreaName();
-                countAddress = county.getAreaName();
+            public void onAddressSelected(Province province, City city, County county) {
+                provinceAddress = province.name;
+                cityAddress = city.name;
+                countAddress = county.name;
 
                 Map<String, String> map = new HashMap<>();
 
@@ -258,16 +287,9 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                 map.put("memberCity", cityAddress);
                 map.put("memberCountry", countAddress);
                 updateUserInfo("address", map);
-
             }
         });
-
-
-        if (!TextUtils.isEmpty(provinceAddress)) {
-            task.execute(provinceAddress, cityAddress, countAddress);
-        } else {
-            task.execute("北京市", "北京市", "朝阳区");
-        }
+        dialog.show();
 
     }
 

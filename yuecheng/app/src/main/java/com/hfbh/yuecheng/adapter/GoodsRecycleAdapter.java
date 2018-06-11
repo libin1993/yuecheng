@@ -16,12 +16,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.bean.GoodsBean;
-import com.hfbh.yuecheng.ui.GoodsDetailActivity;
+import com.hfbh.yuecheng.ui.NewGoodsDetailActivity;
+import com.hfbh.yuecheng.ui.PopGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.NewGoodsActivity;
 import com.hfbh.yuecheng.ui.PopGoodsActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
-import com.hfbh.yuecheng.utils.ToastUtils;
 
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View v) {
                         int position = (int) v.getTag();
-                        Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+                        Intent intent = new Intent(mContext, PopGoodsDetailActivity.class);
                         intent.putExtra("goods_id", dataList.get(position).getCommodityId());
                         mContext.startActivity(intent);
                     }
@@ -86,7 +85,7 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View v) {
                         int position = (int) v.getTag();
-                        Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+                        Intent intent = new Intent(mContext, NewGoodsDetailActivity.class);
                         intent.putExtra("goods_id", dataList.get(position).getCommodityId());
                         mContext.startActivity(intent);
                     }
