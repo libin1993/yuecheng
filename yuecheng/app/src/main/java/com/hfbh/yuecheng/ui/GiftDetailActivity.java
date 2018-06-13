@@ -201,7 +201,12 @@ public class GiftDetailActivity extends BaseActivity {
             case R.id.iv_exchange_share:
                 break;
             case R.id.tv_exchange_now:
-                exChangeGift();
+                if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+                    exChangeGift();
+                } else {
+                    startActivity(new Intent(this, LoginActivity.class));
+                }
+
                 break;
         }
     }
