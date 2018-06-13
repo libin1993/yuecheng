@@ -31,6 +31,7 @@ import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -301,6 +302,8 @@ public class RegisterActivity extends BaseActivity {
                                     userInfoBean.getData().getMemberHead());
                             SharedPreUtils.saveStr(RegisterActivity.this, "card_number",
                                     userInfoBean.getData().getMemberCardNo());
+                            SharedPreUtils.saveStr(RegisterActivity.this, "member_card",
+                                    userInfoBean.getData().getCardLevel());
 
                             EventBus.getDefault().post("login_success");
                             finish();
@@ -344,6 +347,7 @@ public class RegisterActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");

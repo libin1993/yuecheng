@@ -67,16 +67,15 @@
                 tools:replace="android:resource"/>
         </provider>
 
-        <activity
-            android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"/>
+
+        <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.SplashActivity"/>
         <activity android:name=".ui.ChangeMarketActivity"/>
         <activity android:name=".ui.SearchShopActivity"/>
         <activity android:name=".ui.MemberCardActivity"/>
@@ -123,13 +122,21 @@
         <activity android:name=".ui.ScanCodeActivity"/>
         <activity android:name=".ui.UserAgreementActivity"/>
         <activity android:name=".ui.MsgCenterActivity"/>
-        <activity android:name=".ui.NewCalendarActivity"/>
+        <activity android:name=".ui.CalendarActivity"/>
         <activity
             android:name=".ui.EnrollActionActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".ui.CouponActivity"/>
         <activity android:name=".ui.MyExchangeActivity"/>
         <activity android:name=".ui.NewGoodsDetailActivity"/>
+        <activity android:name=".ui.GameActivity"/>
+        <activity android:name=".ui.OrderDetailActivity"/>
+        <activity android:name=".ui.CloseGiftActivity"/>
+
+        <service
+            android:name=".service.TimerService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

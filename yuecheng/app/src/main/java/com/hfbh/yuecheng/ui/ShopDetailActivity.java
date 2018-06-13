@@ -18,6 +18,7 @@ import com.hfbh.yuecheng.bean.GoodsBean;
 import com.hfbh.yuecheng.bean.ShopDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -66,6 +67,8 @@ public class ShopDetailActivity extends BaseActivity {
     private boolean isShop;
     private boolean isGoods;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
+    private String type;
+    private String address;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +81,10 @@ public class ShopDetailActivity extends BaseActivity {
     }
 
     private void getData() {
-        shopId = getIntent().getIntExtra("shop_id", 0);
+        Intent intent = getIntent();
+        shopId = intent.getIntExtra("shop_id", 0);
+        type = intent.getStringExtra("type");
+        address = intent.getStringExtra("address");
     }
 
     /**
@@ -101,6 +107,7 @@ public class ShopDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
+                        LogUtils.log(s);
                         shopBean = GsonUtils.jsonToBean(s, ShopDetailBean.class);
                         if (shopBean.isFlag()) {
                             isShop = true;
@@ -178,8 +185,8 @@ public class ShopDetailActivity extends BaseActivity {
         ivShopDetail.setImageURI(shopBean.getMall().getOrganizePicturePath());
         ivShopDetailAvatar.setImageURI(shopBean.getShop().getShopLogo());
         tvShopDetailName.setText(shopBean.getShop().getShopName());
-        tvShopDetailType.setText(shopBean.getShop().getShowSerial());
-        tvShopDetailLocation.setText(shopBean.getShop().getRegionName());
+        tvShopDetailType.setText(type);
+        tvShopDetailLocation.setText(shopBean.getMall().getOrganizeName() + address);
 
         tvShopDetailInfo.setText(shopBean.getShop().getShopIntro());
 
@@ -200,7 +207,7 @@ public class ShopDetailActivity extends BaseActivity {
 
                 holder.setText(R.id.tv_discovery_new_name, dataBean.getCommodityName());
                 holder.setText(R.id.tv_discovery_new_tip, dataBean.getIndustryName());
-                holder.setText(R.id.tv_discovery_new_time, dataBean.getModifyTime());
+                holder.setText(R.id.tv_discovery_new_time, dataBean.getOnlineTime());
 
             }
         };

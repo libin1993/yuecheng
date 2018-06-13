@@ -2,7 +2,6 @@ package com.hfbh.yuecheng.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
@@ -12,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -21,15 +21,14 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
+import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.ui.EnrollActionActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
-import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -60,6 +59,10 @@ public class ActivityListFragment extends BaseFragment {
     RecyclerView rvActivity;
     @BindView(R.id.layout_refresh_activity)
     SmartRefreshLayout refreshLayout;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
 
     private Unbinder unbinder;
     //标签id
@@ -80,6 +83,8 @@ public class ActivityListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activity_list, container, false);
         unbinder = ButterKnife.bind(this, view);
+        ivNullData.setImageResource(R.mipmap.ic_null_activity);
+        tvNullData.setText("暂无活动");
         getData();
         initData();
         return view;
@@ -129,10 +134,12 @@ public class ActivityListFragment extends BaseFragment {
                                 initView();
                             }
                             svNoActivity.setVisibility(View.GONE);
+                            rvActivity.setVisibility(View.VISIBLE);
                         } else {
                             refreshLayout.finishLoadMore();
                             if (page == 1) {
                                 svNoActivity.setVisibility(View.VISIBLE);
+                                rvActivity.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -157,25 +164,32 @@ public class ActivityListFragment extends BaseFragment {
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                 final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                final boolean isEnroll = dataBean.getMemberSignupState() != null && dataBean.getMemberSignupState().equals("去参加");
+
                 if (!isFinish) {
                     if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                         tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                        switch (dataBean.getAcivityType()) {
-                            case "NONEED":
-                                tvReceive.setVisibility(View.GONE);
-                                break;
-                            case "FREE":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText("免费报名");
-                                break;
-                            case "SCORE":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
-                                break;
-                            case "CASH":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
-                                break;
+                        if (isEnroll) {
+                            tvReceive.setVisibility(View.VISIBLE);
+                            tvReceive.setText("去参加");
+                        } else {
+                            switch (dataBean.getAcivityType()) {
+                                case "NONEED":
+                                    tvReceive.setVisibility(View.GONE);
+                                    break;
+                                case "FREE":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText("免费报名");
+                                    break;
+                                case "SCORE":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+                                    break;
+                                case "CASH":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+                                    break;
+                            }
                         }
                     }
                 } else {
@@ -194,16 +208,19 @@ public class ActivityListFragment extends BaseFragment {
                 tvReceive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!isFinish){
+                        if (!isFinish) {
                             Intent intent;
                             if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                                intent = new Intent(getActivity(), EnrollActionActivity.class);
+                                if (isEnroll) {
+                                    intent = new Intent(getActivity(), CloseActionActivity.class);
+                                } else {
+                                    intent = new Intent(getActivity(), EnrollActionActivity.class);
+                                }
                                 intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
                             } else {
                                 intent = new Intent(getActivity(), LoginActivity.class);
                             }
                             startActivity(intent);
-
                         }
                     }
                 });

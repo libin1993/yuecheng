@@ -15,6 +15,7 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.LocationBean;
+import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.ActivityFragment;
 import com.hfbh.yuecheng.fragment.DiscoveryFragment;
@@ -25,6 +26,7 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LocationUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
@@ -153,6 +155,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     }
 
+
     /**
      * 获取商场id ,hash值
      */
@@ -174,7 +177,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                         loadingView.smoothToHide();
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
-//                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
+                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
                             MyApp.organizeName = locationBean.getData().getOrganizeName();
                             boolean isLogin = SharedPreUtils.getBoolean(MainActivity.this, "is_login", false);
                             //是否已经登录

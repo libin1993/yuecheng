@@ -8,6 +8,7 @@
         android:id="@+id/layout_refresh_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_activity_list"
             android:layout_width="match_parent"
@@ -22,16 +23,8 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <TextView
-            android:id="@+id/tv_no_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="150dp"
-            android:text="暂无活动"
-            android:textColor="@color/gray_10"
-            android:textSize="22sp"
-            android:textStyle="bold"/>
+        <include
+            layout="@layout/layout_null_data"/>
     </android.support.v4.widget.NestedScrollView>
 
 

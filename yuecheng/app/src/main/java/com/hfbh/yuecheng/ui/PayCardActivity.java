@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -21,7 +22,6 @@ import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -57,6 +57,12 @@ public class PayCardActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.tv_pay_card_title)
     TextView tvPayCardTitle;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
 
     private int page = 1;
     //刷新
@@ -77,7 +83,9 @@ public class PayCardActivity extends BaseActivity {
         setContentView(R.layout.activity_pay_card);
         ButterKnife.bind(this);
         tvPayCardTitle.setText("预付卡");
-
+        llNullData.setVisibility(View.GONE);
+        ivNullData.setImageResource(R.mipmap.ic_null_card);
+        tvNullData.setText("暂无预付卡");
         initData();
     }
 
@@ -121,8 +129,14 @@ public class PayCardActivity extends BaseActivity {
                             } else {
                                 initView();
                             }
+                            llNullData.setVisibility(View.GONE);
+                            rvCard.setVisibility(View.VISIBLE);
                         } else {
                             refreshLayout.finishLoadMore();
+                            if (page == 1) {
+                                llNullData.setVisibility(View.VISIBLE);
+                                rvCard.setVisibility(View.GONE);
+                            }
                         }
                     }
                 });

@@ -4,14 +4,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/gray_ed"
                 android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="猫眼"
-        android:textColor="@color/gray_10"
-        android:textSize="22sp"
-        android:textStyle="bold"/>
+    <include
+        layout="@layout/layout_null_info"/>
 
 </RelativeLayout>

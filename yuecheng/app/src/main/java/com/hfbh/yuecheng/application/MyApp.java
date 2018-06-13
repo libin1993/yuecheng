@@ -49,9 +49,6 @@ public class MyApp extends Application {
     //更新内容
     public static String updateContent;
 
-    /**打开的activity**/
-    private List<Activity> activities = new ArrayList<Activity>();
-
     static {
         //设置全局的Header构建器
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {

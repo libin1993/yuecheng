@@ -32,7 +32,6 @@
         app:gpvPasswordType="numberPassword"
         app:gpvTextColor="@color/gray_10"
         app:gpvTextSize="16sp">
-
     </com.jungly.gridpasswordview.GridPasswordView>
 
 

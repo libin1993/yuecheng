@@ -7,23 +7,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.BalanceRecordBean;
-import com.hfbh.yuecheng.bean.MemberBalanceBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
-import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -50,6 +47,12 @@ public class BalanceRecordActivity extends BaseActivity {
     RecyclerView rvBalance;
     @BindView(R.id.layout_refresh_pay_card)
     SmartRefreshLayout refreshLayout;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
 
     private int page = 1;
     //刷新
@@ -69,6 +72,9 @@ public class BalanceRecordActivity extends BaseActivity {
         setContentView(R.layout.activity_pay_card);
         ButterKnife.bind(this);
         tvPayCardTitle.setText("余额明细");
+        llNullData.setVisibility(View.GONE);
+        ivNullData.setImageResource(R.mipmap.ic_null_card);
+        tvNullData.setText("暂无交易记录");
         getData();
         initData();
     }
@@ -121,8 +127,14 @@ public class BalanceRecordActivity extends BaseActivity {
                             } else {
                                 initView();
                             }
+                            llNullData.setVisibility(View.GONE);
+                            rvBalance.setVisibility(View.VISIBLE);
                         } else {
                             refreshLayout.finishLoadMore();
+                            if (page == 1) {
+                                llNullData.setVisibility(View.VISIBLE);
+                                rvBalance.setVisibility(View.GONE);
+                            }
                         }
                     }
                 });

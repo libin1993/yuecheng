@@ -567,12 +567,12 @@ public class ActivityDetailBean {
             private int signupLimitNumber;
             private int signupNumber;
             private String signupState;
-            private Object signupTime;
+            private String signupTime;
             private String startTime;
             private String startTimeStr;
             private String telephone;
             private String useCrowd;
-            private Object verifyCode;
+            private String verifyCode;
             private List<TagsBean> tags;
 
             public String getAcivityAddress() {
@@ -823,11 +823,11 @@ public class ActivityDetailBean {
                 this.signupState = signupState;
             }
 
-            public Object getSignupTime() {
+            public String getSignupTime() {
                 return signupTime;
             }
 
-            public void setSignupTime(Object signupTime) {
+            public void setSignupTime(String signupTime) {
                 this.signupTime = signupTime;
             }
 
@@ -863,11 +863,11 @@ public class ActivityDetailBean {
                 this.useCrowd = useCrowd;
             }
 
-            public Object getVerifyCode() {
+            public String getVerifyCode() {
                 return verifyCode;
             }
 
-            public void setVerifyCode(Object verifyCode) {
+            public void setVerifyCode(String verifyCode) {
                 this.verifyCode = verifyCode;
             }
 

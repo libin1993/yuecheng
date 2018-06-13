@@ -395,6 +395,9 @@ public class LoginActivity extends BaseActivity {
                                     userInfoBean.getData().getMemberHead());
                             SharedPreUtils.saveStr(LoginActivity.this, "card_number",
                                     userInfoBean.getData().getMemberCardNo());
+                            SharedPreUtils.saveStr(LoginActivity.this, "member_card",
+                                    userInfoBean.getData().getCardLevel());
+
                             EventBus.getDefault().post("login_success");
 
                         } else {
@@ -448,6 +451,9 @@ public class LoginActivity extends BaseActivity {
                                     userInfoBean.getData().getMemberHead());
                             SharedPreUtils.saveStr(LoginActivity.this, "card_number",
                                     userInfoBean.getData().getMemberCardNo());
+                            SharedPreUtils.saveStr(LoginActivity.this, "member_card",
+                                    userInfoBean.getData().getCardLevel());
+
                             EventBus.getDefault().post("login_success");
                         } else {
                             ToastUtils.showToast(LoginActivity.this, "登录失败");

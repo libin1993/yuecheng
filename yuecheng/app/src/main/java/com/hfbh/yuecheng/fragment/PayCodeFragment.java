@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,9 +14,14 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.UserInfoBean;
+import com.hfbh.yuecheng.service.TimerService;
+import com.hfbh.yuecheng.ui.CouponActivity;
+import com.hfbh.yuecheng.ui.MemberBalanceActivity;
+import com.hfbh.yuecheng.ui.MemberPointsActivity;
 import com.hfbh.yuecheng.utils.BarcodeUtils;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 
 import butterknife.BindView;
@@ -85,6 +91,8 @@ public class PayCodeFragment extends BaseFragment {
         tvPaycodeMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
         tvPaycodeScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
         tvPaycodeTicket.setText(String.valueOf(userInfoBean.getData().getCouponCount()));
+
+        TimerService.getConnet(getActivity());
     }
 
     public static PayCodeFragment newInstance(UserInfoBean userInfoBean) {
@@ -111,10 +119,13 @@ public class PayCodeFragment extends BaseFragment {
                 }
                 break;
             case R.id.ll_paycode_money:
+                startActivity(new Intent(getActivity(), MemberBalanceActivity.class));
                 break;
             case R.id.ll_paycode_score:
+                startActivity(new Intent(getActivity(), MemberPointsActivity.class));
                 break;
             case R.id.ll_paycode_ticket:
+                startActivity(new Intent(getActivity(), CouponActivity.class));
                 break;
         }
     }
@@ -124,6 +135,11 @@ public class PayCodeFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
         recycleBitmap();
+        //停止由AlarmManager启动的循环
+        TimerService.stop(getActivity());
+        //停止由服务启动的循环
+        Intent intent = new Intent(getActivity(), TimerService.class);
+        getActivity().stopService(intent);
     }
 
 

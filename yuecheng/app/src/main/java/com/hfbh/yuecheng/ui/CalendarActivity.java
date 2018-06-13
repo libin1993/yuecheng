@@ -23,7 +23,6 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -33,12 +32,9 @@ import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -51,7 +47,7 @@ import okhttp3.Call;
  * Email：1993911441@qq.com
  * Describe：
  */
-public class NewCalendarActivity extends BaseActivity {
+public class CalendarActivity extends BaseActivity {
     @BindView(R.id.tv_title_header)
     TextView tvTitleHeader;
     @BindView(R.id.iv_back_header)
@@ -78,7 +74,7 @@ public class NewCalendarActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar_new);
+        setContentView(R.layout.activity_calendar);
         ButterKnife.bind(this);
         tvTitleHeader.setText("活动日历");
         initView();
@@ -158,32 +154,39 @@ public class NewCalendarActivity extends BaseActivity {
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                 final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                final boolean isEnroll = dataBean.getMemberSignupState() != null && dataBean.getMemberSignupState().equals("去参加");
+
                 if (!isFinish) {
                     if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                         tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                        switch (dataBean.getAcivityType()) {
-                            case "NONEED":
-                                tvReceive.setVisibility(View.GONE);
-                                break;
-                            case "FREE":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText("免费报名");
-                                break;
-                            case "SCORE":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
-                                break;
-                            case "CASH":
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
-                                break;
+                        if (isEnroll) {
+                            tvReceive.setVisibility(View.VISIBLE);
+                            tvReceive.setText("去参加");
+                        } else {
+                            switch (dataBean.getAcivityType()) {
+                                case "NONEED":
+                                    tvReceive.setVisibility(View.GONE);
+                                    break;
+                                case "FREE":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText("免费报名");
+                                    break;
+                                case "SCORE":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+                                    break;
+                                case "CASH":
+                                    tvReceive.setVisibility(View.VISIBLE);
+                                    tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+                                    break;
+                            }
                         }
+
                     }
-                }else {
+                } else {
                     tvReceive.setVisibility(View.VISIBLE);
                     tvReceive.setText("已结束");
                     tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
-
                 }
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
@@ -197,11 +200,16 @@ public class NewCalendarActivity extends BaseActivity {
                     public void onClick(View v) {
                         if (!isFinish){
                             Intent intent;
-                            if (SharedPreUtils.getBoolean(NewCalendarActivity.this, "is_login", false)) {
-                                intent = new Intent(NewCalendarActivity.this, EnrollActionActivity.class);
+                            if (SharedPreUtils.getBoolean(CalendarActivity.this, "is_login", false)) {
+                                if (isEnroll){
+                                    intent = new Intent(CalendarActivity.this, CloseActionActivity.class);
+                                }else {
+                                    intent = new Intent(CalendarActivity.this, EnrollActionActivity.class);
+                                }
+
                                 intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
                             } else {
-                                intent = new Intent(NewCalendarActivity.this, LoginActivity.class);
+                                intent = new Intent(CalendarActivity.this, LoginActivity.class);
                             }
                             startActivity(intent);
 
@@ -232,7 +240,7 @@ public class NewCalendarActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(NewCalendarActivity.this, ActionDetailActivity.class);
+                Intent intent = new Intent(CalendarActivity.this, ActionDetailActivity.class);
                 intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
                 startActivity(intent);
             }

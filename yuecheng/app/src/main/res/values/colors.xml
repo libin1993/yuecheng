@@ -59,4 +59,13 @@
     <color name="red_d0">#D0021B</color>
     <color name="yellow_ffe">#FEE000</color>
     <color name="yellow_ffb">#FFBF2F</color>
+    <color name="yellow_cc">#CC9547</color>
+    <color name="yellow_f2da">#F2DADA</color>
+    <color name="yellow_f2de">#F2DEDA</color>
+    <color name="gray_c2">#C2C4CC</color>
+    <color name="red_f3">#F36868</color>
+    <color name="gray_58">#584114</color>
+    <color name="yellow_e3">#E3C282</color>
+    <color name="yellow_f7">#F7E1B6</color>
+    <color name="blue_a4c">#A4C9EE</color>
 </resources>

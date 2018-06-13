@@ -5,13 +5,7 @@
                 android:background="@color/gray_ed"
                 android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="美味不用等"
-        android:textColor="@color/gray_10"
-        android:layout_centerInParent="true"
-        android:textSize="22sp"
-        android:textStyle="bold"/>
+    <include
+        layout="@layout/layout_null_info"/>
 
 </RelativeLayout>

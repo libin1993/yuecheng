@@ -17,16 +17,8 @@
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
-    <TextView
-        android:id="@+id/tv_null_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="暂无活动"
-        android:textColor="@color/gray_10"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:visibility="gone"/>
+    <include
+        layout="@layout/layout_null_data"/>
 
     <include
         layout="@layout/layout_loading"/>

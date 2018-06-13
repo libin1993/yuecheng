@@ -27,14 +27,11 @@ public class Constant {
     public static final String CHANGE_CITY = HOST + "/wechat/cityConfig/cityList.json";
     //店铺列表
     public static final String SHOP_LIST = HOST + "/wechat/shop/getShopList.json";
-    //
-    public static final String SHOP_MORE = HOST + "/wechat/shop/loadMoreShop.json";
+
     //店铺详情
     public static final String SHOP_DETAIL = HOST + "/wechat/shop/shopDetail.json";
     //
     public static final String QR_CODE = "https://pan.baidu.com/share/qrcode?w=150&h=150&url=http://www.xsyrz.cn";
-    //
-    public static final String PAY_CODE = HOST + "/wechat/scanCodePay/queryOrder.json";
     //礼品列表
     public static final String EXCHANGE_GIFT_LIST = HOST + "/wechat/pointsReward/list.json";
     //兑换优惠券列表
@@ -47,6 +44,10 @@ public class Constant {
     public static final String COUPON_DETAIL = HOST + "/wechat/webcoupon/getCouponDesc.json";
     //兑换礼品
     public static final String EXCHANGE_GIFT = HOST + "/wechat/pointsReward/exchange.json";
+    //我的兑换礼品
+    public static final String MY_EXCHANGE_GIFT = HOST + "/wechat/memberCoupon/listMemberCoupon.json";
+    //礼品核销
+    public static final String CLOSE_GIFT = HOST + "/wechat/memberCoupon/getVerifyCoupon.json";
     //注册
     public static final String REGISTER = HOST + "/wechat/appRequest/register.json";
     //是否注册
@@ -97,6 +98,10 @@ public class Constant {
     public static final String LOG_OUT = HOST + "/wechat/appRequest/loginOut.json";
     //检测是否登录
     public static final String IS_LOGIN = HOST + "/wechat/appRequest/memberIsLogin.json";
+    //检测订单
+    public static final String QUERY_ORDER = HOST + "/wechat/scanCodePay/queryOrder.json";
+    //确认订单
+    public static final String CONFIRM_ORDER = HOST + "/wechat/scanCodePay/confirmOrder.json";
 
     //WebView
     //活动详情

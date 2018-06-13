@@ -5,9 +5,9 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
+    android:layout_marginTop="15dp"
     app:cardBackgroundColor="@color/gray_ed"
     app:cardCornerRadius="6dp"
     app:cardElevation="6dp">
@@ -21,8 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             fresco:actualImageScaleType="centerCrop"
-            fresco:placeholderImageScaleType="centerCrop"
             fresco:placeholderImage="@mipmap/img_user_bigcoupon_yellow"
+            fresco:placeholderImageScaleType="centerCrop"
             fresco:roundedCornerRadius="6dp"
             fresco:viewAspectRatio="3.51"/>
 
@@ -85,8 +85,10 @@
                     android:id="@+id/tv_coupon_type_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="¥"
                     android:textColor="@color/gray_10"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tv_coupon_value"
@@ -99,8 +101,10 @@
                     android:id="@+id/tv_coupon_type_park"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="小时"
                     android:textColor="@color/gray_10"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <TextView

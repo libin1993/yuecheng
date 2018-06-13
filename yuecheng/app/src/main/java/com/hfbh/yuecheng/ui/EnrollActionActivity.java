@@ -1,5 +1,8 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,12 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -331,14 +336,15 @@ public class EnrollActionActivity extends BaseActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 boolean flag = jsonObject.getBoolean("flag");
-                                {
-                                    if (flag) {
-                                        ToastUtils.showToast(EnrollActionActivity.this, "报名成功");
-                                    } else {
-                                        String msg = jsonObject.getString("msg");
-                                        ToastUtils.showToast(EnrollActionActivity.this, msg);
-                                    }
+
+                                if (flag) {
+                                    enrollResult(true, "您报名的活动已放置于“我的-活动”，记得去参加哦！");
+                                } else {
+                                    String msg = jsonObject.getString("msg");
+                                    enrollResult(false, msg);
+
                                 }
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -349,4 +355,66 @@ public class EnrollActionActivity extends BaseActivity {
         }
 
     }
+
+
+    /**
+     * 兑换结果
+     */
+    private void enrollResult(final boolean flag, String msg) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_exchange_success, null);
+        int widthPixels = DisplayUtils.getMetrics(this).widthPixels;
+        final PopupWindow mPopupWindow = new PopupWindow(contentView, (int) (widthPixels
+                - DisplayUtils.dp2px(this, 66)), ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setContentView(contentView);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        DisplayUtils.setBackgroundAlpha(this, true);
+
+        ImageView ivResult = (ImageView) contentView.findViewById(R.id.iv_exchange_result);
+        ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_exchange_cancel);
+        TextView tvResult = (TextView) contentView.findViewById(R.id.tv_exchange_result);
+        TextView tvMsg = (TextView) contentView.findViewById(R.id.tv_exchange_reason);
+        final TextView tvSuccess = (TextView) contentView.findViewById(R.id.tv_exchange_success);
+        if (flag) {
+            ivResult.setImageResource(R.mipmap.img_success);
+            tvResult.setText("报名成功");
+            tvSuccess.setText("去查看");
+            tvSuccess.setBackgroundResource(R.drawable.bound_gradient_green);
+        } else {
+            ivResult.setImageResource(R.mipmap.img_failure);
+            tvResult.setText("报名失败");
+            tvSuccess.setText("返回");
+            tvSuccess.setBackgroundResource(R.drawable.bound_gradient_yellow);
+        }
+        tvMsg.setText(msg);
+
+
+        tvSuccess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flag) {
+                    startActivity(new Intent(EnrollActionActivity.this, MyActionActivity.class));
+                }
+                mPopupWindow.dismiss();
+            }
+        });
+
+        ivCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                DisplayUtils.setBackgroundAlpha(EnrollActionActivity.this, false);
+            }
+        });
+    }
+
 }

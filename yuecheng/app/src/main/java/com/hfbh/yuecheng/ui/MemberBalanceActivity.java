@@ -1,5 +1,7 @@
 package com.hfbh.yuecheng.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.MemberBalanceBean;
+import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -153,10 +156,70 @@ public class MemberBalanceActivity extends BaseActivity {
                 startActivity(new Intent(this, PayCardActivity.class));
                 break;
             case R.id.tv_bind_card:
-                startActivity(new Intent(this, BindCardActivity.class));
+                isSetPayPwd();
                 break;
         }
     }
+
+    /**
+     * 是否设置支付密码
+     */
+    private void isSetPayPwd() {
+        OkHttpUtils.post()
+                .url(Constant.IS_SET_PAY_PWD)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+
+                        if (responseBean.isFlag()) {
+                            startActivity(new Intent(MemberBalanceActivity.this, BindCardActivity.class));
+                        } else {
+                            setPayPwd();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 设置支付密码
+     */
+    private void setPayPwd() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this,
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("您尚未设置支付密码，是否前去设置？");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(MemberBalanceActivity.this, ValidateActivity.class);
+                intent.putExtra("type", "bind");
+                startActivity(intent);
+            }
+        });
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
+    }
+
 
     @Subscribe
     public void bindOrDelete(String msg) {

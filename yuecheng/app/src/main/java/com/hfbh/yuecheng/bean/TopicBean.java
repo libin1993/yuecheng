@@ -128,6 +128,15 @@ public class TopicBean {
             private int organizeId;
             private String pic;
             private int relationTopicId;
+            private String memberSignupState;
+
+            public String getMemberSignupState() {
+                return memberSignupState;
+            }
+
+            public void setMemberSignupState(String memberSignupState) {
+                this.memberSignupState = memberSignupState;
+            }
 
             public String getActivityEndTime() {
                 return activityEndTime;
@@ -204,6 +213,25 @@ public class TopicBean {
              * relationTopicId : 1
              * url : sdsds
              */
+
+            private String appId;
+            private String privateToken;
+
+            public String getAppId() {
+                return appId;
+            }
+
+            public void setAppId(String appId) {
+                this.appId = appId;
+            }
+
+            public String getPrivateToken() {
+                return privateToken;
+            }
+
+            public void setPrivateToken(String privateToken) {
+                this.privateToken = privateToken;
+            }
 
             private String byname;
             private int gameId;

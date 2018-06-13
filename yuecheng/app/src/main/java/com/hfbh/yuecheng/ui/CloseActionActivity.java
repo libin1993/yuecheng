@@ -12,16 +12,25 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.ActivityDetailBean;
 import com.hfbh.yuecheng.bean.ActivityListBean;
+import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
+import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
+import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Author：Libin on 2018/5/29 14:59
@@ -55,9 +64,12 @@ public class CloseActionActivity extends BaseActivity {
     TextView tvActivityTip;
     @BindView(R.id.tv_activity_exchange_type)
     TextView tvExchangeType;
-    private ActivityListBean.DataBean dataBean;
 
     private Bitmap qrBmp;
+
+    private ActivityDetailBean activityBean;
+    private int activityId;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,57 +77,91 @@ public class CloseActionActivity extends BaseActivity {
         setContentView(R.layout.activity_close_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("活动报名核销");
+        tvActivityDetail.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+        tvActivityDetail.getPaint().setAntiAlias(true);
         getData();
-        initView();
+        initData();
+    }
+
+    private void initData() {
+        OkHttpUtils.get()
+                .url(Constant.ACTIVITY_INFO)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("id", String.valueOf(activityId))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        LogUtils.log(response);
+                        activityBean = GsonUtils.jsonToBean(response, ActivityDetailBean.class);
+                        if (activityBean.isFlag()) {
+                            initView();
+                        }
+                    }
+                });
     }
 
 
     private void getData() {
-        dataBean = (ActivityListBean.DataBean) getIntent().getExtras().getSerializable("activity_info");
+        activityId = getIntent().getIntExtra("activity_id", 0);
     }
 
     private void initView() {
-        if (dataBean != null) {
-            String avatar = SharedPreUtils.getStr(this, "avatar");
-            String phone = SharedPreUtils.getStr(this, "phone");
-            if (!TextUtils.isEmpty(avatar)) {
-                ivActivityAvatar.setImageURI(avatar);
-            }
-            if (!TextUtils.isEmpty(phone)) {
-                tvActivityPhone.setText(phone);
-            }
 
-            tvActivityName.setText(dataBean.getActivityTitle());
+        String avatar = SharedPreUtils.getStr(this, "avatar");
 
-            qrBmp = QRCodeUtils.createQRCode(String.valueOf(dataBean.getVerifyCode()),
+        if (!TextUtils.isEmpty(avatar)) {
+            ivActivityAvatar.setImageURI(avatar);
+        }
+
+        tvActivityPhone.setText(activityBean.getData().getSignupDo().getTelephone());
+
+        tvActivityName.setText(activityBean.getData().getSignupDo().getActivityTitle());
+        String qrCode = activityBean.getData().getSignupDo().getVerifyCode();
+        if (!TextUtils.isEmpty(qrCode)) {
+            qrBmp = QRCodeUtils.createQRCode(qrCode,
                     (int) DisplayUtils.dp2px(this, 200));
             ivActivityQrcode.setImageBitmap(qrBmp);
+        }
 
-            tvActivityCode.setText(dataBean.getVerifyCode());
-            tvActivityTime.setText("有效时间：" + dataBean.getActivityStarttime() + " - " + dataBean.getActivityEndtime());
-            tvActivityAddress.setText("活动地点：" + dataBean.getAcivityAddress());
-            tvActivityDetail.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-            tvExchangeTime.setText("报名时间：" + dataBean.getStartTimeStr() + " - " + dataBean.getEndTimeStr());
+        tvActivityCode.setText(activityBean.getData().getSignupDo().getVerifyCode());
+        tvActivityTime.setText("有效时间：" + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                "yyyy.MM.dd", activityBean.getData().getSignupDo().getActivityStarttime()) + " - " +
+                DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                        "yyyy.MM.dd", activityBean.getData().getSignupDo().getActivityEndtime()));
+        tvActivityAddress.setText("活动地点：" + activityBean.getData().getSignupDo().getAcivityAddress());
 
-            if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
-                switch (dataBean.getAcivityType()) {
-                    case "NONEED":
-                        tvExchangeType.setVisibility(View.GONE);
-                    case "FREE":
-                        tvExchangeType.setVisibility(View.VISIBLE);
-                        tvExchangeType.setText("报名费用： 免费");
-                        break;
-                    case "SCORE":
-                        tvExchangeType.setVisibility(View.VISIBLE);
-                        tvExchangeType.setText("报名费用： " + DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分");
-                        break;
-                    case "CASH":
-                        tvExchangeType.setVisibility(View.VISIBLE);
-                        tvExchangeType.setText("报名费用： ¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()));
-                        break;
-                }
+        tvExchangeTime.setText("报名时间：" + activityBean.getData().getSignupDo().getSignupTime());
+
+        if (!TextUtils.isEmpty(activityBean.getData().getSignupDo().getAcivityType())) {
+            switch (activityBean.getData().getSignupDo().getAcivityType()) {
+                case "NONEED":
+                    tvExchangeType.setVisibility(View.GONE);
+                case "FREE":
+                    tvExchangeType.setVisibility(View.VISIBLE);
+                    tvExchangeType.setText("报名费用： 免费");
+                    break;
+                case "SCORE":
+                    tvExchangeType.setVisibility(View.VISIBLE);
+                    tvExchangeType.setText("报名费用： " + DisplayUtils.isInteger(activityBean.getData().getSignupDo().getEnrollScore()) + "积分");
+                    break;
+                case "CASH":
+                    tvExchangeType.setVisibility(View.VISIBLE);
+                    tvExchangeType.setText("报名费用： ¥" + DisplayUtils.isInteger(activityBean.getData().getSignupDo().getEnrollFee()));
+                    break;
             }
         }
+
+        tvActivityTip.setVisibility(View.VISIBLE);
+
 
     }
 
@@ -127,7 +173,7 @@ public class CloseActionActivity extends BaseActivity {
                 break;
             case R.id.tv_activity_detail:
                 Intent intent = new Intent(this, ActionDetailActivity.class);
-                intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
+                intent.putExtra("activity_id", activityId);
                 startActivity(intent);
                 break;
         }

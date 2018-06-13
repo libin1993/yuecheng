@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -79,6 +80,7 @@ public class GiftDetailActivity extends BaseActivity {
     private int score;
     //限制兑换件数
     private int limitNum;
+
     //总数量
     private int totalNum;
 
@@ -94,7 +96,7 @@ public class GiftDetailActivity extends BaseActivity {
 
 
     private void getData() {
-        giftId = getIntent().getIntExtra("gift_id", 0);
+        giftId = getIntent().getIntExtra("id", 0);
     }
 
     private void initData() {
@@ -114,12 +116,13 @@ public class GiftDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
+                        LogUtils.log(giftId + response);
                         giftBean = GsonUtils.jsonToBean(response, GiftDetailBean.class);
                         if (giftBean.isFlag()) {
                             score = giftBean.getData().getNeedScore();
                             totalNum = giftBean.getData().getBalanceNum();
                             limitNum = giftBean.getData().getLimitGetNum();
+
                             initView();
                         }
                     }
@@ -136,6 +139,7 @@ public class GiftDetailActivity extends BaseActivity {
         tvGiftName.setText(giftBean.getData().getRelateName());
         tvGiftInfo.setText(giftBean.getData().getExchangeIntro());
         tvGiftIntroduce.setText(giftBean.getData().getGiftIntro());
+
 
         initCount();
     }
@@ -158,6 +162,13 @@ public class GiftDetailActivity extends BaseActivity {
         tvGiftCount.setText("还剩" + totalNum + "件");
         tvExchangeGiftCount.setText(String.valueOf(num));
         tvTotalScore.setText(String.valueOf(score * num));
+        if (totalNum > 0) {
+            tvExchange.setText("立即兑换");
+            tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+        } else {
+            tvExchange.setText("已抢光");
+            tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+        }
 
     }
 
@@ -166,7 +177,7 @@ public class GiftDetailActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_gift_reduce:
-                if (giftBean.getData() != null){
+                if (giftBean.getData() != null) {
                     if (num > 1) {
                         num--;
                     }
@@ -175,7 +186,7 @@ public class GiftDetailActivity extends BaseActivity {
 
                 break;
             case R.id.tv_gift_add:
-                if (giftBean.getData() != null){
+                if (giftBean.getData() != null) {
                     if (num < limitNum) {
                         num++;
                     } else {
@@ -199,7 +210,7 @@ public class GiftDetailActivity extends BaseActivity {
      * 兑换礼品
      */
     private void exChangeGift() {
-        if (giftBean.getData() != null){
+        if (giftBean.getData() != null) {
             OkHttpUtils.post()
                     .url(Constant.EXCHANGE_GIFT)
                     .addParams("appType", MyApp.appType)
@@ -243,7 +254,7 @@ public class GiftDetailActivity extends BaseActivity {
     /**
      * 兑换结果
      */
-    private void exChangeResult(boolean flag, String msg) {
+    private void exChangeResult(final boolean flag, String msg) {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_exchange_success, null);
         int widthPixels = DisplayUtils.getMetrics(this).widthPixels;
         final PopupWindow mPopupWindow = new PopupWindow(contentView, (int) (widthPixels
@@ -278,6 +289,9 @@ public class GiftDetailActivity extends BaseActivity {
         tvSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (flag) {
+                    startActivity(new Intent(GiftDetailActivity.this, MyExchangeActivity.class));
+                }
                 mPopupWindow.dismiss();
             }
         });

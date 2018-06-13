@@ -163,8 +163,8 @@ public class ChangeMarketActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 int currentMarket = holder.getLayoutPosition();
-//                MyApp.organizeId = String.valueOf(cityBean.getData().get(currentCity)
-//                        .getOrganizeList().get(currentMarket).getOrganizeId());
+                MyApp.organizeId = String.valueOf(cityBean.getData().get(currentCity)
+                        .getOrganizeList().get(currentMarket).getOrganizeId());
                 MyApp.organizeName = cityBean.getData().get(currentCity)
                         .getOrganizeList().get(currentMarket).getOrganizeName();
                 EventBus.getDefault().post("change_market");

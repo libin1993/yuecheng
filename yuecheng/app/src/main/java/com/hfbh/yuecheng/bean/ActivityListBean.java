@@ -197,7 +197,7 @@ public class ActivityListBean implements Serializable {
         private int signupLimitNumber;
         private int signupNumber;
         private String signupState;
-        private Object signupTime;
+        private String signupTime;
         private String startTime;
         private String startTimeStr;
         private String telephone;
@@ -453,11 +453,11 @@ public class ActivityListBean implements Serializable {
             this.signupState = signupState;
         }
 
-        public Object getSignupTime() {
+        public String getSignupTime() {
             return signupTime;
         }
 
-        public void setSignupTime(Object signupTime) {
+        public void setSignupTime(String signupTime) {
             this.signupTime = signupTime;
         }
 

@@ -32,10 +32,12 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.SearchShopBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -165,6 +167,7 @@ public class SearchShopActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         SearchShopBean marketListBean = GsonUtils.jsonToBean(response, SearchShopBean.class);
                         if (marketListBean.isFlag() && marketListBean.getShopList().size() > 0) {
                             if (isRefresh) {
@@ -205,6 +208,7 @@ public class SearchShopActivity extends BaseActivity {
                             rvMarketList.setVisibility(View.VISIBLE);
                             tvNoMarket.setVisibility(View.GONE);
                         } else {
+                            refreshLayout.finishLoadMore();
                             if (page == 1) {
                                 loadingView.smoothToHide();
                                 rvMarketList.setVisibility(View.GONE);
@@ -237,8 +241,8 @@ public class SearchShopActivity extends BaseActivity {
                 }
                 tvType.setText(type.toString().substring(0, type.length() - 1));
 
-                holder.setText(R.id.tv_search_market_address, shopListBean.getRegionName() +
-                        shopListBean.getBerthNo());
+                holder.setText(R.id.tv_search_market_address, shopListBean.getFloorName() +
+                        "-" + shopListBean.getRegionName() + "-" + shopListBean.getBerthNo());
 
                 TextView tvScore = holder.getView(R.id.tv_search_market_tip);
                 if ("Y".equals(shopListBean.getIsScoreShop())) {
@@ -256,6 +260,9 @@ public class SearchShopActivity extends BaseActivity {
                 int shopId = shopList.get(position).getShopId();
                 Intent intent = new Intent(SearchShopActivity.this, ShopDetailActivity.class);
                 intent.putExtra("shop_id", shopId);
+                intent.putExtra("type", industryList.get(industryNum).getIndustryName());
+                intent.putExtra("address",shopList.get(position).getFloorName() +
+                        "-" + shopList.get(position).getRegionName() + "-" + shopList.get(position).getBerthNo());
                 startActivity(intent);
             }
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fresco:com.facebook.drawee.view.SimpleDraweeView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/iv_homepage_topic"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    fresco:actualImageScaleType="centerCrop"
+    fresco:viewAspectRatio="4.1667"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp">
+
+</fresco:com.facebook.drawee.view.SimpleDraweeView>

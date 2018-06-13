@@ -10,9 +10,18 @@ import android.widget.TextView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.MyFragmentAdapter;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.UserInfoBean;
+import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.CouponFragment;
 import com.hfbh.yuecheng.fragment.ExchangeFragment;
+import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
+import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Author：Libin on 2018/6/8 18:24
@@ -56,10 +66,10 @@ public class MyExchangeActivity extends BaseActivity {
         tvHeaderTitle.setText("我的兑换");
         titleList = new ArrayList<>();
         fragmentList = new ArrayList<>();
-        titleList.add("待兑换");
+        titleList.add("待核销");
         titleList.add("全部兑换");
-        fragmentList.add(ExchangeFragment.newInstance(0));
-        fragmentList.add(ExchangeFragment.newInstance(1));
+        fragmentList.add(ExchangeFragment.newInstance("UNUSE"));
+        fragmentList.add(ExchangeFragment.newInstance(""));
 
         initView();
     }

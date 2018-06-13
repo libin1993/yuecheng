@@ -166,7 +166,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                 ivCoupon.setImageURI(dataBean.getCouponImage());
 
                 holder.setText(R.id.tv_home_coupon_title, dataBean.getCouponName());
-//                holder.setText(R.id.tv_home_coupon_content, dataBean.getCoupon);
+                holder.setText(R.id.tv_home_coupon_content, dataBean.getUseRange());
                 holder.setText(R.id.tv_home_coupon_remain, "剩余" + dataBean.getBalanceNum());
 
                 TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
@@ -174,18 +174,27 @@ public class ExchangeCouponActivity extends BaseActivity {
                 String accessType = dataBean.getAccessType();
                 double needScore = dataBean.getAccessValue();
 
-                if (!TextUtils.isEmpty(accessType)) {
-                    switch (accessType) {
-                        case "FREE":
-                            tvReceive.setText("免费\n领取");
-                            break;
-                        case "POINT":
-                            tvReceive.setText(needScore + "积分\n领取");
-                            break;
-                        case "BUY":
-                            tvReceive.setText(needScore + "元\n领取");
-                            break;
+                if (dataBean.getBalanceNum() > 0) {
+                    if (dataBean.getMemberBroughtNum() < dataBean.getLimitNum()) {
+                        if (!TextUtils.isEmpty(accessType)) {
+                            switch (accessType) {
+                                case "FREE":
+                                    tvReceive.setText("免费\n领取");
+                                    break;
+                                case "POINT":
+                                    tvReceive.setText(needScore + "积分\n领取");
+                                    break;
+                                case "BUY":
+                                    tvReceive.setText(needScore + "元\n领取");
+                                    break;
+                            }
+                        }
+                    } else {
+                        tvReceive.setText("已领取");
                     }
+
+                } else {
+                    tvReceive.setText("已抢光");
                 }
 
 
@@ -195,6 +204,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(ExchangeCouponActivity.this, CouponDetailActivity.class);
                         intent.putExtra("coupon_id", dataBean.getCouponId());
+                        intent.putExtra("coupon_type", dataBean.getCouponTypeCy());
                         startActivity(intent);
                     }
                 });
@@ -279,6 +289,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("couponId", String.valueOf(dataList.get(position).getCouponId()))
+                .addParams("cyCouponId", String.valueOf(dataList.get(position).getCouponTypeCy()))
                 .addParams("exchangeValue", String.valueOf(dataList.get(position).getAccessValue()))
                 .addParams("exchangeNum", "1")
                 .build()
@@ -298,6 +309,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                             if (flag) {
                                 int data = jsonObject.getInt("data");
                                 dataList.get(position).setBalanceNum(data);
+                                dataList.get(position).setMemberBroughtNum(dataList.get(position).getMemberBroughtNum() + 1);
                                 adapter.notifyDataSetChanged();
                             }
 

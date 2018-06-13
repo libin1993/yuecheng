@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,15 +8,16 @@ import java.util.List;
  * Email：1993911441@qq.com
  * Describe：
  */
-public class MyCouponBean {
+public class MyCouponBean implements Serializable {
 
 
+    private static final long serialVersionUID = -5814812866855699578L;
     /**
      * flag : true
      * page : null
      * hash : c07ed299d6364f04ba33869ed2f26fc9
-     * data : [{"balance":20,"content":null,"couponType":1,"couponTypeKind":null,"couponTypeName":"礼券","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-05-29","validDateSpecified":true},{"balance":20,"content":null,"couponType":2,"couponTypeKind":null,"couponTypeName":"家电券","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-05-31","validDateSpecified":true},{"balance":20,"content":null,"couponType":2,"couponTypeKind":null,"couponTypeName":"家电券","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-06-21","validDateSpecified":true},{"balance":80,"content":null,"couponType":15,"couponTypeKind":null,"couponTypeName":"满额赠","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-05-29","validDateSpecified":true},{"balance":40,"content":null,"couponType":17,"couponTypeKind":null,"couponTypeName":"测试1","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-05-29","validDateSpecified":true}]
      * code : 0
+     * data : [{"balance":20,"content":null,"couponType":1,"couponTypeKind":null,"couponTypeName":"礼券","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-05-29","validDateSpecified":true},{"balance":20,"content":null,"couponType":2,"couponTypeKind":null,"couponTypeName":"家电券","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-05-31","validDateSpecified":true},{"balance":20,"content":null,"couponType":2,"couponTypeKind":null,"couponTypeName":"家电券","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-06-21","validDateSpecified":true},{"balance":80,"content":null,"couponType":15,"couponTypeKind":null,"couponTypeName":"满额赠","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-05-29","validDateSpecified":true},{"balance":40,"content":null,"couponType":17,"couponTypeKind":null,"couponTypeName":"测试1","couponTypeNameSpecified":true,"gainId":null,"startValidDate":null,"validDate":"2018-05-29","validDateSpecified":true}]
      */
 
     private boolean flag;
@@ -64,7 +66,8 @@ public class MyCouponBean {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
+        private static final long serialVersionUID = -4196841622976203158L;
         /**
          * balance : 20
          * content : null
@@ -79,12 +82,12 @@ public class MyCouponBean {
          */
 
         private double balance;
-        private Object content;
+        private String content;
         private int couponType;
-        private Object couponTypeKind;
+        private String couponTypeKind;
         private String couponTypeName;
         private boolean couponTypeNameSpecified;
-        private Object gainId;
+        private int gainId;
         private Object startValidDate;
         private String validDate;
         private boolean validDateSpecified;
@@ -97,11 +100,11 @@ public class MyCouponBean {
             this.balance = balance;
         }
 
-        public Object getContent() {
+        public String getContent() {
             return content;
         }
 
-        public void setContent(Object content) {
+        public void setContent(String content) {
             this.content = content;
         }
 
@@ -113,11 +116,11 @@ public class MyCouponBean {
             this.couponType = couponType;
         }
 
-        public Object getCouponTypeKind() {
+        public String getCouponTypeKind() {
             return couponTypeKind;
         }
 
-        public void setCouponTypeKind(Object couponTypeKind) {
+        public void setCouponTypeKind(String couponTypeKind) {
             this.couponTypeKind = couponTypeKind;
         }
 
@@ -137,11 +140,11 @@ public class MyCouponBean {
             this.couponTypeNameSpecified = couponTypeNameSpecified;
         }
 
-        public Object getGainId() {
+        public int getGainId() {
             return gainId;
         }
 
-        public void setGainId(Object gainId) {
+        public void setGainId(int gainId) {
             this.gainId = gainId;
         }
 

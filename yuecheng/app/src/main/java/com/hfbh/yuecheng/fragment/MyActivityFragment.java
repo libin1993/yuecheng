@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -57,8 +58,13 @@ public class MyActivityFragment extends BaseFragment {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
-    @BindView(R.id.tv_null_activity)
-    TextView tvNullActivity;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
+
     private Unbinder unbinder;
 
     //分类
@@ -79,6 +85,9 @@ public class MyActivityFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
+        llNullData.setVisibility(View.GONE);
+        ivNullData.setImageResource(R.mipmap.ic_null_activity);
+        tvNullData.setText("暂无活动");
         loadingView.smoothToShow();
         initData();
         return view;
@@ -103,6 +112,7 @@ public class MyActivityFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         if (activityListBean.getPage() != null) {
                             pages = activityListBean.getPage().getPages();
@@ -127,13 +137,13 @@ public class MyActivityFragment extends BaseFragment {
                                 initView();
                             }
                             rvActivity.setVisibility(View.VISIBLE);
-                            tvNullActivity.setVisibility(View.GONE);
+                            llNullData.setVisibility(View.GONE);
                         } else {
                             refreshLayout.finishLoadMore();
                             if (page == 1) {
                                 loadingView.smoothToHide();
                                 rvActivity.setVisibility(View.GONE);
-                                tvNullActivity.setVisibility(View.VISIBLE);
+                                llNullData.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -207,22 +217,21 @@ public class MyActivityFragment extends BaseFragment {
                 tvJoin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = null;
+
                         if (!TextUtils.isEmpty(status)) {
+                            Intent intent = null;
                             switch (status) {
                                 case "去报名":
                                     intent = new Intent(getActivity(), EnrollActionActivity.class);
-                                    intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
                                     break;
                                 case "去参加":
                                     intent = new Intent(getActivity(), CloseActionActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable("activity_info", dataList.get(position));
-                                    intent.putExtras(bundle);
                                     break;
                             }
+                            intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
+                            startActivity(intent);
                         }
-                        startActivity(intent);
+
                     }
                 });
 

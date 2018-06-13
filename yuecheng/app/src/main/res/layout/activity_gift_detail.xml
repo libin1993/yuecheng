@@ -288,9 +288,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="36dp"
-            android:background="@drawable/bound_gradient_red"
             android:gravity="center"
-            android:text="立即兑换"
             android:textColor="@android:color/white"
             android:textSize="16sp"/>
     </RelativeLayout>

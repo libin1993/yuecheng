@@ -22,6 +22,7 @@ import com.hfbh.yuecheng.bean.GiftListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.GridItemDecoration1;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -108,11 +109,12 @@ public class ExchangeGiftActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        tvGiftScore.setEnabled(true);
+
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         tvGiftScore.setEnabled(true);
                         GiftListBean ListBean = GsonUtils.jsonToBean(response, GiftListBean.class);
                         pages = ListBean.getPage().getPages();
@@ -178,7 +180,7 @@ public class ExchangeGiftActivity extends BaseActivity {
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
 
                 Intent intent = new Intent(ExchangeGiftActivity.this, GiftDetailActivity.class);
-                intent.putExtra("gift_id", dataList.get(position).getPointsRewardId());
+                intent.putExtra("id", dataList.get(position).getPointsRewardId());
                 startActivity(intent);
 
             }

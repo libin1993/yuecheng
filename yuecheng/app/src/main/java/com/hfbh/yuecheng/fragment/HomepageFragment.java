@@ -1,6 +1,8 @@
 package com.hfbh.yuecheng.fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,17 +42,23 @@ import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.TopicBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.AboutUsActivity;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
+import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.ui.CouponDetailActivity;
 import com.hfbh.yuecheng.ui.EnrollActionActivity;
 import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
+import com.hfbh.yuecheng.ui.GameActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
+import com.hfbh.yuecheng.ui.ResetPayPwdActivity;
 import com.hfbh.yuecheng.ui.ScanCodeActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
+import com.hfbh.yuecheng.ui.SetPwdActivity;
+import com.hfbh.yuecheng.ui.ValidateActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -178,7 +186,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
      * 加载模块数据
      */
     private void initData() {
-
         for (int i = 0; i < typeBean.getData().size(); i++) {
             final int type = i;
             OkHttpUtils.post()
@@ -205,6 +212,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 case "MAIN":
                                     functionBean = GsonUtils.jsonToBean(response, FunctionBean.class);
                                     break;
+                                case "EXTRA":
+                                    break;
                                 case "BROAD":
                                     broadcastBean = GsonUtils.jsonToBean(response, BroadcastBean.class);
                                     break;
@@ -223,6 +232,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             }
                             count++;
                             if (count == typeBean.getData().size()) {
+                                loadingView.smoothToHide();
                                 count = 0;
                                 if (isRefresh) {
                                     refreshLayout.finishRefresh();
@@ -232,7 +242,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                         adapter.notifyDataSetChanged();
                                     }
                                 } else {
-                                    loadingView.smoothToHide();
                                     initView();
                                 }
                             }
@@ -371,6 +380,129 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         }
 
+        if (topicBean != null && topicBean.getData().size() > 0) {
+            BaseDelegateAdapter topicAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+                    R.layout.layout_homepage_topic, 1, 12) {
+                @Override
+                public void onBindViewHolder(ViewHolder holder, int position) {
+                    super.onBindViewHolder(holder, position);
+                    SimpleDraweeView ivTopic = holder.getView(R.id.iv_homepage_topic);
+                    ivTopic.setImageURI(topicBean.getData().get(0).getTopicPic());
+
+                }
+            };
+            mAdapters.add(topicAdapter);
+
+
+            if (topicBean.getData().get(0).getActivityList().size() > 0) {
+                GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
+                gridLayoutHelper.setPadding(0, 0, 0,
+                        (int) DisplayUtils.dp2px(getActivity(), 1));
+                gridLayoutHelper.setHGap((int) DisplayUtils.dp2px(getActivity(), 1));// 控制子元素之间的水平间距
+                gridLayoutHelper.setAutoExpand(false);
+                gridLayoutHelper.setBgColor(Color.WHITE);
+
+
+                BaseDelegateAdapter actionAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper,
+                        R.layout.layout_homepage_game, topicBean.getData().get(0).getActivityList().size(), 13) {
+                    @Override
+                    public void onBindViewHolder(ViewHolder holder, final int position) {
+                        super.onBindViewHolder(holder, position);
+
+                        ImageView ivActivity = holder.getView(R.id.iv_homepage_game);
+
+
+                        Glide.with(getActivity())
+                                .load(topicBean.getData().get(0).getActivityList().get(position).getPic())
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .centerCrop()
+                                .into(ivActivity);
+
+                        holder.setText(R.id.tv_action_title, topicBean.getData().get(0).getActivityList().get(position).getName());
+
+                        TextView tvSubtitle = holder.getView(R.id.tv_action_sub_title);
+                        final String status = topicBean.getData().get(0).getActivityList().get(position).getMemberSignupState();
+                        tvSubtitle.setText(status);
+
+//                        switch (topicBean.getData().get(0).getActivityList().get(position).getActivityType()) {
+//                            case "NONEED":
+//                                break;
+//                            case "FREE":
+//                                tvSubtitle.setText("免费报名");
+//                                break;
+//                            case "SCORE":
+//                                tvSubtitle.setText("积分报名");
+//                                break;
+//                            case "CASH":
+//                                tvSubtitle.setText("现金报名");
+//                                break;
+//                        }
+
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent;
+                                if ("去参加".equals(status)) {
+                                    intent = new Intent(getActivity(), CloseActionActivity.class);
+                                } else {
+                                    intent = new Intent(getActivity(), ActionDetailActivity.class);
+                                }
+                                intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                };
+                mAdapters.add(actionAdapter);
+            }
+
+            if (topicBean.getData().get(0).getGameList().size() > 0) {
+                GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
+                gridLayoutHelper.setPadding(0, 0, 0,
+                        (int) DisplayUtils.dp2px(getActivity(), 1));
+                gridLayoutHelper.setHGap((int) DisplayUtils.dp2px(getActivity(), 1));// 控制子元素之间的水平间距
+                gridLayoutHelper.setAutoExpand(false);
+                gridLayoutHelper.setBgColor(Color.WHITE);
+
+                BaseDelegateAdapter gameAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper,
+                        R.layout.layout_homepage_game, topicBean.getData().get(0).getGameList().size(), 14) {
+                    @Override
+                    public void onBindViewHolder(ViewHolder holder, final int position) {
+                        super.onBindViewHolder(holder, position);
+
+                        holder.setText(R.id.tv_action_title, topicBean.getData().get(0).getGameList().get(position).getName());
+                        holder.setText(R.id.tv_action_sub_title, topicBean.getData().get(0).getGameList().get(position).getByname());
+                        ImageView ivActivity = holder.getView(R.id.iv_homepage_game);
+
+
+                        Glide.with(getActivity())
+                                .load(topicBean.getData().get(0).getGameList().get(position).getPic())
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .centerCrop()
+                                .into(ivActivity);
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                                    Intent intent = new Intent(getActivity(), GameActivity.class);
+                                    intent.putExtra("game_url", topicBean.getData().get(0).getGameList().get(position).getUrl());
+                                    intent.putExtra("app_id", topicBean.getData().get(0).getGameList().get(position).getAppId());
+                                    intent.putExtra("private_token", topicBean.getData().get(0).getGameList().get(position).getPrivateToken());
+                                    startActivity(intent);
+                                } else {
+                                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                                }
+
+                            }
+                        });
+                    }
+                };
+                mAdapters.add(gameAdapter);
+            }
+        }
+
+
         if (couponBean != null && couponBean.getData().size() > 0) {
             //优惠券
             initTitle("优惠券", 5);
@@ -392,25 +524,37 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     String accessType = couponBean.getData().get(position).getAccessType();
                     double needScore = couponBean.getData().get(position).getAccessValue();
 
-                    if (!TextUtils.isEmpty(accessType)) {
-                        switch (accessType) {
-                            case "FREE":
-                                tvReceive.setText("免费\n领取");
-                                break;
-                            case "POINT":
-                                tvReceive.setText(DisplayUtils.isInteger(needScore) + "积分\n领取");
-                                break;
-                            case "BUY":
-                                tvReceive.setText(DisplayUtils.isInteger(needScore) + "元\n领取");
-                                break;
+
+                    if (couponBean.getData().get(position).getBalanceNum() > 0) {
+                        if (couponBean.getData().get(position).getMemberBroughtNum() < couponBean.getData().get(position).getLimitNum()) {
+                            if (!TextUtils.isEmpty(accessType)) {
+                                switch (accessType) {
+                                    case "FREE":
+                                        tvReceive.setText("免费\n领取");
+                                        break;
+                                    case "POINT":
+                                        tvReceive.setText(DisplayUtils.isInteger(needScore) + "积分\n领取");
+                                        break;
+                                    case "BUY":
+                                        tvReceive.setText(DisplayUtils.isInteger(needScore) + "元\n领取");
+                                        break;
+                                }
+                            }
+                        } else {
+                            tvReceive.setText("已领取");
                         }
+
+                    } else {
+                        tvReceive.setText("已抢光");
                     }
+
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
                             intent.putExtra("coupon_id", couponBean.getData().get(position).getObjectId());
+                            intent.putExtra("coupon_type", couponBean.getData().get(position).getCouponTypeCy());
                             startActivity(intent);
                         }
                     });
@@ -464,7 +608,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), GiftDetailActivity.class);
-                            intent.putExtra("gift_id", giftBean.getData().get(position).getObjectId());
+                            intent.putExtra("id", giftBean.getData().get(position).getObjectId());
                             startActivity(intent);
                         }
                     });
@@ -494,27 +638,40 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                     final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
                             "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getEndTime());
+                    final boolean isEnroll = activityBean.getData().get(position).getMemberSignupState() != null && activityBean.getData().get(position).getMemberSignupState().equals("去参加");
                     if (!isFinish) {
-                        if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
-                            tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                            switch (activityBean.getData().get(position).getAcivityType()) {
-                                case "NONEED":
-                                    tvReceive.setVisibility(View.GONE);
-                                    break;
-                                case "FREE":
-                                    tvReceive.setVisibility(View.VISIBLE);
-                                    tvReceive.setText("免费报名");
-                                    break;
-                                case "SCORE":
-                                    tvReceive.setVisibility(View.VISIBLE);
-                                    tvReceive.setText(DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollScore()) + "积分报名");
-                                    break;
-                                case "CASH":
-                                    tvReceive.setVisibility(View.VISIBLE);
-                                    tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean.getData().get(position).getEnrollFee()) + "报名");
-                                    break;
+                        tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                        if (isEnroll) {
+                            tvReceive.setVisibility(View.VISIBLE);
+                            tvReceive.setText("去参加");
+                        } else {
+                            if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
+                                tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                                switch (activityBean.getData().get(position).getAcivityType()) {
+                                    case "NONEED":
+                                        tvReceive.setVisibility(View.GONE);
+                                        break;
+                                    case "FREE":
+                                        tvReceive.setVisibility(View.VISIBLE);
+                                        tvReceive.setText("免费报名");
+                                        break;
+                                    case "SCORE":
+                                        tvReceive.setVisibility(View.VISIBLE);
+                                        tvReceive.setText(DisplayUtils.isInteger(activityBean
+                                                .getData().get(position).getEnrollScore()) + "积分报名");
+
+                                        break;
+                                    case "CASH":
+                                        tvReceive.setVisibility(View.VISIBLE);
+
+                                        tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean
+                                                .getData().get(position).getEnrollFee()) + "报名");
+
+                                        break;
+                                }
                             }
                         }
+
                     } else {
                         tvReceive.setVisibility(View.VISIBLE);
                         tvReceive.setText("已结束");
@@ -545,7 +702,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             if (!isFinish) {
                                 Intent intent;
                                 if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                                    intent = new Intent(getActivity(), EnrollActionActivity.class);
+                                    if (isEnroll){
+                                        intent = new Intent(getActivity(), CloseActionActivity.class);
+                                    }else {
+                                        intent = new Intent(getActivity(), EnrollActionActivity.class);
+                                    }
                                     intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
                                 } else {
                                     intent = new Intent(getActivity(), LoginActivity.class);
@@ -564,7 +725,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
         //底部
         BaseDelegateAdapter footerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
-                R.layout.layout_homepage_footer, 1, 9);
+                R.layout.layout_homepage_footer, 1, 11);
         mAdapters.add(footerAdapter);
 
         delegateAdapter.setAdapters(mAdapters);
@@ -578,6 +739,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         });
         refreshLayout.setEnableLoadMore(false);
+
     }
 
     /**
@@ -590,6 +752,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("cyCouponId", String.valueOf(couponBean.getData().get(position).getCouponTypeCy()))
                 .addParams("couponId", String.valueOf(couponBean.getData().get(position).getObjectId()))
                 .addParams("exchangeValue", String.valueOf(couponBean.getData().get(position).getAccessValue()))
                 .addParams("exchangeNum", "1")
@@ -625,14 +788,75 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
      * 会员卡
      */
     private void toMemberCard() {
-        Intent intent;
+
         if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-            intent = new Intent(getActivity(), MemberCardActivity.class);
+            isSetPayPwd();
         } else {
-            intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(new Intent(getActivity(), LoginActivity.class));
         }
-        startActivity(intent);
+
     }
+
+
+    /**
+     * 是否设置支付密码
+     */
+    private void isSetPayPwd() {
+        OkHttpUtils.post()
+                .url(Constant.IS_SET_PAY_PWD)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+
+                        if (responseBean.isFlag()) {
+                            startActivity(new Intent(getActivity(), MemberCardActivity.class));
+                        } else {
+                            setPayPwd();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 设置支付密码
+     */
+    private void setPayPwd() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("您尚未设置支付密码，是否前去设置？");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), ValidateActivity.class);
+                intent.putExtra("type", "bind");
+                startActivity(intent);
+            }
+        });
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
+    }
+
 
     /**
      * 动态添加标签
@@ -689,6 +913,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         };
         mAdapters.add(titleAdapter);
+
     }
 
     public static HomepageFragment newInstance() {
