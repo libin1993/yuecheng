@@ -13,7 +13,9 @@
         android:layout_marginRight="12dp"
         android:layout_marginTop="10dp"
         fresco:roundedCornerRadius="5dp"
-        fresco:viewAspectRatio="2"/>
+        fresco:viewAspectRatio="2"
+        fresco:placeholderImage="@mipmap/img_place"
+        fresco:placeholderImageScaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/tv_home_activity_name"

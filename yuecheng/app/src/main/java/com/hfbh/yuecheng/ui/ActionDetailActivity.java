@@ -56,6 +56,8 @@ public class ActionDetailActivity extends BaseActivity {
     private ActivityDetailBean activityBean;
     private boolean isFinish;
     private boolean isEnroll;
+    private boolean isStart;
+    private boolean isLimit;
 
 
     @Override
@@ -76,6 +78,9 @@ public class ActionDetailActivity extends BaseActivity {
         ws.setBuiltInZoomControls(false);
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        ws.setUseWideViewPort(true);
+        ws.setLoadWithOverviewMode(true);
+
 
         String url = Constant.ACTIVITY_DETAIL + "?appType=Android&id=" + activityId
                 + "&hash=" + SharedPreUtils.getStr(this, "hash");
@@ -106,7 +111,6 @@ public class ActionDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         activityBean = GsonUtils.jsonToBean(response, ActivityDetailBean.class);
                         if (activityBean.isFlag()) {
                             initView();
@@ -121,6 +125,12 @@ public class ActionDetailActivity extends BaseActivity {
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getEndTime());
         isEnroll = activityBean.getData().getSignupDo().getMemberSignupState() != null
                 && activityBean.getData().getSignupDo().getMemberSignupState().equals("去参加");
+
+        isStart = System.currentTimeMillis() >= DateUtils.getTime(
+                "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getStartTime());
+        isLimit = activityBean.getData().getSignupDo().getSignupLimitNumber() > 0 &&
+                activityBean.getData().getSignupDo().getSignupNumber()
+                        == activityBean.getData().getSignupDo().getSignupLimitNumber();
         if (!TextUtils.isEmpty(activityBean.getData().getSignupDo().getAcivityType())) {
             switch (activityBean.getData().getSignupDo().getAcivityType()) {
                 case "NONEED":
@@ -144,12 +154,25 @@ public class ActionDetailActivity extends BaseActivity {
             }
         }
         if (!isFinish) {
-            tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-            if (isEnroll) {
-                tvExchange.setText("去参加");
+            if (isStart) {
+                if (isEnroll) {
+                    tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+                    tvExchange.setText("去参加");
+                } else {
+                    if (!isLimit) {
+                        tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+                        tvExchange.setText("立即报名");
+                    } else {
+                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                        tvExchange.setText("名额已满");
+                    }
+
+                }
             } else {
-                tvExchange.setText("立即报名");
+                tvExchange.setText("待报名");
+                tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
             }
+
         } else {
             tvExchange.setText("已结束");
             tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
@@ -182,20 +205,24 @@ public class ActionDetailActivity extends BaseActivity {
      * 活动报名
      */
     private void enrollActivity() {
-        if (!isFinish) {
+        if (!isFinish && isStart) {
             Intent intent;
             if (SharedPreUtils.getBoolean(this, "is_login", false)) {
-                if (isEnroll){
+                if (isEnroll) {
                     intent = new Intent(this, CloseActionActivity.class);
-                }else {
+                    intent.putExtra("activity_id", activityId);
+                    startActivity(intent);
+                } else if (!isLimit) {
                     intent = new Intent(this, EnrollActionActivity.class);
+                    intent.putExtra("activity_id", activityId);
+                    startActivity(intent);
                 }
 
-                intent.putExtra("activity_id", activityId);
             } else {
                 intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
             }
-            startActivity(intent);
+
         }
     }
 

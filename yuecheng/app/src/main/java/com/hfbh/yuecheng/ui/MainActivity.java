@@ -1,10 +1,21 @@
 package com.hfbh.yuecheng.ui;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -15,12 +26,14 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.LocationBean;
+import com.hfbh.yuecheng.bean.UpdateBean;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.ActivityFragment;
 import com.hfbh.yuecheng.fragment.DiscoveryFragment;
 import com.hfbh.yuecheng.fragment.HomepageFragment;
 import com.hfbh.yuecheng.fragment.MineFragment;
+import com.hfbh.yuecheng.service.DownloadService;
 import com.hfbh.yuecheng.utils.AppManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
@@ -30,6 +43,7 @@ import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -39,6 +53,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +86,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     //纬度
     private String latitude = "";
     private FragmentTabUtils fragmentTabUtils;
+    private boolean isCheckUpdate = true;
+    private DownloadService downloadService;
+    private boolean isChangeCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +104,113 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      */
     private void getData() {
         Intent intent = getIntent();
-        boolean isChangeCity = intent.getBooleanExtra("change_market", false);
+        isChangeCity = intent.getBooleanExtra("change_market", false);
         if (isChangeCity) {
             initView();
         } else {
             isLogin();
+        }
+    }
+
+    /**
+     * 检测更新
+     */
+    private void checkUpDate() {
+        if (isCheckUpdate && !isChangeCity) {
+            OkHttpUtils.post()
+                    .url(Constant.CHECK_UPDATE)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("organizeId", MyApp.organizeId)
+                    .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("platform", MyApp.appType)
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int i) {
+                            isCheckUpdate = false;
+                        }
+
+                        @Override
+                        public void onResponse(String s, int i) {
+                            LogUtils.log(s);
+                            UpdateBean updateBean = GsonUtils.jsonToBean(s, UpdateBean.class);
+                            if (updateBean.isFlag()) {
+                                //取消检测更新
+                                isCheckUpdate = false;
+
+                                if (updateBean.getData().getVersionId() > getVersionCode()) {
+                                    //取消检测更新
+                                    isCheckUpdate = false;
+                                    MyApp.updateUrl = updateBean.getData().getUrl();
+                                    MyApp.updateContent = updateBean.getData().getContent();
+                                    MyApp.updateVersion = updateBean.getData().getVersionName();
+
+                                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this,
+                                            R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+                                    dialog.setTitle("检测到新版本" + MyApp.updateVersion + "，请更新");
+                                    dialog.setMessage(MyApp.updateContent);
+                                    //确定
+                                    dialog.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            downloadFile(MyApp.updateUrl);
+                                        }
+                                    });
+                                    //取消
+                                    dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog.create();
+                                    dialog.show();
+                                }
+                            }
+                        }
+                    });
+        }
+
+    }
+
+    /**
+     * 下载文件
+     */
+    private void downloadFile(String url) {
+        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setTitle("百大悦城");
+        request.setDescription("正在下载");
+        // 设置下载可见
+        request.setVisibleInDownloadsUi(true);
+        //下载完成后通知栏可见
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        //当前网络状态
+        ConnectivityManager mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (mConnectivityManager != null) {
+            networkInfo = mConnectivityManager.getActiveNetworkInfo();
+        }
+        if (networkInfo != null && networkInfo.isConnected()) {
+            String type = networkInfo.getTypeName();
+            if (type.equalsIgnoreCase("MOBILE")) {
+                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE);
+            }
+        }
+
+        // 设置下载位置
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator + "yuecheng", "yuecheng.apk");
+        if (file.exists()) {
+            file.delete();
+        }
+        request.setDestinationUri(Uri.fromFile(file));
+
+        downloadService = new DownloadService(file);
+        registerReceiver(downloadService, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        if (manager != null) {
+            manager.enqueue(request);
         }
     }
 
@@ -203,6 +323,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         fragmentList.add(MineFragment.newInstance());
         fragmentTabUtils = new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
                 R.id.fl_main_container, rgsMainTab);
+        checkUpDate();
     }
 
     /**
@@ -273,6 +394,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (downloadService != null) {
+            unregisterReceiver(downloadService);
+        }
     }
 
     /**
@@ -284,4 +408,20 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             fragmentTabUtils.setCurrentFragment(1);
         }
     }
+
+    /**
+     * 获取版本号
+     */
+
+    private int getVersionCode() {
+        PackageManager pm = this.getPackageManager();
+        PackageInfo pi = null;
+        try {
+            pi = pm.getPackageInfo(this.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pi != null ? pi.versionCode : 0;
+    }
+
 }

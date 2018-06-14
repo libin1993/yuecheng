@@ -87,8 +87,18 @@ public class OrderDetailActivity extends BaseActivity {
         tvOrderNumber.setText(orderBean.getData().getOrderNo());
         tvOrderShop.setText(orderBean.getData().getFDMC());
         tvOrderMoney.setText("¥" + orderBean.getData().getMoney());
-        tvOrderDiscount.setText("¥" + orderBean.getData().getTotalzk());
-        tvOrderPoints.setText("¥" + orderBean.getData().getMember_zk());
+        if (!TextUtils.isEmpty(orderBean.getData().getTotalzk())) {
+            tvOrderDiscount.setText("¥" + orderBean.getData().getTotalzk());
+        } else {
+            tvOrderDiscount.setText("¥0.00");
+        }
+
+
+        if (!TextUtils.isEmpty(orderBean.getData().getMember_zk())) {
+            tvOrderPoints.setText("¥" + orderBean.getData().getMember_zk());
+        } else {
+            tvOrderPoints.setText("¥0.00");
+        }
 
         double totalCoupon = 0.00;
         for (int i = 0; i < orderBean.getData().getYhqlist().size(); i++) {
@@ -149,7 +159,7 @@ public class OrderDetailActivity extends BaseActivity {
     private void inputPwd() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_validate_pwd, null);
 
-        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, (int) DisplayUtils.dp2px(this,191));
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
@@ -261,10 +271,10 @@ public class OrderDetailActivity extends BaseActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");
-                            if (flag){
+                            if (flag) {
                                 ToastUtils.showToast(OrderDetailActivity.this, "购买成功");
                                 finish();
-                            }else {
+                            } else {
                                 String msg = jsonObject.getString("msg");
                                 ToastUtils.showToast(OrderDetailActivity.this, msg);
                             }

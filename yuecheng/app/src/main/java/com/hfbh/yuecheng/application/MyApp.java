@@ -42,10 +42,12 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class MyApp extends Application {
     public static String appVersion;
     public static String appType = "Android";
-    public static String organizeId = "2";
+    public static String organizeId = "";
     public static String organizeName = "";
     //更新链接
     public static String updateUrl;
+    //更新版本
+    public static String updateVersion;
     //更新内容
     public static String updateContent;
 

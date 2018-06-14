@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/gray_ed"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
+
+    <include
+        layout="@layout/layout_widget_header"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:text="适用范围"
+        android:textColor="@color/gray_10"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/tv_coupon_range"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:paddingBottom="6dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textColor="@color/gray_66"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:text="使用说明"
+        android:textColor="@color/gray_10"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/tv_coupon_intro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:paddingBottom="6dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textColor="@color/gray_66"
+        android:textSize="14sp"/>
+</LinearLayout>

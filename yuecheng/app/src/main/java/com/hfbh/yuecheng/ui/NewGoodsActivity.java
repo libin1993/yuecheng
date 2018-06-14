@@ -16,10 +16,12 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.GoodsBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -131,7 +133,7 @@ public class NewGoodsActivity extends BaseActivity {
 
                 holder.setText(R.id.tv_discovery_new_name, dataBean.getCommodityName());
                 holder.setText(R.id.tv_discovery_new_tip, dataBean.getIndustryName());
-                holder.setText(R.id.tv_discovery_new_tip, dataBean.getModifyTime());
+                holder.setText(R.id.tv_discovery_new_time, dataBean.getOnlineTime());
 
             }
         };

@@ -21,4 +21,7 @@
     <include
         layout="@layout/layout_loading"/>
 
+    <include
+        layout="@layout/layout_null_info"/>
+
 </RelativeLayout>

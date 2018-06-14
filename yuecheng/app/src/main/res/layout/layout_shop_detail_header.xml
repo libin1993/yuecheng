@@ -20,7 +20,9 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             fresco:roundedCornerRadius="5dp"
-            fresco:viewAspectRatio="2"/>
+            fresco:viewAspectRatio="2"
+            fresco:placeholderImage="@mipmap/img_place"
+            fresco:placeholderImageScaleType="centerCrop"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -35,7 +37,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
             fresco:roundAsCircle="true"
-            fresco:viewAspectRatio="2"/>
+            fresco:placeholderImage="@mipmap/img_place_circle"
+            fresco:placeholderImageScaleType="centerCrop"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -86,10 +89,11 @@
                 android:layout_marginTop="6dp"
                 android:drawablePadding="2dp"
                 android:drawableTop="@mipmap/ic_mall_navigation"
+                android:gravity="center"
+                android:text="导航"
                 android:textColor="@color/gray_a9"
                 android:textSize="10sp"
-                android:text="导航"
-                android:gravity="center"/>
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
@@ -120,12 +124,14 @@
         android:textSize="14sp"/>
 
     <LinearLayout
+        android:id="@+id/ll_shop_goods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="35dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <View
             android:layout_width="0dp"

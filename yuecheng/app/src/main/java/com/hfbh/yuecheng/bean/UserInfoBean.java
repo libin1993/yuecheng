@@ -24,6 +24,16 @@ public class UserInfoBean implements Serializable {
     private DataBean data;
     private int code;
 
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    private String msg;
+
     public boolean isFlag() {
         return flag;
     }

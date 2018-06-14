@@ -16,11 +16,11 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.MyCouponBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.CouponFragment;
-import com.hfbh.yuecheng.fragment.MyActivityFragment;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -46,6 +46,10 @@ public class CouponActivity extends BaseActivity {
     SlidingTabLayout tabCoupon;
     @BindView(R.id.vp_my_activity)
     ViewPager vpCoupon;
+    @BindView(R.id.view_header_line)
+    View viewHeaderLine;
+    @BindView(R.id.view_loading)
+    AVLoadingIndicatorView viewLoading;
 
 
     private List<String> titleList;
@@ -65,6 +69,7 @@ public class CouponActivity extends BaseActivity {
     }
 
     private void initData() {
+        viewLoading.smoothToShow();
         OkHttpUtils.post()
                 .url(Constant.MY_COUPON)
                 .addParams("appType", MyApp.appType)
@@ -72,6 +77,7 @@ public class CouponActivity extends BaseActivity {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("cardNumber", SharedPreUtils.getStr(this, "card_number"))
+                .addParams("couponTypeKind", "VOUCHER")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -81,7 +87,7 @@ public class CouponActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
+                        viewLoading.smoothToHide();
                         couponBean = GsonUtils.jsonToBean(response, MyCouponBean.class);
                         if (couponBean.isFlag() && couponBean.getData() != null
                                 && couponBean.getData().size() > 0) {

@@ -21,7 +21,6 @@ import com.hfbh.yuecheng.ui.MemberPointsActivity;
 import com.hfbh.yuecheng.utils.BarcodeUtils;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 
 import butterknife.BindView;
@@ -92,7 +91,7 @@ public class PayCodeFragment extends BaseFragment {
         tvPaycodeScore.setText(String.valueOf(userInfoBean.getData().getPoints()));
         tvPaycodeTicket.setText(String.valueOf(userInfoBean.getData().getCouponCount()));
 
-        TimerService.getConnet(getActivity());
+        TimerService.getConnect(getActivity());
     }
 
     public static PayCodeFragment newInstance(UserInfoBean userInfoBean) {

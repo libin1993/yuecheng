@@ -283,7 +283,6 @@ public class EnrollActionActivity extends BaseActivity {
 
     private void getData() {
         activityId = getIntent().getIntExtra("activity_id", 0);
-        LogUtils.log("ssss" + activityId);
     }
 
     @OnClick({R.id.iv_header_back, R.id.tv_enroll_activity})
@@ -304,7 +303,7 @@ public class EnrollActionActivity extends BaseActivity {
     private void enrollActivity() {
         if (etUsername != null && etPhone != null && !TextUtils.isEmpty(etUsername.getText().toString().trim())
                 && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && map.size() / 2 == dataList.size()) {
-
+            tvEnrollScore.setEnabled(false);
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("appType", MyApp.appType);
             paramMap.put("appVersion", MyApp.appVersion);
@@ -317,7 +316,6 @@ public class EnrollActionActivity extends BaseActivity {
             if (map.size() > 0) {
                 String info = GsonUtils.mapToJson(map).replaceAll(":", "=");
                 info = info.replaceAll(",", ";");
-                LogUtils.log(info);
                 paramMap.put("appData", info);
             }
 
@@ -328,21 +326,24 @@ public class EnrollActionActivity extends BaseActivity {
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            LogUtils.log(e.toString());
+                            tvEnrollScore.setEnabled(true);
                         }
 
                         @Override
                         public void onResponse(String response, int id) {
+
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 boolean flag = jsonObject.getBoolean("flag");
 
                                 if (flag) {
-                                    enrollResult(true, "您报名的活动已放置于“我的-活动”，记得去参加哦！");
+                                    enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
+                                    tvEnrollActivity.setText("已报名");
+                                    tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
                                 } else {
                                     String msg = jsonObject.getString("msg");
                                     enrollResult(false, msg);
-
+                                    tvEnrollScore.setEnabled(true);
                                 }
 
                             } catch (JSONException e) {

@@ -65,7 +65,7 @@ public class AboutUsActivity extends BaseActivity {
         tvHeaderTitle.setText("关于");
         tvVersion.setText("v" + getVersionName());
         if (!TextUtils.isEmpty(MyApp.updateUrl)) {
-            tvVersion.setVisibility(View.VISIBLE);
+            tvCheckUpdate.setVisibility(View.VISIBLE);
         }
     }
 
@@ -92,7 +92,7 @@ public class AboutUsActivity extends BaseActivity {
         if (!TextUtils.isEmpty(MyApp.updateUrl)) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(AboutUsActivity.this,
                     R.style.Theme_AppCompat_DayNight_Dialog_Alert);
-            dialog.setTitle("检测到新版本，请更新");
+            dialog.setTitle("检测到新版本" + MyApp.updateVersion + "，请更新");
             dialog.setMessage(MyApp.updateContent);
             //为“确定”按钮注册监听事件
             dialog.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
@@ -123,7 +123,7 @@ public class AboutUsActivity extends BaseActivity {
     private void downloadFile() {
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(MyApp.updateUrl));
-        request.setTitle("妙定");
+        request.setTitle("百大悦城");
         request.setDescription("正在下载");
         // 设置下载可见
         request.setVisibleInDownloadsUi(true);
@@ -145,7 +145,7 @@ public class AboutUsActivity extends BaseActivity {
         }
         // 设置下载位置
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator + "CloudWorkshop", "miaoding.apk");
+                + File.separator + "yuecheng", "yuecheng.apk");
         if (file.exists()) {
             file.delete();
         }

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -64,11 +65,10 @@ public class ShopDetailActivity extends BaseActivity {
 
     private ShopDetailBean shopBean;
     private List<GoodsBean.DataBean> goodsList = new ArrayList<>();
-    private boolean isShop;
-    private boolean isGoods;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
     private String type;
     private String address;
+    private LinearLayout llTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,12 +107,11 @@ public class ShopDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log(s);
                         shopBean = GsonUtils.jsonToBean(s, ShopDetailBean.class);
                         if (shopBean.isFlag()) {
-                            isShop = true;
-                            if (isGoods) {
-                                initGoodsList();
+                            initGoodsList();
+                            if (mHeaderAndFooterWrapper != null) {
+                                mHeaderAndFooterWrapper.notifyDataSetChanged();
                             }
                         }
                     }
@@ -141,8 +140,10 @@ public class ShopDetailActivity extends BaseActivity {
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
 
                         if (goodsBean.isFlag() && goodsBean.getData().size() > 0) {
-                            isGoods = true;
-                            pages = goodsBean.getPage().getPages();
+                            if (goodsBean.getPage() != null) {
+                                pages = goodsBean.getPage().getPages();
+                            }
+
                             if (isRefresh) {
                                 goodsList.clear();
                             }
@@ -152,16 +153,22 @@ public class ShopDetailActivity extends BaseActivity {
                             if (isRefresh) {
                                 refreshLayout.finishRefresh();
                                 isRefresh = false;
-                                mHeaderAndFooterWrapper.notifyDataSetChanged();
                             } else if (isLoadMore) { //加载更多
                                 refreshLayout.finishLoadMore();
                                 isLoadMore = false;
-                                mHeaderAndFooterWrapper.notifyDataSetChanged();
-                            } else {
-                                if (isShop && isGoods) {
-                                    initGoodsList();
-                                }
                             }
+                            if (llTitle != null) {
+                                llTitle.setVisibility(View.VISIBLE);
+                            }
+                            if (mHeaderAndFooterWrapper != null) {
+                                mHeaderAndFooterWrapper.notifyDataSetChanged();
+                            }
+
+                        } else {
+                            if (llTitle != null) {
+                                llTitle.setVisibility(View.GONE);
+                            }
+
                         }
                     }
                 });
@@ -180,6 +187,7 @@ public class ShopDetailActivity extends BaseActivity {
         TextView tvShopDetailType = (TextView) view.findViewById(R.id.tv_shop_detail_type);
         TextView tvShopDetailLocation = (TextView) view.findViewById(R.id.tv_shop_detail_location);
         TextView tvShopDetailInfo = (TextView) view.findViewById(R.id.tv_shop_detail_info);
+        llTitle = (LinearLayout) view.findViewById(R.id.ll_shop_goods);
 
 
         ivShopDetail.setImageURI(shopBean.getMall().getOrganizePicturePath());
@@ -223,7 +231,7 @@ public class ShopDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(ShopDetailActivity.this, NewGoodsDetailActivity.class);
-                intent.putExtra("goods_id", goodsList.get(position).getCommodityId());
+                intent.putExtra("goods_id", goodsList.get(position - 1).getCommodityId());
                 startActivity(intent);
             }
 

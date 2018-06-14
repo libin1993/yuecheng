@@ -7,6 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     fresco:actualImageScaleType="centerCrop"
+    fresco:placeholderImage="@mipmap/img_place"
+    fresco:placeholderImageScaleType="centerCrop"
     fresco:viewAspectRatio="4.1667"
     android:layout_marginTop="12dp"
     android:layout_marginBottom="12dp">

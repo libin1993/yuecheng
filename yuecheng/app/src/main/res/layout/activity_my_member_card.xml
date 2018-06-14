@@ -44,7 +44,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         fresco:actualImageScaleType="centerCrop"
-                        fresco:placeholderImage="@mipmap/img_vipcard1"
+                        fresco:placeholderImage="@mipmap/img_place"
                         fresco:placeholderImageScaleType="centerCrop"
                         fresco:roundedCornerRadius="8dp"
                         fresco:viewAspectRatio="1.7268"/>

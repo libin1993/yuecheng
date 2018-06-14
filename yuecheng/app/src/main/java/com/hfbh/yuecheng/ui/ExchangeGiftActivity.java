@@ -114,7 +114,6 @@ public class ExchangeGiftActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         tvGiftScore.setEnabled(true);
                         GiftListBean ListBean = GsonUtils.jsonToBean(response, GiftListBean.class);
                         pages = ListBean.getPage().getPages();

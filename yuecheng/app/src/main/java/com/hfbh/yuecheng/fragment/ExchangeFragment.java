@@ -104,6 +104,7 @@ public class ExchangeFragment extends BaseFragment {
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
                 .addParams("queryType", type)
                 .addParams("pageNum", String.valueOf(page))
+                .addParams("rewardType","GIFT")
                 .build()
                 .execute(new StringCallback() {
                     @Override

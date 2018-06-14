@@ -80,7 +80,6 @@ public class GiftDetailActivity extends BaseActivity {
     private int score;
     //限制兑换件数
     private int limitNum;
-
     //总数量
     private int totalNum;
 
@@ -116,13 +115,11 @@ public class GiftDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(giftId + response);
                         giftBean = GsonUtils.jsonToBean(response, GiftDetailBean.class);
                         if (giftBean.isFlag()) {
                             score = giftBean.getData().getNeedScore();
                             totalNum = giftBean.getData().getBalanceNum();
                             limitNum = giftBean.getData().getLimitGetNum();
-
                             initView();
                         }
                     }
@@ -233,7 +230,6 @@ public class GiftDetailActivity extends BaseActivity {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.log(response);
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 boolean flag = jsonObject.getBoolean("flag");

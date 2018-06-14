@@ -72,6 +72,8 @@ public class CouponDetailActivity extends BaseActivity {
     private int couponId;
     private int couponType;
     private CouponDetailBean couponBean;
+    //已领取数量
+    private int hasGetNum;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,7 +103,6 @@ public class CouponDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(couponId + response);
                         couponBean = GsonUtils.jsonToBean(response, CouponDetailBean.class);
                         if (couponBean.isFlag()) {
                             initView();
@@ -111,6 +112,8 @@ public class CouponDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        hasGetNum = couponBean.getData().getMemberBroughtNum();
+
         ivCoupon.setImageURI(couponBean.getData().getCouponImage());
         tvCouponName.setText(couponBean.getData().getCouponName());
         tvCouponRemain.setText("剩余： " + couponBean.getData().getBalanceNum() + "张");
@@ -138,17 +141,20 @@ public class CouponDetailActivity extends BaseActivity {
         }
 
         if (couponBean.getData().getBalanceNum() > 0) {
-            if (couponBean.getData().getMemberBroughtNum() < couponBean.getData().getLimitNum()){
+            if (hasGetNum < couponBean.getData().getLimitNum()) {
                 tvExchangeCoupon.setText("立即兑换");
                 tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gradient_red);
-            }else {
+                tvExchangeCoupon.setEnabled(true);
+            } else {
                 tvExchangeCoupon.setText("已领取");
                 tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                tvExchangeCoupon.setEnabled(false);
             }
 
         } else {
             tvExchangeCoupon.setText("已抢光");
             tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+            tvExchangeCoupon.setEnabled(true);
         }
 
         tvCouponRange.setText(couponBean.getData().getUseRange());
@@ -201,18 +207,28 @@ public class CouponDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log(s);
                         try {
                             JSONObject jsonObject = new JSONObject(s);
                             boolean flag = jsonObject.getBoolean("flag");
                             String msg = jsonObject.getString("msg");
                             if (flag) {
+                                hasGetNum++;
                                 int data = jsonObject.getInt("data");
                                 tvCouponRemain.setText("剩余： " + data + "张");
                                 if (data == 0) {
                                     tvExchangeCoupon.setText("已抢光");
                                     tvExchangeCoupon.setEnabled(false);
                                     tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                } else {
+                                    if (hasGetNum < couponBean.getData().getLimitNum()) {
+                                        tvExchangeCoupon.setText("立即兑换");
+                                        tvExchangeCoupon.setEnabled(true);
+                                        tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                    } else {
+                                        tvExchangeCoupon.setText("已领取");
+                                        tvExchangeCoupon.setEnabled(false);
+                                        tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                    }
                                 }
                                 exChangeResult(true, "您兑换的优惠券已放置于“我的-票券”，记得去查看哦！");
                             } else {

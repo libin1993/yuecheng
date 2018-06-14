@@ -43,7 +43,8 @@
         android:layout_below="@id/ll_set_pwd"
         android:layout_marginTop="1dp"
         android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"

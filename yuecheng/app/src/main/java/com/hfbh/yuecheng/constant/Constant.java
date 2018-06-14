@@ -19,6 +19,8 @@ public class Constant {
     public static final String ACTIVITY_LIST = HOST + "/wechat/wechat/signup_activity/list.json";
     //活动详情
     public static final String ACTIVITY_INFO = HOST + "/wechat/wechat/signup_activity/detail.json";
+    //活动核销
+    public static final String CLOSE_ACTIVITY = HOST + "/wechat/wechat/signup_activity/verify_codes.json";
     //活动报名数据
     public static final String ENROLL_ACTIVITY_INFO = HOST + "/wechat/wechat/signup_activity/signup_form.json";
     //活动报名
@@ -78,8 +80,6 @@ public class Constant {
     public static final String RESET_PAY_PWD = HOST + "/wechat/member/resetPassword.json";
     //验证支付密码
     public static final String VALIDATE_PWD = HOST + "/wechat/member/validatePassword.json";
-    //会员卡
-    public static final String MEMBER_CARD = HOST + "/wechat/member/accountChangeRecord.json";
     //积分记录
     public static final String MEMBER_POINTS_RECORD = HOST + "/wechat/member/pointsRecord.json";
     //预付卡
@@ -102,13 +102,15 @@ public class Constant {
     public static final String QUERY_ORDER = HOST + "/wechat/scanCodePay/queryOrder.json";
     //确认订单
     public static final String CONFIRM_ORDER = HOST + "/wechat/scanCodePay/confirmOrder.json";
+    //检测更新
+    public static final String CHECK_UPDATE = HOST + "/wechat/appRequest/appVersion.json";
 
     //WebView
     //活动详情
     public static final String ACTIVITY_DETAIL = HOST + "/mall/baida-app-h5/index.html#/activity";
     //人气单品详情
     public static final String POP_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/specialDetail";
-    //人气单品详情
+    //新品详情
     public static final String NEW_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/newDetail";
     //用户协议
     public static final String USER_AGREEMENT = HOST + "/mall/baida-app-h5/index.html#/protocol";

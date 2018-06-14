@@ -53,7 +53,8 @@ public class GameActivity extends BaseActivity {
         ws.setBuiltInZoomControls(false);
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-
+        ws.setUseWideViewPort(true);
+        ws.setLoadWithOverviewMode(true);
 
         String uid = SharedPreUtils.getStr(this, "hash");
 

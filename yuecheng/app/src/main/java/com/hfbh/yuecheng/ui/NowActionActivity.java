@@ -149,35 +149,55 @@ public class NowActionActivity extends BaseActivity {
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                 final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                final boolean isStart = System.currentTimeMillis() >= DateUtils.getTime(
+                        "yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
+
+                final boolean isLimit = dataBean.getSignupLimitNumber() > 0 && dataBean.getSignupNumber()
+                        == dataBean.getSignupLimitNumber();
+
                 final boolean isEnroll = dataBean.getMemberSignupState() != null && dataBean.getMemberSignupState().equals("去参加");
 
                 if (!isFinish) {
-                    if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
-                        tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                        if (isEnroll) {
-                            tvReceive.setVisibility(View.VISIBLE);
-                            tvReceive.setText("去参加");
-                        } else {
-                            switch (dataBean.getAcivityType()) {
-                                case "NONEED":
-                                    tvReceive.setVisibility(View.GONE);
-                                    break;
-                                case "FREE":
+                    if (isStart) {
+                        if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
+                            if (isEnroll) {
+                                tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                                tvReceive.setVisibility(View.VISIBLE);
+                                tvReceive.setText("去参加");
+                            } else {
+                                if (isLimit) {
                                     tvReceive.setVisibility(View.VISIBLE);
-                                    tvReceive.setText("免费报名");
-                                    break;
-                                case "SCORE":
-                                    tvReceive.setVisibility(View.VISIBLE);
-                                    tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
-                                    break;
-                                case "CASH":
-                                    tvReceive.setVisibility(View.VISIBLE);
-                                    tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
-                                    break;
+                                    tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+                                    tvReceive.setText("名额已满");
+                                } else {
+                                    tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                                    switch (dataBean.getAcivityType()) {
+                                        case "NONEED":
+                                            tvReceive.setVisibility(View.GONE);
+                                            break;
+                                        case "FREE":
+                                            tvReceive.setVisibility(View.VISIBLE);
+                                            tvReceive.setText("免费报名");
+                                            break;
+                                        case "SCORE":
+                                            tvReceive.setVisibility(View.VISIBLE);
+                                            tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+                                            break;
+                                        case "CASH":
+                                            tvReceive.setVisibility(View.VISIBLE);
+                                            tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+                                            break;
+                                    }
+                                }
                             }
-                        }
 
+                        }
+                    } else {
+                        tvReceive.setVisibility(View.VISIBLE);
+                        tvReceive.setText("待报名");
+                        tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                     }
+
                 } else {
                     tvReceive.setVisibility(View.VISIBLE);
                     tvReceive.setText("已结束");
@@ -194,20 +214,23 @@ public class NowActionActivity extends BaseActivity {
                 tvReceive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!isFinish) {
+                        if (!isFinish && isStart) {
                             Intent intent;
                             if (SharedPreUtils.getBoolean(NowActionActivity.this, "is_login", false)) {
                                 if (isEnroll) {
                                     intent = new Intent(NowActionActivity.this, CloseActionActivity.class);
-                                } else {
+                                    intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
+                                    startActivity(intent);
+                                } else if (!isLimit) {
                                     intent = new Intent(NowActionActivity.this, EnrollActionActivity.class);
+                                    intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
+                                    startActivity(intent);
                                 }
-
-                                intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
                             } else {
                                 intent = new Intent(NowActionActivity.this, LoginActivity.class);
+                                startActivity(intent);
                             }
-                            startActivity(intent);
+
 
                         }
                     }

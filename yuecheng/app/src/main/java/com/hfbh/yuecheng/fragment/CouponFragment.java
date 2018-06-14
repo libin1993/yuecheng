@@ -17,6 +17,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.MyCouponBean;
+import com.hfbh.yuecheng.ui.CloseCouponActivity;
 import com.hfbh.yuecheng.ui.CouponDetailActivity;
 import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
@@ -152,20 +153,22 @@ public class CouponFragment extends BaseFragment {
                             break;
                     }
 
-
                 }
             };
+
+            refreshLayout.setEnableLoadMore(false);
+            refreshLayout.setEnableRefresh(false);
 
             rvCoupon.setAdapter(adapter);
 
             adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                    if (dataList.get(position).getCouponTypeKind() != null &&
+                    if (type == 1 && dataList.get(position).getCouponTypeKind() != null &&
                             "VOUCHER".equals(dataList.get(position).getCouponTypeKind())) {
-                        Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
+                        Intent intent = new Intent(getActivity(), CloseCouponActivity.class);
                         intent.putExtra("coupon_id", dataList.get(position).getGainId());
-                        intent.putExtra("coupon_type", dataList.get(position).getGainId());
+                        intent.putExtra("coupon_type", dataList.get(position).getCouponType());
                         startActivity(intent);
                     }
                 }

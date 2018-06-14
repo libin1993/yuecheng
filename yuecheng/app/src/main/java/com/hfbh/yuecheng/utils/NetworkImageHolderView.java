@@ -30,6 +30,7 @@ public class NetworkImageHolderView implements Holder<String> {
         Glide.with(context)
                 .load(data)
                 .dontAnimate()
+                .placeholder(R.mipmap.img_place)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(imageView);
     }

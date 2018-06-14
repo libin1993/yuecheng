@@ -31,6 +31,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.SearchShopBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -167,7 +168,6 @@ public class SearchShopActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         SearchShopBean marketListBean = GsonUtils.jsonToBean(response, SearchShopBean.class);
                         if (marketListBean.isFlag() && marketListBean.getShopList().size() > 0) {
                             if (isRefresh) {
@@ -333,7 +333,7 @@ public class SearchShopActivity extends BaseActivity {
     private void selectFloor() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_select_floor, null);
         final PopupWindow mPopupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT,  (int) DisplayUtils.dp2px(this,280));
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
@@ -403,7 +403,7 @@ public class SearchShopActivity extends BaseActivity {
     private void selectIndustry() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_select_floor, null);
         final PopupWindow mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+                (int) DisplayUtils.dp2px(this,280));
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);

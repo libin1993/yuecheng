@@ -47,7 +47,8 @@ public class UserAgreementActivity extends BaseActivity {
         ws.setBuiltInZoomControls(false);
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-
+        ws.setUseWideViewPort(true);
+        ws.setLoadWithOverviewMode(true);
 
         webview.loadUrl(Constant.USER_AGREEMENT);
         webview.setWebViewClient(new WebViewClient() {

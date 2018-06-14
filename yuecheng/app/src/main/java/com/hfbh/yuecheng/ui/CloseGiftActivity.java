@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -77,6 +78,7 @@ public class CloseGiftActivity extends BaseActivity {
 
     private void getData() {
         giftId = getIntent().getIntExtra("gift_id", 0);
+        tvGiftDetail.setText("礼品详情");
         tvGiftDetail.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         tvGiftDetail.getPaint().setAntiAlias(true);
     }
@@ -114,10 +116,14 @@ public class CloseGiftActivity extends BaseActivity {
 
         tvGiftName.setText(giftBean.getData().getGainName());
 
-        qrBmp = QRCodeUtils.createQRCode(giftBean.getData().getVerifyCode(),
-                (int) DisplayUtils.dp2px(this, 200));
-        ivGiftQrcode.setImageBitmap(qrBmp);
-        tvGiftCode.setText(giftBean.getData().getVerifyCode());
+        String qrCode = giftBean.getData().getVerifyCode();
+        if (!TextUtils.isEmpty(qrCode)){
+            qrBmp = QRCodeUtils.createQRCode(qrCode,
+                    (int) DisplayUtils.dp2px(this, 200));
+            ivGiftQrcode.setImageBitmap(qrBmp);
+            tvGiftCode.setText(qrCode);
+        }
+
 
         tvGiftTime.setText("有效时间：" + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
                 "yyyy.MM.dd", giftBean.getData().getStartTime()) + " - " +

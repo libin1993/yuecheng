@@ -32,6 +32,7 @@ import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -401,7 +402,7 @@ public class LoginActivity extends BaseActivity {
                             EventBus.getDefault().post("login_success");
 
                         } else {
-                            ToastUtils.showToast(LoginActivity.this, "登录失败");
+                            ToastUtils.showToast(LoginActivity.this, userInfoBean.getMsg());
                         }
                     }
                 });
@@ -438,6 +439,7 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+
                         UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             ToastUtils.showToast(LoginActivity.this, "登录成功");
@@ -456,7 +458,7 @@ public class LoginActivity extends BaseActivity {
 
                             EventBus.getDefault().post("login_success");
                         } else {
-                            ToastUtils.showToast(LoginActivity.this, "登录失败");
+                            ToastUtils.showToast(LoginActivity.this, userInfoBean.getMsg());
                         }
                     }
                 });
@@ -466,10 +468,14 @@ public class LoginActivity extends BaseActivity {
      * 获取验证码
      */
     private void getVerificationCode() {
-        if (isPhone) {
-            isRegister(1);
+        if (!TextUtils.isEmpty(etPhone.getText().toString().trim())) {
+            if (isPhone) {
+                isRegister(1);
+            } else {
+                ToastUtils.showToast(this, "手机号格式不正确，请重新输入");
+            }
         } else {
-            ToastUtils.showToast(this, "手机号输入有误，请重新输入");
+            ToastUtils.showToast(this, "请输入手机号");
         }
     }
 

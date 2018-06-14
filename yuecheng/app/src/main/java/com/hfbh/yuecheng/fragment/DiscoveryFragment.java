@@ -12,6 +12,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.MyFragmentAdapter;
 import com.hfbh.yuecheng.base.BaseFragment;
+import com.hfbh.yuecheng.ui.NewGoodsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class DiscoveryFragment extends BaseFragment {
         titleList.add("美食");
         titleList.add("电影");
 
-        fragmentList.add(GoodsFragment.newInstance());
+        fragmentList.add(NewGoodsFragment.newInstance());
         fragmentList.add(FoodFragment.newInstance());
         fragmentList.add(MovieFragment.newInstance());
 

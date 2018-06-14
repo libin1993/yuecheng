@@ -57,6 +57,8 @@ public class NewGoodsDetailActivity extends BaseActivity {
         ws.setBuiltInZoomControls(false);
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        ws.setUseWideViewPort(true);
+        ws.setLoadWithOverviewMode(true);
 
         String url = Constant.NEW_GOODS_DETAIL + "?appType=Android&id=" + goodsId + "&hash=" + SharedPreUtils.getStr(this, "hash");
 

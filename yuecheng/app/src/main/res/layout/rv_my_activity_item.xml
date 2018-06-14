@@ -30,7 +30,9 @@
                 android:layout_width="166dp"
                 android:layout_height="83dp"
                 fresco:actualImageScaleType="centerCrop"
-                fresco:roundedCornerRadius="4dp"/>
+                fresco:roundedCornerRadius="4dp"
+                fresco:placeholderImage="@mipmap/img_place"
+                fresco:placeholderImageScaleType="centerCrop"/>
         </android.support.v7.widget.CardView>
 
 

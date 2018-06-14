@@ -25,6 +25,7 @@ import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -44,6 +45,7 @@ import com.hfbh.yuecheng.bean.TopicBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.AboutUsActivity;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
+import com.hfbh.yuecheng.ui.BannerInfoActivity;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
 import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.ui.CouponDetailActivity;
@@ -71,6 +73,7 @@ import com.hfbh.yuecheng.view.PermissionDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.smarttop.library.utils.LogUtil;
 import com.sunfusheng.marqueeview.MarqueeView;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
@@ -172,7 +175,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log(s);
                         typeBean = GsonUtils.jsonToBean(s, HomepageTypeBean.class);
                         if (typeBean.isFlag()) {
                             initData();
@@ -291,6 +293,15 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             .setPageIndicator(new int[]{R.drawable.indicator_normal, R.drawable.indicator_focus})
                             //设置指示器的方向
                             .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
+
+                    banner.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Intent intent = new Intent(getActivity(), BannerInfoActivity.class);
+                            intent.putExtra("url", bannerBean.getData().get(position).getAdvertUrl());
+                            startActivity(intent);
+                        }
+                    });
                 }
             };
             mAdapters.add(bannerAdapter);
@@ -323,7 +334,9 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                             Glide.with(getActivity())
                                     .load(dataBean.getFunctionIco())
+                                    .dontAnimate()
                                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                    .placeholder(R.mipmap.img_place_circle)
                                     .into((ImageView) holder.getView(R.id.iv_function_item));
                             holder.setText(R.id.tv_function_name, dataBean.getFunctionName());
                         }
@@ -415,6 +428,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         Glide.with(getActivity())
                                 .load(topicBean.getData().get(0).getActivityList().get(position).getPic())
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .dontAnimate()
+                                .placeholder(R.mipmap.img_place)
                                 .centerCrop()
                                 .into(ivActivity);
 
@@ -423,20 +438,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         TextView tvSubtitle = holder.getView(R.id.tv_action_sub_title);
                         final String status = topicBean.getData().get(0).getActivityList().get(position).getMemberSignupState();
                         tvSubtitle.setText(status);
-
-//                        switch (topicBean.getData().get(0).getActivityList().get(position).getActivityType()) {
-//                            case "NONEED":
-//                                break;
-//                            case "FREE":
-//                                tvSubtitle.setText("免费报名");
-//                                break;
-//                            case "SCORE":
-//                                tvSubtitle.setText("积分报名");
-//                                break;
-//                            case "CASH":
-//                                tvSubtitle.setText("现金报名");
-//                                break;
-//                        }
 
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -479,6 +480,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         Glide.with(getActivity())
                                 .load(topicBean.getData().get(0).getGameList().get(position).getPic())
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .dontAnimate()
+                                .placeholder(R.mipmap.img_place)
                                 .centerCrop()
                                 .into(ivActivity);
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -600,6 +603,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     Glide.with(getActivity())
                             .load(giftBean.getData().get(position).getGiftPicturePath())
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .dontAnimate()
+                            .placeholder(R.mipmap.img_place)
                             .into(ivGift);
                     holder.setText(R.id.tv_home_gift_name, giftBean.getData().get(position).getRelateName());
                     holder.setText(R.id.tv_home_gift_score, DisplayUtils.isInteger(giftBean.getData().get(position).getNeedScore()) + "积分");
@@ -638,39 +643,50 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                     final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
                             "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getEndTime());
-                    final boolean isEnroll = activityBean.getData().get(position).getMemberSignupState() != null && activityBean.getData().get(position).getMemberSignupState().equals("去参加");
+
+                    final boolean isStart = System.currentTimeMillis() >= DateUtils.getTime(
+                            "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getStartTime());
+                    final boolean isEnroll = activityBean.getData().get(position).getMemberSignupState()
+                            != null && activityBean.getData().get(position).getMemberSignupState().equals("去参加");
                     if (!isFinish) {
-                        tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                        if (isEnroll) {
-                            tvReceive.setVisibility(View.VISIBLE);
-                            tvReceive.setText("去参加");
-                        } else {
-                            if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
-                                tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                                switch (activityBean.getData().get(position).getAcivityType()) {
-                                    case "NONEED":
-                                        tvReceive.setVisibility(View.GONE);
-                                        break;
-                                    case "FREE":
-                                        tvReceive.setVisibility(View.VISIBLE);
-                                        tvReceive.setText("免费报名");
-                                        break;
-                                    case "SCORE":
-                                        tvReceive.setVisibility(View.VISIBLE);
-                                        tvReceive.setText(DisplayUtils.isInteger(activityBean
-                                                .getData().get(position).getEnrollScore()) + "积分报名");
+                        if (isStart) {
+                            tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                            if (isEnroll) {
+                                tvReceive.setVisibility(View.VISIBLE);
+                                tvReceive.setText("去参加");
+                            } else {
+                                if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
 
-                                        break;
-                                    case "CASH":
-                                        tvReceive.setVisibility(View.VISIBLE);
+                                    switch (activityBean.getData().get(position).getAcivityType()) {
+                                        case "NONEED":
+                                            tvReceive.setVisibility(View.GONE);
+                                            break;
+                                        case "FREE":
+                                            tvReceive.setVisibility(View.VISIBLE);
+                                            tvReceive.setText("免费报名");
+                                            break;
+                                        case "SCORE":
+                                            tvReceive.setVisibility(View.VISIBLE);
+                                            tvReceive.setText(DisplayUtils.isInteger(activityBean
+                                                    .getData().get(position).getEnrollScore()) + "积分报名");
 
-                                        tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean
-                                                .getData().get(position).getEnrollFee()) + "报名");
+                                            break;
+                                        case "CASH":
+                                            tvReceive.setVisibility(View.VISIBLE);
 
-                                        break;
+                                            tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean
+                                                    .getData().get(position).getEnrollFee()) + "报名");
+
+                                            break;
+                                    }
                                 }
                             }
+                        } else {
+                            tvReceive.setVisibility(View.VISIBLE);
+                            tvReceive.setText("待报名");
+                            tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                         }
+
 
                     } else {
                         tvReceive.setVisibility(View.VISIBLE);
@@ -699,12 +715,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     tvReceive.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (!isFinish) {
+                            if (!isFinish && isStart) {
                                 Intent intent;
                                 if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                                    if (isEnroll){
+                                    if (isEnroll) {
                                         intent = new Intent(getActivity(), CloseActionActivity.class);
-                                    }else {
+                                    } else {
                                         intent = new Intent(getActivity(), EnrollActionActivity.class);
                                     }
                                     intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
@@ -890,10 +906,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
+                LinearLayout linearLayout = holder.getView(R.id.ll_home_title);
                 TextView tvTitle = holder.getView(R.id.tv_home_title);
                 tvTitle.setText(title);
 
-                tvTitle.setOnClickListener(new View.OnClickListener() {
+                linearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         switch (type) {

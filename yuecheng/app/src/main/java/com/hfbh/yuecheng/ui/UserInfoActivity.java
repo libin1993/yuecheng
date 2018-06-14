@@ -200,6 +200,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
 
         userBirthday = userInfoBean.getData().getMemberBirthday();
         tvUserBirthday.setText(userBirthday);
+        tvUserPhone.setText(userInfoBean.getData().getMemberPhone());
 
     }
 

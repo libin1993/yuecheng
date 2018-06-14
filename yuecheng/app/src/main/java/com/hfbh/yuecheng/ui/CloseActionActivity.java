@@ -16,6 +16,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.ActivityDetailBean;
 import com.hfbh.yuecheng.bean.ActivityListBean;
+import com.hfbh.yuecheng.bean.CloseActivityBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DateUtils;
@@ -67,7 +68,7 @@ public class CloseActionActivity extends BaseActivity {
 
     private Bitmap qrBmp;
 
-    private ActivityDetailBean activityBean;
+    private CloseActivityBean activityBean;
     private int activityId;
 
 
@@ -77,6 +78,7 @@ public class CloseActionActivity extends BaseActivity {
         setContentView(R.layout.activity_close_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("活动报名核销");
+        tvActivityDetail.setText("查看活动详情");
         tvActivityDetail.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         tvActivityDetail.getPaint().setAntiAlias(true);
         getData();
@@ -85,7 +87,7 @@ public class CloseActionActivity extends BaseActivity {
 
     private void initData() {
         OkHttpUtils.get()
-                .url(Constant.ACTIVITY_INFO)
+                .url(Constant.CLOSE_ACTIVITY)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
@@ -100,8 +102,7 @@ public class CloseActionActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
-                        activityBean = GsonUtils.jsonToBean(response, ActivityDetailBean.class);
+                        activityBean = GsonUtils.jsonToBean(response, CloseActivityBean.class);
                         if (activityBean.isFlag()) {
                             initView();
                         }
@@ -122,27 +123,27 @@ public class CloseActionActivity extends BaseActivity {
             ivActivityAvatar.setImageURI(avatar);
         }
 
-        tvActivityPhone.setText(activityBean.getData().getSignupDo().getTelephone());
+        tvActivityPhone.setText(activityBean.getData().getStatistic().getPhone());
 
-        tvActivityName.setText(activityBean.getData().getSignupDo().getActivityTitle());
-        String qrCode = activityBean.getData().getSignupDo().getVerifyCode();
+        tvActivityName.setText(activityBean.getData().getActivity().getActivityTitle());
+        String qrCode = activityBean.getData().getActivity().getVerifyCode();
         if (!TextUtils.isEmpty(qrCode)) {
             qrBmp = QRCodeUtils.createQRCode(qrCode,
                     (int) DisplayUtils.dp2px(this, 200));
             ivActivityQrcode.setImageBitmap(qrBmp);
         }
 
-        tvActivityCode.setText(activityBean.getData().getSignupDo().getVerifyCode());
+        tvActivityCode.setText(activityBean.getData().getActivity().getVerifyCode());
         tvActivityTime.setText("有效时间：" + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
-                "yyyy.MM.dd", activityBean.getData().getSignupDo().getActivityStarttime()) + " - " +
+                "yyyy.MM.dd", activityBean.getData().getActivity().getActivityStarttime()) + " - " +
                 DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
-                        "yyyy.MM.dd", activityBean.getData().getSignupDo().getActivityEndtime()));
-        tvActivityAddress.setText("活动地点：" + activityBean.getData().getSignupDo().getAcivityAddress());
+                        "yyyy.MM.dd", activityBean.getData().getActivity().getActivityEndtime()));
+        tvActivityAddress.setText("活动地点：" + activityBean.getData().getActivity().getAcivityAddress());
 
-        tvExchangeTime.setText("报名时间：" + activityBean.getData().getSignupDo().getSignupTime());
+        tvExchangeTime.setText("报名时间：" + activityBean.getData().getStatistic().getSignupTime());
 
-        if (!TextUtils.isEmpty(activityBean.getData().getSignupDo().getAcivityType())) {
-            switch (activityBean.getData().getSignupDo().getAcivityType()) {
+        if (!TextUtils.isEmpty(activityBean.getData().getActivity().getAcivityType())) {
+            switch (activityBean.getData().getActivity().getAcivityType()) {
                 case "NONEED":
                     tvExchangeType.setVisibility(View.GONE);
                 case "FREE":
@@ -151,11 +152,11 @@ public class CloseActionActivity extends BaseActivity {
                     break;
                 case "SCORE":
                     tvExchangeType.setVisibility(View.VISIBLE);
-                    tvExchangeType.setText("报名费用： " + DisplayUtils.isInteger(activityBean.getData().getSignupDo().getEnrollScore()) + "积分");
+                    tvExchangeType.setText("报名费用： " + DisplayUtils.isInteger(activityBean.getData().getActivity().getEnrollScore()) + "积分");
                     break;
                 case "CASH":
                     tvExchangeType.setVisibility(View.VISIBLE);
-                    tvExchangeType.setText("报名费用： ¥" + DisplayUtils.isInteger(activityBean.getData().getSignupDo().getEnrollFee()));
+                    tvExchangeType.setText("报名费用： ¥" + DisplayUtils.isInteger(activityBean.getData().getActivity().getEnrollFee()));
                     break;
             }
         }

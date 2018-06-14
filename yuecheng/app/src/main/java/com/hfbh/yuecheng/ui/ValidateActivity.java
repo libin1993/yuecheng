@@ -109,7 +109,7 @@ public class ValidateActivity extends BaseActivity {
                 }
             }
         });
-        etValidatePhone.setText(SharedPreUtils.getStr(this,"phone"));
+        etValidatePhone.setText(SharedPreUtils.getStr(this, "phone"));
 
 
         etValidateCode.addTextChangedListener(new TextWatcher() {
@@ -189,10 +189,14 @@ public class ValidateActivity extends BaseActivity {
      * 获取验证码
      */
     private void getVerificationCode() {
-        if (isPhone) {
-            isRegister(1);
+        if (!TextUtils.isEmpty(etValidatePhone.getText().toString().trim())) {
+            if (isPhone) {
+                isRegister(1);
+            } else {
+                ToastUtils.showToast(this, "手机号格式不正确，请重新输入");
+            }
         } else {
-            ToastUtils.showToast(this, "手机号输入有误，请重新输入");
+            ToastUtils.showToast(this, "请输入手机号");
         }
     }
 
