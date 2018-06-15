@@ -697,8 +697,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             tvReceive.setText("待报名");
                             tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                         }
-
-
                     } else {
                         tvReceive.setVisibility(View.VISIBLE);
                         tvReceive.setText("已结束");
