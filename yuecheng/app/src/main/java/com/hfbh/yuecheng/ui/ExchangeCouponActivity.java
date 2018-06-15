@@ -32,6 +32,7 @@ import com.hfbh.yuecheng.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -122,6 +123,7 @@ public class ExchangeCouponActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         CouponListBean ListBean = GsonUtils.jsonToBean(response, CouponListBean.class);
                         pages = ListBean.getPage().getPages();
                         if (ListBean.isFlag() && ListBean.getData() != null && ListBean.getData().size() > 0) {
@@ -175,7 +177,9 @@ public class ExchangeCouponActivity extends BaseActivity {
                 String accessType = dataBean.getAccessType();
                 String needScore = DisplayUtils.isInteger(dataBean.getAccessValue());
                 if (dataBean.getBalanceNum() > 0) {
-                    if (dataBean.getMemberBroughtNum() < dataBean.getLimitNum()) {
+                    if (dataBean.getMemberBroughtNum() > 0 && dataBean.getMemberBroughtNum() >= dataBean.getLimitNum()) {
+                        tvReceive.setText("已领取");
+                    } else {
                         if (!TextUtils.isEmpty(accessType)) {
                             switch (accessType) {
                                 case "FREE":
@@ -189,8 +193,6 @@ public class ExchangeCouponActivity extends BaseActivity {
                                     break;
                             }
                         }
-                    } else {
-                        tvReceive.setText("已领取");
                     }
 
                 } else {

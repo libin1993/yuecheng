@@ -169,10 +169,13 @@ public class SetUpActivity extends BaseActivity {
                         ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                         if (responseBean.isFlag()) {
                             SharedPreUtils.deleteStr(SetUpActivity.this, "is_login");
-                            tvLogOut.setVisibility(View.GONE);
                             ToastUtils.showToast(SetUpActivity.this, "退出成功");
+                            Intent intent = new Intent(SetUpActivity.this, MainActivity.class);
+                            intent.putExtra("change_market", true);
+                            startActivity(intent);
+                            finish();
                         } else {
-                            ToastUtils.showToast(SetUpActivity.this, "退出失败");
+                            ToastUtils.showToast(SetUpActivity.this, responseBean.getMsg());
                         }
                     }
                 });

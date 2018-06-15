@@ -172,12 +172,12 @@ public class GiftDetailActivity extends BaseActivity {
 
         if (!isFinish) {
             if (totalNum > 0) {
-                if (getNum < limitNum) {
-                    tvExchange.setText("立即兑换");
-                    tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                } else {
+                if (getNum > 0 && getNum >= limitNum) {
                     tvExchange.setText("已兑换");
                     tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                } else {
+                    tvExchange.setText("立即兑换");
+                    tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
                 }
             } else {
                 tvExchange.setText("已抢光");

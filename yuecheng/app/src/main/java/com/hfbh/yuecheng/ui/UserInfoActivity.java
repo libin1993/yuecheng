@@ -181,7 +181,10 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
         provinceAddress = userInfoBean.getData().getMemberProvince();
         cityAddress = userInfoBean.getData().getMemberCity();
         countAddress = userInfoBean.getData().getMemberCountry();
-        tvUserAddress.setText(provinceAddress + " " + cityAddress + " " + countAddress);
+        if (!TextUtils.isEmpty(provinceAddress)){
+            tvUserAddress.setText(provinceAddress + " " + cityAddress + " " + countAddress);
+        }
+
 
         String memberSex = userInfoBean.getData().getMemberSex();
         if (!TextUtils.isEmpty(memberSex)) {

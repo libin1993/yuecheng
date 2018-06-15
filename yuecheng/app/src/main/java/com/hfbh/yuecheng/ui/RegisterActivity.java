@@ -163,7 +163,6 @@ public class RegisterActivity extends BaseActivity {
                     } else {
                         tvRegister.setEnabled(false);
                     }
-
                 } else {
                     isCode = false;
                     tvRegister.setEnabled(false);
@@ -193,7 +192,7 @@ public class RegisterActivity extends BaseActivity {
                         tvRegister.setEnabled(false);
                     }
                 } else {
-                    isCode = false;
+                    isPwd = false;
                     tvRegister.setEnabled(false);
                 }
 
@@ -269,50 +268,60 @@ public class RegisterActivity extends BaseActivity {
     private void register() {
         String phone = etRegisterPhone.getText().toString().trim();
         String pwd = etRegisterPwd.getText().toString().trim();
-        String md5 = MD5Utils.md5(pwd + phone.substring(7));
-        OkHttpUtils.post()
-                .url(Constant.REGISTER)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("memberPhone", phone)
-                .addParams("vircode", etRegisterCode.getText().toString().trim())
-                .addParams("memberPwd", md5)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
+        if (pwd.length() >= 6 && pwd.length() <= 16 && pwd.matches(".*[a-zA-z].*")) {
+            String md5 = MD5Utils.md5(pwd + phone.substring(7));
+            OkHttpUtils.post()
+                    .url(Constant.REGISTER)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("organizeId", MyApp.organizeId)
+                    .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("memberPhone", phone)
+                    .addParams("vircode", etRegisterCode.getText().toString().trim())
+                    .addParams("memberPwd", md5)
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
 
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-
-                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
-                        if (userInfoBean.isFlag()) {
-                            ToastUtils.showToast(RegisterActivity.this, "注册成功");
-
-                            SharedPreUtils.saveStr(RegisterActivity.this, "hash", userInfoBean.getHash());
-                            SharedPreUtils.saveStr(RegisterActivity.this, "member_id",
-                                    String.valueOf(userInfoBean.getData().getMemberId()));
-                            SharedPreUtils.saveBoolean(RegisterActivity.this, "is_login", true);
-                            SharedPreUtils.saveStr(RegisterActivity.this, "phone",
-                                    String.valueOf(userInfoBean.getData().getMemberPhone()));
-                            SharedPreUtils.saveStr(RegisterActivity.this, "avatar",
-                                    userInfoBean.getData().getMemberHead());
-                            SharedPreUtils.saveStr(RegisterActivity.this, "card_number",
-                                    userInfoBean.getData().getMemberCardNo());
-                            SharedPreUtils.saveStr(RegisterActivity.this, "member_card",
-                                    userInfoBean.getData().getCardLevel());
-
-                            EventBus.getDefault().post("login_success");
-                            finish();
-                        } else {
-                            ToastUtils.showToast(RegisterActivity.this, userInfoBean.getMsg());
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(String response, int id) {
+
+                            UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                            if (userInfoBean.isFlag()) {
+                                ToastUtils.showToast(RegisterActivity.this, "注册成功");
+
+                                SharedPreUtils.saveStr(RegisterActivity.this, "hash", userInfoBean.getHash());
+                                SharedPreUtils.saveStr(RegisterActivity.this, "member_id",
+                                        String.valueOf(userInfoBean.getData().getMemberId()));
+                                SharedPreUtils.saveBoolean(RegisterActivity.this, "is_login", true);
+                                SharedPreUtils.saveStr(RegisterActivity.this, "phone",
+                                        String.valueOf(userInfoBean.getData().getMemberPhone()));
+                                SharedPreUtils.saveStr(RegisterActivity.this, "avatar",
+                                        userInfoBean.getData().getMemberHead());
+                                SharedPreUtils.saveStr(RegisterActivity.this, "card_number",
+                                        userInfoBean.getData().getMemberCardNo());
+                                SharedPreUtils.saveStr(RegisterActivity.this, "member_card",
+                                        userInfoBean.getData().getCardLevel());
+
+                                EventBus.getDefault().post("login_success");
+
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                intent.putExtra("change_market", true);
+                                startActivity(intent);
+                                finish();
+
+                            } else {
+                                ToastUtils.showToast(RegisterActivity.this, userInfoBean.getMsg());
+                            }
+                        }
+                    });
+        } else {
+            ToastUtils.showToast(this, "密码要求6-16位数字与字母组合");
+        }
+
 
     }
 

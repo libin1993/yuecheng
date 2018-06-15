@@ -141,14 +141,15 @@ public class CouponDetailActivity extends BaseActivity {
         }
 
         if (couponBean.getData().getBalanceNum() > 0) {
-            if (hasGetNum < couponBean.getData().getLimitNum()) {
-                tvExchangeCoupon.setText("立即兑换");
-                tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gradient_red);
-                tvExchangeCoupon.setEnabled(true);
-            } else {
+            if (hasGetNum > 0 && hasGetNum >= couponBean.getData().getLimitNum()) {
                 tvExchangeCoupon.setText("已领取");
                 tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
                 tvExchangeCoupon.setEnabled(false);
+
+            } else {
+                tvExchangeCoupon.setText("立即兑换");
+                tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gradient_red);
+                tvExchangeCoupon.setEnabled(true);
             }
 
         } else {

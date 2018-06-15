@@ -445,11 +445,18 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             public void onClick(View v) {
                                 Intent intent;
                                 if ("去参加".equals(status)) {
-                                    intent = new Intent(getActivity(), CloseActionActivity.class);
+                                    if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                                        intent = new Intent(getActivity(), CloseActionActivity.class);
+                                        intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
+                                    } else {
+                                        intent = new Intent(getActivity(), LoginActivity.class);
+                                    }
+
                                 } else {
                                     intent = new Intent(getActivity(), ActionDetailActivity.class);
+                                    intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
                                 }
-                                intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
+
                                 startActivity(intent);
                             }
                         });
@@ -529,7 +536,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
 
                     if (couponBean.getData().get(position).getBalanceNum() > 0) {
-                        if (couponBean.getData().get(position).getMemberBroughtNum() < couponBean.getData().get(position).getLimitNum()) {
+                        if (couponBean.getData().get(position).getMemberBroughtNum() > 0 &&
+                                couponBean.getData().get(position).getMemberBroughtNum() >=
+                                        couponBean.getData().get(position).getLimitNum()) {
+                            tvReceive.setText("已领取");
+                        } else {
                             if (!TextUtils.isEmpty(accessType)) {
                                 switch (accessType) {
                                     case "FREE":
@@ -543,8 +554,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                         break;
                                 }
                             }
-                        } else {
-                            tvReceive.setText("已领取");
                         }
 
                     } else {

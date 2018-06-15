@@ -400,6 +400,10 @@ public class LoginActivity extends BaseActivity {
                                     userInfoBean.getData().getCardLevel());
 
                             EventBus.getDefault().post("login_success");
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("change_market", true);
+                            startActivity(intent);
+                            finish();
 
                         } else {
                             ToastUtils.showToast(LoginActivity.this, userInfoBean.getMsg());
@@ -415,53 +419,66 @@ public class LoginActivity extends BaseActivity {
      * 密码登录
      */
     private void pwdLogin() {
+
+
         String phone = etPhone.getText().toString().trim();
         String pwd = etCode.getText().toString().trim();
-        final String md5 = MD5Utils.md5(pwd + phone.substring(7));
 
-        Map<String, String> map = new HashMap<>();
-        map.put("appType", MyApp.appType);
-        map.put("appVersion", MyApp.appVersion);
-        map.put("organizeId", MyApp.organizeId);
-        map.put("hash", SharedPreUtils.getStr(this, "hash"));
-        map.put("memberPhone", phone);
-        map.put("memberPwd", md5);
+        if (pwd.length() >= 6 && pwd.length() <= 16 && pwd.matches(".*[a-zA-z].*")) {
+            final String md5 = MD5Utils.md5(pwd + phone.substring(7));
 
-        OkHttpUtils.post()
-                .url(Constant.PWD_LOGIN)
-                .params(map)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
+            Map<String, String> map = new HashMap<>();
+            map.put("appType", MyApp.appType);
+            map.put("appVersion", MyApp.appVersion);
+            map.put("organizeId", MyApp.organizeId);
+            map.put("hash", SharedPreUtils.getStr(this, "hash"));
+            map.put("memberPhone", phone);
+            map.put("memberPwd", md5);
 
-                    }
+            OkHttpUtils.post()
+                    .url(Constant.PWD_LOGIN)
+                    .params(map)
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
 
-                    @Override
-                    public void onResponse(String response, int id) {
-
-                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
-                        if (userInfoBean.isFlag()) {
-                            ToastUtils.showToast(LoginActivity.this, "登录成功");
-                            SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
-                            SharedPreUtils.saveStr(LoginActivity.this, "member_id",
-                                    String.valueOf(userInfoBean.getData().getMemberId()));
-                            SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
-                            SharedPreUtils.saveStr(LoginActivity.this, "phone",
-                                    String.valueOf(userInfoBean.getData().getMemberPhone()));
-                            SharedPreUtils.saveStr(LoginActivity.this, "avatar",
-                                    userInfoBean.getData().getMemberHead());
-                            SharedPreUtils.saveStr(LoginActivity.this, "card_number",
-                                    userInfoBean.getData().getMemberCardNo());
-                            SharedPreUtils.saveStr(LoginActivity.this, "member_card",
-                                    userInfoBean.getData().getCardLevel());
-
-                            EventBus.getDefault().post("login_success");
-                        } else {
-                            ToastUtils.showToast(LoginActivity.this, userInfoBean.getMsg());
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(String response, int id) {
+
+                            UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                            if (userInfoBean.isFlag()) {
+                                ToastUtils.showToast(LoginActivity.this, "登录成功");
+                                SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
+                                SharedPreUtils.saveStr(LoginActivity.this, "member_id",
+                                        String.valueOf(userInfoBean.getData().getMemberId()));
+                                SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
+                                SharedPreUtils.saveStr(LoginActivity.this, "phone",
+                                        String.valueOf(userInfoBean.getData().getMemberPhone()));
+                                SharedPreUtils.saveStr(LoginActivity.this, "avatar",
+                                        userInfoBean.getData().getMemberHead());
+                                SharedPreUtils.saveStr(LoginActivity.this, "card_number",
+                                        userInfoBean.getData().getMemberCardNo());
+                                SharedPreUtils.saveStr(LoginActivity.this, "member_card",
+                                        userInfoBean.getData().getCardLevel());
+
+                                EventBus.getDefault().post("login_success");
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("change_market", true);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                ToastUtils.showToast(LoginActivity.this, userInfoBean.getMsg());
+                            }
+                        }
+                    });
+        } else {
+            ToastUtils.showToast(this, "密码要求6-16位数字与字母组合");
+        }
+
+
     }
 
     /**

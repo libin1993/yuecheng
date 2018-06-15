@@ -165,7 +165,7 @@ public class ForgetPwdActivity extends BaseActivity {
                         tvRegister.setEnabled(false);
                     }
                 } else {
-                    isCode = false;
+                    isPwd = false;
                     tvRegister.setEnabled(false);
                 }
 
@@ -238,33 +238,37 @@ public class ForgetPwdActivity extends BaseActivity {
     private void updatePwd() {
         String phone = etRegisterPhone.getText().toString().trim();
         String pwd = etRegisterPwd.getText().toString().trim();
-        String md5 = MD5Utils.md5(pwd + phone.substring(7));
-        OkHttpUtils.post()
-                .url(Constant.UPDATE_PWD)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("memberPhone", phone)
-                .addParams("vircode", etRegisterCode.getText().toString().trim())
-                .addParams("memberPwd", md5)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        ResponseBean responseBean = GsonUtils.jsonToBean(response,ResponseBean.class);
-                        if (responseBean.isFlag()){
-                            ToastUtils.showToast(ForgetPwdActivity.this, "修改成功");
-                            finish();
-                        }else {
-                            ToastUtils.showToast(ForgetPwdActivity.this, "修改失败");
+        if (pwd.length() >= 6 && pwd.length() <= 16 && pwd.matches(".*[a-zA-z].*")) {
+            String md5 = MD5Utils.md5(pwd + phone.substring(7));
+            OkHttpUtils.post()
+                    .url(Constant.UPDATE_PWD)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("organizeId", MyApp.organizeId)
+                    .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("memberPhone", phone)
+                    .addParams("vircode", etRegisterCode.getText().toString().trim())
+                    .addParams("memberPwd", md5)
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+                            if (responseBean.isFlag()) {
+                                ToastUtils.showToast(ForgetPwdActivity.this, "修改成功");
+                                finish();
+                            } else {
+                                ToastUtils.showToast(ForgetPwdActivity.this, "修改失败");
+                            }
+                        }
+                    });
+        } else {
+            ToastUtils.showToast(this, "密码要求6-16位数字与字母组合");
+        }
 
     }
 
@@ -273,13 +277,13 @@ public class ForgetPwdActivity extends BaseActivity {
      * 获取验证码
      */
     private void getVerificationCode() {
-        if (!TextUtils.isEmpty(etRegisterPhone.getText().toString().trim())){
+        if (!TextUtils.isEmpty(etRegisterPhone.getText().toString().trim())) {
             if (isPhone) {
                 isRegister(1);
             } else {
                 ToastUtils.showToast(this, "手机号格式不正确，请重新输入");
             }
-        }else {
+        } else {
             ToastUtils.showToast(this, "请输入手机号");
         }
     }
