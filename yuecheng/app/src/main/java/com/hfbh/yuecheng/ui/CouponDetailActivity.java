@@ -130,11 +130,11 @@ public class CouponDetailActivity extends BaseActivity {
                     tvCouponScore.setText("免费");
                     break;
                 case "POINT":
-                    tvCouponScore.setText(String.valueOf(couponBean.getData().getAccessValue()));
+                    tvCouponScore.setText(DisplayUtils.isInteger(couponBean.getData().getAccessValue()));
                     tvCouponType.setVisibility(View.VISIBLE);
                     break;
                 case "BUY":
-                    tvCouponScore.setText("¥" + couponBean.getData().getAccessValue());
+                    tvCouponScore.setText("¥" + DisplayUtils.isInteger(couponBean.getData().getAccessValue()));
                     break;
             }
 
@@ -188,59 +188,61 @@ public class CouponDetailActivity extends BaseActivity {
      * 领取优惠券
      */
     private void exchangeCoupon() {
-        OkHttpUtils.post()
-                .url(Constant.EXCHANGE_COUPON)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("cyCouponId", String.valueOf(couponType))
-                .addParams("couponId", String.valueOf(couponId))
-                .addParams("exchangeValue", String.valueOf(couponBean.getData().getAccessValue()))
-                .addParams("exchangeNum", "1")
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int i) {
+        if (couponBean != null && couponBean.getData() != null) {
+            OkHttpUtils.post()
+                    .url(Constant.EXCHANGE_COUPON)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("organizeId", MyApp.organizeId)
+                    .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("cyCouponId", String.valueOf(couponType))
+                    .addParams("couponId", String.valueOf(couponId))
+                    .addParams("exchangeValue", String.valueOf(couponBean.getData().getAccessValue()))
+                    .addParams("exchangeNum", "1")
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int i) {
 
-                    }
-
-                    @Override
-                    public void onResponse(String s, int i) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(s);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            String msg = jsonObject.getString("msg");
-                            if (flag) {
-                                hasGetNum++;
-                                int data = jsonObject.getInt("data");
-                                tvCouponRemain.setText("剩余： " + data + "张");
-                                if (data == 0) {
-                                    tvExchangeCoupon.setText("已抢光");
-                                    tvExchangeCoupon.setEnabled(false);
-                                    tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                                } else {
-                                    if (hasGetNum < couponBean.getData().getLimitNum()) {
-                                        tvExchangeCoupon.setText("立即兑换");
-                                        tvExchangeCoupon.setEnabled(true);
-                                        tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                                    } else {
-                                        tvExchangeCoupon.setText("已领取");
-                                        tvExchangeCoupon.setEnabled(false);
-                                        tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                                    }
-                                }
-                                exChangeResult(true, "您兑换的优惠券已放置于“我的-票券”，记得去查看哦！");
-                            } else {
-                                exChangeResult(false, msg);
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
 
-                    }
-                });
+                        @Override
+                        public void onResponse(String s, int i) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(s);
+                                boolean flag = jsonObject.getBoolean("flag");
+                                String msg = jsonObject.getString("msg");
+                                if (flag) {
+                                    hasGetNum++;
+                                    int data = jsonObject.getInt("data");
+                                    tvCouponRemain.setText("剩余： " + data + "张");
+                                    if (data == 0) {
+                                        tvExchangeCoupon.setText("已抢光");
+                                        tvExchangeCoupon.setEnabled(false);
+                                        tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                    } else {
+                                        if (hasGetNum < couponBean.getData().getLimitNum()) {
+                                            tvExchangeCoupon.setText("立即兑换");
+                                            tvExchangeCoupon.setEnabled(true);
+                                            tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                        } else {
+                                            tvExchangeCoupon.setText("已领取");
+                                            tvExchangeCoupon.setEnabled(false);
+                                            tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                        }
+                                    }
+                                    exChangeResult(true, "您兑换的优惠券已放置于“我的-票券”，记得去查看哦！");
+                                } else {
+                                    exChangeResult(false, msg);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+        }
 
     }
 

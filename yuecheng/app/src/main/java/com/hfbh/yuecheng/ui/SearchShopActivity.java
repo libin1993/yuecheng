@@ -93,8 +93,8 @@ public class SearchShopActivity extends BaseActivity {
     private String floorName;
     //类型名称
     private String industryName;
-    private int industryNum = -1;
-    private int floorNum = -1;
+    private int industryNum = 0;
+    private int floorNum = 0;
 
     private List<SearchShopBean.ShopListBean> shopList = new ArrayList<>();
     private List<SearchShopBean.FloorListBean> floorList = new ArrayList<>();
@@ -147,10 +147,10 @@ public class SearchShopActivity extends BaseActivity {
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
         map.put("pageNum", String.valueOf(page));
-        if (floorNum >= 0) {
+        if (floorNum > 0) {
             map.put("floorId", String.valueOf(floorId));
         }
-        if (industryNum >= 0) {
+        if (industryNum > 0) {
             map.put("industryId", String.valueOf(industryId));
         }
         if (!TextUtils.isEmpty(etSearch.getText().toString().trim())) {
@@ -174,9 +174,16 @@ public class SearchShopActivity extends BaseActivity {
                                 shopList.clear();
                             }
                             shopList.addAll(marketListBean.getShopList());
-                            pages = marketListBean.getPage().getPages();
+                            if (marketListBean.getPage() != null) {
+                                pages = marketListBean.getPage().getPages();
+                            }
+
                             if (firstIn) {
                                 if (marketListBean.getFloorList().size() > 0) {
+                                    SearchShopBean.FloorListBean floorBean = new SearchShopBean.FloorListBean();
+                                    floorBean.setFloorName("全部楼层");
+                                    floorList.add(floorBean);
+
                                     floorList.addAll(marketListBean.getFloorList());
                                     floorNum = 0;
                                     floorId = floorList.get(0).getFloorId();
@@ -184,6 +191,11 @@ public class SearchShopActivity extends BaseActivity {
                                     tvMarketFloor.setText(floorName);
                                 }
                                 if (marketListBean.getIndustryList().size() > 0) {
+                                    SearchShopBean.IndustryListBeanX industryBean = new SearchShopBean.IndustryListBeanX();
+                                    industryBean.setIndustryName("全部分类");
+                                    industryList.add(industryBean);
+
+
                                     industryList.addAll(marketListBean.getIndustryList());
                                     industryId = industryList.get(0).getIndustryId();
                                     industryNum = 0;
@@ -202,9 +214,9 @@ public class SearchShopActivity extends BaseActivity {
                                 isLoadMore = false;
                                 shopAdapter.notifyDataSetChanged();
                             } else {
-                                loadingView.smoothToHide();
                                 initView();
                             }
+                            loadingView.smoothToHide();
                             rvMarketList.setVisibility(View.VISIBLE);
                             tvNoMarket.setVisibility(View.GONE);
                         } else {
@@ -235,14 +247,18 @@ public class SearchShopActivity extends BaseActivity {
                 holder.setText(R.id.tv_search_market_name, shopListBean.getShopName());
 
                 TextView tvType = holder.getView(R.id.tv_search_market_type);
-                StringBuilder type = new StringBuilder();
-                for (int i = 0; i < shopListBean.getIndustryList().size(); i++) {
-                    type.append(shopListBean.getIndustryList().get(i).getIndustryName()).append(",");
-                }
-                tvType.setText(type.toString().substring(0, type.length() - 1));
 
-                holder.setText(R.id.tv_search_market_address, shopListBean.getFloorName() +
-                        "-" + shopListBean.getRegionName() + "-" + shopListBean.getBerthNo());
+                if (shopListBean.getIndustryList().size() > 0) {
+                    StringBuilder type = new StringBuilder();
+                    for (int i = 0; i < shopListBean.getIndustryList().size(); i++) {
+                        type.append(shopListBean.getIndustryList().get(i).getIndustryName()).append(",");
+                    }
+                    tvType.setText(type.toString().substring(0, type.length() - 1) + " 丨 " + shopListBean.getFloorName() +
+                            "-" + shopListBean.getRegionName() + "-" + shopListBean.getBerthNo());
+                } else {
+                    tvType.setText(shopListBean.getFloorName() + "-" + shopListBean.getRegionName()
+                            + "-" + shopListBean.getBerthNo());
+                }
 
                 TextView tvScore = holder.getView(R.id.tv_search_market_tip);
                 if ("Y".equals(shopListBean.getIsScoreShop())) {
@@ -261,7 +277,7 @@ public class SearchShopActivity extends BaseActivity {
                 Intent intent = new Intent(SearchShopActivity.this, ShopDetailActivity.class);
                 intent.putExtra("shop_id", shopId);
                 intent.putExtra("type", industryList.get(industryNum).getIndustryName());
-                intent.putExtra("address",shopList.get(position).getFloorName() +
+                intent.putExtra("address", shopList.get(position).getFloorName() +
                         "-" + shopList.get(position).getRegionName() + "-" + shopList.get(position).getBerthNo());
                 startActivity(intent);
             }
@@ -333,7 +349,7 @@ public class SearchShopActivity extends BaseActivity {
     private void selectFloor() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_select_floor, null);
         final PopupWindow mPopupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.MATCH_PARENT,  (int) DisplayUtils.dp2px(this,280));
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
@@ -345,7 +361,7 @@ public class SearchShopActivity extends BaseActivity {
 
 
         RecyclerView rvFloor = (RecyclerView) contentView.findViewById(R.id.rv_select_floor);
-
+        View viewBg = contentView.findViewById(R.id.view_shop_bg);
         rvFloor.setLayoutManager(new LinearLayoutManager(this));
         final CommonAdapter<SearchShopBean.FloorListBean> floorAdapter = new CommonAdapter
                 <SearchShopBean.FloorListBean>(this, R.layout.rv_floor_list_item, floorList) {
@@ -376,6 +392,7 @@ public class SearchShopActivity extends BaseActivity {
                 mPopupWindow.dismiss();
                 page = 1;
                 isRefresh = true;
+                loadingView.smoothToShow();
                 initData();
             }
 
@@ -384,6 +401,13 @@ public class SearchShopActivity extends BaseActivity {
                 return false;
             }
         });
+        viewBg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
 
         mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -403,7 +427,7 @@ public class SearchShopActivity extends BaseActivity {
     private void selectIndustry() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_select_floor, null);
         final PopupWindow mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-                (int) DisplayUtils.dp2px(this,280));
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
@@ -414,7 +438,7 @@ public class SearchShopActivity extends BaseActivity {
         }
 
         RecyclerView rvType = (RecyclerView) contentView.findViewById(R.id.rv_select_floor);
-
+        View viewBg = contentView.findViewById(R.id.view_shop_bg);
         rvType.setLayoutManager(new LinearLayoutManager(this));
         final CommonAdapter<SearchShopBean.IndustryListBeanX> typeAdapter = new CommonAdapter
                 <SearchShopBean.IndustryListBeanX>(this,
@@ -446,6 +470,7 @@ public class SearchShopActivity extends BaseActivity {
                 typeAdapter.notifyDataSetChanged();
                 mPopupWindow.dismiss();
                 page = 1;
+                loadingView.smoothToShow();
                 isRefresh = true;
                 initData();
             }
@@ -455,6 +480,13 @@ public class SearchShopActivity extends BaseActivity {
                 return false;
             }
         });
+        viewBg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
 
         mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override

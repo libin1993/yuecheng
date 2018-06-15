@@ -158,7 +158,7 @@ public class BindCardActivity extends BaseActivity {
                             EventBus.getDefault().post("bind_success");
                             finish();
                         } else {
-                            ToastUtils.showToast(BindCardActivity.this, "绑定失败");
+                            ToastUtils.showToast(BindCardActivity.this, responseBean.getMsg());
                         }
                     }
                 });

@@ -362,33 +362,33 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:id="@+id/rl_mine_order"
+                    android:id="@+id/rl_mine_activity"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="29dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bound_pink_f2">
+                    android:background="@drawable/bound_green_e4">
 
                     <ImageView
-                        android:id="@+id/iv_mine_order"
+                        android:id="@+id/iv_mine_activity"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="25dp"
-                        android:src="@mipmap/ic_mine_order"/>
+                        android:src="@mipmap/ic_mine_activity"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@id/iv_mine_order"
+                        android:layout_toRightOf="@id/iv_mine_activity"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="订单"
+                            android:text="活动"
                             android:textColor="@color/blue_19"
                             android:textSize="15sp"/>
 
@@ -396,7 +396,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Orders"
+                            android:text="Activity"
                             android:textColor="@color/blue_19"
                             android:textSize="12sp"/>
 
@@ -404,6 +404,7 @@
                     </LinearLayout>
 
                 </RelativeLayout>
+
 
                 <RelativeLayout
                     android:id="@+id/rl_mine_exchange"
@@ -454,36 +455,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <RelativeLayout
-                    android:id="@+id/rl_mine_activity"
+                    android:id="@+id/rl_mine_order"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="29dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bound_green_e4">
+                    android:background="@drawable/bound_pink_f2">
 
                     <ImageView
-                        android:id="@+id/iv_mine_activity"
+                        android:id="@+id/iv_mine_order"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="25dp"
-                        android:src="@mipmap/ic_mine_activity"/>
+                        android:src="@mipmap/ic_mine_order"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@id/iv_mine_activity"
+                        android:layout_toRightOf="@id/iv_mine_order"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="活动"
+                            android:text="订单"
                             android:textColor="@color/blue_19"
                             android:textSize="15sp"/>
 
@@ -491,7 +493,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Activity"
+                            android:text="Orders"
                             android:textColor="@color/blue_19"
                             android:textSize="12sp"/>
 
@@ -499,6 +501,7 @@
                     </LinearLayout>
 
                 </RelativeLayout>
+
 
                 <RelativeLayout
                     android:id="@+id/rl_mine_tool"

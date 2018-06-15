@@ -123,7 +123,7 @@ public class GiftDetailBean {
         private Object modifierId;
         private Object modifyTime;
         private int needScore;
-        private Object offlineTime;
+        private String offlineTime;
         private String onlineTime;
         private int organizeId;
         private String picUrl;
@@ -265,11 +265,11 @@ public class GiftDetailBean {
             this.needScore = needScore;
         }
 
-        public Object getOfflineTime() {
+        public String getOfflineTime() {
             return offlineTime;
         }
 
-        public void setOfflineTime(Object offlineTime) {
+        public void setOfflineTime(String offlineTime) {
             this.offlineTime = offlineTime;
         }
 

@@ -22,6 +22,7 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -111,6 +112,7 @@ public class ActionDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+
                         activityBean = GsonUtils.jsonToBean(response, ActivityDetailBean.class);
                         if (activityBean.isFlag()) {
                             initView();
@@ -122,7 +124,7 @@ public class ActionDetailActivity extends BaseActivity {
 
     private void initView() {
         isFinish = System.currentTimeMillis() > DateUtils.getTime(
-                "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getEndTime());
+                "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getActivityEndtime());
         isEnroll = activityBean.getData().getSignupDo().getMemberSignupState() != null
                 && activityBean.getData().getSignupDo().getMemberSignupState().equals("去参加");
 

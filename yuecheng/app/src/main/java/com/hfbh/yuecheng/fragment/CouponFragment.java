@@ -62,7 +62,6 @@ public class CouponFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
-        llNullData.setVisibility(View.GONE);
         ivNullData.setImageResource(R.mipmap.ic_null_coupon);
         tvNullData.setText("暂无优惠券");
         initView();

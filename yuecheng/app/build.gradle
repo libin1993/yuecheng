@@ -33,12 +33,15 @@ android {
     }
 
     productFlavors {
-        yuecheng {}
         m360 {}
         yingyongbao {}
         ali {}
         huawei {}
         xiaomi {}
+        baidu {}
+        oppo {}
+        vivo {}
+        yuecheng {}
     }
 
     productFlavors.all { flavor ->
@@ -91,7 +94,6 @@ dependencies {
     compile project(':photopicker')
     compile project(':slidingtablayout')
     compile project(':wheelpicker')
-    compile project(':appbarbehavior')
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     compile files('libs/barcode4j-2.1.jar')
     compile files('libs/jbarcode-0.2.8.jar')
@@ -99,6 +101,5 @@ dependencies {
     compile 'com.jungly:gridPasswordView:0.3'
     compile 'com.sunfusheng:marqueeview:1.3.3'
     compile project(':calendarview')
-
     compile project(path: ':addressselector')
 }

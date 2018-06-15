@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -23,7 +24,6 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
-import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -58,6 +58,12 @@ public class NowActionActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
 
     private int page = 1;
     //刷新
@@ -76,6 +82,8 @@ public class NowActionActivity extends BaseActivity {
         setContentView(R.layout.activity_now_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("活动进行时");
+        ivNullData.setImageResource(R.mipmap.ic_null_activity);
+        tvNullData.setText("暂无数据");
         loadingView.smoothToShow();
         initData();
     }
@@ -124,8 +132,14 @@ public class NowActionActivity extends BaseActivity {
                                 loadingView.smoothToHide();
                                 initView();
                             }
+                            rvActivity.setVisibility(View.VISIBLE);
+                            llNullData.setVisibility(View.GONE);
                         } else {
                             refreshLayout.finishLoadMore();
+                            if (page == 1){
+                                rvActivity.setVisibility(View.GONE);
+                                llNullData.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });
@@ -143,12 +157,15 @@ public class NowActionActivity extends BaseActivity {
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
                 ivCoupon.setImageURI(dataBean.getActivityPicture());
                 holder.setText(R.id.tv_home_activity_name, dataBean.getActivityTitle());
-                holder.setText(R.id.tv_home_activity_time, dataBean
-                        .getStartTimeStr() + " - " + dataBean.getEndTimeStr());
+
+                holder.setText(R.id.tv_home_activity_time, DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                        "yyyy.MM.dd", dataBean.getActivityStarttime()) + " - " +
+                        DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                                "yyyy.MM.dd", dataBean.getActivityEndtime()));
 
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                 final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
-                        "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                        "yyyy-MM-dd HH:mm:ss", dataBean.getActivityEndtime());
                 final boolean isStart = System.currentTimeMillis() >= DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
 

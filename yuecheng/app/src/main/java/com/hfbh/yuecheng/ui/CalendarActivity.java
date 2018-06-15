@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -23,8 +24,11 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
+import com.smarttop.library.utils.LogUtil;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -58,6 +62,11 @@ public class CalendarActivity extends BaseActivity {
     CalendarView calendarView;
     @BindView(R.id.rv_calendar_activity)
     RecyclerView rvCalendar;
+    @BindView(R.id.view_loading)
+    AVLoadingIndicatorView viewLoading;
+    @BindView(R.id.ll_null_activity)
+    LinearLayout llNullActivity;
+
     private int page = 1;
     //是否选择日期
     private boolean isSelect;
@@ -77,6 +86,7 @@ public class CalendarActivity extends BaseActivity {
         setContentView(R.layout.activity_calendar);
         ButterKnife.bind(this);
         tvTitleHeader.setText("活动日历");
+
         initView();
     }
 
@@ -96,7 +106,7 @@ public class CalendarActivity extends BaseActivity {
         }
 
         OkHttpUtils.get()
-                .url(Constant.ACTIVITY_LIST)
+                .url(Constant.CALENDAR_ACTIVITY)
                 .params(map)
                 .build()
                 .execute(new StringCallback() {
@@ -120,15 +130,19 @@ public class CalendarActivity extends BaseActivity {
 
                             if (isSelect) {
                                 isSelect = false;
+                                viewLoading.smoothToHide();
                                 loadMoreWrapper.notifyDataSetChanged();
                             } else if (isLoadMore) {
                                 isLoadMore = false;
                                 loadMoreWrapper.notifyDataSetChanged();
                             }
-                            rvCalendar.setVisibility(View.VISIBLE);
+                            llNullActivity.setVisibility(View.GONE);
                         } else {
                             if (page == 1) {
-                                rvCalendar.setVisibility(View.GONE);
+                                dataList.clear();
+                                loadMoreWrapper.notifyDataSetChanged();
+                                llNullActivity.setVisibility(View.VISIBLE);
+                                viewLoading.smoothToHide();
                             }
                         }
                     }
@@ -148,12 +162,13 @@ public class CalendarActivity extends BaseActivity {
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
                 ivCoupon.setImageURI(dataBean.getActivityPicture());
                 holder.setText(R.id.tv_home_activity_name, dataBean.getActivityTitle());
-                holder.setText(R.id.tv_home_activity_time, dataBean
-                        .getStartTimeStr() + " - " + dataBean.getEndTimeStr());
-
+                holder.setText(R.id.tv_home_activity_time, DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                        "yyyy.MM.dd", dataBean.getActivityStarttime()) + " - " +
+                        DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                                "yyyy.MM.dd", dataBean.getActivityEndtime()));
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                 final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
-                        "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                        "yyyy-MM-dd HH:mm:ss", dataBean.getActivityEndtime());
                 final boolean isStart = System.currentTimeMillis() >= DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
 
@@ -297,6 +312,7 @@ public class CalendarActivity extends BaseActivity {
                 selectDate = calendar.getYear() + "-" + month + "-" + day;
                 isSelect = true;
                 page = 1;
+                viewLoading.smoothToShow();
                 initData();
             }
         });

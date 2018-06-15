@@ -19,6 +19,8 @@ public class Constant {
     public static final String ACTIVITY_LIST = HOST + "/wechat/wechat/signup_activity/list.json";
     //活动详情
     public static final String ACTIVITY_INFO = HOST + "/wechat/wechat/signup_activity/detail.json";
+    //活动日历
+    public static final String CALENDAR_ACTIVITY = HOST + "/wechat/signupActivity/list.json";
     //活动核销
     public static final String CLOSE_ACTIVITY = HOST + "/wechat/wechat/signup_activity/verify_codes.json";
     //活动报名数据

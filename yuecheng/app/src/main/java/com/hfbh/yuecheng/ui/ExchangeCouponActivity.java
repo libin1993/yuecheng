@@ -24,6 +24,7 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.CouponListBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -172,8 +173,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                 TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
 
                 String accessType = dataBean.getAccessType();
-                double needScore = dataBean.getAccessValue();
-
+                String needScore = DisplayUtils.isInteger(dataBean.getAccessValue());
                 if (dataBean.getBalanceNum() > 0) {
                     if (dataBean.getMemberBroughtNum() < dataBean.getLimitNum()) {
                         if (!TextUtils.isEmpty(accessType)) {

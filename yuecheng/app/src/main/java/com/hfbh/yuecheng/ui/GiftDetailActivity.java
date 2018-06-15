@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.GiftDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -82,6 +84,8 @@ public class GiftDetailActivity extends BaseActivity {
     private int limitNum;
     //总数量
     private int totalNum;
+    //已领取数量
+    private int getNum;
 
 
     @Override
@@ -115,11 +119,13 @@ public class GiftDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         giftBean = GsonUtils.jsonToBean(response, GiftDetailBean.class);
                         if (giftBean.isFlag()) {
                             score = giftBean.getData().getNeedScore();
                             totalNum = giftBean.getData().getBalanceNum();
                             limitNum = giftBean.getData().getLimitGetNum();
+                            getNum = giftBean.getData().getExchangeNum();
                             initView();
                         }
                     }
@@ -137,7 +143,6 @@ public class GiftDetailActivity extends BaseActivity {
         tvGiftInfo.setText(giftBean.getData().getExchangeIntro());
         tvGiftIntroduce.setText(giftBean.getData().getGiftIntro());
 
-
         initCount();
     }
 
@@ -148,7 +153,7 @@ public class GiftDetailActivity extends BaseActivity {
         if (num == 1) {
             tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_ee));
             tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_99));
-        } else if (num < limitNum) {
+        } else if (num < limitNum - getNum) {
             tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_99));
             tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_99));
         } else {
@@ -159,11 +164,27 @@ public class GiftDetailActivity extends BaseActivity {
         tvGiftCount.setText("还剩" + totalNum + "件");
         tvExchangeGiftCount.setText(String.valueOf(num));
         tvTotalScore.setText(String.valueOf(score * num));
-        if (totalNum > 0) {
-            tvExchange.setText("立即兑换");
-            tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+        boolean isFinish = false;
+        if (!TextUtils.isEmpty(giftBean.getData().getOfflineTime())) {
+            isFinish = System.currentTimeMillis() > DateUtils.getTime(
+                    "yyyy-MM-dd HH:mm:ss", giftBean.getData().getOfflineTime());
+        }
+
+        if (!isFinish) {
+            if (totalNum > 0) {
+                if (getNum < limitNum) {
+                    tvExchange.setText("立即兑换");
+                    tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+                } else {
+                    tvExchange.setText("已兑换");
+                    tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                }
+            } else {
+                tvExchange.setText("已抢光");
+                tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+            }
         } else {
-            tvExchange.setText("已抢光");
+            tvExchange.setText("已失效");
             tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
         }
 
@@ -184,10 +205,10 @@ public class GiftDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_gift_add:
                 if (giftBean.getData() != null) {
-                    if (num < limitNum) {
+                    if (num < limitNum - getNum) {
                         num++;
                     } else {
-                        ToastUtils.showToast(this, "每人限制兑换" + limitNum + "个哦~");
+                        ToastUtils.showToast(this, "每人限制兑换" + limitNum + "个,您已兑换了" + getNum + "个");
                     }
                     initCount();
                 }
@@ -212,7 +233,7 @@ public class GiftDetailActivity extends BaseActivity {
      * 兑换礼品
      */
     private void exChangeGift() {
-        if (giftBean.getData() != null) {
+        if (giftBean != null && giftBean.getData() != null) {
             OkHttpUtils.post()
                     .url(Constant.EXCHANGE_GIFT)
                     .addParams("appType", MyApp.appType)
@@ -238,6 +259,7 @@ public class GiftDetailActivity extends BaseActivity {
                                     JSONObject data = jsonObject.getJSONObject("data");
                                     totalNum = data.getInt("balanceGetNum");
                                     limitNum = data.getInt("limitGetNum");
+                                    getNum += num;
                                     initCount();
                                     exChangeResult(true, "您兑换的礼品已放置于“我的-兑换”，记得到店核销兑换哦！");
                                 } else {

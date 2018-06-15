@@ -158,12 +158,14 @@ public class ActivityListFragment extends BaseFragment {
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
                 ivCoupon.setImageURI(dataBean.getActivityPicture());
                 holder.setText(R.id.tv_home_activity_name, dataBean.getActivityTitle());
-                holder.setText(R.id.tv_home_activity_time, dataBean
-                        .getStartTimeStr() + " - " + dataBean.getEndTimeStr());
+                holder.setText(R.id.tv_home_activity_time, DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                        "yyyy.MM.dd", dataBean.getActivityStarttime()) + " - " +
+                        DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                                "yyyy.MM.dd", dataBean.getActivityEndtime()));
 
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                 final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
-                        "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                        "yyyy-MM-dd HH:mm:ss", dataBean.getActivityEndtime());
 
                 final boolean isStart = System.currentTimeMillis() >= DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());

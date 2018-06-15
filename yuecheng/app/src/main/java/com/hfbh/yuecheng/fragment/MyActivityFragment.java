@@ -23,6 +23,7 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.ui.EnrollActionActivity;
+import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -85,7 +86,6 @@ public class MyActivityFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
-        llNullData.setVisibility(View.GONE);
         ivNullData.setImageResource(R.mipmap.ic_null_activity);
         tvNullData.setText("暂无活动");
         loadingView.smoothToShow();
@@ -195,23 +195,41 @@ public class MyActivityFragment extends BaseFragment {
                 final TextView tvStatus = holder.getView(R.id.tv_activity_status);
 
                 final String status = dataBean.getMemberSignupState();
-                if (!TextUtils.isEmpty(status)) {
-                    switch (status) {
-                        case "待报名":
-                        case "已结束":
-                            tvStatus.setVisibility(View.VISIBLE);
-                            tvJoin.setVisibility(View.GONE);
-                            tvStatus.setText(status);
-                            break;
-                        case "去报名":
-                        case "去参加":
-                            tvStatus.setVisibility(View.GONE);
-                            tvJoin.setVisibility(View.VISIBLE);
-                            tvJoin.setText(status);
-                            break;
+
+                final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
+                        "yyyy-MM-dd HH:mm:ss", dataBean.getActivityEndtime());
+
+                if (!isFinish) {
+                    if (!TextUtils.isEmpty(status)) {
+                        switch (status) {
+                            case "待报名":
+                            case "已结束":
+                                tvStatus.setVisibility(View.VISIBLE);
+                                tvJoin.setVisibility(View.GONE);
+                                tvStatus.setText(status);
+                                break;
+                            case "去报名":
+                            case "去参加":
+                                tvStatus.setVisibility(View.GONE);
+                                tvJoin.setVisibility(View.VISIBLE);
+                                tvJoin.setText(status);
+                                break;
+
+                        }
+                    }
+                } else {
+                    tvStatus.setVisibility(View.VISIBLE);
+                    tvJoin.setVisibility(View.GONE);
+                    tvStatus.setText("已结束");
+                }
+
+                tvStatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
                     }
-                }
+                });
+
 
                 tvJoin.setOnClickListener(new View.OnClickListener() {
                     @Override

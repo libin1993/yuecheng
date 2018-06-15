@@ -130,4 +130,35 @@
         　
     </com.haibin.calendarview.CalendarLayout>
 
+    <include
+        layout="@layout/layout_loading"/>
+
+    <LinearLayout
+        android:id="@+id/ll_null_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_null_activity"/>
+
+        <TextView
+            android:id="@+id/tv_null_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="暂无活动"
+            android:textColor="@color/blue_a4c"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
 </RelativeLayout>

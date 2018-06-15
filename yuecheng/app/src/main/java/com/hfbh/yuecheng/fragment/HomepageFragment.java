@@ -637,15 +637,17 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_activity);
                     ivCoupon.setImageURI(activityBean.getData().get(position).getActivityPic());
                     holder.setText(R.id.tv_home_activity_name, activityBean.getData().get(position).getActivityName());
-                    holder.setText(R.id.tv_home_activity_time, activityBean.getData().get(position)
-                            .getStartTimeStr() + " - " + activityBean.getData().get(position).getEndTimeStr());
+                    holder.setText(R.id.tv_home_activity_time, DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                            "yyyy.MM.dd", activityBean.getData().get(position).getStartTime()) + " - " +
+                            DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                                    "yyyy.MM.dd", activityBean.getData().get(position).getEndTime()));
 
                     TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
                     final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
                             "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getEndTime());
 
                     final boolean isStart = System.currentTimeMillis() >= DateUtils.getTime(
-                            "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getStartTime());
+                            "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getVoteStartTime());
                     final boolean isEnroll = activityBean.getData().get(position).getMemberSignupState()
                             != null && activityBean.getData().get(position).getMemberSignupState().equals("去参加");
                     if (!isFinish) {

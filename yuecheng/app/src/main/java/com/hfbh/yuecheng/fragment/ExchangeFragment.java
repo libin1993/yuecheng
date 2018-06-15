@@ -83,7 +83,6 @@ public class ExchangeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
-        llNullData.setVisibility(View.GONE);
         ivNullData.setImageResource(R.mipmap.ic_null_gift);
         tvNullData.setText("暂无兑换信息");
         viewLoading.smoothToShow();
@@ -207,6 +206,12 @@ public class ExchangeFragment extends BaseFragment {
                         }
                     }
                 }
+                tvStatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
 
                 tvJoin.setOnClickListener(new View.OnClickListener() {
                     @Override
