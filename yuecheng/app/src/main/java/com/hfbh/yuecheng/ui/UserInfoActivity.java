@@ -219,7 +219,9 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                 updateAvatar();
                 break;
             case R.id.ll_user_name:
-                startActivity(new Intent(this, UpdateNameActivity.class));
+                Intent intent = new Intent(this, UpdateNameActivity.class);
+                intent.putExtra("username",userInfoBean.getData().getMemberNickname());
+                startActivity(intent);
                 break;
             case R.id.ll_user_sex:
                 updateSex();

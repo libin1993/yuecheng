@@ -263,7 +263,7 @@ public class ResetLoginPwdActivity extends BaseActivity {
                                 ToastUtils.showToast(ResetLoginPwdActivity.this, "修改成功");
                                 finish();
                             } else {
-                                ToastUtils.showToast(ResetLoginPwdActivity.this, "修改失败");
+                                ToastUtils.showToast(ResetLoginPwdActivity.this, responseBean.getMsg());
                             }
                         }
                     });

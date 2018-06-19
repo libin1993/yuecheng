@@ -45,13 +45,19 @@ public class UpdateNameActivity extends BaseActivity {
     @BindView(R.id.tv_update_name)
     TextView tvUpdateName;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_name);
         ButterKnife.bind(this);
-        tvHeaderTitle.setText("设置昵称");
+        getData();
 
+    }
+
+    private void getData() {
+        tvHeaderTitle.setText("设置昵称");
+        etSetNickname.setText(getIntent().getStringExtra("nickname"));
     }
 
 

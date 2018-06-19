@@ -201,7 +201,7 @@ public class ValidateActivity extends BaseActivity {
     }
 
     /**
-     * 监测手机号是否注册
+     * 检测手机号是否注册
      */
     private void isRegister(final int type) {
         OkHttpUtils.post()

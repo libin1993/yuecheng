@@ -203,9 +203,7 @@ public class MineFragment extends BaseFragment {
         Intent intent;
         if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
             if (userInfoBean != null) {
-                intent = new Intent(getActivity(), MemberBalanceActivity.class);
-                intent.putExtra("balance", userInfoBean.getData().getAccountBalance());
-                startActivity(intent);
+                startActivity(new Intent(getActivity(), MemberBalanceActivity.class));
             }
         } else {
             intent = new Intent(getActivity(), LoginActivity.class);

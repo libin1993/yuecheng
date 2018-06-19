@@ -154,7 +154,7 @@ public class CouponListBean {
         private Object memberCouponState;
         private int organizeId;
         private Object percentage;
-        private int serviceAmount;
+        private double serviceAmount;
         private String startTime;
         private String state;
         private String useRange;
@@ -304,11 +304,11 @@ public class CouponListBean {
             this.percentage = percentage;
         }
 
-        public int getServiceAmount() {
+        public double getServiceAmount() {
             return serviceAmount;
         }
 
-        public void setServiceAmount(int serviceAmount) {
+        public void setServiceAmount(double serviceAmount) {
             this.serviceAmount = serviceAmount;
         }
 

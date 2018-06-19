@@ -100,16 +100,14 @@
         </android.support.v7.widget.RecyclerView>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-    <TextView
-        android:id="@+id/tv_no_market"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="暂无店铺"
-        android:textColor="@color/gray_10"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:visibility="gone"/>
+        android:layout_marginTop="150dp">
+
+        <include
+            layout="@layout/layout_null_data"/>
+    </RelativeLayout>
 
     <include
         layout="@layout/layout_loading"/>

@@ -35,6 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="44dp">
+
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/layout_refresh_pay_card"
             android:layout_width="match_parent"
@@ -49,9 +50,11 @@
 
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-        <include
-            layout="@layout/layout_null_data"/>
+
     </RelativeLayout>
+
+    <include
+        layout="@layout/layout_null_data"/>
 
 
 </RelativeLayout>

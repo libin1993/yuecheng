@@ -9,16 +9,15 @@ import java.util.List;
  */
 public class BalanceRecordBean {
 
+
     /**
      * flag : true
-     * page : {"pageNum":1,"pageSize":10,"pages":1,"total":1}
-     * hash : CC2A91E00EB59CEA37FC1906574F5E2A95C9BED6583D2A40F6D78C5926769E5D
-     * data : [{"beforeChangeAmount":1,"changeAmount":1,"changeWay":"RECHARGE","createTime":"2018-03-27 15:31:32","fromTo":"1","fundDesc":"","id":1,"isDelete":null,"memberId":1,"organizeId":null,"remark":"","type":"INCREASE"}]
+     * hash : c07ed299d6364f04ba33869ed2f26fc9
+     * data : [{"creditMoney":"-0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-31 13:31:30","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-31 13:31:21","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-31 13:30:53","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-31 13:30:38","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-25 11:09:20","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-25 11:08:04","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-5","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 15:38:39","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 15:38:39","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 15:38:39","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:38:23","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:21:46","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:21:22","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:20:49","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:20:25","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:18:57","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:17:25","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:17:14","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:16:59","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:09:41","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-18 14:09:17","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 14:00:27","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 14:00:02","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 13:55:00","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 10:08:41","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 10:08:15","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 10:06:57","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 10:06:03","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 10:05:30","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 10:04:44","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 10:04:00","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-16 10:03:32","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"5","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-14 14:27:43","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-14 09:00:44","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-11 18:45:34","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-11 18:30:39","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-08 14:25:01","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.99","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-08 11:11:51","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"1","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-08 10:58:07","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-08 09:43:39","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-08 09:43:07","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"-0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-08 09:37:41","procType":"消费","procTypeSpecified":true,"remark":"前台消费冲正","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0.01","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-05-08 09:36:42","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"10.09","creditMoneySpecified":true,"debitMoney":"0","debitMoneySpecified":true,"procTime":"2018-04-25 17:55:41","procType":"消费","procTypeSpecified":true,"remark":"Wisu接口提交","remarkSpecified":true,"storeName":"测试百货","storeNameSpecified":true},{"creditMoney":"0","creditMoneySpecified":true,"debitMoney":"500","debitMoneySpecified":true,"procTime":"2008-07-11 11:20:22","procType":"建卡","procTypeSpecified":true,"remark":"","remarkSpecified":true,"storeName":"","storeNameSpecified":true}]
      * code : 0
      */
 
     private boolean flag;
-    private PageBean page;
     private String hash;
     private int code;
     private List<DataBean> data;
@@ -29,14 +28,6 @@ public class BalanceRecordBean {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
-    }
-
-    public PageBean getPage() {
-        return page;
-    }
-
-    public void setPage(PageBean page) {
-        this.page = page;
     }
 
     public String getHash() {
@@ -63,159 +54,87 @@ public class BalanceRecordBean {
         this.data = data;
     }
 
-    public static class PageBean {
-        /**
-         * pageNum : 1
-         * pageSize : 10
-         * pages : 1
-         * total : 1
-         */
-
-        private int pageNum;
-        private int pageSize;
-        private int pages;
-        private int total;
-
-        public int getPageNum() {
-            return pageNum;
-        }
-
-        public void setPageNum(int pageNum) {
-            this.pageNum = pageNum;
-        }
-
-        public int getPageSize() {
-            return pageSize;
-        }
-
-        public void setPageSize(int pageSize) {
-            this.pageSize = pageSize;
-        }
-
-        public int getPages() {
-            return pages;
-        }
-
-        public void setPages(int pages) {
-            this.pages = pages;
-        }
-
-        public int getTotal() {
-            return total;
-        }
-
-        public void setTotal(int total) {
-            this.total = total;
-        }
-    }
-
     public static class DataBean {
         /**
-         * beforeChangeAmount : 1
-         * changeAmount : 1
-         * changeWay : RECHARGE
-         * createTime : 2018-03-27 15:31:32
-         * fromTo : 1
-         * fundDesc :
-         * id : 1
-         * isDelete : null
-         * memberId : 1
-         * organizeId : null
-         * remark :
-         * type : INCREASE
+         * creditMoney : -0.01
+         * creditMoneySpecified : true
+         * debitMoney : 0
+         * debitMoneySpecified : true
+         * procTime : 2018-05-31 13:31:30
+         * procType : 消费
+         * procTypeSpecified : true
+         * remark : 前台消费冲正
+         * remarkSpecified : true
+         * storeName : 测试百货
+         * storeNameSpecified : true
          */
 
-        private double beforeChangeAmount;
-        private double changeAmount;
-        private String changeWay;
-        private String createTime;
-        private String fromTo;
-        private String fundDesc;
-        private int id;
-        private Object isDelete;
-        private int memberId;
-        private Object organizeId;
+        private String creditMoney;
+        private boolean creditMoneySpecified;
+        private String debitMoney;
+        private boolean debitMoneySpecified;
+        private String procTime;
+        private String procType;
+        private boolean procTypeSpecified;
         private String remark;
-        private String type;
+        private boolean remarkSpecified;
+        private String storeName;
+        private boolean storeNameSpecified;
 
-        public double getBeforeChangeAmount() {
-            return beforeChangeAmount;
+        public String getCreditMoney() {
+            return creditMoney;
         }
 
-        public void setBeforeChangeAmount(double beforeChangeAmount) {
-            this.beforeChangeAmount = beforeChangeAmount;
+        public void setCreditMoney(String creditMoney) {
+            this.creditMoney = creditMoney;
         }
 
-        public double getChangeAmount() {
-            return changeAmount;
+        public boolean isCreditMoneySpecified() {
+            return creditMoneySpecified;
         }
 
-        public void setChangeAmount(double changeAmount) {
-            this.changeAmount = changeAmount;
+        public void setCreditMoneySpecified(boolean creditMoneySpecified) {
+            this.creditMoneySpecified = creditMoneySpecified;
         }
 
-        public String getChangeWay() {
-            return changeWay;
+        public String getDebitMoney() {
+            return debitMoney;
         }
 
-        public void setChangeWay(String changeWay) {
-            this.changeWay = changeWay;
+        public void setDebitMoney(String debitMoney) {
+            this.debitMoney = debitMoney;
         }
 
-        public String getCreateTime() {
-            return createTime;
+        public boolean isDebitMoneySpecified() {
+            return debitMoneySpecified;
         }
 
-        public void setCreateTime(String createTime) {
-            this.createTime = createTime;
+        public void setDebitMoneySpecified(boolean debitMoneySpecified) {
+            this.debitMoneySpecified = debitMoneySpecified;
         }
 
-        public String getFromTo() {
-            return fromTo;
+        public String getProcTime() {
+            return procTime;
         }
 
-        public void setFromTo(String fromTo) {
-            this.fromTo = fromTo;
+        public void setProcTime(String procTime) {
+            this.procTime = procTime;
         }
 
-        public String getFundDesc() {
-            return fundDesc;
+        public String getProcType() {
+            return procType;
         }
 
-        public void setFundDesc(String fundDesc) {
-            this.fundDesc = fundDesc;
+        public void setProcType(String procType) {
+            this.procType = procType;
         }
 
-        public int getId() {
-            return id;
+        public boolean isProcTypeSpecified() {
+            return procTypeSpecified;
         }
 
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public Object getIsDelete() {
-            return isDelete;
-        }
-
-        public void setIsDelete(Object isDelete) {
-            this.isDelete = isDelete;
-        }
-
-        public int getMemberId() {
-            return memberId;
-        }
-
-        public void setMemberId(int memberId) {
-            this.memberId = memberId;
-        }
-
-        public Object getOrganizeId() {
-            return organizeId;
-        }
-
-        public void setOrganizeId(Object organizeId) {
-            this.organizeId = organizeId;
+        public void setProcTypeSpecified(boolean procTypeSpecified) {
+            this.procTypeSpecified = procTypeSpecified;
         }
 
         public String getRemark() {
@@ -226,12 +145,28 @@ public class BalanceRecordBean {
             this.remark = remark;
         }
 
-        public String getType() {
-            return type;
+        public boolean isRemarkSpecified() {
+            return remarkSpecified;
         }
 
-        public void setType(String type) {
-            this.type = type;
+        public void setRemarkSpecified(boolean remarkSpecified) {
+            this.remarkSpecified = remarkSpecified;
+        }
+
+        public String getStoreName() {
+            return storeName;
+        }
+
+        public void setStoreName(String storeName) {
+            this.storeName = storeName;
+        }
+
+        public boolean isStoreNameSpecified() {
+            return storeNameSpecified;
+        }
+
+        public void setStoreNameSpecified(boolean storeNameSpecified) {
+            this.storeNameSpecified = storeNameSpecified;
         }
     }
 }

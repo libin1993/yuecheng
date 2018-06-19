@@ -126,14 +126,16 @@ public class CloseActionActivity extends BaseActivity {
         tvActivityPhone.setText(activityBean.getData().getStatistic().getPhone());
 
         tvActivityName.setText(activityBean.getData().getActivity().getActivityTitle());
-        String qrCode = activityBean.getData().getActivity().getVerifyCode();
-        if (!TextUtils.isEmpty(qrCode)) {
+
+        if (!TextUtils.isEmpty(activityBean.getData().getActivity().getVerifyCode())) {
+            String qrCode = activityBean.getData().getActivity().getVerifyCode() + 2;
             qrBmp = QRCodeUtils.createQRCode(qrCode,
                     (int) DisplayUtils.dp2px(this, 200));
             ivActivityQrcode.setImageBitmap(qrBmp);
+            tvActivityCode.setText(qrCode);
         }
 
-        tvActivityCode.setText(activityBean.getData().getActivity().getVerifyCode());
+
         tvActivityTime.setText("有效时间：" + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
                 "yyyy.MM.dd", activityBean.getData().getActivity().getActivityStarttime()) + " - " +
                 DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",

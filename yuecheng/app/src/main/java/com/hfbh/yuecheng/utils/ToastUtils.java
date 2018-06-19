@@ -1,6 +1,7 @@
 package com.hfbh.yuecheng.utils;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.Toast;
 
 /**
@@ -18,6 +19,7 @@ public class ToastUtils {
             mToast.setText(content);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
+        mToast.setGravity(Gravity.CENTER, 0, 0);
         mToast.show();
     }
 }

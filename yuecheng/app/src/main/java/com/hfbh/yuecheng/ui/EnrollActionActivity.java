@@ -231,8 +231,8 @@ public class EnrollActionActivity extends BaseActivity {
             addTextView(flowLayout, activityBean.getData().getSignupActivity().getTags());
         }
 
-        tvActionTime.setText(activityBean.getData().getSignupActivity().getStartTimeStr() + " - "
-                + activityBean.getData().getSignupActivity().getEndTimeStr());
+        tvActionTime.setText(activityBean.getData().getSignupActivity().getActivityStarttime() + " - "
+                + activityBean.getData().getSignupActivity().getActivityEndtime());
         tvActionAddress.setText(activityBean.getData().getSignupActivity().getAcivityAddress());
 
         String type = activityBean.getData().getSignupActivity().getAcivityType();

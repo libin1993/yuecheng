@@ -31,16 +31,12 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.SearchShopBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
-import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
-import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -79,12 +75,17 @@ public class SearchShopActivity extends BaseActivity {
     RecyclerView rvMarketList;
     @BindView(R.id.layout_refresh_market)
     SmartRefreshLayout refreshLayout;
-    @BindView(R.id.tv_no_market)
-    TextView tvNoMarket;
+
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
     @BindView(R.id.view_header_line)
     View viewHeaderLine;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
     //业态id
     private int industryId;
     //楼层id
@@ -119,6 +120,7 @@ public class SearchShopActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_shop);
         ButterKnife.bind(this);
+
         init();
         initData();
     }
@@ -126,6 +128,8 @@ public class SearchShopActivity extends BaseActivity {
     private void init() {
         tvHeaderTitle.setText("找店铺");
         viewHeaderLine.setVisibility(View.GONE);
+        ivNullData.setImageResource(R.mipmap.ic_null_shop);
+        tvNullData.setText("暂无内容");
         loadingView.smoothToShow();
 
         grayDrawable = ContextCompat.getDrawable(this, R.mipmap.ic_triangle_graydown);
@@ -217,14 +221,14 @@ public class SearchShopActivity extends BaseActivity {
                                 initView();
                             }
                             loadingView.smoothToHide();
-                            rvMarketList.setVisibility(View.VISIBLE);
-                            tvNoMarket.setVisibility(View.GONE);
+                            llNullData.setVisibility(View.GONE);
                         } else {
                             refreshLayout.finishLoadMore();
                             if (page == 1) {
                                 loadingView.smoothToHide();
-                                rvMarketList.setVisibility(View.GONE);
-                                tvNoMarket.setVisibility(View.VISIBLE);
+                                shopList.clear();
+                                shopAdapter.notifyDataSetChanged();
+                                llNullData.setVisibility(View.VISIBLE);
                                 refreshLayout.finishRefresh();
                             }
                         }
@@ -249,15 +253,11 @@ public class SearchShopActivity extends BaseActivity {
                 TextView tvType = holder.getView(R.id.tv_search_market_type);
 
                 if (shopListBean.getIndustryList().size() > 0) {
-                    StringBuilder type = new StringBuilder();
-                    for (int i = 0; i < shopListBean.getIndustryList().size(); i++) {
-                        type.append(shopListBean.getIndustryList().get(i).getIndustryName()).append(",");
-                    }
-                    tvType.setText(type.toString().substring(0, type.length() - 1) + " 丨 " + shopListBean.getFloorName() +
-                            "-" + shopListBean.getRegionName() + "-" + shopListBean.getBerthNo());
+
+                    tvType.setText(shopListBean.getIndustryList().get(0).getIndustryName() + " 丨 "
+                            + shopListBean.getFloorName() + "-" + shopListBean.getBerthNo());
                 } else {
-                    tvType.setText(shopListBean.getFloorName() + "-" + shopListBean.getRegionName()
-                            + "-" + shopListBean.getBerthNo());
+                    tvType.setText(shopListBean.getFloorName() + "-" + shopListBean.getBerthNo());
                 }
 
                 TextView tvScore = holder.getView(R.id.tv_search_market_tip);
@@ -278,7 +278,7 @@ public class SearchShopActivity extends BaseActivity {
                 intent.putExtra("shop_id", shopId);
                 intent.putExtra("type", industryList.get(industryNum).getIndustryName());
                 intent.putExtra("address", shopList.get(position).getFloorName() +
-                        "-" + shopList.get(position).getRegionName() + "-" + shopList.get(position).getBerthNo());
+                        "-" + shopList.get(position).getBerthNo());
                 startActivity(intent);
             }
 

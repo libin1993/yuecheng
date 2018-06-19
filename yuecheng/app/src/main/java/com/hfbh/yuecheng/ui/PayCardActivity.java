@@ -154,7 +154,7 @@ public class PayCardActivity extends BaseActivity {
             protected void convert(ViewHolder holder, MemberBalanceBean.DataBean dataBean, int position) {
                 SimpleDraweeView ivBg = holder.getView(R.id.iv_pay_card_bg);
                 ivBg.setImageResource(imgCard[position % 5]);
-                holder.setText(R.id.tv_pay_card_number, dataBean.getAccountId());
+                holder.setText(R.id.tv_pay_card_number, dataBean.getPrePaidCardAccount());
                 holder.setText(R.id.tv_pay_card_name, dataBean.getAccountName());
                 holder.setText(R.id.tv_pay_card_money, DisplayUtils.isInteger(dataBean.getBalance()) + "元");
             }

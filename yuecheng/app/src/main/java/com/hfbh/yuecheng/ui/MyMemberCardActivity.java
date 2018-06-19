@@ -30,6 +30,9 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -77,6 +80,7 @@ public class MyMemberCardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_member_card);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initData();
     }
 
@@ -227,9 +231,7 @@ public class MyMemberCardActivity extends BaseActivity {
      */
     private void toMemberBalance() {
         if (userInfoBean != null) {
-            Intent intent = new Intent(this, MemberBalanceActivity.class);
-            intent.putExtra("balance", userInfoBean.getData().getAccountBalance());
-            startActivity(intent);
+            startActivity(new Intent(this, MemberBalanceActivity.class));
         }
     }
 
@@ -242,6 +244,20 @@ public class MyMemberCardActivity extends BaseActivity {
             intent.putExtra("points", userInfoBean.getData().getPoints());
             startActivity(intent);
         }
+    }
+
+
+    @Subscribe
+    public void bindOrDelete(String msg) {
+        if ("delete_success".equals(msg) || "bind_success".equals(msg)) {
+            initData();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
 }

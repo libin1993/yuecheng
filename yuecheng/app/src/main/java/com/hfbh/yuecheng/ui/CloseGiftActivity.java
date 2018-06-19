@@ -116,8 +116,9 @@ public class CloseGiftActivity extends BaseActivity {
 
         tvGiftName.setText(giftBean.getData().getGainName());
 
-        String qrCode = giftBean.getData().getVerifyCode();
-        if (!TextUtils.isEmpty(qrCode)){
+
+        if (!TextUtils.isEmpty(giftBean.getData().getVerifyCode())) {
+            String qrCode = giftBean.getData().getVerifyCode();
             qrBmp = QRCodeUtils.createQRCode(qrCode,
                     (int) DisplayUtils.dp2px(this, 200));
             ivGiftQrcode.setImageBitmap(qrBmp);

@@ -1,10 +1,10 @@
 package com.hfbh.yuecheng.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,17 +16,13 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.BalanceRecordBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,26 +41,17 @@ public class BalanceRecordActivity extends BaseActivity {
     ImageView ivPayCardBack;
     @BindView(R.id.rv_pay_card)
     RecyclerView rvBalance;
-    @BindView(R.id.layout_refresh_pay_card)
-    SmartRefreshLayout refreshLayout;
     @BindView(R.id.iv_null_data)
     ImageView ivNullData;
     @BindView(R.id.tv_null_data)
     TextView tvNullData;
     @BindView(R.id.ll_null_data)
     LinearLayout llNullData;
+    @BindView(R.id.layout_refresh_pay_card)
+    SmartRefreshLayout refreshLayout;
 
-    private int page = 1;
-    //刷新
-    private boolean isRefresh;
-    //加载更多
-    private boolean isLoadMore;
-    private List<BalanceRecordBean.DataBean> dataList = new ArrayList<>();
-    //总页数
-    private int pages;
-    //活动总数量
-    private CommonAdapter<BalanceRecordBean.DataBean> adapter;
-    private int accountId;
+    private String accountId;
+    private BalanceRecordBean balanceBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +67,7 @@ public class BalanceRecordActivity extends BaseActivity {
     }
 
     private void getData() {
-        accountId = getIntent().getIntExtra("account_id", 0);
+        accountId = getIntent().getStringExtra("account_id");
     }
 
     /**
@@ -94,8 +81,7 @@ public class BalanceRecordActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("id", String.valueOf(accountId))
-                .addParams("pageNum", String.valueOf(page))
+                .addParams("id", accountId)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -105,36 +91,12 @@ public class BalanceRecordActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        BalanceRecordBean balanceBean = GsonUtils.jsonToBean(s, BalanceRecordBean.class);
-                        if (balanceBean.getPage() != null) {
-                            pages = balanceBean.getPage().getPages();
-                        }
-
+                        LogUtils.log(accountId);
+                        balanceBean = GsonUtils.jsonToBean(s, BalanceRecordBean.class);
                         if (balanceBean.isFlag() && balanceBean.getData() != null && balanceBean.getData().size() > 0) {
-                            if (isRefresh) {
-                                dataList.clear();
-                            }
-                            dataList.addAll(balanceBean.getData());
-
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                initView();
-                            }
-                            llNullData.setVisibility(View.GONE);
-                            rvBalance.setVisibility(View.VISIBLE);
+                            initView();
                         } else {
-                            refreshLayout.finishLoadMore();
-                            if (page == 1) {
-                                llNullData.setVisibility(View.VISIBLE);
-                                rvBalance.setVisibility(View.GONE);
-                            }
+                            llNullData.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -146,45 +108,45 @@ public class BalanceRecordActivity extends BaseActivity {
      */
     private void initView() {
         rvBalance.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CommonAdapter<BalanceRecordBean.DataBean>(
-                this, R.layout.rv_member_points_item, dataList) {
+        CommonAdapter<BalanceRecordBean.DataBean> adapter = new CommonAdapter<BalanceRecordBean.DataBean>(
+                this, R.layout.rv_member_points_item, balanceBean.getData()) {
             @Override
             protected void convert(ViewHolder holder, BalanceRecordBean.DataBean dataBean, int position) {
-                holder.setText(R.id.tv_points_remark, dataBean.getRemark());
-                holder.setText(R.id.tv_points_time, dataBean.getCreateTime());
+                holder.setText(R.id.tv_points_time, dataBean.getProcTime());
+                TextView tvTitle = holder.getView(R.id.tv_points_remark);
                 TextView tvPoints = holder.getView(R.id.tv_points_type);
-                if (dataBean.getType() != null) {
-                    if (dataBean.getType().equals("INCREASE")) {
-                        tvPoints.setTextColor(getResources().getColor(R.color.red_99));
-                        tvPoints.setText("+" + dataBean.getChangeAmount());
-                    } else {
-                        tvPoints.setTextColor(getResources().getColor(R.color.gray_10));
-                        tvPoints.setText("-" + dataBean.getChangeAmount());
+
+                if (!TextUtils.isEmpty(dataBean.getProcType())) {
+                    switch (dataBean.getProcType()) {
+                        case "建卡":
+                        case "存款":
+                            tvTitle.setText(dataBean.getProcType());
+                            tvPoints.setTextColor(getResources().getColor(R.color.red_99));
+                            tvPoints.setText("+" + dataBean.getDebitMoney());
+                            break;
+                        case "取款":
+                            tvTitle.setText(dataBean.getProcType());
+                            tvPoints.setTextColor(getResources().getColor(R.color.gray_10));
+                            tvPoints.setText("-" + dataBean.getDebitMoney());
+                            break;
+                        case "消费":
+                            if (dataBean.getCreditMoney().contains("-")) {
+                                tvTitle.setText("退款");
+                                tvPoints.setTextColor(getResources().getColor(R.color.red_99));
+                                tvPoints.setText("+" + dataBean.getCreditMoney().substring(1));
+                            } else {
+                                tvTitle.setText("消费");
+                                tvPoints.setTextColor(getResources().getColor(R.color.gray_10));
+                                tvPoints.setText("-"+dataBean.getCreditMoney());
+                            }
+                            break;
                     }
                 }
             }
         };
         rvBalance.setAdapter(adapter);
-
-        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                if (page < pages) {
-                    isLoadMore = true;
-                    page++;
-                    initData();
-                } else {
-                    refreshLayout.finishLoadMore();
-                }
-            }
-
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                isRefresh = true;
-                page = 1;
-                initData();
-            }
-        });
+        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setEnableLoadMore(false);
 
     }
 

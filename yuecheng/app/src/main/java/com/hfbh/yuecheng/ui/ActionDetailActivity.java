@@ -31,6 +31,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 
+import static android.webkit.WebSettings.LOAD_NO_CACHE;
+
 /**
  * Author：Libin on 2018/6/4 14:13
  * Email：1993911441@qq.com
@@ -79,6 +81,7 @@ public class ActionDetailActivity extends BaseActivity {
         ws.setBuiltInZoomControls(false);
         ws.setSupportZoom(false);
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        ws.setCacheMode(LOAD_NO_CACHE);
         ws.setUseWideViewPort(true);
         ws.setLoadWithOverviewMode(true);
 

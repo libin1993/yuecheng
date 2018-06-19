@@ -536,11 +536,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
 
                     if (couponBean.getData().get(position).getBalanceNum() > 0) {
-                        if (couponBean.getData().get(position).getMemberBroughtNum() > 0 &&
-                                couponBean.getData().get(position).getMemberBroughtNum() >=
-                                        couponBean.getData().get(position).getLimitNum()) {
-                            tvReceive.setText("已领取");
-                        } else {
+
+                        int limitNum = couponBean.getData().get(position).getLimitNum();
+                        int getNum = couponBean.getData().get(position).getMemberBroughtNum();
+
+                        if (limitNum == 0) {
                             if (!TextUtils.isEmpty(accessType)) {
                                 switch (accessType) {
                                     case "FREE":
@@ -554,7 +554,26 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                         break;
                                 }
                             }
+                        } else {
+                            if (getNum > 0 && getNum >= limitNum) {
+                                tvReceive.setText("已领取");
+                            } else {
+                                if (!TextUtils.isEmpty(accessType)) {
+                                    switch (accessType) {
+                                        case "FREE":
+                                            tvReceive.setText("免费\n领取");
+                                            break;
+                                        case "POINT":
+                                            tvReceive.setText(DisplayUtils.isInteger(needScore) + "积分\n领取");
+                                            break;
+                                        case "BUY":
+                                            tvReceive.setText(DisplayUtils.isInteger(needScore) + "元\n领取");
+                                            break;
+                                    }
+                                }
+                            }
                         }
+
 
                     } else {
                         tvReceive.setText("已抢光");

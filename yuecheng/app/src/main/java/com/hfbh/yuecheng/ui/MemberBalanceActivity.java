@@ -18,6 +18,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.MemberBalanceBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
+import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -67,14 +68,33 @@ public class MemberBalanceActivity extends BaseActivity {
         setContentView(R.layout.activity_member_balance);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        getData();
+        tvTitleHeader.setText("会员卡余额");
+        initBalance();
         initData();
-
     }
 
-    private void getData() {
-        tvTitleHeader.setText("会员卡余额");
-        tvMemberBalance.setText(DisplayUtils.isInteger(getIntent().getDoubleExtra("balance", 0)));
+    private void initBalance() {
+        OkHttpUtils.post()
+                .url(Constant.USER_INFO)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                        if (userInfoBean.isFlag()) {
+                            tvMemberBalance.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
+                        }
+                    }
+                });
     }
 
     private void initData() {
@@ -121,7 +141,7 @@ public class MemberBalanceActivity extends BaseActivity {
             protected void convert(ViewHolder holder, MemberBalanceBean.DataBean dataBean, int position) {
                 SimpleDraweeView ivBg = holder.getView(R.id.iv_pay_card_bg);
                 ivBg.setImageResource(imgCard[position % 5]);
-                holder.setText(R.id.tv_pay_card_number, dataBean.getAccountId());
+                holder.setText(R.id.tv_pay_card_number, dataBean.getPrePaidCardAccount());
                 holder.setText(R.id.tv_pay_card_name, dataBean.getAccountName());
                 holder.setText(R.id.tv_pay_card_money, DisplayUtils.isInteger(dataBean.getBalance()) + "元");
             }
@@ -224,6 +244,7 @@ public class MemberBalanceActivity extends BaseActivity {
     @Subscribe
     public void bindOrDelete(String msg) {
         if ("delete_success".equals(msg) || "bind_success".equals(msg)) {
+            initBalance();
             initData();
         }
     }

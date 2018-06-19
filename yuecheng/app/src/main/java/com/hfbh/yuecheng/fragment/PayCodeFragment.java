@@ -76,7 +76,7 @@ public class PayCodeFragment extends BaseFragment {
     }
 
     private void initView() {
-        String cardNumber = userInfoBean.getData().getCardNumber();
+        String cardNumber = userInfoBean.getData().getCardNumber() + System.currentTimeMillis();
 
         barBmp = BarcodeUtils.creatBarcode(cardNumber,
                 (int) DisplayUtils.dp2px(getActivity(), 225),
@@ -108,7 +108,7 @@ public class PayCodeFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tv_pay_barcode:
                 if (isShow) {
-                    tvPayBarcode.setText(String.valueOf(userInfoBean.getData().getCardNumber()));
+                    tvPayBarcode.setText(userInfoBean.getData().getCardNumber() + System.currentTimeMillis());
                     tvPayBarcode.setTextColor(getResources().getColor(R.color.gray_10));
                     isShow = false;
                 } else {

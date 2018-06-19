@@ -122,11 +122,11 @@ public class CloseCouponActivity extends BaseActivity {
 
 
         tvCouponName.setText(couponBean.getData().getCouponName());
-        String qrCode = couponBean.getData().getVerifyCode();
 
-        if (!TextUtils.isEmpty(qrCode)) {
-            qrBmp = QRCodeUtils.createQRCode(qrCode,
-                    (int) DisplayUtils.dp2px(this, 200));
+
+        if (!TextUtils.isEmpty(couponBean.getData().getVerifyCode())) {
+            String qrCode = couponBean.getData().getVerifyCode() + 1;
+            qrBmp = QRCodeUtils.createQRCode(qrCode, (int) DisplayUtils.dp2px(this, 200));
             ivCouponQrcode.setImageBitmap(qrBmp);
             tvCouponCode.setText(qrCode);
         }

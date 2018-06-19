@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,7 +23,6 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.CouponListBean;
-import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -35,7 +35,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
-import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -71,8 +70,13 @@ public class ExchangeCouponActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
-    @BindView(R.id.tv_no_coupon)
-    TextView tvNoCoupon;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
+
 
     private int page = 1;
     //刷新
@@ -91,6 +95,8 @@ public class ExchangeCouponActivity extends BaseActivity {
         setContentView(R.layout.activity_exchange_coupon);
         ButterKnife.bind(this);
         tvTitleHeader.setText("优惠券");
+        ivNullData.setImageResource(R.mipmap.ic_null_coupon);
+        tvNullData.setText("暂无优惠券");
         loadingView.smoothToShow();
 
         initData();
@@ -125,7 +131,9 @@ public class ExchangeCouponActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         LogUtils.log(response);
                         CouponListBean ListBean = GsonUtils.jsonToBean(response, CouponListBean.class);
-                        pages = ListBean.getPage().getPages();
+                        if (ListBean.getPage() != null){
+                            pages = ListBean.getPage().getPages();
+                        }
                         if (ListBean.isFlag() && ListBean.getData() != null && ListBean.getData().size() > 0) {
                             if (isRefresh) {
                                 dataList.clear();
@@ -144,14 +152,17 @@ public class ExchangeCouponActivity extends BaseActivity {
                                 loadingView.smoothToHide();
                                 initView();
                             }
-                            tvNoCoupon.setVisibility(View.GONE);
-                            rvExchangeCoupon.setVisibility(View.VISIBLE);
+                            llNullData.setVisibility(View.GONE);
+
                         } else {
                             if (page == 1) {
                                 loadingView.smoothToHide();
-                                tvNoCoupon.setVisibility(View.VISIBLE);
-                                rvExchangeCoupon.setVisibility(View.GONE);
+                                dataList.clear();
+                                adapter.notifyDataSetChanged();
+                                llNullData.setVisibility(View.VISIBLE);
+                                refreshLayout.finishRefresh();
                             }
+
                             refreshLayout.finishLoadMore();
                         }
                     }
@@ -169,7 +180,27 @@ public class ExchangeCouponActivity extends BaseActivity {
                 ivCoupon.setImageURI(dataBean.getCouponImage());
 
                 holder.setText(R.id.tv_home_coupon_title, dataBean.getCouponName());
-                holder.setText(R.id.tv_home_coupon_content, dataBean.getUseRange());
+                if (dataBean.getCouponTypeKind() != null && dataBean.getCouponTypeKind().equals("VOUCHER")) {
+                    if (dataBean.getListCouponShop() != null && dataBean.getListCouponShop().size() > 0) {
+                        StringBuilder shop = new StringBuilder();
+                        for (int i = 0; i < dataBean.getListCouponShop().size(); i++) {
+                            if (i < dataBean.getListCouponShop().size() - 1) {
+                                shop.append(dataBean.getListCouponShop().get(i).getShopName()).append("、");
+                            } else {
+                                shop.append(dataBean.getListCouponShop().get(i).getShopName());
+                            }
+                        }
+
+                        holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils.isInteger(dataBean.getServiceAmount()) + "元可用,限" + shop.toString());
+                    } else {
+                        holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils.isInteger(dataBean.getServiceAmount()) + "元可用");
+                    }
+
+                } else {
+                    holder.setText(R.id.tv_home_coupon_content, dataBean.getUseRange());
+                }
+
+
                 holder.setText(R.id.tv_home_coupon_remain, "剩余" + dataBean.getBalanceNum());
 
                 TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
@@ -177,9 +208,10 @@ public class ExchangeCouponActivity extends BaseActivity {
                 String accessType = dataBean.getAccessType();
                 String needScore = DisplayUtils.isInteger(dataBean.getAccessValue());
                 if (dataBean.getBalanceNum() > 0) {
-                    if (dataBean.getMemberBroughtNum() > 0 && dataBean.getMemberBroughtNum() >= dataBean.getLimitNum()) {
-                        tvReceive.setText("已领取");
-                    } else {
+                    int limitNum = dataBean.getLimitNum();
+                    int getNum = dataBean.getMemberBroughtNum();
+
+                    if (limitNum == 0) {
                         if (!TextUtils.isEmpty(accessType)) {
                             switch (accessType) {
                                 case "FREE":
@@ -193,8 +225,25 @@ public class ExchangeCouponActivity extends BaseActivity {
                                     break;
                             }
                         }
+                    } else {
+                        if (getNum > 0 && getNum >= limitNum) {
+                            tvReceive.setText("已领取");
+                        } else {
+                            if (!TextUtils.isEmpty(accessType)) {
+                                switch (accessType) {
+                                    case "FREE":
+                                        tvReceive.setText("免费\n领取");
+                                        break;
+                                    case "POINT":
+                                        tvReceive.setText(needScore + "积分\n领取");
+                                        break;
+                                    case "BUY":
+                                        tvReceive.setText(needScore + "元\n领取");
+                                        break;
+                                }
+                            }
+                        }
                     }
-
                 } else {
                     tvReceive.setText("已抢光");
                 }
@@ -232,6 +281,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                 if (page < pages) {
                     isLoadMore = true;
                     page++;
+                    LogUtils.log("ccc");
                     initData();
                 } else {
                     refreshLayout.finishLoadMore();
@@ -242,6 +292,7 @@ public class ExchangeCouponActivity extends BaseActivity {
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 isRefresh = true;
                 page = 1;
+                LogUtils.log("bbb");
                 initData();
             }
         });
@@ -272,6 +323,7 @@ public class ExchangeCouponActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                LogUtils.log("aaaa");
                 isRefresh = true;
                 page = 1;
                 initData();
