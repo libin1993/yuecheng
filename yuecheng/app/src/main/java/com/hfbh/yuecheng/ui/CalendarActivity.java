@@ -100,6 +100,7 @@ public class CalendarActivity extends BaseActivity {
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
         map.put("pageNum", String.valueOf(page));
+        map.put("token", SharedPreUtils.getStr(this, "token"));
 
         if (!TextUtils.isEmpty(selectDate)) {
             map.put("activityTime", selectDate);

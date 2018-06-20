@@ -34,8 +34,6 @@ public class Constant {
 
     //店铺详情
     public static final String SHOP_DETAIL = HOST + "/wechat/shop/shopDetail.json";
-    //
-    public static final String QR_CODE = "https://pan.baidu.com/share/qrcode?w=150&h=150&url=http://www.xsyrz.cn";
     //礼品列表
     public static final String EXCHANGE_GIFT_LIST = HOST + "/wechat/pointsReward/list.json";
     //兑换优惠券列表

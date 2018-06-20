@@ -100,6 +100,7 @@ public class EnrollActionActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("id", String.valueOf(activityId))
                 .build()
                 .execute(new StringCallback() {
@@ -309,6 +310,7 @@ public class EnrollActionActivity extends BaseActivity {
             paramMap.put("appVersion", MyApp.appVersion);
             paramMap.put("organizeId", MyApp.organizeId);
             paramMap.put("hash", SharedPreUtils.getStr(this, "hash"));
+            paramMap.put("token", SharedPreUtils.getStr(this, "token"));
             paramMap.put("realname", etUsername.getText().toString().trim());
             paramMap.put("mobile", etPhone.getText().toString().trim());
             paramMap.put("id", String.valueOf(activityId));

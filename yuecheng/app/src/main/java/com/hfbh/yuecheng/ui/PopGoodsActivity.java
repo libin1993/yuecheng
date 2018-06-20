@@ -84,6 +84,7 @@ public class PopGoodsActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("commodityType", "SPECIAL")
                 .addParams("pageNum", String.valueOf(page))
                 .build()
@@ -118,6 +119,10 @@ public class PopGoodsActivity extends BaseActivity {
                                 loadingView.smoothToHide();
                                 refreshLayout.finishLoadMore();
                                 initView();
+                            }
+                        } else {
+                            if (page == 1) {
+                                loadingView.smoothToHide();
                             }
                         }
                     }

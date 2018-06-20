@@ -92,6 +92,7 @@ public class CloseCouponActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("couponId", String.valueOf(couponType))
                 .addParams("memberCouponId", String.valueOf(couponId))
                 .build()

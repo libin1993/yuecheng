@@ -210,6 +210,7 @@ public class ValidateActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etValidatePhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
@@ -268,6 +269,7 @@ public class ValidateActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etValidatePhone.getText().toString().trim())
                 .addParams("vircode", etValidateCode.getText().toString().trim())
                 .build()
@@ -330,6 +332,7 @@ public class ValidateActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etValidatePhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {

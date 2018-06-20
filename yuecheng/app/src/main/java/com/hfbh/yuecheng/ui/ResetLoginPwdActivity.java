@@ -246,6 +246,7 @@ public class ResetLoginPwdActivity extends BaseActivity {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("token",SharedPreUtils.getStr(this, "token"))
                     .addParams("memberPhone", phone)
                     .addParams("vircode", etResetCode.getText().toString().trim())
                     .addParams("memberPwd", md5)
@@ -299,6 +300,7 @@ public class ResetLoginPwdActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etResetPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
@@ -387,6 +389,7 @@ public class ResetLoginPwdActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etResetPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {

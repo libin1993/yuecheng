@@ -118,6 +118,7 @@ public class ExchangeCouponActivity extends BaseActivity {
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
         map.put("pageNum", String.valueOf(page));
+        map.put("token", SharedPreUtils.getStr(this, "token"));
         if (!TextUtils.isEmpty(etSearchCoupon.getText().toString().trim())) {
             map.put("key", etSearchCoupon.getText().toString().trim());
         }
@@ -133,7 +134,7 @@ public class ExchangeCouponActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(etSearchCoupon.getText().toString().trim() + response);
+                        LogUtils.log(response);
                         CouponListBean ListBean = GsonUtils.jsonToBean(response, CouponListBean.class);
                         if (ListBean.getPage() != null) {
                             pages = ListBean.getPage().getPages();
@@ -346,6 +347,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("couponId", String.valueOf(dataList.get(position).getCouponId()))
                 .addParams("cyCouponId", String.valueOf(dataList.get(position).getCouponTypeCy()))
                 .addParams("exchangeValue", String.valueOf(dataList.get(position).getAccessValue()))

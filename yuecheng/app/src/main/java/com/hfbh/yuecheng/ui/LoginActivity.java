@@ -397,11 +397,12 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
+                        LogUtils.log("aaa" + response);
                         UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             ToastUtils.showToast(LoginActivity.this, "登录成功");
                             SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
+                            SharedPreUtils.saveStr(LoginActivity.this, "token", userInfoBean.getToken());
                             SharedPreUtils.saveStr(LoginActivity.this, "member_id",
                                     String.valueOf(userInfoBean.getData().getMemberId()));
                             SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
@@ -462,11 +463,12 @@ public class LoginActivity extends BaseActivity {
 
                         @Override
                         public void onResponse(String response, int id) {
-
+                            LogUtils.log("bbb"+response);
                             UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                             if (userInfoBean.isFlag()) {
                                 ToastUtils.showToast(LoginActivity.this, "登录成功");
                                 SharedPreUtils.saveStr(LoginActivity.this, "hash", userInfoBean.getHash());
+                                SharedPreUtils.saveStr(LoginActivity.this, "token", userInfoBean.getToken());
                                 SharedPreUtils.saveStr(LoginActivity.this, "member_id",
                                         String.valueOf(userInfoBean.getData().getMemberId()));
                                 SharedPreUtils.saveBoolean(LoginActivity.this, "is_login", true);
@@ -541,6 +543,7 @@ public class LoginActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {

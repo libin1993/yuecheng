@@ -97,6 +97,7 @@ public class CouponDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("couponId", String.valueOf(couponId))
                 .build()
                 .execute(new StringCallback() {
@@ -211,6 +212,7 @@ public class CouponDetailActivity extends BaseActivity {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("token",SharedPreUtils.getStr(this, "token"))
                     .addParams("cyCouponId", String.valueOf(couponType))
                     .addParams("couponId", String.valueOf(couponId))
                     .addParams("exchangeValue", String.valueOf(couponBean.getData().getAccessValue()))

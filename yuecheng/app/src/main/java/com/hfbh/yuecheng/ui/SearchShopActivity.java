@@ -152,6 +152,7 @@ public class SearchShopActivity extends BaseActivity {
         map.put("appVersion", MyApp.appVersion);
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
+        map.put("token", SharedPreUtils.getStr(this, "token"));
         map.put("pageNum", String.valueOf(page));
         if (floorNum > 0) {
             map.put("floorId", String.valueOf(floorId));
@@ -219,10 +220,10 @@ public class SearchShopActivity extends BaseActivity {
                                 refreshLayout.finishLoadMore();
                                 isLoadMore = false;
                                 shopAdapter.notifyDataSetChanged();
-                            } else if (isSearch){
+                            } else if (isSearch) {
                                 loadingView.smoothToHide();
                                 shopAdapter.notifyDataSetChanged();
-                            }else {
+                            } else {
                                 loadingView.smoothToHide();
                                 initView();
                             }

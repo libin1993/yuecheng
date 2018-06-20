@@ -90,6 +90,7 @@ public class CloseGiftActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("gainId", String.valueOf(giftId))
                 .addParams("queryType", "GIFT")
                 .build()

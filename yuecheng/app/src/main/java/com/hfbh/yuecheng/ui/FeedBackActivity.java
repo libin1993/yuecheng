@@ -224,6 +224,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
         map.put("appVersion", MyApp.appVersion);
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
+        map.put("token",SharedPreUtils.getStr(this, "token"));
         map.put("content", etContent.getText().toString().trim());
         if (!TextUtils.isEmpty(phone)) {
             map.put("phone", phone);

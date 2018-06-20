@@ -352,6 +352,7 @@ public class RegisterActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etRegisterPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
@@ -440,6 +441,7 @@ public class RegisterActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etRegisterPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {

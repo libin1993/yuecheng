@@ -98,6 +98,7 @@ public class NowActionActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("status", "DOING")
                 .build()
@@ -137,6 +138,7 @@ public class NowActionActivity extends BaseActivity {
                         } else {
                             refreshLayout.finishLoadMore();
                             if (page == 1){
+                                loadingView.smoothToHide();
                                 rvActivity.setVisibility(View.GONE);
                                 llNullData.setVisibility(View.VISIBLE);
                             }

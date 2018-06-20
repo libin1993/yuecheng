@@ -178,6 +178,7 @@ public class ResetPayPwdActivity extends BaseActivity {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("token",SharedPreUtils.getStr(this, "token"))
                     .addParams("payPassword", newPwd)
                     .addParams("confirmPayPassword", secPwd)
                     .build()
@@ -214,6 +215,7 @@ public class ResetPayPwdActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("payPassword", validatePwd)
                 .build()
                 .execute(new StringCallback() {

@@ -123,6 +123,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("token",SharedPreUtils.getStr(this, "token"))
                     .addParams("platform", MyApp.appType)
                     .build()
                     .execute(new StringCallback() {
@@ -248,6 +249,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     .addParams("appType", MyApp.appType)
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("token",SharedPreUtils.getStr(this, "token"))
                     .build()
                     .execute(new StringCallback() {
                         @Override

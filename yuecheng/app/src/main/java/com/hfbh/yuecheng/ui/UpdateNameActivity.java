@@ -85,6 +85,7 @@ public class UpdateNameActivity extends BaseActivity {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("token",SharedPreUtils.getStr(this, "token"))
                     .addParams("memberNickName", nickName)
                     .addParams("memberId", SharedPreUtils.getStr(this, "member_id"))
                     .build().execute(new StringCallback() {

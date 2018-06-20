@@ -101,6 +101,7 @@ public class MyActivityFragment extends BaseFragment {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
                 .addParams("memberId", SharedPreUtils.getStr(getActivity(), "member_id"))
+                .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("type", String.valueOf(type))
                 .build()

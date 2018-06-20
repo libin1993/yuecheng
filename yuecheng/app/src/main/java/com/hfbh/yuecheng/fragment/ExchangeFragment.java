@@ -101,6 +101,7 @@ public class ExchangeFragment extends BaseFragment {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("queryType", type)
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("rewardType","GIFT")

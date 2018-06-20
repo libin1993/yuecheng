@@ -223,6 +223,7 @@ public class OrderDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("payPassword", validatePwd)
                 .build()
                 .execute(new StringCallback() {
@@ -258,6 +259,7 @@ public class OrderDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("orderNo", orderBean.getData().getOrderNo())
                 .build()
                 .execute(new StringCallback() {

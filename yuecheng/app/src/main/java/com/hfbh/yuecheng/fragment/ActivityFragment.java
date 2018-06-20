@@ -83,6 +83,7 @@ public class ActivityFragment extends BaseFragment {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("pageNum", "1")
                 .build()
                 .execute(new StringCallback() {

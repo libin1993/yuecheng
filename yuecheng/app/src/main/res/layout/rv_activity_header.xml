@@ -33,7 +33,6 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/ll_activity_time"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="10dp"
@@ -96,7 +95,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:textColor="@color/gray_95"
-            android:textSize="13sp"/>
+            android:textSize="13sp"
+            android:singleLine="true"
+            android:ellipsize="end"/>
 
     </LinearLayout>
 

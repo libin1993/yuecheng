@@ -102,6 +102,7 @@ public class ExchangeGiftActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("pointsRewardType", "GIFT")
                 .addParams("sortType", sortType)

@@ -97,6 +97,7 @@ public class GoodsFragment extends BaseFragment {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getParentFragment().getActivity(), "hash"))
+                .addParams("token",SharedPreUtils.getStr(getParentFragment().getActivity(), "token"))
                 .addParams("commodityType", type)
                 .addParams("pageNum", String.valueOf(page))
                 .build()

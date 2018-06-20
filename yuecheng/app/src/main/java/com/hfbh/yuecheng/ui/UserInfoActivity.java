@@ -152,6 +152,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -161,6 +162,8 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(SharedPreUtils.getStr(UserInfoActivity.this, "hash")
+                                +",,"+SharedPreUtils.getStr(UserInfoActivity.this, "token")+response);
                         userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             initView();
@@ -219,9 +222,12 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                 updateAvatar();
                 break;
             case R.id.ll_user_name:
-                Intent intent = new Intent(this, UpdateNameActivity.class);
-                intent.putExtra("username", userInfoBean.getData().getMemberNickname());
-                startActivity(intent);
+                if (userInfoBean != null && userInfoBean.getData() != null) {
+                    Intent intent = new Intent(this, UpdateNameActivity.class);
+                    intent.putExtra("username", userInfoBean.getData().getMemberNickname());
+                    startActivity(intent);
+                }
+
                 break;
             case R.id.ll_user_sex:
                 updateSex();
@@ -489,6 +495,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
         map.put("memberId", SharedPreUtils.getStr(this, "member_id"));
+        map.put("token", SharedPreUtils.getStr(this, "token"));
         OkHttpUtils.post()
                 .url(Constant.UPDATE_USER_INFO)
                 .params(map)

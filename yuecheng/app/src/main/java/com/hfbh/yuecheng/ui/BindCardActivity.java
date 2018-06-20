@@ -140,6 +140,7 @@ public class BindCardActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("prePaidCardAccount", etBindCardNumber.getText().toString().trim())
                 .addParams("prePaidCardPassword", etBindCardPwd.getText().toString().trim())
                 .build()

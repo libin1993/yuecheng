@@ -108,6 +108,7 @@ public class GiftDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("pointsRewardId", String.valueOf(giftId))
                 .build()
                 .execute(new StringCallback() {
@@ -260,6 +261,7 @@ public class GiftDetailActivity extends BaseActivity {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("token",SharedPreUtils.getStr(this, "token"))
                     .addParams("pointsRewardId", String.valueOf(giftId))
                     .addParams("exchangeNum", String.valueOf(num))
                     .build()

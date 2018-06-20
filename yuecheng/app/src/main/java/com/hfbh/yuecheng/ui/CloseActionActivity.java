@@ -92,6 +92,7 @@ public class CloseActionActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("id", String.valueOf(activityId))
                 .build()
                 .execute(new StringCallback() {

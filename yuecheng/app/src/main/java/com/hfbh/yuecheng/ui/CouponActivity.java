@@ -76,6 +76,7 @@ public class CouponActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("cardNumber", SharedPreUtils.getStr(this, "card_number"))
                 .addParams("couponTypeKind", "VOUCHER")
                 .build()

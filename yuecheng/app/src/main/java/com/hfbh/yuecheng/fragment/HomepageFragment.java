@@ -167,6 +167,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -197,6 +198,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                    .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                     .addParams("moduleCode", typeBean.getData().get(i).getModuleCode())
                     .build()
                     .execute(new StringCallback() {
@@ -208,31 +210,40 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         @Override
                         public void onResponse(String response, int id) {
                             LogUtils.log(response);
-                            switch (typeBean.getData().get(type).getModuleCode()) {
-                                case "BANNER":
-                                    bannerBean = GsonUtils.jsonToBean(response, BannerBean.class);
-                                    break;
-                                case "MAIN":
-                                    functionBean = GsonUtils.jsonToBean(response, FunctionBean.class);
-                                    break;
-                                case "EXTRA":
-                                    break;
-                                case "BROAD":
-                                    broadcastBean = GsonUtils.jsonToBean(response, BroadcastBean.class);
-                                    break;
-                                case "TOPIC":
-                                    topicBean = GsonUtils.jsonToBean(response, TopicBean.class);
-                                    break;
-                                case "COUPON":
-                                    couponBean = GsonUtils.jsonToBean(response, CouponBean.class);
-                                    break;
-                                case "ACTIVITY":
-                                    activityBean = GsonUtils.jsonToBean(response, ActivityBean.class);
-                                    break;
-                                case "GIFT":
-                                    giftBean = GsonUtils.jsonToBean(response, GiftBean.class);
-                                    break;
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                boolean flag = jsonObject.getBoolean("flag");
+                                if (flag){
+                                    switch (typeBean.getData().get(type).getModuleCode()) {
+                                        case "BANNER":
+                                            bannerBean = GsonUtils.jsonToBean(response, BannerBean.class);
+                                            break;
+                                        case "MAIN":
+                                            functionBean = GsonUtils.jsonToBean(response, FunctionBean.class);
+                                            break;
+                                        case "EXTRA":
+                                            break;
+                                        case "BROAD":
+                                            broadcastBean = GsonUtils.jsonToBean(response, BroadcastBean.class);
+                                            break;
+                                        case "TOPIC":
+                                            topicBean = GsonUtils.jsonToBean(response, TopicBean.class);
+                                            break;
+                                        case "COUPON":
+                                            couponBean = GsonUtils.jsonToBean(response, CouponBean.class);
+                                            break;
+                                        case "ACTIVITY":
+                                            activityBean = GsonUtils.jsonToBean(response, ActivityBean.class);
+                                            break;
+                                        case "GIFT":
+                                            giftBean = GsonUtils.jsonToBean(response, GiftBean.class);
+                                            break;
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+
                             count++;
                             if (count == typeBean.getData().size()) {
                                 loadingView.smoothToHide();
@@ -271,7 +282,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, true);
         rvHomepage.setAdapter(delegateAdapter);
 
-        if (bannerBean != null && bannerBean.getData().size() > 0) {
+        if (bannerBean != null && bannerBean.getData() != null && bannerBean.getData().size() > 0) {
             BaseDelegateAdapter bannerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                     R.layout.layout_homepage_banner, 1, 1) {
                 @Override
@@ -308,7 +319,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             mAdapters.add(bannerAdapter);
         }
 
-        if (functionBean != null && functionBean.getData().size() > 0) {
+        if (functionBean != null && functionBean.getData() != null && functionBean.getData().size() > 0) {
             //功能模块
             BaseDelegateAdapter functionAdapter = new BaseDelegateAdapter(getActivity(), new
                     GridLayoutHelper(2, 1), R.layout.layout_homepage_function,
@@ -395,7 +406,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         }
 
-        if (topicBean != null && topicBean.getData().size() > 0) {
+        if (topicBean != null && topicBean.getData() != null && topicBean.getData().size() > 0) {
             BaseDelegateAdapter topicAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                     R.layout.layout_homepage_topic, 1, 12) {
                 @Override
@@ -515,7 +526,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
 
-        if (couponBean != null && couponBean.getData().size() > 0) {
+        if (couponBean != null && couponBean.getData() != null && couponBean.getData().size() > 0) {
             //优惠券
             initTitle("优惠券", 5);
 
@@ -606,7 +617,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             mAdapters.add(couponAdapter);
         }
 
-        if (giftBean != null && giftBean.getData().size() > 0) {
+        if (giftBean != null && giftBean.getData() != null && giftBean.getData().size() > 0) {
             //积分兑换
             initTitle("积分兑礼", 7);
 
@@ -653,7 +664,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
 
-        if (activityBean != null && activityBean.getData().size() > 0) {
+        if (activityBean != null && activityBean.getData() != null && activityBean.getData().size() > 0) {
             //精彩活动
             initTitle("精彩活动", 9);
 
@@ -798,6 +809,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("cyCouponId", String.valueOf(couponBean.getData().get(position).getCouponTypeCy()))
                 .addParams("couponId", String.valueOf(couponBean.getData().get(position).getObjectId()))
                 .addParams("exchangeValue", String.valueOf(couponBean.getData().get(position).getAccessValue()))
@@ -854,6 +866,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override

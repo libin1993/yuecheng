@@ -97,6 +97,7 @@ public class PayCardActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("pageNum", String.valueOf(page))
                 .build()
                 .execute(new StringCallback() {
@@ -236,6 +237,7 @@ public class PayCardActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token",SharedPreUtils.getStr(this, "token"))
                 .addParams("id", String.valueOf(cardId))
                 .build()
                 .execute(new StringCallback() {

@@ -23,6 +23,15 @@ public class UserInfoBean implements Serializable {
     private String hash;
     private DataBean data;
     private int code;
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getMsg() {
         return msg;
