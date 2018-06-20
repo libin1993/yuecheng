@@ -48,9 +48,8 @@
             android:src="@mipmap/ic_activity_time"/>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="活动时间"
             android:textColor="@color/gray_33"
             android:textSize="15sp"/>
@@ -60,13 +59,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
+            android:layout_marginLeft="12dp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="@color/gray_95"
-            android:textSize="13sp"/>
+            android:textSize="13sp"
+            android:gravity="right"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_activity_address"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="1dp"
@@ -82,9 +84,8 @@
             android:src="@mipmap/ic_activity_location"/>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="活动地点"
             android:textColor="@color/gray_33"
             android:textSize="15sp"/>
@@ -96,8 +97,10 @@
             android:layout_marginRight="12dp"
             android:textColor="@color/gray_95"
             android:textSize="13sp"
+            android:layout_marginLeft="12dp"
             android:singleLine="true"
-            android:ellipsize="end"/>
+            android:ellipsize="end"
+            android:gravity="right"/>
 
     </LinearLayout>
 

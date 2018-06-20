@@ -196,7 +196,7 @@ public class ShopDetailActivity extends BaseActivity {
         ivShopDetailAvatar.setImageURI(shopBean.getShop().getShopLogo());
         tvShopDetailName.setText(shopBean.getShop().getShopName());
         tvShopDetailType.setText(type);
-        tvShopDetailLocation.setText(shopBean.getMall().getOrganizeName() + address);
+        tvShopDetailLocation.setText(shopBean.getMall().getOrganizeName() +"  "+address);
 
         tvShopDetailInfo.setText(shopBean.getShop().getShopIntro());
 

@@ -22,7 +22,9 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.CalendarActivity;
 import com.hfbh.yuecheng.ui.NowActionActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -89,7 +91,7 @@ public class ActivityFragment extends BaseFragment {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-
+                        LogUtils.log(e.toString());
                     }
 
                     @Override

@@ -46,7 +46,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/gray_10"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
 
                     <TextView
                         android:id="@+id/tv_coupon_detail_remain"

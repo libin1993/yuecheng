@@ -6,7 +6,7 @@ package com.hfbh.yuecheng.constant;
  * Describe：接口
  */
 public class Constant {
-    private static final String HOST = "https://yjwang.wmalle.com";
+    private static final String HOST = "https://ceshi.wmalle.com";
     //定位
     public static final String LOCATION = HOST + "/wechat/appRequest/nearestMall.json";
     //首页分类
@@ -109,12 +109,12 @@ public class Constant {
 
     //WebView
     //活动详情
-    public static final String ACTIVITY_DETAIL = "http://yjwang.wmalle.com/mall/baida-app-h5/index.html#/activity";
+    public static final String ACTIVITY_DETAIL = "http://ceshi.wmalle.com/mall/baida-app-h5/index.html#/activity";
     //人气单品详情
-    public static final String POP_GOODS_DETAIL = "http://yjwang.wmalle.com/mall/baida-app-h5/index.html#/commodity/specialDetail";
+    public static final String POP_GOODS_DETAIL = "http://ceshi.wmalle.com/mall/baida-app-h5/index.html#/commodity/specialDetail";
     //新品详情
-    public static final String NEW_GOODS_DETAIL = "http://yjwang.wmalle.com/mall/baida-app-h5/index.html#/commodity/newDetail";
+    public static final String NEW_GOODS_DETAIL = "http://ceshi.wmalle.com/mall/baida-app-h5/index.html#/commodity/newDetail";
     //用户协议
-    public static final String USER_AGREEMENT = "http://yjwang.wmalle.com/mall/baida-app-h5/index.html#/protocol";
+    public static final String USER_AGREEMENT = "http://ceshi.wmalle.com/mall/baida-app-h5/index.html#/protocol";
 
 }

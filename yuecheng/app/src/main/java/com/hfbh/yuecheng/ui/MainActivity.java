@@ -134,7 +134,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
                         @Override
                         public void onResponse(String s, int i) {
-                            LogUtils.log(s);
                             UpdateBean updateBean = GsonUtils.jsonToBean(s, UpdateBean.class);
                             if (updateBean.isFlag()) {
                                 //取消检测更新
