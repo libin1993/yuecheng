@@ -83,11 +83,15 @@ public class ExchangeCouponActivity extends BaseActivity {
     private boolean isRefresh;
     //加载更多
     private boolean isLoadMore;
+    //搜索
+    private boolean isSearch;
+
     //关键字
     private List<CouponListBean.DataBean> dataList = new ArrayList<>();
     //总页数
     private int pages;
     private CommonAdapter<CouponListBean.DataBean> adapter;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,31 +133,34 @@ public class ExchangeCouponActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
+                        LogUtils.log(etSearchCoupon.getText().toString().trim() + response);
                         CouponListBean ListBean = GsonUtils.jsonToBean(response, CouponListBean.class);
-                        if (ListBean.getPage() != null){
+                        if (ListBean.getPage() != null) {
                             pages = ListBean.getPage().getPages();
                         }
                         if (ListBean.isFlag() && ListBean.getData() != null && ListBean.getData().size() > 0) {
-                            if (isRefresh) {
+                            if ((isRefresh || isSearch) && !isLoadMore) {
                                 dataList.clear();
                             }
                             dataList.addAll(ListBean.getData());
 
                             if (isRefresh) {
                                 refreshLayout.finishRefresh();
-                                isRefresh = false;
                                 adapter.notifyDataSetChanged();
+                                isRefresh = false;
                             } else if (isLoadMore) {
                                 refreshLayout.finishLoadMore();
-                                isLoadMore = false;
                                 adapter.notifyDataSetChanged();
+                                isLoadMore = false;
+                            } else if (isSearch) {
+                                adapter.notifyDataSetChanged();
+                                loadingView.smoothToHide();
                             } else {
                                 loadingView.smoothToHide();
                                 initView();
                             }
-                            llNullData.setVisibility(View.GONE);
 
+                            llNullData.setVisibility(View.GONE);
                         } else {
                             if (page == 1) {
                                 loadingView.smoothToHide();
@@ -161,8 +168,8 @@ public class ExchangeCouponActivity extends BaseActivity {
                                 adapter.notifyDataSetChanged();
                                 llNullData.setVisibility(View.VISIBLE);
                                 refreshLayout.finishRefresh();
-                            }
 
+                            }
                             refreshLayout.finishLoadMore();
                         }
                     }
@@ -170,7 +177,6 @@ public class ExchangeCouponActivity extends BaseActivity {
     }
 
     private void initView() {
-
         rvExchangeCoupon.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CommonAdapter<CouponListBean.DataBean>(ExchangeCouponActivity.this,
                 R.layout.rv_coupon_item, dataList) {
@@ -281,7 +287,6 @@ public class ExchangeCouponActivity extends BaseActivity {
                 if (page < pages) {
                     isLoadMore = true;
                     page++;
-                    LogUtils.log("ccc");
                     initData();
                 } else {
                     refreshLayout.finishLoadMore();
@@ -292,7 +297,7 @@ public class ExchangeCouponActivity extends BaseActivity {
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 isRefresh = true;
                 page = 1;
-                LogUtils.log("bbb");
+
                 initData();
             }
         });
@@ -323,8 +328,7 @@ public class ExchangeCouponActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                LogUtils.log("aaaa");
-                isRefresh = true;
+                isSearch = true;
                 page = 1;
                 initData();
             }

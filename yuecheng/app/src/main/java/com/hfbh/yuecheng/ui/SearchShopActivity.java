@@ -107,6 +107,8 @@ public class SearchShopActivity extends BaseActivity {
     private boolean isRefresh;
     //加载更多
     private boolean isLoadMore;
+    //搜索
+    private boolean isSearch;
     //总页数
     private int pages;
     //首次进入
@@ -174,7 +176,7 @@ public class SearchShopActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         SearchShopBean marketListBean = GsonUtils.jsonToBean(response, SearchShopBean.class);
                         if (marketListBean.isFlag() && marketListBean.getShopList().size() > 0) {
-                            if (isRefresh) {
+                            if ((isRefresh || isSearch) && !isLoadMore) {
                                 shopList.clear();
                             }
                             shopList.addAll(marketListBean.getShopList());
@@ -217,10 +219,14 @@ public class SearchShopActivity extends BaseActivity {
                                 refreshLayout.finishLoadMore();
                                 isLoadMore = false;
                                 shopAdapter.notifyDataSetChanged();
-                            } else {
+                            } else if (isSearch){
+                                loadingView.smoothToHide();
+                                shopAdapter.notifyDataSetChanged();
+                            }else {
+                                loadingView.smoothToHide();
                                 initView();
                             }
-                            loadingView.smoothToHide();
+
                             llNullData.setVisibility(View.GONE);
                         } else {
                             refreshLayout.finishLoadMore();
@@ -276,7 +282,7 @@ public class SearchShopActivity extends BaseActivity {
                 int shopId = shopList.get(position).getShopId();
                 Intent intent = new Intent(SearchShopActivity.this, ShopDetailActivity.class);
                 intent.putExtra("shop_id", shopId);
-                intent.putExtra("type", industryList.get(industryNum).getIndustryName());
+                intent.putExtra("type", shopList.get(position).getIndustryList().get(0).getIndustryName());
                 intent.putExtra("address", shopList.get(position).getFloorName() +
                         "-" + shopList.get(position).getBerthNo());
                 startActivity(intent);
@@ -334,7 +340,7 @@ public class SearchShopActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                isRefresh = true;
+                isSearch = true;
                 page = 1;
                 initData();
             }

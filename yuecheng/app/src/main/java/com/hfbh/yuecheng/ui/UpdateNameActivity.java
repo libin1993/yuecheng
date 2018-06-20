@@ -57,7 +57,7 @@ public class UpdateNameActivity extends BaseActivity {
 
     private void getData() {
         tvHeaderTitle.setText("设置昵称");
-        etSetNickname.setText(getIntent().getStringExtra("nickname"));
+        etSetNickname.setText(getIntent().getStringExtra("username"));
     }
 
 
@@ -97,10 +97,11 @@ public class UpdateNameActivity extends BaseActivity {
                 public void onResponse(String response, int id) {
                     ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                     if (responseBean.isFlag()) {
+                        ToastUtils.showToast(UpdateNameActivity.this, "昵称设置成功");
                         EventBus.getDefault().post(nickName);
                         finish();
                     } else {
-                        ToastUtils.showToast(UpdateNameActivity.this, "设置昵称失败");
+                        ToastUtils.showToast(UpdateNameActivity.this, responseBean.getMsg());
                     }
                 }
             });

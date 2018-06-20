@@ -135,6 +135,7 @@
         <activity android:name=".ui.CloseCouponActivity"/>
         <activity android:name=".ui.CouponIntroActivity"/>
         <activity android:name=".ui.BannerInfoActivity"/>
+        <activity android:name=".ui.GuideActivity"/>
 
         <service
             android:name=".service.TimerService"

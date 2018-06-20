@@ -181,8 +181,8 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
         provinceAddress = userInfoBean.getData().getMemberProvince();
         cityAddress = userInfoBean.getData().getMemberCity();
         countAddress = userInfoBean.getData().getMemberCountry();
-        if (!TextUtils.isEmpty(provinceAddress)){
-            tvUserAddress.setText(provinceAddress + " " + cityAddress + " " + countAddress);
+        if (!TextUtils.isEmpty(provinceAddress)) {
+            tvUserAddress.setText(provinceAddress + " " + cityAddress);
         }
 
 
@@ -220,7 +220,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                 break;
             case R.id.ll_user_name:
                 Intent intent = new Intent(this, UpdateNameActivity.class);
-                intent.putExtra("username",userInfoBean.getData().getMemberNickname());
+                intent.putExtra("username", userInfoBean.getData().getMemberNickname());
                 startActivity(intent);
                 break;
             case R.id.ll_user_sex:
@@ -513,7 +513,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                             tvUserBirthday.setText(userBirthday);
                             break;
                         case "address":
-                            tvUserAddress.setText(provinceAddress + " " + cityAddress + " " + countAddress);
+                            tvUserAddress.setText(provinceAddress + " " + cityAddress);
                             break;
                     }
                     ToastUtils.showToast(UserInfoActivity.this, "修改成功");

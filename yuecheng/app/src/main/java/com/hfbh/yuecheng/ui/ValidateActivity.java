@@ -299,12 +299,12 @@ public class ValidateActivity extends BaseActivity {
         AlertDialog.Builder dialog = new AlertDialog.Builder(ValidateActivity.this,
                 R.style.Theme_AppCompat_DayNight_Dialog_Alert);
         dialog.setTitle("提示");
-        dialog.setMessage("该手机号尚未注册，请先去注册");
+        dialog.setMessage("该手机号尚未绑定，请先去绑定");
         //为“确定”按钮注册监听事件
-        dialog.setPositiveButton("去注册", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("去绑定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(ValidateActivity.this, RegisterActivity.class));
+                startActivity(new Intent(ValidateActivity.this, LoginActivity.class));
             }
         });
 

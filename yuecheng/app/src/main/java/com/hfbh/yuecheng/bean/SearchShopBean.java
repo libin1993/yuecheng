@@ -418,7 +418,7 @@ public class SearchShopBean {
         private String firstLetter;
         private int floorId;
         private String floorName;
-        private Object industryName;
+        private String industryName;
         private String isCoupon;
         private String isDelete;
         private String isGroup;
@@ -506,11 +506,11 @@ public class SearchShopBean {
             this.floorName = floorName;
         }
 
-        public Object getIndustryName() {
+        public String getIndustryName() {
             return industryName;
         }
 
-        public void setIndustryName(Object industryName) {
+        public void setIndustryName(String industryName) {
             this.industryName = industryName;
         }
 

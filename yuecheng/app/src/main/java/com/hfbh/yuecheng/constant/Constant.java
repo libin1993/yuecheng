@@ -106,15 +106,17 @@ public class Constant {
     public static final String CONFIRM_ORDER = HOST + "/wechat/scanCodePay/confirmOrder.json";
     //检测更新
     public static final String CHECK_UPDATE = HOST + "/wechat/appRequest/appVersion.json";
+    //室内导航
+    public static final String FLOOR_GUIDE = HOST + "/wechat/mallFloor/floorList.json";
 
     //WebView
     //活动详情
-    public static final String ACTIVITY_DETAIL = HOST + "/mall/baida-app-h5/index.html#/activity";
+    public static final String ACTIVITY_DETAIL = "http://yjwang.wmalle.com/mall/baida-app-h5/index.html#/activity";
     //人气单品详情
-    public static final String POP_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/specialDetail";
+    public static final String POP_GOODS_DETAIL = "http://yjwang.wmalle.com/mall/baida-app-h5/index.html#/commodity/specialDetail";
     //新品详情
-    public static final String NEW_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/newDetail";
+    public static final String NEW_GOODS_DETAIL = "http://yjwang.wmalle.com/mall/baida-app-h5/index.html#/commodity/newDetail";
     //用户协议
-    public static final String USER_AGREEMENT = HOST + "/mall/baida-app-h5/index.html#/protocol";
+    public static final String USER_AGREEMENT = "http://yjwang.wmalle.com/mall/baida-app-h5/index.html#/protocol";
 
 }

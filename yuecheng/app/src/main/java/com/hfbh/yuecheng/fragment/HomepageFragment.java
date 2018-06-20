@@ -54,6 +54,7 @@ import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
 import com.hfbh.yuecheng.ui.GameActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
+import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.ResetPayPwdActivity;
@@ -353,6 +354,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 case "SHOPPING"://我要买
                                     break;
                                 case "GUIDING"://室内导航
+                                    startActivity(new Intent(getActivity(), GuideActivity.class));
                                     break;
                                 case "PLAYING"://我要玩
                                     break;

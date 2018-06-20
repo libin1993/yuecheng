@@ -13,6 +13,8 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -23,7 +25,6 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.bean.LoginBean;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -32,7 +33,6 @@ import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
-import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -76,10 +76,12 @@ public class LoginActivity extends BaseActivity {
     TextView tvForgetPassword;
     @BindView(R.id.tv_login)
     TextView tvLogin;
-    @BindView(R.id.tv_login_sign)
-    TextView tvSign;
     @BindView(R.id.tv_wechat_login)
     RelativeLayout tvWechatLogin;
+    @BindView(R.id.checkbox_login)
+    CheckBox checkboxLogin;
+    @BindView(R.id.tv_login_agreement)
+    TextView tvLoginAgreement;
 
     //是否输入手机号
     private boolean isPhone;
@@ -114,6 +116,17 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        checkboxLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && isPhone && isCode) {
+                    tvLogin.setEnabled(true);
+                } else {
+                    tvLogin.setEnabled(false);
+                }
+            }
+        });
+
         etPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -129,7 +142,7 @@ public class LoginActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {
                     isPhone = true;
-                    if (isCode) {
+                    if (isCode && checkboxLogin.isChecked()) {
                         tvLogin.setEnabled(true);
                     } else {
                         tvLogin.setEnabled(false);
@@ -159,7 +172,7 @@ public class LoginActivity extends BaseActivity {
                     tvLogin.setEnabled(false);
                 } else {
                     isCode = true;
-                    if (isPhone) {
+                    if (isPhone && checkboxLogin.isChecked()) {
                         tvLogin.setEnabled(true);
                     } else {
                         tvLogin.setEnabled(false);
@@ -182,7 +195,6 @@ public class LoginActivity extends BaseActivity {
             etCode.setText(null);
             etCode.setHint("输入验证码");
             etCode.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-
         } else {
             tvLoginTitle.setText("账号密码登录");
             rlLoginCode.setVisibility(View.GONE);
@@ -224,7 +236,7 @@ public class LoginActivity extends BaseActivity {
 
 
     @OnClick({R.id.iv_login_close, R.id.tv_login_code, R.id.iv_login_code, R.id.tv_forget_password,
-            R.id.tv_login, R.id.tv_login_sign, R.id.tv_wechat_login})
+            R.id.tv_login, R.id.tv_wechat_login, R.id.tv_login_agreement})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_login_close:
@@ -256,108 +268,110 @@ public class LoginActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.tv_login:
-                isRegister(2);
-                break;
-            case R.id.tv_login_sign:
-                Intent intent1 = new Intent(LoginActivity.this, RegisterActivity.class);
-                intent1.putExtra("type", "register");
-                startActivity(intent1);
+                if (loginType == 0) {
+                    codeLogin();
+                } else {
+                    pwdLogin();
+                }
                 break;
             case R.id.tv_wechat_login:
+                break;
+            case R.id.tv_login_agreement:
+                startActivity(new Intent(this, UserAgreementActivity.class));
                 break;
         }
     }
 
-    /**
-     * 监测手机号是否注册
-     */
-    private void isRegister(final int type) {
-        OkHttpUtils.post()
-                .url(Constant.IS_REGISTER)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("memberPhone", etPhone.getText().toString().trim())
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
+//    /**
+//     * 监测手机号是否注册
+//     */
+//    private void isRegister(final int type) {
+//        OkHttpUtils.post()
+//                .url(Constant.IS_REGISTER)
+//                .addParams("appType", MyApp.appType)
+//                .addParams("appVersion", MyApp.appVersion)
+//                .addParams("organizeId", MyApp.organizeId)
+//                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+//                .addParams("memberPhone", etPhone.getText().toString().trim())
+//                .build()
+//                .execute(new StringCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e, int id) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response, int id) {
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(response);
+//                            boolean flag = jsonObject.getBoolean("flag");
+//                            //是否已注册 false已注册 true未注册
+//                            if (flag) {
+//                                toRegister();
+//                            } else {
+//                                if (type == 1) {
+//                                    sendPhoneNumber();
+//                                    new Thread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            for (int i = 60; i > 0; i--) {
+//                                                Message msg = new Message();
+//                                                msg.what = 1;
+//                                                msg.arg1 = i;
+//                                                mHandler.sendMessage(msg);
+//                                                try {
+//                                                    Thread.sleep(1000);
+//                                                } catch (InterruptedException e) {
+//                                                    e.printStackTrace();
+//                                                }
+//                                            }
+//                                            mHandler.sendEmptyMessage(2);
+//                                        }
+//                                    }).start();
+//                                } else if (type == 2) {
+//                                    if (loginType == 0) {
+//                                        codeLogin();
+//                                    } else {
+//                                        pwdLogin();
+//                                    }
+//                                }
+//                            }
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//
+//    }
 
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            //是否已注册 false已注册 true未注册
-                            if (flag) {
-                                toRegister();
-                            } else {
-                                if (type == 1) {
-                                    sendPhoneNumber();
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            for (int i = 60; i > 0; i--) {
-                                                Message msg = new Message();
-                                                msg.what = 1;
-                                                msg.arg1 = i;
-                                                mHandler.sendMessage(msg);
-                                                try {
-                                                    Thread.sleep(1000);
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            mHandler.sendEmptyMessage(2);
-                                        }
-                                    }).start();
-                                } else if (type == 2) {
-                                    if (loginType == 0) {
-                                        codeLogin();
-                                    } else {
-                                        pwdLogin();
-                                    }
-                                }
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-
-    }
-
-    /**
-     * 手机号未注册，提示用户注册
-     */
-    private void toRegister() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this,
-                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
-        dialog.setTitle("提示");
-        dialog.setMessage("该手机号尚未注册，请先去注册");
-        //为“确定”按钮注册监听事件
-        dialog.setPositiveButton("去注册", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
-        });
-
-        //为“取消”按钮注册监听事件
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.create();
-        dialog.show();
-    }
+//    /**
+//     * 手机号未注册，提示用户注册
+//     */
+//    private void toRegister() {
+//        AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this,
+//                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+//        dialog.setTitle("提示");
+//        dialog.setMessage("该手机号尚未注册，请先去注册");
+//        //为“确定”按钮注册监听事件
+//        dialog.setPositiveButton("去注册", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+//            }
+//        });
+//
+//        //为“取消”按钮注册监听事件
+//        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.create();
+//        dialog.show();
+//    }
 
     /**
      * 验证码登录
@@ -383,6 +397,7 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             ToastUtils.showToast(LoginActivity.this, "登录成功");
@@ -487,7 +502,26 @@ public class LoginActivity extends BaseActivity {
     private void getVerificationCode() {
         if (!TextUtils.isEmpty(etPhone.getText().toString().trim())) {
             if (isPhone) {
-                isRegister(1);
+                sendPhoneNumber();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 60; i > 0; i--) {
+                            Message msg = new Message();
+                            msg.what = 1;
+                            msg.arg1 = i;
+                            mHandler.sendMessage(msg);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        mHandler.sendEmptyMessage(2);
+                    }
+                }).start();
+
+
             } else {
                 ToastUtils.showToast(this, "手机号格式不正确，请重新输入");
             }

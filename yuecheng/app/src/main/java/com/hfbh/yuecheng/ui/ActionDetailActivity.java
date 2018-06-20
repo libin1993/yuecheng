@@ -88,6 +88,7 @@ public class ActionDetailActivity extends BaseActivity {
 
         String url = Constant.ACTIVITY_DETAIL + "?appType=Android&id=" + activityId
                 + "&hash=" + SharedPreUtils.getStr(this, "hash");
+        LogUtils.log(url);
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
             @Override
