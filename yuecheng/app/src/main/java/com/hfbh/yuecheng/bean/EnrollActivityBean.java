@@ -944,6 +944,16 @@ public class EnrollActivityBean {
             private String required;
             private String title;
             private String type;
+            private boolean isFinish;
+
+            public boolean isFinish() {
+                return isFinish;
+            }
+
+            public void setFinish(boolean finish) {
+                isFinish = finish;
+            }
+
             private List<ItemListBean> itemList;
 
             public int getId() {

@@ -87,7 +87,7 @@ public class PayCodeFragment extends BaseFragment {
 
         ivPayQrcode.setImageBitmap(qrBmp);
 
-        tvPaycodeMoney.setText(String.valueOf(userInfoBean.getData().getAccountBalance()));
+        tvPaycodeMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
         tvPaycodeScore.setText(DisplayUtils.isInteger(userInfoBean.getData().getPoints()));
         tvPaycodeTicket.setText(String.valueOf(userInfoBean.getData().getCouponCount()));
 

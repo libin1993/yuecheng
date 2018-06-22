@@ -162,8 +162,6 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(SharedPreUtils.getStr(UserInfoActivity.this, "hash")
-                                +",,"+SharedPreUtils.getStr(UserInfoActivity.this, "token")+response);
                         userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             initView();
@@ -224,7 +222,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
             case R.id.ll_user_name:
                 if (userInfoBean != null && userInfoBean.getData() != null) {
                     Intent intent = new Intent(this, UpdateNameActivity.class);
-                    intent.putExtra("username", userInfoBean.getData().getMemberNickname());
+                    intent.putExtra("username", tvUserName.getText().toString().trim());
                     startActivity(intent);
                 }
 

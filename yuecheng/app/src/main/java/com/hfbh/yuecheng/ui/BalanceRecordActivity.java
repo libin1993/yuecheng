@@ -92,7 +92,6 @@ public class BalanceRecordActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log(accountId);
                         balanceBean = GsonUtils.jsonToBean(s, BalanceRecordBean.class);
                         if (balanceBean.isFlag() && balanceBean.getData() != null && balanceBean.getData().size() > 0) {
                             initView();

@@ -100,7 +100,7 @@ public class ActivityListFragment extends BaseFragment {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
-                .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("tagId", String.valueOf(tagId))
                 .build()
@@ -165,63 +165,68 @@ public class ActivityListFragment extends BaseFragment {
                                 "yyyy.MM.dd", dataBean.getActivityEndtime()));
 
                 TextView tvReceive = holder.getView(R.id.tv_home_activity_receive);
-                final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
+                //活动结束
+                final boolean isActivityEnd = System.currentTimeMillis() > DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getActivityEndtime());
-
-                final boolean isStart = System.currentTimeMillis() >= DateUtils.getTime(
+                //报名开始
+                final boolean isEnrollStart = System.currentTimeMillis() >= DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
-
+                //报名结束
+                final boolean isEnrollEnd = System.currentTimeMillis() > DateUtils.getTime(
+                        "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                //报名满额
                 final boolean isLimit = dataBean.getSignupLimitNumber() > 0 && dataBean.getSignupNumber()
                         == dataBean.getSignupLimitNumber();
-
+                //是否报名
                 final boolean isEnroll = dataBean.getMemberSignupState() != null
                         && dataBean.getMemberSignupState().equals("去参加");
 
-                if (!isFinish) {
-                    if (isStart) {
-                        if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
-                            if (isEnroll) {
-                                tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText("去参加");
-                            } else {
-                                if (isLimit) {
-                                    tvReceive.setVisibility(View.VISIBLE);
-                                    tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
-                                    tvReceive.setText("名额已满");
-                                } else {
+                if (!TextUtils.isEmpty(dataBean.getAcivityType()) && dataBean.getAcivityType().equals("NONEED")) {
+                    tvReceive.setVisibility(View.GONE);
+                } else {
+                    tvReceive.setVisibility(View.VISIBLE);
+
+                    if (!isActivityEnd) {
+                        if (isEnrollStart) {
+                            if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
+                                if (isEnroll) {
                                     tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                                    switch (dataBean.getAcivityType()) {
-                                        case "NONEED":
-                                            tvReceive.setVisibility(View.GONE);
-                                            break;
-                                        case "FREE":
-                                            tvReceive.setVisibility(View.VISIBLE);
-                                            tvReceive.setText("免费报名");
-                                            break;
-                                        case "SCORE":
-                                            tvReceive.setVisibility(View.VISIBLE);
-                                            tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
-                                            break;
-                                        case "CASH":
-                                            tvReceive.setVisibility(View.VISIBLE);
-                                            tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
-                                            break;
+                                    tvReceive.setText("去参加");
+                                } else {
+                                    if (isEnrollEnd) {
+                                        tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+                                        tvReceive.setText("报名已结束");
+                                    } else {
+                                        if (isLimit) {
+                                            tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+                                            tvReceive.setText("名额已满");
+                                        } else {
+                                            tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                                            switch (dataBean.getAcivityType()) {
+                                                case "FREE":
+                                                    tvReceive.setText("免费报名");
+                                                    break;
+                                                case "SCORE":
+                                                    tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+                                                    break;
+                                                case "CASH":
+                                                    tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+                                                    break;
+                                            }
+                                        }
                                     }
                                 }
-
                             }
+                        } else {
+                            tvReceive.setVisibility(View.VISIBLE);
+                            tvReceive.setText("待报名");
+                            tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                         }
                     } else {
                         tvReceive.setVisibility(View.VISIBLE);
-                        tvReceive.setText("待报名");
+                        tvReceive.setText("活动已结束");
                         tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                     }
-
-                } else {
-                    tvReceive.setVisibility(View.VISIBLE);
-                    tvReceive.setText("已结束");
-                    tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                 }
 
 
@@ -230,30 +235,30 @@ public class ActivityListFragment extends BaseFragment {
                 if (dataBean.getTags() != null && dataBean.getTags().size() > 0) {
                     addTextView(flowLayout, dataBean.getTags());
                 }
-
-                tvReceive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!isFinish && isStart) {
-                            Intent intent;
-                            if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                                if (isEnroll) {
-                                    intent = new Intent(getActivity(), CloseActionActivity.class);
-                                    intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
-                                    startActivity(intent);
-                                } else if (!isLimit) {
-                                    intent = new Intent(getActivity(), EnrollActionActivity.class);
-                                    intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
-                                    startActivity(intent);
-                                }
-                            } else {
-                                intent = new Intent(getActivity(), LoginActivity.class);
-                                startActivity(intent);
-                            }
-
-                        }
-                    }
-                });
+//
+//                tvReceive.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (!isActivityEnd && isEnrollStart) {
+//                            Intent intent;
+//                            if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+//                                if (isEnroll) {
+//                                    intent = new Intent(getActivity(), CloseActionActivity.class);
+//                                    intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
+//                                    startActivity(intent);
+//                                } else if (!isLimit && !isEnrollEnd) {
+//                                    intent = new Intent(getActivity(), EnrollActionActivity.class);
+//                                    intent.putExtra("activity_id", dataBean.getMarketingActivitySignupId());
+//                                    startActivity(intent);
+//                                }
+//                            } else {
+//                                intent = new Intent(getActivity(), LoginActivity.class);
+//                                startActivity(intent);
+//                            }
+//
+//                        }
+//                    }
+//                });
 
             }
         };

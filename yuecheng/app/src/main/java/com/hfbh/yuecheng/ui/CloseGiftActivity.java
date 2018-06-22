@@ -20,8 +20,10 @@ import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -90,7 +92,7 @@ public class CloseGiftActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("gainId", String.valueOf(giftId))
                 .addParams("queryType", "GIFT")
                 .build()
@@ -115,7 +117,7 @@ public class CloseGiftActivity extends BaseActivity {
         ivUserAvatar.setImageURI(giftBean.getMember().getMemberHead());
         tvGiftPhone.setText(giftBean.getMember().getMemberPhone());
 
-        tvGiftName.setText(giftBean.getData().getGainName());
+        tvGiftName.setText(giftBean.getData().getGainName() + "  X " + giftBean.getData().getDownloadNum());
 
 
         if (!TextUtils.isEmpty(giftBean.getData().getVerifyCode())) {

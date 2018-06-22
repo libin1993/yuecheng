@@ -26,9 +26,12 @@ import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -92,6 +95,7 @@ public class GiftDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gift_detail);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         getData();
         initData();
     }
@@ -108,7 +112,7 @@ public class GiftDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("pointsRewardId", String.valueOf(giftId))
                 .build()
                 .execute(new StringCallback() {
@@ -125,7 +129,12 @@ public class GiftDetailActivity extends BaseActivity {
                             score = giftBean.getData().getNeedScore();
                             balanceNum = giftBean.getData().getBalanceNum();
                             limitNum = giftBean.getData().getLimitGetNum();
-                            getNum = giftBean.getData().getExchangeNum();
+                            if (SharedPreUtils.getBoolean(GiftDetailActivity.this, "is_login", false)) {
+                                getNum = limitNum - giftBean.getData().getBalanceGetNum();
+                            } else {
+                                getNum = 0;
+                            }
+
                             initView();
                         }
                     }
@@ -170,38 +179,43 @@ public class GiftDetailActivity extends BaseActivity {
                     "yyyy-MM-dd HH:mm:ss", giftBean.getData().getOfflineTime());
         }
         boolean isOnline = true;
-        if (!TextUtils.isEmpty(giftBean.getData().getRewardState()) && giftBean.getData().getRewardState().equals("OFFLINE")){
+        if (!TextUtils.isEmpty(giftBean.getData().getRewardState()) && giftBean.getData().getRewardState().equals("OFFLINE")) {
             isOnline = false;
         }
 
         if (!isFinish) {
-            if (isOnline){
+            if (isOnline) {
                 if (balanceNum > 0) {
                     if (limitNum > 0) {
                         if (getNum > 0 && getNum >= limitNum) {
                             tvExchange.setText("已兑换");
                             tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                            tvExchange.setEnabled(false);
                         } else {
                             tvExchange.setText("立即兑换");
                             tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+                            tvExchange.setEnabled(true);
                         }
                     } else {
                         tvExchange.setText("立即兑换");
                         tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+                        tvExchange.setEnabled(true);
                     }
                 } else {
                     tvExchange.setText("已抢光");
                     tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                    tvExchange.setEnabled(false);
                 }
-            }else {
+            } else {
                 tvExchange.setText("已失效");
                 tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                tvExchange.setEnabled(false);
             }
         } else {
             tvExchange.setText("已失效");
             tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+            tvExchange.setEnabled(false);
         }
-
     }
 
     @OnClick({R.id.tv_gift_reduce, R.id.tv_gift_add, R.id.iv_exchange_back, R.id.iv_exchange_share,
@@ -223,7 +237,7 @@ public class GiftDetailActivity extends BaseActivity {
                         if (num < limitNum - getNum) {
                             num++;
                         } else {
-                            ToastUtils.showToast(this, "每人限制兑换" + limitNum + "个,您已兑换了" + getNum + "个");
+                            ToastUtils.showToast(this, "每人限制兑换" + limitNum + "个哦");
                         }
                     } else {
                         if (num < balanceNum) {
@@ -261,7 +275,7 @@ public class GiftDetailActivity extends BaseActivity {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                    .addParams("token",SharedPreUtils.getStr(this, "token"))
+                    .addParams("token", SharedPreUtils.getStr(this, "token"))
                     .addParams("pointsRewardId", String.valueOf(giftId))
                     .addParams("exchangeNum", String.valueOf(num))
                     .build()
@@ -279,8 +293,7 @@ public class GiftDetailActivity extends BaseActivity {
                                 String msg = jsonObject.getString("msg");
                                 if (flag) {
                                     JSONObject data = jsonObject.getJSONObject("data");
-                                    balanceNum = data.getInt("balanceGetNum");
-                                    limitNum = data.getInt("limitGetNum");
+                                    balanceNum = data.getInt("balanceNum");
                                     getNum += num;
                                     initCount();
                                     exChangeResult(true, "您兑换的礼品已放置于“我的-兑换”，记得到店核销兑换哦！");
@@ -355,4 +368,20 @@ public class GiftDetailActivity extends BaseActivity {
             }
         });
     }
+
+
+
+    @Subscribe
+    public void isLogin(String msg) {
+        if ("login_success".equals(msg)) {
+            initData();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

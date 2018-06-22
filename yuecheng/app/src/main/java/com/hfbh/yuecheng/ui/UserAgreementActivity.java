@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.webkit.WebSettings;
@@ -52,6 +53,9 @@ public class UserAgreementActivity extends BaseActivity {
         ws.setCacheMode(LOAD_NO_CACHE);
         ws.setUseWideViewPort(true);
         ws.setLoadWithOverviewMode(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
 
         webview.loadUrl(Constant.USER_AGREEMENT);
         webview.setWebViewClient(new WebViewClient() {

@@ -52,7 +52,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="49dp"
+            android:layout_marginBottom="25dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_marginTop="14dp">

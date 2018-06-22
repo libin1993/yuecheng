@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -77,7 +79,7 @@ public class ShopDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         getData();
         initShopData();
-        initGoodsData();
+//        initGoodsData();
     }
 
     private void getData() {
@@ -108,9 +110,10 @@ public class ShopDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
+
                         shopBean = GsonUtils.jsonToBean(s, ShopDetailBean.class);
                         if (shopBean.isFlag()) {
-                            initGoodsList();
+                            initView();
                             if (mHeaderAndFooterWrapper != null) {
                                 mHeaderAndFooterWrapper.notifyDataSetChanged();
                             }
@@ -170,7 +173,6 @@ public class ShopDetailActivity extends BaseActivity {
                             if (llTitle != null) {
                                 llTitle.setVisibility(View.GONE);
                             }
-
                         }
                     }
                 });
@@ -180,7 +182,7 @@ public class ShopDetailActivity extends BaseActivity {
     /**
      * 店铺信息
      */
-    private View initShopInfo() {
+    private View initHeader() {
 
         View view = LayoutInflater.from(this).inflate(R.layout.layout_shop_detail_header, null);
         SimpleDraweeView ivShopDetail = (SimpleDraweeView) view.findViewById(R.id.iv_shop_detail);
@@ -191,8 +193,12 @@ public class ShopDetailActivity extends BaseActivity {
         TextView tvShopDetailInfo = (TextView) view.findViewById(R.id.tv_shop_detail_info);
         llTitle = (LinearLayout) view.findViewById(R.id.ll_shop_goods);
 
+        if (!TextUtils.isEmpty(shopBean.getShop().getShopPicture())){
+            ivShopDetail.setImageURI(shopBean.getShop().getShopPicture());
+        }else {
+            ivShopDetail.setImageURI(shopBean.getMall().getOrganizePicturePath());
+        }
 
-        ivShopDetail.setImageURI(shopBean.getMall().getOrganizePicturePath());
         ivShopDetailAvatar.setImageURI(shopBean.getShop().getShopLogo());
         tvShopDetailName.setText(shopBean.getShop().getShopName());
         tvShopDetailType.setText(type);
@@ -206,7 +212,7 @@ public class ShopDetailActivity extends BaseActivity {
     /**
      * 店铺列表
      */
-    private void initGoodsList() {
+    private void initView() {
         rvShopDetail.setLayoutManager(new LinearLayoutManager(this));
         CommonAdapter<GoodsBean.DataBean> adapter = new CommonAdapter<GoodsBean.DataBean>(
                 this, R.layout.rv_new_goods_item, goodsList) {
@@ -224,7 +230,7 @@ public class ShopDetailActivity extends BaseActivity {
 
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
 
-        mHeaderAndFooterWrapper.addHeaderView(initShopInfo());
+        mHeaderAndFooterWrapper.addHeaderView(initHeader());
 
         rvShopDetail.setAdapter(mHeaderAndFooterWrapper);
 
@@ -242,27 +248,27 @@ public class ShopDetailActivity extends BaseActivity {
                 return false;
             }
         });
-
-
-        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                if (page < pages) {
-                    isLoadMore = true;
-                    page++;
-                    initGoodsData();
-                } else {
-                    refreshLayout.finishLoadMore();
-                }
-            }
-
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-                isRefresh = true;
-                page = 1;
-                initGoodsData();
-            }
-        });
+        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setEnableLoadMore(false);
+//        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+//            @Override
+//            public void onLoadMore(RefreshLayout refreshLayout) {
+//                if (page < pages) {
+//                    isLoadMore = true;
+//                    page++;
+//                    initGoodsData();
+//                } else {
+//                    refreshLayout.finishLoadMore();
+//                }
+//            }
+//
+//            @Override
+//            public void onRefresh(RefreshLayout refreshLayout) {
+//                isRefresh = true;
+//                page = 1;
+//                initGoodsData();
+//            }
+//        });
 
     }
 

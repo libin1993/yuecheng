@@ -8,15 +8,15 @@ import java.util.List;
  * Email：1993911441@qq.com
  * Describe：
  */
-public class ActivityListBean implements Serializable {
+public class ActivityListBean {
 
-    private static final long serialVersionUID = -3537025521984386396L;
+
     /**
      * flag : true
-     * page : {"pageNum":1,"pageSize":10,"pages":17,"total":164}
-     * hash : 317ea0c5b2e4aa4845e616e47ab67bb
-     * data : [{"acivityAddress":"发我发啊为娃","acivityType":"SCORE","activityEndtime":"2018-05-31 09:00:00","activityIntroduce":"1、福娃范围我娃福娃","activityPicture":"http://yjwang.wmalle.com/image/20180514/6795404613975448.jpg","activityStarttime":"2018-05-14 09:00:00","activityTitle":"活动报名565655656556565565655656556565565655656556565","createTime":"2018-05-14 15:47:47","creatorId":4,"endTime":"2018-05-31 00:00:00","endTimeStr":"2018/05/31","enrollFee":null,"enrollScore":10,"extraIntroduce":"11111111112","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":509,"memberLevel":null,"memberSignupState":"去报名","modifierId":4,"modifyTime":"2018-05-24 21:40:00","offlineTime":null,"onlineTime":"2018-05-24 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-05-14 00:00:00","startTimeStr":"2018/05/14","tags":[{"tagType":"public","tagName":"啤酒节"},{"tagType":"public","tagName":"清明节"},{"tagType":"public","tagName":"1啦啦啦啦啦"}],"telephone":"13533332222","useCrowd":"MEMBER","verifyCode":null},{"acivityAddress":"q12r234e","acivityType":"SCORE","activityEndtime":"2018-05-31 00:00:00","activityIntroduce":"fweqg","activityPicture":"http://yjwang.wmalle.com/image/20180524/7676141558994616.jpg","activityStarttime":"2018-05-24 00:00:00","activityTitle":"hhhhhhhhh","createTime":"2018-05-24 20:26:30","creatorId":4,"endTime":"2018-05-31 00:00:00","endTimeStr":"2018/05/31","enrollFee":null,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":592,"memberLevel":null,"memberSignupState":"去报名","modifierId":4,"modifyTime":"2018-05-24 21:27:04","offlineTime":null,"onlineTime":"2018-05-24 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-05-24 00:00:00","startTimeStr":"2018/05/24","tags":[{"tagType":"public","tagName":"西湖"}],"telephone":"","useCrowd":"MEMBER","verifyCode":null},{"acivityAddress":"我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学","acivityType":"FREE","activityEndtime":"2018-05-31 00:00:00","activityIntroduce":"<h1 accuse=\"qTitle\" style=\"margin-top: 0px; margin-bottom: 0px; padding: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-weight: 700; font-stretch: normal; font-size: 16px; line-height: 26px; font-family: &quot;PingFang SC&quot;, &quot;Lantinghei SC&quot;, &quot;Microsoft YaHei&quot;, arial, 宋体, sans-serif, tahoma; word-break: break-all; position: relative; color: rgb(51, 51, 51);\"><span class=\"ask-title \" style=\"display: inline; font-size: 24px; line-height: 34px; font-weight: 400; overflow: hidden;\">我们国家有哪些有日语或德语专业的重点大学<\/span>我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学<\/h1>","activityPicture":"http://yjwang.wmalle.com/image/20180524/7653946232394269.png","activityStarttime":"2018-05-24 00:00:00","activityTitle":"我们国家有哪些有日语或德语专业的重点大学8787我们国家有哪些有日语或德语专业的重点大学我们国家有哪","createTime":"2018-05-24 14:16:21","creatorId":4,"endTime":"2018-05-29 00:00:00","endTimeStr":"2018/05/29","enrollFee":null,"enrollScore":null,"extraIntroduce":"我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":585,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-05-24 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":1,"signupState":"DOING","signupTime":null,"startTime":"2018-05-24 00:00:00","startTimeStr":"2018/05/24","tags":[{"tagType":"public","tagName":"啦啦啦啦啦"},{"tagType":"public","tagName":"清明节"}],"telephone":"","useCrowd":null,"verifyCode":null},{"acivityAddress":"我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学","acivityType":"NONEED","activityEndtime":"2018-05-31 00:00:00","activityIntroduce":"<h1 accuse=\"qTitle\" style=\"margin-top: 0px; margin-bottom: 0px; padding: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-weight: 700; font-stretch: normal; font-size: 16px; line-height: 26px; font-family: &quot;PingFang SC&quot;, &quot;Lantinghei SC&quot;, &quot;Microsoft YaHei&quot;, arial, 宋体, sans-serif, tahoma; word-break: break-all; position: relative; color: rgb(51, 51, 51);\"><span class=\"ask-title \" style=\"display: inline; font-size: 24px; line-height: 34px; font-weight: 400; overflow: hidden;\">我们国家有哪些有日语或德语专业的重点大学<\/span>我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学我们国家有哪些有日语或德语专业的重点大学<\/h1>","activityPicture":"http://yjwang.wmalle.com/image/20180524/7653876702554781.png","activityStarttime":"2018-05-24 00:00:00","activityTitle":"我们国家有哪些有日语或德语专业的重点大学22154545我们国家有哪些有日语或德语专业的重点大学88","createTime":"2018-05-24 14:15:01","creatorId":4,"endTime":"2018-05-31 00:00:00","endTimeStr":"2018/05/31","enrollFee":null,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":584,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-05-24 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-05-24 00:00:00","startTimeStr":"2018/05/24","tags":[{"tagType":"public","tagName":"啦啦啦啦啦"},{"tagType":"public","tagName":"1啦啦啦啦啦"}],"telephone":"","useCrowd":null,"verifyCode":null},{"acivityAddress":"sssss","acivityType":"NONEED","activityEndtime":"2018-06-01 00:00:00","activityIntroduce":"sssss","activityPicture":"http://yjwang.wmalle.com/image/20180522/7500124785043344.jpg","activityStarttime":"2018-05-22 00:00:00","activityTitle":"0522redis","createTime":"2018-05-22 19:32:57","creatorId":4,"endTime":"2018-06-01 00:00:00","endTimeStr":"2018/06/01","enrollFee":null,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":572,"memberLevel":null,"memberSignupState":"去报名","modifierId":4,"modifyTime":"2018-05-22 21:34:20","offlineTime":"2018-05-31 00:00:00","onlineTime":"2018-05-23 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-05-22 00:00:00","startTimeStr":"2018/05/22","tags":[{"tagType":"public","tagName":"西湖"}],"telephone":"15000002222","useCrowd":"MEMBER","verifyCode":null},{"acivityAddress":"555","acivityType":"CASH","activityEndtime":"2018-06-12 00:00:00","activityIntroduce":"222","activityPicture":"http://yjwang.wmalle.com/image/20180511/6557313482086367.jpg","activityStarttime":"2018-05-11 00:00:00","activityTitle":"05110511","createTime":"2018-05-11 21:39:34","creatorId":4,"endTime":"2018-06-11 00:00:00","endTimeStr":"2018/06/11","enrollFee":0.02,"enrollScore":null,"extraIntroduce":"2522928","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":1,"marketingActivitySignupId":501,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-05-11 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":100,"signupNumber":4,"signupState":"DOING","signupTime":null,"startTime":"2018-05-01 00:00:00","startTimeStr":"2018/05/01","tags":[{"tagType":"public","tagName":"五一欢庆"}],"telephone":"15000002222","useCrowd":null,"verifyCode":null},{"acivityAddress":"123","acivityType":"FREE","activityEndtime":"2018-05-24 00:00:00","activityIntroduce":"123132","activityPicture":"http://yjwang.wmalle.com/image/20180510/6451721412826299.png","activityStarttime":"2018-05-10 00:00:00","activityTitle":"活动报名24234","createTime":"2018-05-10 16:19:29","creatorId":4,"endTime":"2018-05-17 00:00:00","endTimeStr":"2018/05/17","enrollFee":null,"enrollScore":null,"extraIntroduce":"123","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":493,"memberLevel":null,"memberSignupState":"已结束","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-05-10 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":4,"signupState":"DOING","signupTime":null,"startTime":"2018-05-10 00:00:00","startTimeStr":"2018/05/10","tags":[{"tagType":"public","tagName":"西湖"},{"tagType":"public","tagName":"五一欢庆"},{"tagType":"public","tagName":"灵隐寺"}],"telephone":"13533333333","useCrowd":null,"verifyCode":null},{"acivityAddress":"13123","acivityType":"FREE","activityEndtime":"2018-05-31 00:00:00","activityIntroduce":"发疯啊","activityPicture":"http://yjwang.wmalle.com/image/20180510/6451447043576062.png","activityStarttime":"2018-05-10 00:00:00","activityTitle":"活动报名咯囖咯","createTime":"2018-05-10 16:16:23","creatorId":4,"endTime":"2018-05-25 00:00:00","endTimeStr":"2018/05/25","enrollFee":null,"enrollScore":null,"extraIntroduce":"方法沃尔啊让我","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":492,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-05-10 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":1,"signupState":"DOING","signupTime":null,"startTime":"2018-05-10 00:00:00","startTimeStr":"2018/05/10","tags":[{"tagType":"public","tagName":"西湖"},{"tagType":"public","tagName":"五一欢庆"},{"tagType":"public","tagName":"灵隐寺"}],"telephone":"13532222222","useCrowd":null,"verifyCode":null},{"acivityAddress":"2","acivityType":"NONEED","activityEndtime":"2018-05-13 00:00:00","activityIntroduce":"1","activityPicture":"http://yjwang.wmalle.com/image/20180508/6284015475866180.png","activityStarttime":"2018-05-08 00:00:00","activityTitle":"活动报名20180508001","createTime":"2018-05-08 17:44:15","creatorId":4,"endTime":"2018-05-13 00:00:00","endTimeStr":"2018/05/13","enrollFee":null,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":477,"memberLevel":null,"memberSignupState":"已结束","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-05-08 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-05-08 00:00:00","startTimeStr":"2018/05/08","tags":[{"tagType":"public","tagName":"西湖"}],"telephone":"","useCrowd":null,"verifyCode":null},{"acivityAddress":"快快快 ","acivityType":"FREE","activityEndtime":"2018-06-11 00:00:00","activityIntroduce":"急急急","activityPicture":"http://yjwang.wmalle.com/image/20180507/6193358070053391.jpg","activityStarttime":"2018-05-10 00:00:00","activityTitle":"0507_0507","createTime":"2018-05-07 16:33:33","creatorId":4,"endTime":"2018-05-10 00:00:00","endTimeStr":"2018/05/10","enrollFee":null,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":465,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-05-07 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-05-08 00:00:00","startTimeStr":"2018/05/08","tags":[{"tagType":"public","tagName":"西湖"}],"telephone":"15156788775","useCrowd":null,"verifyCode":null}]
-     * tagList : [{"createTime":"2018-04-18 17:39:12","creatorId":4,"id":28,"isDelete":"N","modifierId":4,"modifyTime":"2018-05-15 13:51:03","organizeId":2,"showSerial":1,"tagName":"西湖"},{"createTime":"2018-05-14 19:30:21","creatorId":4,"id":87,"isDelete":"N","modifierId":4,"modifyTime":"2018-05-15 13:51:03","organizeId":2,"showSerial":2,"tagName":"粽子"},{"createTime":"2018-05-15 13:50:49","creatorId":4,"id":91,"isDelete":"N","modifierId":4,"modifyTime":"2018-05-15 13:51:03","organizeId":2,"showSerial":3,"tagName":"清明节"},{"createTime":"2018-05-15 13:50:49","creatorId":4,"id":92,"isDelete":"N","modifierId":4,"modifyTime":"2018-05-15 13:51:03","organizeId":2,"showSerial":4,"tagName":"1啦啦啦啦啦"},{"createTime":"2018-05-15 13:50:49","creatorId":4,"id":94,"isDelete":"N","modifierId":4,"modifyTime":"2018-05-15 13:51:03","organizeId":2,"showSerial":5,"tagName":"啦啦啦啦啦"},{"createTime":"2018-05-15 13:50:49","creatorId":4,"id":95,"isDelete":"N","modifierId":4,"modifyTime":"2018-05-15 13:51:03","organizeId":2,"showSerial":6,"tagName":"1212"}]
+     * page : {"pageNum":1,"pageSize":10,"pages":5,"total":41}
+     * hash : 36b5876d897940bea6558f101dcd8fcb
+     * data : [{"acivityAddress":"123","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"123123123","activityPicture":"http://ceshi.wmalle.com/image/20180621/549870177198900.png","activityStarttime":"2018-06-21 00:00:00","activityTitle":"活动9999","createTime":"2018-06-21 22:55:22","creatorId":4,"endTime":"2018-06-30 00:00:00","endTimeStr":"2018/06/30","enrollFee":0.01,"enrollScore":0,"extraIntroduce":"123123","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":87,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-21 00:00:00","startTimeStr":"2018/06/21","tags":[{"tagType":"public","tagName":"测试"}],"telephone":"","useCrowd":null,"verifyCode":null},{"acivityAddress":"12","acivityType":"NONEED","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"123","activityPicture":"http://ceshi.wmalle.com/image/20180621/549767050774457.png","activityStarttime":"2018-06-21 00:00:00","activityTitle":"活动778","createTime":"2018-06-21 22:53:26","creatorId":4,"endTime":"2018-06-30 00:00:00","endTimeStr":"2018/06/30","enrollFee":null,"enrollScore":0,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":86,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-21 00:00:00","startTimeStr":"2018/06/21","tags":[{"tagType":"extra","tagName":"12566"}],"telephone":"","useCrowd":null,"verifyCode":null},{"acivityAddress":"1231321312","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"123123","activityPicture":"http://ceshi.wmalle.com/image/20180621/538729569102439.png","activityStarttime":"2018-06-21 00:00:00","activityTitle":"活动123123","createTime":"2018-06-21 19:50:49","creatorId":4,"endTime":"2018-06-22 00:00:00","endTimeStr":"2018/06/22","enrollFee":0.01,"enrollScore":0,"extraIntroduce":"123123","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":83,"memberLevel":null,"memberSignupState":"去报名","modifierId":4,"modifyTime":"2018-06-21 22:03:00","offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-21 00:00:00","startTimeStr":"2018/06/21","tags":[{"tagType":"public","tagName":"测试"}],"telephone":"","useCrowd":"MEMBER","verifyCode":null},{"acivityAddress":"ttt","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"1111","activityPicture":"http://ceshi.wmalle.com/image/20180621/529586399859147.png","activityStarttime":"2018-06-21 00:00:00","activityTitle":"aaaa","createTime":"2018-06-21 17:17:23","creatorId":4,"endTime":"2018-06-30 00:00:00","endTimeStr":"2018/06/30","enrollFee":0.01,"enrollScore":0,"extraIntroduce":"11","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":75,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":1,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-21 00:00:00","startTimeStr":"2018/06/21","tags":[{"tagType":"public","tagName":"测试"}],"telephone":"","useCrowd":null,"verifyCode":null},{"acivityAddress":"啊飒飒","acivityType":"CASH","activityEndtime":"2018-06-29 00:00:00","activityIntroduce":"飒飒飒飒","activityPicture":"http://ceshi.wmalle.com/image/20180621/529354532211631.jpg","activityStarttime":"2018-06-21 00:00:00","activityTitle":"再加一次现金","createTime":"2018-06-21 17:13:19","creatorId":4,"endTime":"2018-06-29 00:00:00","endTimeStr":"2018/06/29","enrollFee":0.88,"enrollScore":0,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":73,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-18 00:00:00","startTimeStr":"2018/06/18","tags":[{"tagType":"public","tagName":"测试"}],"telephone":"","useCrowd":null,"verifyCode":null},{"acivityAddress":"西湖区西斗门路3号天堂软件园10楼慧优科技","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"啊啊","activityPicture":"http://ceshi.wmalle.com/image/20180621/528458429950274.png","activityStarttime":"2018-06-21 00:00:00","activityTitle":"现金活动","createTime":"2018-06-21 16:58:54","creatorId":4,"endTime":"2018-06-29 00:00:00","endTimeStr":"2018/06/29","enrollFee":0.01,"enrollScore":0,"extraIntroduce":"123","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":70,"memberLevel":null,"memberSignupState":"去报名","modifierId":4,"modifyTime":"2018-06-21 16:59:26","offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":1,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-21 00:00:00","startTimeStr":"2018/06/21","tags":[{"tagType":"public","tagName":"测试"}],"telephone":"","useCrowd":"MEMBER","verifyCode":null},{"acivityAddress":"tt","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"11","activityPicture":"http://ceshi.wmalle.com/image/20180621/523469789963962.png","activityStarttime":"2018-06-21 00:00:00","activityTitle":"aaa","createTime":"2018-06-21 15:35:35","creatorId":4,"endTime":"2018-06-30 00:00:00","endTimeStr":"2018/06/30","enrollFee":0.01,"enrollScore":0,"extraIntroduce":"111","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":65,"memberLevel":null,"memberSignupState":"去报名","modifierId":4,"modifyTime":"2018-06-21 15:44:46","offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-21 00:00:00","startTimeStr":"2018/06/21","tags":[{"tagType":"extra","tagName":"1"}],"telephone":"","useCrowd":"MEMBER","verifyCode":null},{"acivityAddress":"活动123","acivityType":"SCORE","activityEndtime":"2018-06-29 00:00:00","activityIntroduce":"123","activityPicture":"http://ceshi.wmalle.com/image/20180621/521183179290675.png","activityStarttime":"2018-06-22 00:00:00","activityTitle":"未开始活动","createTime":"2018-06-21 15:01:32","creatorId":4,"endTime":"2018-06-28 00:00:00","endTimeStr":"2018/06/28","enrollFee":null,"enrollScore":3,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":62,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-22 00:00:00","startTimeStr":"2018/06/22","tags":[{"tagType":"extra","tagName":"6666"}],"telephone":"","useCrowd":null,"verifyCode":null},{"acivityAddress":"12389182391杭州","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"12312","activityPicture":"http://ceshi.wmalle.com/image/20180621/520564451601717.png","activityStarttime":"2018-06-21 00:00:00","activityTitle":"现金报名2","createTime":"2018-06-21 14:47:14","creatorId":4,"endTime":"2018-06-21 16:46:00","endTimeStr":"2018/06/21","enrollFee":0.01,"enrollScore":0,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":61,"memberLevel":null,"memberSignupState":"去报名","modifierId":4,"modifyTime":"2018-06-21 14:56:31","offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":5,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-21 00:00:00","startTimeStr":"2018/06/21","tags":[{"tagType":"extra","tagName":"666"}],"telephone":"","useCrowd":"MEMBER","verifyCode":null},{"acivityAddress":"杭州市西湖区","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"1、飞机拉我及哦哇","activityPicture":"http://ceshi.wmalle.com/image/20180621/520452684929935.png","activityStarttime":"2018-06-21 00:00:00","activityTitle":"现金报名活动","createTime":"2018-06-21 14:45:29","creatorId":4,"endTime":"2018-06-21 16:45:00","endTimeStr":"2018/06/21","enrollFee":0.01,"enrollScore":0,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":60,"memberLevel":null,"memberSignupState":"去报名","modifierId":4,"modifyTime":"2018-06-21 14:46:09","offlineTime":null,"onlineTime":"2018-06-21 00:00:00","organizeId":2,"signStateText":"进行中","signinOffline":"OPEN","signupLimitNumber":10,"signupNumber":0,"signupState":"DOING","signupTime":null,"startTime":"2018-06-21 00:00:00","startTimeStr":"2018/06/21","tags":[{"tagType":"extra","tagName":"现金报名"}],"telephone":"13533334444","useCrowd":"MEMBER","verifyCode":null}]
+     * tagList : [{"createTime":"2018-06-21 16:53:39","creatorId":4,"id":1,"isDelete":"N","modifierId":null,"modifyTime":null,"organizeId":2,"showSerial":1,"tagName":"测试"}]
      * code : 0
      */
 
@@ -75,13 +75,12 @@ public class ActivityListBean implements Serializable {
         this.tagList = tagList;
     }
 
-    public static class PageBean implements Serializable {
-        public static final long serialVersionUID = 222177733332L;
+    public static class PageBean {
         /**
          * pageNum : 1
          * pageSize : 10
-         * pages : 17
-         * total : 164
+         * pages : 5
+         * total : 41
          */
 
         private int pageNum;
@@ -122,35 +121,33 @@ public class ActivityListBean implements Serializable {
         }
     }
 
-    public static class DataBean implements Serializable {
-
-        private static final long serialVersionUID = 8197938254486909366L;
+    public static class DataBean {
         /**
-         * acivityAddress : 发我发啊为娃
-         * acivityType : SCORE
-         * activityEndtime : 2018-05-31 09:00:00
-         * activityIntroduce : 1、福娃范围我娃福娃
-         * activityPicture : http://yjwang.wmalle.com/image/20180514/6795404613975448.jpg
-         * activityStarttime : 2018-05-14 09:00:00
-         * activityTitle : 活动报名565655656556565565655656556565565655656556565
-         * createTime : 2018-05-14 15:47:47
+         * acivityAddress : 123
+         * acivityType : CASH
+         * activityEndtime : 2018-06-30 00:00:00
+         * activityIntroduce : 123123123
+         * activityPicture : http://ceshi.wmalle.com/image/20180621/549870177198900.png
+         * activityStarttime : 2018-06-21 00:00:00
+         * activityTitle : 活动9999
+         * createTime : 2018-06-21 22:55:22
          * creatorId : 4
-         * endTime : 2018-05-31 00:00:00
-         * endTimeStr : 2018/05/31
-         * enrollFee : null
-         * enrollScore : 10
-         * extraIntroduce : 11111111112
+         * endTime : 2018-06-30 00:00:00
+         * endTimeStr : 2018/06/30
+         * enrollFee : 0.01
+         * enrollScore : 0
+         * extraIntroduce : 123123
          * isAudit : N
          * isDelete : N
-         * isSignup : null
+         * isSignup : false
          * joinNumber : 0
-         * marketingActivitySignupId : 509
+         * marketingActivitySignupId : 87
          * memberLevel : null
          * memberSignupState : 去报名
-         * modifierId : 4
-         * modifyTime : 2018-05-24 21:40:00
+         * modifierId : null
+         * modifyTime : null
          * offlineTime : null
-         * onlineTime : 2018-05-24 00:00:00
+         * onlineTime : 2018-06-21 00:00:00
          * organizeId : 2
          * signStateText : 进行中
          * signinOffline : OPEN
@@ -158,11 +155,11 @@ public class ActivityListBean implements Serializable {
          * signupNumber : 0
          * signupState : DOING
          * signupTime : null
-         * startTime : 2018-05-14 00:00:00
-         * startTimeStr : 2018/05/14
-         * tags : [{"tagType":"public","tagName":"啤酒节"},{"tagType":"public","tagName":"清明节"},{"tagType":"public","tagName":"1啦啦啦啦啦"}]
-         * telephone : 13533332222
-         * useCrowd : MEMBER
+         * startTime : 2018-06-21 00:00:00
+         * startTimeStr : 2018/06/21
+         * tags : [{"tagType":"public","tagName":"测试"}]
+         * telephone :
+         * useCrowd : null
          * verifyCode : null
          */
 
@@ -182,13 +179,13 @@ public class ActivityListBean implements Serializable {
         private String extraIntroduce;
         private String isAudit;
         private String isDelete;
-        private Object isSignup;
+        private boolean isSignup;
         private int joinNumber;
         private int marketingActivitySignupId;
         private Object memberLevel;
         private String memberSignupState;
-        private int modifierId;
-        private String modifyTime;
+        private Object modifierId;
+        private Object modifyTime;
         private Object offlineTime;
         private String onlineTime;
         private int organizeId;
@@ -197,12 +194,12 @@ public class ActivityListBean implements Serializable {
         private int signupLimitNumber;
         private int signupNumber;
         private String signupState;
-        private String signupTime;
+        private Object signupTime;
         private String startTime;
         private String startTimeStr;
         private String telephone;
-        private String useCrowd;
-        private String verifyCode;
+        private Object useCrowd;
+        private Object verifyCode;
         private List<TagsBean> tags;
 
         public String getAcivityAddress() {
@@ -333,11 +330,11 @@ public class ActivityListBean implements Serializable {
             this.isDelete = isDelete;
         }
 
-        public Object getIsSignup() {
+        public boolean isIsSignup() {
             return isSignup;
         }
 
-        public void setIsSignup(Object isSignup) {
+        public void setIsSignup(boolean isSignup) {
             this.isSignup = isSignup;
         }
 
@@ -373,19 +370,19 @@ public class ActivityListBean implements Serializable {
             this.memberSignupState = memberSignupState;
         }
 
-        public int getModifierId() {
+        public Object getModifierId() {
             return modifierId;
         }
 
-        public void setModifierId(int modifierId) {
+        public void setModifierId(Object modifierId) {
             this.modifierId = modifierId;
         }
 
-        public String getModifyTime() {
+        public Object getModifyTime() {
             return modifyTime;
         }
 
-        public void setModifyTime(String modifyTime) {
+        public void setModifyTime(Object modifyTime) {
             this.modifyTime = modifyTime;
         }
 
@@ -453,11 +450,11 @@ public class ActivityListBean implements Serializable {
             this.signupState = signupState;
         }
 
-        public String getSignupTime() {
+        public Object getSignupTime() {
             return signupTime;
         }
 
-        public void setSignupTime(String signupTime) {
+        public void setSignupTime(Object signupTime) {
             this.signupTime = signupTime;
         }
 
@@ -485,19 +482,19 @@ public class ActivityListBean implements Serializable {
             this.telephone = telephone;
         }
 
-        public String getUseCrowd() {
+        public Object getUseCrowd() {
             return useCrowd;
         }
 
-        public void setUseCrowd(String useCrowd) {
+        public void setUseCrowd(Object useCrowd) {
             this.useCrowd = useCrowd;
         }
 
-        public String getVerifyCode() {
+        public Object getVerifyCode() {
             return verifyCode;
         }
 
-        public void setVerifyCode(String verifyCode) {
+        public void setVerifyCode(Object verifyCode) {
             this.verifyCode = verifyCode;
         }
 
@@ -509,11 +506,10 @@ public class ActivityListBean implements Serializable {
             this.tags = tags;
         }
 
-        public static class TagsBean implements Serializable {
-            private static final long serialVersionUID = -1526062096545617263L;
+        public static class TagsBean {
             /**
              * tagType : public
-             * tagName : 啤酒节
+             * tagName : 测试
              */
 
             private String tagType;
@@ -537,27 +533,25 @@ public class ActivityListBean implements Serializable {
         }
     }
 
-    public static class TagListBean implements Serializable {
-
-        private static final long serialVersionUID = -2350695627016684110L;
+    public static class TagListBean {
         /**
-         * createTime : 2018-04-18 17:39:12
+         * createTime : 2018-06-21 16:53:39
          * creatorId : 4
-         * id : 28
+         * id : 1
          * isDelete : N
-         * modifierId : 4
-         * modifyTime : 2018-05-15 13:51:03
+         * modifierId : null
+         * modifyTime : null
          * organizeId : 2
          * showSerial : 1
-         * tagName : 西湖
+         * tagName : 测试
          */
 
         private String createTime;
         private int creatorId;
         private int id;
         private String isDelete;
-        private int modifierId;
-        private String modifyTime;
+        private Object modifierId;
+        private Object modifyTime;
         private int organizeId;
         private int showSerial;
         private String tagName;
@@ -594,19 +588,19 @@ public class ActivityListBean implements Serializable {
             this.isDelete = isDelete;
         }
 
-        public int getModifierId() {
+        public Object getModifierId() {
             return modifierId;
         }
 
-        public void setModifierId(int modifierId) {
+        public void setModifierId(Object modifierId) {
             this.modifierId = modifierId;
         }
 
-        public String getModifyTime() {
+        public Object getModifyTime() {
             return modifyTime;
         }
 
-        public void setModifyTime(String modifyTime) {
+        public void setModifyTime(Object modifyTime) {
             this.modifyTime = modifyTime;
         }
 

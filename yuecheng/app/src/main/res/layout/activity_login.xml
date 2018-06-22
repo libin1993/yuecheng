@@ -216,7 +216,7 @@
             android:checked="true"
             android:drawableLeft="@drawable/cb_register"
             android:drawablePadding="3dp"
-            android:text="登录即同意"
+            android:text="我已阅读并同意"
             android:textColor="@color/gray_10"
             android:textSize="12sp"/>
 
@@ -224,7 +224,7 @@
             android:id="@+id/tv_login_agreement"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:text="《合肥百大悦城用户服务协议》"
+            android:text="《百大悦城用户服务协议》"
             android:textColor="@color/gray_10"
             android:textSize="12sp"/>
     </LinearLayout>

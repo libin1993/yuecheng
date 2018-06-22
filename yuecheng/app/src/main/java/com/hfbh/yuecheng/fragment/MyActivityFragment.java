@@ -32,6 +32,7 @@ import com.hfbh.yuecheng.view.FlowLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -95,13 +96,13 @@ public class MyActivityFragment extends BaseFragment {
 
     private void initData() {
         OkHttpUtils.get()
-                .url(Constant.ACTIVITY_LIST)
+                .url(Constant.MY_ACTIVITY_LIST)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
                 .addParams("memberId", SharedPreUtils.getStr(getActivity(), "member_id"))
-                .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("type", String.valueOf(type))
                 .build()
@@ -163,8 +164,10 @@ public class MyActivityFragment extends BaseFragment {
                 ivCoupon.setImageURI(dataBean.getActivityPicture());
 
                 holder.setText(R.id.tv_my_activity_name, dataBean.getActivityTitle());
-                holder.setText(R.id.tv_activity_range, "有效时间： " + dataBean
-                        .getStartTimeStr() + " - " + dataBean.getEndTimeStr());
+                holder.setText(R.id.tv_activity_range, "有效时间： " + DateUtils.formatTime(
+                        "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd",
+                        dataBean.getActivityStarttime()) + " - " + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                        "yyyy.MM.dd", dataBean.getActivityEndtime()));
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_my_activity);
                 flowLayout.removeAllViews();
@@ -262,8 +265,6 @@ public class MyActivityFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
-
                 Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
                 intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
                 startActivity(intent);

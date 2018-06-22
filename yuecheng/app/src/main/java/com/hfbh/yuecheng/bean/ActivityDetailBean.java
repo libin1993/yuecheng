@@ -150,7 +150,7 @@ public class ActivityDetailBean {
              * useScore : 192
              */
 
-            private int balanceScore;
+            private double balanceScore;
             private Object birthday;
             private Object cardLevelId;
             private String entityCardId;
@@ -189,11 +189,11 @@ public class ActivityDetailBean {
             private Object subscribeTimeEnd;
             private int useScore;
 
-            public int getBalanceScore() {
+            public double getBalanceScore() {
                 return balanceScore;
             }
 
-            public void setBalanceScore(int balanceScore) {
+            public void setBalanceScore(double balanceScore) {
                 this.balanceScore = balanceScore;
             }
 

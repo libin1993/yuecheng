@@ -51,7 +51,6 @@ public class LocationUtils {
         List<String> providers = locationManager.getProviders( true );
         if (providers.contains( LocationManager.NETWORK_PROVIDER )) {
             //如果是网络定位
-
             locationProvider = LocationManager.NETWORK_PROVIDER;
         } else if (providers.contains( LocationManager.GPS_PROVIDER )) {
             //如果是GPS定位
@@ -65,7 +64,9 @@ public class LocationUtils {
                 ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        if (ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_FINE_LOCATION )
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( mContext,
+                Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         //3.获取上次的位置，一般第一次运行，此值为null

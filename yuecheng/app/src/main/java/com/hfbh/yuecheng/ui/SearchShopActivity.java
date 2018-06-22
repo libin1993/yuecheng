@@ -3,8 +3,10 @@ package com.hfbh.yuecheng.ui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -33,6 +35,7 @@ import com.hfbh.yuecheng.bean.SearchShopBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.view.DropDownPopupWindow;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -215,6 +218,7 @@ public class SearchShopActivity extends BaseActivity {
                             if (isRefresh) {
                                 refreshLayout.finishRefresh();
                                 isRefresh = false;
+                                loadingView.smoothToHide();
                                 shopAdapter.notifyDataSetChanged();
                             } else if (isLoadMore) {
                                 refreshLayout.finishLoadMore();
@@ -254,7 +258,7 @@ public class SearchShopActivity extends BaseActivity {
             @Override
             protected void convert(ViewHolder holder, SearchShopBean.ShopListBean shopListBean, int position) {
                 SimpleDraweeView ivMarket = holder.getView(R.id.iv_search_market);
-                ivMarket.setImageURI(shopListBean.getShopPicture());
+                ivMarket.setImageURI(shopListBean.getShopLogo());
                 holder.setText(R.id.tv_search_market_name, shopListBean.getShopName());
 
                 TextView tvType = holder.getView(R.id.tv_search_market_type);
@@ -355,16 +359,23 @@ public class SearchShopActivity extends BaseActivity {
      */
     private void selectFloor() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_select_floor, null);
-        final PopupWindow mPopupWindow = new PopupWindow(contentView,
+        final DropDownPopupWindow mPopupWindow = new DropDownPopupWindow(contentView,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-        if (!isFinishing()) {
-            mPopupWindow.showAsDropDown(llSearchMarket);
-        }
+        mPopupWindow.showAsDropDown(llSearchMarket);
+//        if (Build.VERSION.SDK_INT >= 24) {
+//            Rect visibleFrame = new Rect();
+//            llSearchMarket.getGlobalVisibleRect(visibleFrame);
+//            int height = llSearchMarket.getResources().getDisplayMetrics().heightPixels - visibleFrame.bottom;
+//            mPopupWindow.setHeight(height);
+//            mPopupWindow.showAsDropDown(llNullData, 0, 0);
+//        } else {
+//            mPopupWindow.showAsDropDown(llSearchMarket);
+//        }
 
 
         RecyclerView rvFloor = (RecyclerView) contentView.findViewById(R.id.rv_select_floor);
@@ -433,16 +444,25 @@ public class SearchShopActivity extends BaseActivity {
      */
     private void selectIndustry() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_select_floor, null);
-        final PopupWindow mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+        final DropDownPopupWindow mPopupWindow = new DropDownPopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-        if (!isFinishing()) {
-            mPopupWindow.showAsDropDown(llSearchMarket);
-        }
+
+        mPopupWindow.showAsDropDown(llSearchMarket);
+
+//        if (Build.VERSION.SDK_INT >= 24) {
+//            Rect visibleFrame = new Rect();
+//            llSearchMarket.getGlobalVisibleRect(visibleFrame);
+//            int height = llSearchMarket.getResources().getDisplayMetrics().heightPixels - visibleFrame.bottom;
+//            mPopupWindow.setHeight(height);
+//            mPopupWindow.showAsDropDown(llNullData, 0, 0);
+//        } else {
+//            mPopupWindow.showAsDropDown(llSearchMarket);
+//        }
 
         RecyclerView rvType = (RecyclerView) contentView.findViewById(R.id.rv_select_floor);
         View viewBg = contentView.findViewById(R.id.view_shop_bg);

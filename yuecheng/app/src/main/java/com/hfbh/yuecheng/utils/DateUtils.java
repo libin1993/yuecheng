@@ -1,7 +1,10 @@
 package com.hfbh.yuecheng.utils;
 
+import com.smarttop.library.utils.LogUtil;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -28,10 +31,13 @@ public class DateUtils {
      * @return 字符串转时间戳毫秒
      */
     public static long getTime(String type, String time) {
+
         try {
-            return new SimpleDateFormat(type, Locale.CHINA).parse(time).getTime();
+            Calendar c = Calendar.getInstance();
+            c.setTime(new SimpleDateFormat(type).parse(time));
+            return c.getTimeInMillis();
         } catch (ParseException e) {
-            e.printStackTrace();
+
         }
         return 0;
     }

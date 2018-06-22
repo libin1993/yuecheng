@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#66000000">
+
+    <RelativeLayout
+        android:id="@+id/rl_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            fresco:placeholderImage="@mipmap/img_update"
+            fresco:viewAspectRatio="0.7635"
+            fresco:placeholderImageScaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/tv_update_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="140dp"
+            android:gravity="center"
+            android:textColor="@color/gray_10"
+            android:textSize="16sp"/>
+
+        <ScrollView
+            android:id="@+id/sv_update"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/tv_update_title"
+            android:orientation="vertical"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_update_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_10"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/tv_update_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/sv_update"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bound_red_ed"
+            android:gravity="center"
+            android:text="立即更新"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_update_cancel"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/rl_update"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_update_close"/>
+
+</RelativeLayout>

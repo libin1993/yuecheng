@@ -37,13 +37,26 @@
     </RadioGroup>
 
     <EditText
-        android:id="@+id/tv_enroll_activity_value"
+        android:id="@+id/et_enroll_activity_value"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/tv_enroll_activity_title"
         android:background="@null"
         android:gravity="right|center"
         android:paddingRight="12dp"
+        android:textColor="@color/gray_33"
+        android:textColorHint="@color/gray_9f"
+        android:textSize="13sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_enroll_activity_value"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/tv_enroll_activity_title"
+        android:gravity="right|center"
+        android:paddingRight="12dp"
+        android:text="+"
         android:textColor="@color/gray_33"
         android:textColorHint="@color/gray_9f"
         android:textSize="13sp"

@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -18,9 +20,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
@@ -123,7 +132,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                    .addParams("token",SharedPreUtils.getStr(this, "token"))
+                    .addParams("token", SharedPreUtils.getStr(this, "token"))
                     .addParams("platform", MyApp.appType)
                     .build()
                     .execute(new StringCallback() {
@@ -138,34 +147,52 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                             if (updateBean.isFlag()) {
                                 //取消检测更新
                                 isCheckUpdate = false;
-
                                 if (updateBean.getData().getVersionId() > getVersionCode()) {
                                     //取消检测更新
                                     isCheckUpdate = false;
+
                                     MyApp.updateUrl = updateBean.getData().getUrl();
                                     MyApp.updateContent = updateBean.getData().getContent();
                                     MyApp.updateVersion = updateBean.getData().getVersionName();
 
-                                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this,
-                                            R.style.Theme_AppCompat_DayNight_Dialog_Alert);
-                                    dialog.setTitle("检测到新版本" + MyApp.updateVersion + "，请更新");
-                                    dialog.setMessage(MyApp.updateContent);
-                                    //确定
-                                    dialog.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+                                    View contentView = LayoutInflater.from(MainActivity.this).inflate(R.layout.ppw_update, null);
+
+                                    final PopupWindow mPopupWindow = new PopupWindow(contentView,
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.MATCH_PARENT);
+
+                                    mPopupWindow.setContentView(contentView);
+                                    mPopupWindow.setTouchable(true);
+                                    mPopupWindow.setFocusable(true);
+                                    mPopupWindow.setOutsideTouchable(false);
+                                    mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+                                    mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+
+
+                                    TextView tvTitle = (TextView) contentView.findViewById(R.id.tv_update_title);
+                                    TextView tvContent = (TextView) contentView.findViewById(R.id.tv_update_content);
+                                    ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_update_cancel);
+                                    TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_update_confirm);
+
+                                    tvTitle.setText("有新版本啦(" + MyApp.updateVersion + ")");
+                                    tvContent.setText(MyApp.updateContent);
+
+
+                                    tvConfirm.setOnClickListener(new View.OnClickListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            downloadFile(MyApp.updateUrl);
+                                        public void onClick(View v) {
+                                            downloadFile();
+                                            mPopupWindow.dismiss();
                                         }
                                     });
-                                    //取消
-                                    dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+
+                                    ivCancel.setOnClickListener(new View.OnClickListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
+                                        public void onClick(View v) {
+                                            mPopupWindow.dismiss();
                                         }
                                     });
-                                    dialog.create();
-                                    dialog.show();
+
                                 }
                             }
                         }
@@ -177,9 +204,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     /**
      * 下载文件
      */
-    private void downloadFile(String url) {
+    private void downloadFile() {
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(MyApp.updateUrl));
         request.setTitle("百大悦城");
         request.setDescription("正在下载");
         // 设置下载可见
@@ -248,7 +275,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     .addParams("appType", MyApp.appType)
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                    .addParams("token",SharedPreUtils.getStr(this, "token"))
+                    .addParams("token", SharedPreUtils.getStr(this, "token"))
                     .build()
                     .execute(new StringCallback() {
                         @Override

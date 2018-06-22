@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -57,7 +59,13 @@ public class PopGoodsDetailActivity extends BaseActivity {
         ws.setCacheMode(LOAD_NO_CACHE);
         ws.setUseWideViewPort(true);
         ws.setLoadWithOverviewMode(true);
-        String url = Constant.POP_GOODS_DETAIL + "?appType=Android&id=" + goodsId + "&hash=" + SharedPreUtils.getStr(this, "hash");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        String url = Constant.POP_GOODS_DETAIL + "?appType=Android&id=" + goodsId
+                + "&appVersion=" + MyApp.appVersion + "&organizeId=" + MyApp.organizeId
+                + "&token=" + SharedPreUtils.getStr(this, "token")
+                + "&hash=" + SharedPreUtils.getStr(this, "hash");
 
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {

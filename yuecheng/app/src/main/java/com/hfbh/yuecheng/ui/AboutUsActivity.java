@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -15,15 +17,23 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.alibaba.android.vlayout.LayoutView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.service.DownloadService;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 
 import java.io.File;
@@ -59,6 +69,7 @@ public class AboutUsActivity extends BaseActivity {
         setContentView(R.layout.activity_about_us);
         ButterKnife.bind(this);
         initView();
+
     }
 
     private void initView() {
@@ -84,33 +95,50 @@ public class AboutUsActivity extends BaseActivity {
         }
     }
 
+
     /**
      * 检查更新
      */
     private void checkUpdate() {
 
         if (!TextUtils.isEmpty(MyApp.updateUrl)) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(AboutUsActivity.this,
-                    R.style.Theme_AppCompat_DayNight_Dialog_Alert);
-            dialog.setTitle("检测到新版本" + MyApp.updateVersion + "，请更新");
-            dialog.setMessage(MyApp.updateContent);
-            //为“确定”按钮注册监听事件
-            dialog.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+            View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_update, null);
+
+
+            final PopupWindow mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
+            mPopupWindow.setContentView(contentView);
+            mPopupWindow.setTouchable(true);
+            mPopupWindow.setFocusable(true);
+            mPopupWindow.setOutsideTouchable(false);
+            mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+            mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+
+
+            TextView tvTitle = (TextView) contentView.findViewById(R.id.tv_update_title);
+            TextView tvContent = (TextView) contentView.findViewById(R.id.tv_update_content);
+            ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_update_cancel);
+            TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_update_confirm);
+
+            tvTitle.setText("有新版本啦(" + MyApp.updateVersion + ")");
+            tvContent.setText(MyApp.updateContent);
+
+            tvConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(View v) {
                     downloadFile();
+                    mPopupWindow.dismiss();
                 }
             });
 
-            //为“取消”按钮注册监听事件
-            dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+            ivCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                public void onClick(View v) {
+                    mPopupWindow.dismiss();
                 }
             });
-            dialog.create();
-            dialog.show();
+
         } else {
             ToastUtils.showToast(this, "已是最新版本！");
         }

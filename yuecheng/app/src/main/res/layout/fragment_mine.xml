@@ -47,7 +47,8 @@
         android:paddingRight="11dp"
         android:paddingTop="11.5dp"
         android:scaleType="center"
-        android:src="@mipmap/ic_mine_msg"/>
+        android:src="@mipmap/ic_mine_msg"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/rl_mine_info"
@@ -69,11 +70,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLength="11"
                 android:singleLine="true"
                 android:textColor="@color/gray_10"
                 android:textSize="22sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:maxEms="5"/>
 
             <ImageView
                 android:layout_width="16dp"

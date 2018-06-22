@@ -39,6 +39,8 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -98,6 +100,7 @@ public class ExchangeCouponActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange_coupon);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         tvTitleHeader.setText("优惠券");
         ivNullData.setImageResource(R.mipmap.ic_null_coupon);
         tvNullData.setText("暂无优惠券");
@@ -134,7 +137,6 @@ public class ExchangeCouponActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         CouponListBean ListBean = GsonUtils.jsonToBean(response, CouponListBean.class);
                         if (ListBean.getPage() != null) {
                             pages = ListBean.getPage().getPages();
@@ -298,7 +300,6 @@ public class ExchangeCouponActivity extends BaseActivity {
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 isRefresh = true;
                 page = 1;
-
                 initData();
             }
         });
@@ -347,7 +348,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("couponId", String.valueOf(dataList.get(position).getCouponId()))
                 .addParams("cyCouponId", String.valueOf(dataList.get(position).getCouponTypeCy()))
                 .addParams("exchangeValue", String.valueOf(dataList.get(position).getAccessValue()))
@@ -387,4 +388,20 @@ public class ExchangeCouponActivity extends BaseActivity {
     public void onViewClicked() {
         finish();
     }
+
+    @Subscribe
+    public void isLogin(String msg) {
+        if ("login_success".equals(msg)) {
+            isRefresh = true;
+            page = 1;
+            initData();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

@@ -203,6 +203,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
                             ResponseBean responseBean = GsonUtils.jsonToBean(response.body().string(),
                                     ResponseBean.class);
                             if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
+                                imgUrl = responseBean.getData();
                                 submitData();
                             }
                         } catch (IOException e) {
@@ -224,8 +225,12 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
         map.put("appVersion", MyApp.appVersion);
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
-        map.put("token",SharedPreUtils.getStr(this, "token"));
+        map.put("token", SharedPreUtils.getStr(this, "token"));
         map.put("content", etContent.getText().toString().trim());
+        if (imgUrl != null) {
+            map.put("imgPath", imgUrl);
+        }
+
         if (!TextUtils.isEmpty(phone)) {
             map.put("phone", phone);
         }
@@ -254,7 +259,6 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
                 });
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

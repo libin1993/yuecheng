@@ -2,9 +2,11 @@ package com.hfbh.yuecheng.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,9 @@ import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,17 +90,18 @@ public class ActivityFragment extends BaseFragment {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
-                .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("pageNum", "1")
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        LogUtils.log(e.toString());
+
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
+
                         loadingView.smoothToHide();
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         tagList = new ArrayList<>();

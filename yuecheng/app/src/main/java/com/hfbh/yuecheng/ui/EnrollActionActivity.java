@@ -1,10 +1,11 @@
 package com.hfbh.yuecheng.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,13 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
@@ -33,10 +32,14 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
+import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
+import com.hfbh.yuecheng.view.PermissionDialog;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -45,6 +48,8 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,14 +58,24 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.iwf.photopicker.PhotoPicker;
+import me.iwf.photopicker.PhotoPreview;
 import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Author：Libin on 2018/6/7 09:05
  * Email：1993911441@qq.com
  * Describe：活动报名
  */
-public class EnrollActionActivity extends BaseActivity {
+public class EnrollActionActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     @BindView(R.id.tv_header_title)
     TextView tvHeaderTitle;
     @BindView(R.id.iv_header_back)
@@ -81,6 +96,17 @@ public class EnrollActionActivity extends BaseActivity {
     private EditText etUsername;
     private EditText etPhone;
     private Map<String, String> map = new HashMap<>();
+
+    private ArrayList<String> photoList = new ArrayList<>();
+
+    static final String[] permissionStr = {Manifest.permission.CAMERA};
+
+    private int picPosition;
+    private HeaderAndFooterWrapper headerAndFooterWrapper;
+    private int totalNum;
+    private int inputNum;
+    private boolean flag = true;
+    private boolean flag2 = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,7 +141,16 @@ public class EnrollActionActivity extends BaseActivity {
                         if (activityBean.isFlag()) {
                             if (activityBean.getData().getOptionList() != null && activityBean
                                     .getData().getOptionList().size() > 0) {
-                                dataList.addAll(activityBean.getData().getOptionList());
+
+                                for (int i = 0; i < activityBean.getData().getOptionList().size(); i++) {
+                                    dataList.add(activityBean.getData().getOptionList().get(i));
+                                    if (!TextUtils.isEmpty(activityBean.getData().getOptionList()
+                                            .get(i).getRequired()) && activityBean.getData()
+                                            .getOptionList().get(i).getRequired().equals("true")) {
+                                        totalNum++;
+                                    }
+                                }
+
                             }
                             initView();
                         }
@@ -128,19 +163,29 @@ public class EnrollActionActivity extends BaseActivity {
      */
     private void initView() {
         rvActivity.setLayoutManager(new LinearLayoutManager(this));
-        CommonAdapter<EnrollActivityBean.DataBean.OptionListBean> adapter = new CommonAdapter
-                <EnrollActivityBean.DataBean.OptionListBean>(EnrollActionActivity.this,
-                R.layout.rv_enroll_activity_item, dataList) {
+        CommonAdapter<EnrollActivityBean.DataBean.OptionListBean> adapter = new CommonAdapter<EnrollActivityBean.DataBean.OptionListBean>(
+                EnrollActionActivity.this, R.layout.rv_enroll_activity_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, final EnrollActivityBean.DataBean.OptionListBean
-                    optionListBean, int position) {
+                    optionListBean, final int position) {
                 holder.setText(R.id.tv_enroll_activity_title, optionListBean.getTitle());
-                EditText etValue = holder.getView(R.id.tv_enroll_activity_value);
+                EditText etValue = holder.getView(R.id.et_enroll_activity_value);
+                TextView tvValue = holder.getView(R.id.tv_enroll_activity_value);
+                TextView tvNeed = holder.getView(R.id.tv_activity_need);
                 RadioGroup rgsValue = holder.getView(R.id.rgs_activity);
+
+                if (!TextUtils.isEmpty(optionListBean.getRequired()) && optionListBean.getRequired().equals("true")) {
+                    tvNeed.setVisibility(View.VISIBLE);
+                } else {
+                    tvNeed.setVisibility(View.INVISIBLE);
+                }
+
+
                 switch (optionListBean.getType()) {
                     case "SINGLE":
                         etValue.setVisibility(View.VISIBLE);
                         rgsValue.setVisibility(View.GONE);
+                        tvValue.setVisibility(View.GONE);
                         etValue.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -157,10 +202,19 @@ public class EnrollActionActivity extends BaseActivity {
                                 if (!TextUtils.isEmpty(s.toString().trim())) {
                                     map.put(optionListBean.getTitle(), s.toString().trim());
                                     map.put(optionListBean.getTitle() + "id", String.valueOf(optionListBean.getId()));
+                                    if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
+                                            optionListBean.getRequired().equals("true")) {
+                                        inputNum++;
+                                    }
+
                                 } else {
                                     if (map.containsKey(optionListBean.getTitle())) {
                                         map.remove(optionListBean.getTitle());
                                         map.remove(optionListBean.getTitle() + "id");
+                                        if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
+                                                optionListBean.getRequired().equals("true")) {
+                                            inputNum--;
+                                        }
                                     }
                                 }
                             }
@@ -169,13 +223,41 @@ public class EnrollActionActivity extends BaseActivity {
                     case "RADIO":
                         etValue.setVisibility(View.GONE);
                         rgsValue.setVisibility(View.VISIBLE);
+                        tvValue.setVisibility(View.GONE);
                         rgsValue.removeAllViews();
                         addView(rgsValue, optionListBean);
+                        break;
+                    case "UPLOAD_IMAGE":
+                        etValue.setVisibility(View.GONE);
+                        rgsValue.setVisibility(View.GONE);
+                        tvValue.setVisibility(View.VISIBLE);
+                        if (optionListBean.isFinish()) {
+                            tvValue.setText("√");
+                        } else {
+                            tvValue.setText("+");
+                        }
+
+                        tvValue.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (!EasyPermissions.hasPermissions(EnrollActionActivity.this, permissionStr)) {
+                                    EasyPermissions.requestPermissions(EnrollActionActivity.this, "", 123, permissionStr);
+                                } else {
+
+                                    picPosition = position - 1;
+                                    PhotoPicker.builder()
+                                            .setPhotoCount(3)
+                                            .setShowCamera(true)
+                                            .setSelected(photoList)
+                                            .start(EnrollActionActivity.this);
+                                }
+                            }
+                        });
                         break;
                 }
             }
         };
-        HeaderAndFooterWrapper headerAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
+        headerAndFooterWrapper = new HeaderAndFooterWrapper(adapter);
         headerAndFooterWrapper.addHeaderView(initHeader());
         rvActivity.setAdapter(headerAndFooterWrapper);
 
@@ -202,6 +284,14 @@ public class EnrollActionActivity extends BaseActivity {
         rgsValue.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if (flag) {
+                    flag = false;
+                    if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
+                            optionListBean.getRequired().equals("true")) {
+                        inputNum++;
+                    }
+                }
                 for (int i = 0; i < rgsValue.getChildCount(); i++) {
                     if (rgsValue.getChildAt(i).getId() == checkedId) {
                         map.put(optionListBean.getTitle(), optionListBean.getItemList().get(i).getTitle());
@@ -303,56 +393,69 @@ public class EnrollActionActivity extends BaseActivity {
      */
     private void enrollActivity() {
         if (etUsername != null && etPhone != null && !TextUtils.isEmpty(etUsername.getText().toString().trim())
-                && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && map.size() / 2 == dataList.size()) {
-            tvEnrollScore.setEnabled(false);
-            Map<String, String> paramMap = new HashMap<>();
-            paramMap.put("appType", MyApp.appType);
-            paramMap.put("appVersion", MyApp.appVersion);
-            paramMap.put("organizeId", MyApp.organizeId);
-            paramMap.put("hash", SharedPreUtils.getStr(this, "hash"));
-            paramMap.put("token", SharedPreUtils.getStr(this, "token"));
-            paramMap.put("realname", etUsername.getText().toString().trim());
-            paramMap.put("mobile", etPhone.getText().toString().trim());
-            paramMap.put("id", String.valueOf(activityId));
+                && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && inputNum == totalNum) {
+            if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {
+                tvEnrollScore.setEnabled(false);
+                Map<String, String> paramMap = new HashMap<>();
+                paramMap.put("appType", MyApp.appType);
+                paramMap.put("appVersion", MyApp.appVersion);
+                paramMap.put("organizeId", MyApp.organizeId);
+                paramMap.put("hash", SharedPreUtils.getStr(this, "hash"));
+                paramMap.put("token", SharedPreUtils.getStr(this, "token"));
+                paramMap.put("realname", etUsername.getText().toString().trim());
+                paramMap.put("mobile", etPhone.getText().toString().trim());
+                paramMap.put("id", String.valueOf(activityId));
 
-            if (map.size() > 0) {
-                String info = GsonUtils.mapToJson(map).replaceAll(":", "=");
-                info = info.replaceAll(",", ";");
-                paramMap.put("appData", info);
+                if (map.size() > 0) {
+                    StringBuilder info = new StringBuilder("{");
+                    for (Map.Entry<String, String> entry : map.entrySet()) {
+                        info.append("\"").append(entry.getKey()).append("\"=\"").append(entry.getValue()).append("\";");
+                    }
+                    paramMap.put("appData", info.toString().substring(0, info.length() - 1) + "}\"");
+                }
+
+//            if (map.size() > 0) {
+//                String info = GsonUtils.mapToJson(map).replaceAll(":", "=");
+//                info = info.replaceAll(",", ";");
+//                paramMap.put("appData", info);
+//            }
+
+                OkHttpUtils.post()
+                        .url(Constant.ENROLL_ACTIVITY)
+                        .params(paramMap)
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                tvEnrollScore.setEnabled(true);
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    boolean flag = jsonObject.getBoolean("flag");
+
+                                    if (flag) {
+                                        enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
+                                        tvEnrollActivity.setText("已报名");
+                                        tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                    } else {
+                                        String msg = jsonObject.getString("msg");
+                                        enrollResult(false, msg);
+                                        tvEnrollScore.setEnabled(true);
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            } else {
+                ToastUtils.showToast(this, "手机号输入格式有误");
             }
 
-            OkHttpUtils.post()
-                    .url(Constant.ENROLL_ACTIVITY)
-                    .params(paramMap)
-                    .build()
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onError(Call call, Exception e, int id) {
-                            tvEnrollScore.setEnabled(true);
-                        }
-
-                        @Override
-                        public void onResponse(String response, int id) {
-
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                boolean flag = jsonObject.getBoolean("flag");
-
-                                if (flag) {
-                                    enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
-                                    tvEnrollActivity.setText("已报名");
-                                    tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                                } else {
-                                    String msg = jsonObject.getString("msg");
-                                    enrollResult(false, msg);
-                                    tvEnrollScore.setEnabled(true);
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
         } else {
             ToastUtils.showToast(this, "请完善报名信息");
         }
@@ -418,6 +521,112 @@ public class EnrollActionActivity extends BaseActivity {
                 DisplayUtils.setBackgroundAlpha(EnrollActionActivity.this, false);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && (requestCode == PhotoPicker.REQUEST_CODE
+                || requestCode == PhotoPreview.REQUEST_CODE)) {
+
+            List<String> photos = null;
+            if (data != null) {
+                photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+            }
+            photoList.clear();
+
+            if (photos != null) {
+                photoList.addAll(photos);
+                uploadImg();
+            }
+        }
+    }
+
+
+    /**
+     * 图片上传
+     */
+    private void uploadImg() {
+
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+        for (int i = 0; i < photoList.size(); i++) {
+            File file = new File(photoList.get(i));
+            builder.addFormDataPart("img" + i, file.getName(),
+                    RequestBody.create(MediaType.parse("image/png"), file));
+        }
+
+        MultipartBody requestBody = builder.build();
+        //构建请求
+        final Request request = new Request.Builder()
+                .url(Constant.UPLOAD_FILE)
+                .post(requestBody)
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ResponseBean responseBean = GsonUtils.jsonToBean(response.body().string(),
+                                    ResponseBean.class);
+                            if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
+                                if (flag2) {
+                                    flag2 = false;
+                                    if (!TextUtils.isEmpty(dataList.get(picPosition).getRequired()) &&
+                                            dataList.get(picPosition).getRequired().equals("true")) {
+                                        inputNum++;
+                                    }
+                                }
+                                dataList.get(picPosition).setFinish(true);
+                                headerAndFooterWrapper.notifyItemChanged(picPosition + 1);
+                                map.put(dataList.get(picPosition).getTitle(), responseBean.getData());
+                                map.put(dataList.get(picPosition).getTitle() + "id", String.valueOf(dataList.get(picPosition).getId()));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 用户权限处理,
+     * 如果全部获取, 则直接过.
+     * 如果权限缺失, 则提示Dialog.
+     *
+     * @param requestCode  请求码
+     * @param permissions  权限
+     * @param grantResults 结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
+        return false;
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        PermissionDialog.showPermissionDialog(this, "相机");
     }
 
 }

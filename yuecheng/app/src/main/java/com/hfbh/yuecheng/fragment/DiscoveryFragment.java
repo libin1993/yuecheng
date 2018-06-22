@@ -55,7 +55,7 @@ public class DiscoveryFragment extends BaseFragment {
         titleList.add("美食");
         titleList.add("电影");
 
-        fragmentList.add(NewGoodsFragment.newInstance());
+        fragmentList.add(FoodFragment.newInstance());
         fragmentList.add(FoodFragment.newInstance());
         fragmentList.add(MovieFragment.newInstance());
 

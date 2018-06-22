@@ -108,7 +108,7 @@ public class GiftDetailBean {
          */
 
         private Object accessValue;
-        private Object balanceGetNum;
+        private int balanceGetNum;
         private int balanceNum;
         private Object couponValue;
         private String createTime;
@@ -145,11 +145,11 @@ public class GiftDetailBean {
             this.accessValue = accessValue;
         }
 
-        public Object getBalanceGetNum() {
+        public int getBalanceGetNum() {
             return balanceGetNum;
         }
 
-        public void setBalanceGetNum(Object balanceGetNum) {
+        public void setBalanceGetNum(int balanceGetNum) {
             this.balanceGetNum = balanceGetNum;
         }
 

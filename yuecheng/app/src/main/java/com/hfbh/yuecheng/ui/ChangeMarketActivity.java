@@ -84,7 +84,6 @@ public class ChangeMarketActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        LogUtils.log(s);
                         cityBean = GsonUtils.jsonToBean(s, CityListBean.class);
                         if (cityBean.isFlag()) {
                             initView();

@@ -397,7 +397,6 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log("aaa" + response);
                         UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             ToastUtils.showToast(LoginActivity.this, "登录成功");
@@ -416,9 +415,11 @@ public class LoginActivity extends BaseActivity {
                                     userInfoBean.getData().getCardLevel());
 
                             EventBus.getDefault().post("login_success");
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("change_market", true);
-                            startActivity(intent);
+                            if (getIntent().getIntExtra("type",0) == 1){
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("change_market", true);
+                                startActivity(intent);
+                            }
                             finish();
 
                         } else {
@@ -463,7 +464,6 @@ public class LoginActivity extends BaseActivity {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.log("bbb"+response);
                             UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                             if (userInfoBean.isFlag()) {
                                 ToastUtils.showToast(LoginActivity.this, "登录成功");
@@ -482,9 +482,11 @@ public class LoginActivity extends BaseActivity {
                                         userInfoBean.getData().getCardLevel());
 
                                 EventBus.getDefault().post("login_success");
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("change_market", true);
-                                startActivity(intent);
+                                if (getIntent().getIntExtra("type",0) == 1){
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("change_market", true);
+                                    startActivity(intent);
+                                }
                                 finish();
                             } else {
                                 ToastUtils.showToast(LoginActivity.this, userInfoBean.getMsg());

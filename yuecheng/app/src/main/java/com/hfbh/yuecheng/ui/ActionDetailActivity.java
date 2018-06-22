@@ -1,6 +1,7 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -22,9 +23,11 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
-import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,17 +60,23 @@ public class ActionDetailActivity extends BaseActivity {
     //活动id
     private int activityId;
     private ActivityDetailBean activityBean;
-    private boolean isFinish;
+    //是否活动结束
+    private boolean isActivityEnd;
+    //是否已报名
     private boolean isEnroll;
-    private boolean isStart;
+    //是否报名开始
+    private boolean isEnrollStart;
+    //是否报名结束
+    private boolean isEnrollEnd;
+    //是否满额
     private boolean isLimit;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_action_detail);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         tvTitleHeader.setText("活动详情");
         getData();
         initData();
@@ -84,11 +93,14 @@ public class ActionDetailActivity extends BaseActivity {
         ws.setCacheMode(LOAD_NO_CACHE);
         ws.setUseWideViewPort(true);
         ws.setLoadWithOverviewMode(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
 
-
-        String url = Constant.ACTIVITY_DETAIL + "?appType=Android&id=" + activityId
+        String url = Constant.ACTIVITY_DETAIL + "?appType=Android&id=" + activityId + "&appVersion="
+                + MyApp.appVersion + "&organizeId=" + MyApp.organizeId
+                + "&token=" + SharedPreUtils.getStr(this, "token")
                 + "&hash=" + SharedPreUtils.getStr(this, "hash");
-        LogUtils.log(url);
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -106,7 +118,7 @@ public class ActionDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("id", String.valueOf(activityId))
                 .build()
                 .execute(new StringCallback() {
@@ -117,7 +129,6 @@ public class ActionDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-
                         activityBean = GsonUtils.jsonToBean(response, ActivityDetailBean.class);
                         if (activityBean.isFlag()) {
                             initView();
@@ -128,13 +139,16 @@ public class ActionDetailActivity extends BaseActivity {
 
 
     private void initView() {
-        isFinish = System.currentTimeMillis() > DateUtils.getTime(
+        isActivityEnd = System.currentTimeMillis() > DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getActivityEndtime());
         isEnroll = activityBean.getData().getSignupDo().getMemberSignupState() != null
                 && activityBean.getData().getSignupDo().getMemberSignupState().equals("去参加");
 
-        isStart = System.currentTimeMillis() >= DateUtils.getTime(
+        isEnrollStart = System.currentTimeMillis() >= DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getStartTime());
+        isEnrollEnd = System.currentTimeMillis() > DateUtils.getTime(
+                "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getEndTime());
+
         isLimit = activityBean.getData().getSignupDo().getSignupLimitNumber() > 0 &&
                 activityBean.getData().getSignupDo().getSignupNumber()
                         == activityBean.getData().getSignupDo().getSignupLimitNumber();
@@ -160,29 +174,52 @@ public class ActionDetailActivity extends BaseActivity {
                     break;
             }
         }
-        if (!isFinish) {
-            if (isStart) {
+
+
+        if (!isActivityEnd) {
+            if (isEnrollStart) {
                 if (isEnroll) {
                     tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                    tvExchange.setText("去参加");
+                    tvExchange.setText("已报名，查看报名信息");
+                    tvExchange.setEnabled(true);
                 } else {
-                    if (!isLimit) {
-                        tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                        tvExchange.setText("立即报名");
-                    } else {
+                    if (isEnrollEnd) {
                         tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                        tvExchange.setText("名额已满");
-                    }
+                        tvExchange.setText("报名已结束");
+                        tvExchange.setEnabled(false);
+                    } else {
+                        if (!isLimit) {
+                            if (SharedPreUtils.getBoolean(this, "is_login", false)
+                                    && activityBean.getData().getSignupDo().getAcivityType().equals("SCORE")
+                                    && activityBean.getData().getSignupDo().getEnrollScore() >
+                                    activityBean.getData().getMember().getBalanceScore()) {
 
+                                tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                tvExchange.setText("积分不足");
+                                tvExchange.setEnabled(false);
+                            } else {
+                                tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+                                tvExchange.setText("立即报名");
+                                tvExchange.setEnabled(true);
+                            }
+
+                        } else {
+                            tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                            tvExchange.setText("名额已满");
+                            tvExchange.setEnabled(false);
+                        }
+                    }
                 }
             } else {
                 tvExchange.setText("待报名");
                 tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                tvExchange.setEnabled(false);
             }
 
         } else {
-            tvExchange.setText("已结束");
+            tvExchange.setText("活动已结束");
             tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+            tvExchange.setEnabled(false);
         }
     }
 
@@ -212,14 +249,14 @@ public class ActionDetailActivity extends BaseActivity {
      * 活动报名
      */
     private void enrollActivity() {
-        if (!isFinish && isStart) {
+        if (!isActivityEnd && isEnrollStart) {
             Intent intent;
             if (SharedPreUtils.getBoolean(this, "is_login", false)) {
                 if (isEnroll) {
                     intent = new Intent(this, CloseActionActivity.class);
                     intent.putExtra("activity_id", activityId);
                     startActivity(intent);
-                } else if (!isLimit) {
+                } else {
                     intent = new Intent(this, EnrollActionActivity.class);
                     intent.putExtra("activity_id", activityId);
                     startActivity(intent);
@@ -231,6 +268,21 @@ public class ActionDetailActivity extends BaseActivity {
             }
 
         }
+    }
+
+
+    @Subscribe
+    public void isLogin(String msg) {
+        if ("login_success".equals(msg)) {
+            webView.reload();
+            initData();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
 }

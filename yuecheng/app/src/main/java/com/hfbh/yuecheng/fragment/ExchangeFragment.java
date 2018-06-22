@@ -29,6 +29,7 @@ import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -101,10 +102,10 @@ public class ExchangeFragment extends BaseFragment {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
-                .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("queryType", type)
                 .addParams("pageNum", String.valueOf(page))
-                .addParams("rewardType","GIFT")
+                .addParams("rewardType", "GIFT")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -114,6 +115,7 @@ public class ExchangeFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         MyGiftBean giftBean = GsonUtils.jsonToBean(response, MyGiftBean.class);
                         if (giftBean.getPage() != null) {
                             pages = giftBean.getPage().getPages();
@@ -134,7 +136,7 @@ public class ExchangeFragment extends BaseFragment {
                                 isLoadMore = false;
                                 adapter.notifyDataSetChanged();
                             } else {
-                                if (viewLoading!=null){
+                                if (viewLoading != null) {
                                     viewLoading.smoothToHide();
                                 }
 
@@ -159,20 +161,19 @@ public class ExchangeFragment extends BaseFragment {
      */
     private void initView() {
         rvGift.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new CommonAdapter<MyGiftBean.DataBean>(getActivity(),
-                R.layout.rv_my_exchange_item, dataList) {
+        adapter = new CommonAdapter<MyGiftBean.DataBean>(getActivity(), R.layout.rv_my_exchange_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, MyGiftBean.DataBean dataBean, final int position) {
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_my_exchange);
                 ivCoupon.setImageURI(dataBean.getCouponImage());
 
                 holder.setText(R.id.tv_my_exchange_name, dataBean.getGainName());
-                holder.setText(R.id.tv_exchange_time, "有效时间： "
-                        + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
-                        "yyyy.MM.dd", dataBean.getStartTime())
-                        + " - "
-                        + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
-                        "yyyy.MM.dd", dataBean.getEndTime()));
+                if (!TextUtils.isEmpty(dataBean.getStartTime()) && !TextUtils.isEmpty(dataBean.getEndTime())) {
+                    holder.setText(R.id.tv_exchange_time, "有效时间： "
+                            + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd", dataBean.getStartTime())
+                            + " - "
+                            + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd", dataBean.getEndTime()));
+                }
 
 
                 holder.setText(R.id.tv_exchange_cost, dataBean.getGiftPrice() + "积分");
@@ -181,48 +182,34 @@ public class ExchangeFragment extends BaseFragment {
                 final TextView tvJoin = holder.getView(R.id.tv_exchange_join);
 
                 final String status = dataBean.getUseState();
+                boolean isFinish = false;
+                if (!TextUtils.isEmpty(dataBean.getEndTime())) {
+                    isFinish = System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                }
 
-                final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
-                        "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
-
-                if (isFinish) {
-                    tvStatus.setVisibility(View.VISIBLE);
-                    tvJoin.setVisibility(View.GONE);
-                    tvStatus.setTextColor(getActivity().getResources().getColor(R.color.gray_9f));
-                    tvStatus.setText("已失效");
-                } else {
-                    if (!TextUtils.isEmpty(status)) {
-                        switch (status) {
-                            case "UNUSE":
+                if (!TextUtils.isEmpty(status)) {
+                    switch (status) {
+                        case "UNUSE":
+                            if (isFinish) {
+                                tvStatus.setVisibility(View.VISIBLE);
+                                tvJoin.setVisibility(View.GONE);
+                                tvStatus.setTextColor(getActivity().getResources().getColor(R.color.gray_9f));
+                                tvStatus.setText("已失效");
+                            } else {
                                 tvStatus.setVisibility(View.GONE);
                                 tvJoin.setVisibility(View.VISIBLE);
                                 tvJoin.setText("去核销");
-                                break;
-                            case "USE":
-                                tvStatus.setVisibility(View.VISIBLE);
-                                tvJoin.setVisibility(View.GONE);
-                                tvStatus.setTextColor(getActivity().getResources().getColor(R.color.red_99));
-                                tvStatus.setText("已完成");
-                                break;
-                        }
+                            }
+
+                            break;
+                        case "USE":
+                            tvStatus.setVisibility(View.VISIBLE);
+                            tvJoin.setVisibility(View.GONE);
+                            tvStatus.setTextColor(getActivity().getResources().getColor(R.color.red_99));
+                            tvStatus.setText("已完成");
+                            break;
                     }
                 }
-                tvStatus.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
-
-                tvJoin.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), CloseGiftActivity.class);
-                        intent.putExtra("gift_id", dataList.get(position).getGainId());
-
-                        startActivity(intent);
-                    }
-                });
 
             }
         };
@@ -233,9 +220,15 @@ public class ExchangeFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(getActivity(), GiftDetailActivity.class);
-                intent.putExtra("id", dataList.get(position).getObjectId());
-                startActivity(intent);
+                if (dataList.get(position).getUseState() != null
+                        && dataList.get(position).getUseState().equals("UNUSE")
+                        && System.currentTimeMillis() <= DateUtils.getTime(
+                        "yyyy-MM-dd HH:mm:ss", dataList.get(position).getEndTime())) {
+                    Intent intent = new Intent(getActivity(), CloseGiftActivity.class);
+                    intent.putExtra("gift_id", dataList.get(position).getObjectId());
+                    startActivity(intent);
+                }
+
             }
 
             @Override

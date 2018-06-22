@@ -108,7 +108,7 @@ public class MineFragment extends BaseFragment {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
-                    .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
+                    .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                     .build()
                     .execute(new StringCallback() {
                         @Override
@@ -118,7 +118,6 @@ public class MineFragment extends BaseFragment {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.log( MyApp.organizeId+response);
                             userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                             if (userInfoBean.isFlag()) {
                                 initView();
@@ -209,6 +208,7 @@ public class MineFragment extends BaseFragment {
             }
         } else {
             intent = new Intent(getActivity(), LoginActivity.class);
+            intent.putExtra("type", 1);
             startActivity(intent);
         }
     }
@@ -226,6 +226,7 @@ public class MineFragment extends BaseFragment {
             }
         } else {
             intent = new Intent(getActivity(), LoginActivity.class);
+            intent.putExtra("type", 1);
             startActivity(intent);
         }
     }
@@ -239,6 +240,7 @@ public class MineFragment extends BaseFragment {
             intent = new Intent(getActivity(), cls);
         } else {
             intent = new Intent(getActivity(), LoginActivity.class);
+            intent.putExtra("type", 1);
         }
         startActivity(intent);
     }

@@ -30,6 +30,8 @@ import com.hfbh.yuecheng.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,6 +86,7 @@ public class CouponDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coupon_detail);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         tvHeaderTitle.setText("优惠券详情");
         viewHeaderLine.setVisibility(View.GONE);
         getData();
@@ -97,7 +100,7 @@ public class CouponDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("couponId", String.valueOf(couponId))
                 .build()
                 .execute(new StringCallback() {
@@ -108,7 +111,6 @@ public class CouponDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         couponBean = GsonUtils.jsonToBean(response, CouponDetailBean.class);
                         if (couponBean.isFlag()) {
                             initView();
@@ -212,7 +214,7 @@ public class CouponDetailActivity extends BaseActivity {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                    .addParams("token",SharedPreUtils.getStr(this, "token"))
+                    .addParams("token", SharedPreUtils.getStr(this, "token"))
                     .addParams("cyCouponId", String.valueOf(couponType))
                     .addParams("couponId", String.valueOf(couponId))
                     .addParams("exchangeValue", String.valueOf(couponBean.getData().getAccessValue()))
@@ -309,4 +311,19 @@ public class CouponDetailActivity extends BaseActivity {
             }
         });
     }
+
+
+    @Subscribe
+    public void isLogin(String msg) {
+        if ("login_success".equals(msg)) {
+            initData();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

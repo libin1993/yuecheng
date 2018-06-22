@@ -159,7 +159,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
      */
     private void initType() {
         tvHomeLocation.setText(MyApp.organizeName);
-
         loadingView.smoothToShow();
         OkHttpUtils.post()
                 .url(Constant.HOMEPAGE_TYPE)
@@ -209,11 +208,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.log(response);
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 boolean flag = jsonObject.getBoolean("flag");
-                                if (flag){
+                                if (flag) {
                                     switch (typeBean.getData().get(type).getModuleCode()) {
                                         case "BANNER":
                                             bannerBean = GsonUtils.jsonToBean(response, BannerBean.class);
@@ -443,7 +441,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .dontAnimate()
                                 .placeholder(R.mipmap.img_place)
-                                .centerCrop()
                                 .into(ivActivity);
 
                         holder.setText(R.id.tv_action_title, topicBean.getData().get(0).getActivityList().get(position).getName());
@@ -456,20 +453,24 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent;
-                                if ("去参加".equals(status)) {
-                                    if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                                        intent = new Intent(getActivity(), CloseActionActivity.class);
-                                        intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
-                                    } else {
-                                        intent = new Intent(getActivity(), LoginActivity.class);
-                                    }
+//                                Intent intent;
+//                                if ("去参加".equals(status)) {
+//                                    if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+//                                        intent = new Intent(getActivity(), CloseActionActivity.class);
+//                                        intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
+//                                    } else {
+//                                        intent = new Intent(getActivity(), LoginActivity.class);
+//                                    }
+//
+//                                } else {
+//                                    intent = new Intent(getActivity(), ActionDetailActivity.class);
+//                                    intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
+//                                }
+//
+//                                startActivity(intent);
 
-                                } else {
-                                    intent = new Intent(getActivity(), ActionDetailActivity.class);
-                                    intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
-                                }
-
+                                Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
+                                intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
                                 startActivity(intent);
                             }
                         });
@@ -502,7 +503,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .dontAnimate()
                                 .placeholder(R.mipmap.img_place)
-                                .centerCrop()
                                 .into(ivActivity);
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -753,26 +753,26 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     });
 
 
-                    tvReceive.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (!isFinish && isStart) {
-                                Intent intent;
-                                if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-                                    if (isEnroll) {
-                                        intent = new Intent(getActivity(), CloseActionActivity.class);
-                                    } else {
-                                        intent = new Intent(getActivity(), EnrollActionActivity.class);
-                                    }
-                                    intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
-                                } else {
-                                    intent = new Intent(getActivity(), LoginActivity.class);
-                                }
-                                startActivity(intent);
-                            }
-
-                        }
-                    });
+//                    tvReceive.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if (!isFinish && isStart) {
+//                                Intent intent;
+//                                if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+//                                    if (isEnroll) {
+//                                        intent = new Intent(getActivity(), CloseActionActivity.class);
+//                                    } else {
+//                                        intent = new Intent(getActivity(), EnrollActionActivity.class);
+//                                    }
+//                                    intent.putExtra("activity_id", activityBean.getData().get(position).getObjectId());
+//                                } else {
+//                                    intent = new Intent(getActivity(), LoginActivity.class);
+//                                }
+//                                startActivity(intent);
+//                            }
+//
+//                        }
+//                    });
 
                 }
             };
