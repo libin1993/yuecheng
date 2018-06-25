@@ -48,16 +48,13 @@ public class CouponActivity extends BaseActivity {
     ViewPager vpCoupon;
     @BindView(R.id.view_header_line)
     View viewHeaderLine;
-    @BindView(R.id.view_loading)
-    AVLoadingIndicatorView viewLoading;
-
 
     private List<String> titleList;
     private List<Fragment> fragmentList;
-    private MyCouponBean couponBean;
-    private List<MyCouponBean.DataBean> usableList = new ArrayList<>();
-    private List<MyCouponBean.DataBean> disableList = new ArrayList<>();
-    private List<MyCouponBean.DataBean> overdueList = new ArrayList<>();
+//    private MyCouponBean couponBean;
+//    private List<MyCouponBean.DataBean> usableList = new ArrayList<>();
+//    private List<MyCouponBean.DataBean> disableList = new ArrayList<>();
+//    private List<MyCouponBean.DataBean> overdueList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,64 +62,65 @@ public class CouponActivity extends BaseActivity {
         setContentView(R.layout.activity_my_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("我的票券");
-        initData();
+        initTitle();
     }
 
-    private void initData() {
-        viewLoading.smoothToShow();
-        OkHttpUtils.post()
-                .url(Constant.MY_COUPON)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
-                .addParams("cardNumber", SharedPreUtils.getStr(this, "card_number"))
-                .addParams("couponTypeKind", "VOUCHER")
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        viewLoading.smoothToHide();
-                        couponBean = GsonUtils.jsonToBean(response, MyCouponBean.class);
-                        if (couponBean.isFlag() && couponBean.getData() != null
-                                && couponBean.getData().size() > 0) {
-                            initTitle();
-                        }
-                    }
-                });
-    }
+//    private void initData() {
+//        viewLoading.smoothToShow();
+//        OkHttpUtils.post()
+//                .url(Constant.MY_COUPON)
+//                .addParams("appType", MyApp.appType)
+//                .addParams("appVersion", MyApp.appVersion)
+//                .addParams("organizeId", MyApp.organizeId)
+//                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+//                .addParams("token", SharedPreUtils.getStr(this, "token"))
+//                .addParams("cardNumber", SharedPreUtils.getStr(this, "card_number"))
+//                .addParams("couponTypeKind", "VOUCHER")
+//                .build()
+//                .execute(new StringCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e, int id) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response, int id) {
+//                        viewLoading.smoothToHide();
+//                        couponBean = GsonUtils.jsonToBean(response, MyCouponBean.class);
+//                        if (couponBean.isFlag() && couponBean.getData() != null
+//                                && couponBean.getData().size() > 0) {
+//                            initTitle();
+//                        }
+//                    }
+//                });
+//    }
 
     /**
      * tab分类
      */
     private void initTitle() {
 
-        for (int i = 0; i < couponBean.getData().size(); i++) {
-            if (System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd", couponBean.getData().get(i).getValidDate())) {
-                overdueList.add(couponBean.getData().get(i));
-            } else {
-                if (couponBean.getData().get(i).getBalance() > 0) {
-                    usableList.add(couponBean.getData().get(i));
-                } else {
-                    disableList.add(couponBean.getData().get(i));
-                }
-            }
-        }
+//        for (int i = 0; i < couponBean.getData().size(); i++) {
+//            if (System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd",
+//                    couponBean.getData().get(i).getValidDate())) {
+//                overdueList.add(couponBean.getData().get(i));
+//            } else {
+//                if (couponBean.getData().get(i).getBalance() > 0) {
+//                    usableList.add(couponBean.getData().get(i));
+//                } else {
+//                    disableList.add(couponBean.getData().get(i));
+//                }
+//            }
+//        }
 
         titleList = new ArrayList<>();
         fragmentList = new ArrayList<>();
         titleList.add("未使用");
         titleList.add("已使用");
         titleList.add("已过期");
-        fragmentList.add(CouponFragment.newInstance(1, usableList));
-        fragmentList.add(CouponFragment.newInstance(2, disableList));
-        fragmentList.add(CouponFragment.newInstance(3, overdueList));
+        fragmentList.add(CouponFragment.newInstance("UNUSE"));
+        fragmentList.add(CouponFragment.newInstance("USE"));
+        fragmentList.add(CouponFragment.newInstance("EXPIRE"));
 
         initView();
     }

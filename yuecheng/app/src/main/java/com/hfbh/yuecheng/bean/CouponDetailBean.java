@@ -120,6 +120,7 @@ public class CouponDetailBean {
         private String couponName;
         private Object couponRecom;
         private String couponTypeKind;
+        private int couponTypeCy;
         private int couponValue;
         private String endTime;
         private Object exchangeTime;
@@ -140,6 +141,14 @@ public class CouponDetailBean {
         private Object useTime;
         private Object verifyCode;
         private List<ListCouponShopBean> listCouponShop;
+
+        public int getCouponTypeCy() {
+            return couponTypeCy;
+        }
+
+        public void setCouponTypeCy(int couponTypeCy) {
+            this.couponTypeCy = couponTypeCy;
+        }
 
         public String getAccessType() {
             return accessType;

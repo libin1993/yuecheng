@@ -27,6 +27,7 @@ import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -125,8 +126,38 @@ public class CouponDetailActivity extends BaseActivity {
         hasGetNum = couponBean.getData().getMemberBroughtNum();
 
         ivCoupon.setImageURI(couponBean.getData().getCouponImage());
+
+
         tvCouponName.setText(couponBean.getData().getCouponName());
 
+
+        if (couponType == 9) {
+            //返利
+            double rebate = 0.015;
+            if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+                switch (SharedPreUtils.getStr(this, "member_card")) {
+                    case "VIP积分卡":
+                        rebate = 0.015;
+                        break;
+                    case "三星贵宾卡":
+                        rebate = 0.02;
+                        break;
+                    case "五星贵宾卡":
+                        rebate = 0.03;
+                        break;
+                }
+            }
+
+            if (!TextUtils.isEmpty(couponBean.getData().getAccessType()) && couponBean.getData().getAccessType().equals("POINT")) {
+                tvCouponName.setText(DisplayUtils.isInteger(couponBean.getData().getAccessValue() * rebate)
+                        + "元-" + couponBean.getData().getCouponName());
+            } else {
+                tvCouponName.setText(couponBean.getData().getCouponName());
+            }
+
+        } else {
+            tvCouponName.setText(couponBean.getData().getCouponName());
+        }
 
         tvCouponTime.setText(DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
                 "yyyy.MM.dd", couponBean.getData().getStartTime()) + " - " +

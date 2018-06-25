@@ -33,6 +33,7 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -118,6 +119,7 @@ public class MineFragment extends BaseFragment {
 
                         @Override
                         public void onResponse(String response, int id) {
+
                             userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                             if (userInfoBean.isFlag()) {
                                 initView();

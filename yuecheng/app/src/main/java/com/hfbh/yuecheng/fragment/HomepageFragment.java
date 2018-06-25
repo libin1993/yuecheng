@@ -228,6 +228,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                             topicBean = GsonUtils.jsonToBean(response, TopicBean.class);
                                             break;
                                         case "COUPON":
+                                            LogUtils.log(response);
                                             couponBean = GsonUtils.jsonToBean(response, CouponBean.class);
                                             break;
                                         case "ACTIVITY":
@@ -538,7 +539,9 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_coupon);
                     ivCoupon.setImageURI(couponBean.getData().get(position).getCouponImage());
 
-                    holder.setText(R.id.tv_home_coupon_title, couponBean.getData().get(position).getCouponName());
+                    TextView tvCouponName = holder.getView(R.id.tv_home_coupon_title);
+
+
                     holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getCouponDesc());
                     holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData().get(position).getBalanceNum());
 
@@ -546,6 +549,35 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                     String accessType = couponBean.getData().get(position).getAccessType();
                     double needScore = couponBean.getData().get(position).getAccessValue();
+
+
+                    if (couponBean.getData().get(position).getCouponTypeCy() == 9) {
+                        //返利
+                        double rebate = 0.015;
+                        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+                            switch (SharedPreUtils.getStr(getActivity(), "member_card")) {
+                                case "VIP积分卡":
+                                    rebate = 0.015;
+                                    break;
+                                case "三星贵宾卡":
+                                    rebate = 0.02;
+                                    break;
+                                case "五星贵宾卡":
+                                    rebate = 0.03;
+                                    break;
+                            }
+                        }
+
+                        if (!TextUtils.isEmpty(accessType) && accessType.equals("POINT")) {
+                            tvCouponName.setText(DisplayUtils.isInteger(needScore * rebate)
+                                    + "元-" + couponBean.getData().get(position).getCouponName());
+                        } else {
+                            tvCouponName.setText(couponBean.getData().get(position).getCouponName());
+                        }
+
+                    } else {
+                        tvCouponName.setText(couponBean.getData().get(position).getCouponName());
+                    }
 
 
                     if (couponBean.getData().get(position).getBalanceNum() > 0) {

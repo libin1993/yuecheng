@@ -12,8 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
+import com.hfbh.yuecheng.bean.MyCouponBean;
 import com.hfbh.yuecheng.bean.UserInfoBean;
+import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.service.TimerService;
 import com.hfbh.yuecheng.ui.CouponActivity;
 import com.hfbh.yuecheng.ui.MemberBalanceActivity;
@@ -21,12 +24,17 @@ import com.hfbh.yuecheng.ui.MemberPointsActivity;
 import com.hfbh.yuecheng.utils.BarcodeUtils;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
+import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
+import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.Call;
 
 /**
  * Author：Libin on 2018/5/23 16:20
@@ -67,8 +75,42 @@ public class PayCodeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_pay_code, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
+        getCouponCount();
         initView();
         return view;
+    }
+
+    /**
+     * 获取优惠券数量
+     */
+    private void getCouponCount() {
+        OkHttpUtils.post()
+                .url(Constant.MY_COUPON)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
+                .addParams("cardNumber", SharedPreUtils.getStr(getActivity(), "card_number"))
+                .addParams("couponTypeKind", "VOUCHER")
+                .addParams("queryType", "UNUSE")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        MyCouponBean couponBean = GsonUtils.jsonToBean(response, MyCouponBean.class);
+                        if (couponBean.isFlag() && couponBean.getData() != null
+                                && couponBean.getData().size() > 0) {
+                            tvPaycodeTicket.setText(String.valueOf(couponBean.getData().size()));
+                        }
+                    }
+                });
+
     }
 
     private void getData() {
@@ -89,7 +131,6 @@ public class PayCodeFragment extends BaseFragment {
 
         tvPaycodeMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
         tvPaycodeScore.setText(DisplayUtils.isInteger(userInfoBean.getData().getPoints()));
-        tvPaycodeTicket.setText(String.valueOf(userInfoBean.getData().getCouponCount()));
 
         TimerService.getConnect(getActivity());
     }

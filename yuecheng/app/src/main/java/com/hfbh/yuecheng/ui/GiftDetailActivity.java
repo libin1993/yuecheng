@@ -123,7 +123,7 @@ public class GiftDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
+
                         giftBean = GsonUtils.jsonToBean(response, GiftDetailBean.class);
                         if (giftBean.isFlag()) {
                             score = giftBean.getData().getNeedScore();

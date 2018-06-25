@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
@@ -94,7 +95,9 @@ public class DisplayUtils {
      * @return 保留两位小数
      */
     public static String decimalFormat(Float value) {
-        return new DecimalFormat("0.00").format(value);
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.DOWN);
+        return df.format(value);
     }
 
     /**

@@ -24,6 +24,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.CouponListBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.fragment.ExchangeFragment;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -188,7 +189,9 @@ public class ExchangeCouponActivity extends BaseActivity {
                 SimpleDraweeView ivCoupon = holder.getView(R.id.iv_home_coupon);
                 ivCoupon.setImageURI(dataBean.getCouponImage());
 
-                holder.setText(R.id.tv_home_coupon_title, dataBean.getCouponName());
+                TextView tvCouponName = holder.getView(R.id.tv_home_coupon_title);
+
+
                 if (dataBean.getCouponTypeKind() != null && dataBean.getCouponTypeKind().equals("VOUCHER")) {
                     if (dataBean.getListCouponShop() != null && dataBean.getListCouponShop().size() > 0) {
                         StringBuilder shop = new StringBuilder();
@@ -215,7 +218,37 @@ public class ExchangeCouponActivity extends BaseActivity {
                 TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
 
                 String accessType = dataBean.getAccessType();
-                String needScore = DisplayUtils.isInteger(dataBean.getAccessValue());
+                double needScore = dataBean.getAccessValue();
+
+                if (dataBean.getCouponTypeCy() == 9) {
+                    //返利
+                    double rebate = 0.015;
+                    if (SharedPreUtils.getBoolean(ExchangeCouponActivity.this, "is_login", false)) {
+                        switch (SharedPreUtils.getStr(ExchangeCouponActivity.this, "member_card")) {
+                            case "VIP积分卡":
+                                rebate = 0.015;
+                                break;
+                            case "三星贵宾卡":
+                                rebate = 0.02;
+                                break;
+                            case "五星贵宾卡":
+                                rebate = 0.03;
+                                break;
+                        }
+                    }
+
+                    if (!TextUtils.isEmpty(accessType) && accessType.equals("POINT")) {
+                        tvCouponName.setText(DisplayUtils.isInteger(needScore * rebate)
+                                + "元-" + dataBean.getCouponName());
+                    } else {
+                        tvCouponName.setText(dataBean.getCouponName());
+                    }
+
+                } else {
+                    tvCouponName.setText(dataBean.getCouponName());
+                }
+
+
                 if (dataBean.getBalanceNum() > 0) {
                     int limitNum = dataBean.getLimitNum();
                     int getNum = dataBean.getMemberBroughtNum();
@@ -227,10 +260,10 @@ public class ExchangeCouponActivity extends BaseActivity {
                                     tvReceive.setText("免费\n领取");
                                     break;
                                 case "POINT":
-                                    tvReceive.setText(needScore + "积分\n领取");
+                                    tvReceive.setText(DisplayUtils.isInteger(needScore) + "积分\n领取");
                                     break;
                                 case "BUY":
-                                    tvReceive.setText(needScore + "元\n领取");
+                                    tvReceive.setText(DisplayUtils.isInteger(needScore) + "元\n领取");
                                     break;
                             }
                         }
@@ -244,10 +277,10 @@ public class ExchangeCouponActivity extends BaseActivity {
                                         tvReceive.setText("免费\n领取");
                                         break;
                                     case "POINT":
-                                        tvReceive.setText(needScore + "积分\n领取");
+                                        tvReceive.setText(DisplayUtils.isInteger(needScore) + "积分\n领取");
                                         break;
                                     case "BUY":
-                                        tvReceive.setText(needScore + "元\n领取");
+                                        tvReceive.setText(DisplayUtils.isInteger(needScore) + "元\n领取");
                                         break;
                                 }
                             }

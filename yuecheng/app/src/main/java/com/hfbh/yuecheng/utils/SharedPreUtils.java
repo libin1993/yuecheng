@@ -28,7 +28,7 @@ public class SharedPreUtils {
      */
     public static String getStr(Context context, String key) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(key, MODE_PRIVATE);
-//        LogUtils.log(sharedPreferences.getString(key, ""));
+        LogUtils.log(sharedPreferences.getString(key, ""));
         return sharedPreferences.getString(key, "");
     }
 

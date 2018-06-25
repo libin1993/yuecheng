@@ -115,7 +115,6 @@ public class ExchangeFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         MyGiftBean giftBean = GsonUtils.jsonToBean(response, MyGiftBean.class);
                         if (giftBean.getPage() != null) {
                             pages = giftBean.getPage().getPages();
@@ -220,12 +219,17 @@ public class ExchangeFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                boolean isFinish = false;
+                if (!TextUtils.isEmpty(dataList.get(position).getEndTime())) {
+                    isFinish = System.currentTimeMillis() > DateUtils.getTime(
+                            "yyyy-MM-dd HH:mm:ss", dataList.get(position).getEndTime());
+                }
+
                 if (dataList.get(position).getUseState() != null
                         && dataList.get(position).getUseState().equals("UNUSE")
-                        && System.currentTimeMillis() <= DateUtils.getTime(
-                        "yyyy-MM-dd HH:mm:ss", dataList.get(position).getEndTime())) {
+                        && !isFinish) {
                     Intent intent = new Intent(getActivity(), CloseGiftActivity.class);
-                    intent.putExtra("gift_id", dataList.get(position).getObjectId());
+                    intent.putExtra("gain_id", dataList.get(position).getGainId());
                     startActivity(intent);
                 }
 

@@ -20,10 +20,8 @@ import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
-import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -63,7 +61,7 @@ public class CloseGiftActivity extends BaseActivity {
     TextView tvGiftExchangeType;
     @BindView(R.id.tv_activity_phone)
     TextView tvGiftPhone;
-    private int giftId;
+    private int gainId;
     private CloseGiftBean giftBean;
 
     private Bitmap qrBmp;
@@ -79,7 +77,7 @@ public class CloseGiftActivity extends BaseActivity {
     }
 
     private void getData() {
-        giftId = getIntent().getIntExtra("gift_id", 0);
+        gainId = getIntent().getIntExtra("gain_id", 0);
         tvGiftDetail.setText("礼品详情");
         tvGiftDetail.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         tvGiftDetail.getPaint().setAntiAlias(true);
@@ -93,7 +91,7 @@ public class CloseGiftActivity extends BaseActivity {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("token", SharedPreUtils.getStr(this, "token"))
-                .addParams("gainId", String.valueOf(giftId))
+                .addParams("gainId", String.valueOf(gainId))
                 .addParams("queryType", "GIFT")
                 .build()
                 .execute(new StringCallback() {
@@ -128,11 +126,19 @@ public class CloseGiftActivity extends BaseActivity {
             tvGiftCode.setText(qrCode);
         }
 
+        String startTime = "";
+        if (!TextUtils.isEmpty(giftBean.getData().getStartTime())) {
+            startTime = DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                    "yyyy.MM.dd", giftBean.getData().getStartTime());
+        }
 
-        tvGiftTime.setText("有效时间：" + DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
-                "yyyy.MM.dd", giftBean.getData().getStartTime()) + " - " +
-                DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
-                        "yyyy.MM.dd", giftBean.getData().getEndTime()));
+        String endTime = "";
+        if (!TextUtils.isEmpty(giftBean.getData().getEndTime())) {
+            endTime = DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
+                    "yyyy.MM.dd", giftBean.getData().getEndTime());
+        }
+
+        tvGiftTime.setText("有效时间：" + startTime + " - " + endTime);
         tvGiftAddress.setText("兑换地点：请到指定地点（参考详情）");
 
 

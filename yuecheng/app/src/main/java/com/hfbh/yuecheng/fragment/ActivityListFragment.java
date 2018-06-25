@@ -229,7 +229,6 @@ public class ActivityListFragment extends BaseFragment {
                     }
                 }
 
-
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
                 flowLayout.removeAllViews();
                 if (dataBean.getTags() != null && dataBean.getTags().size() > 0) {
