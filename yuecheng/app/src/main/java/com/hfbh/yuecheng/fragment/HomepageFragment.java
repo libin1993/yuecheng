@@ -723,49 +723,48 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getVoteStartTime());
                     final boolean isEnroll = activityBean.getData().get(position).getMemberSignupState()
                             != null && activityBean.getData().get(position).getMemberSignupState().equals("去参加");
-                    if (!isFinish) {
-                        if (isStart) {
-                            tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                            if (isEnroll) {
-                                tvReceive.setVisibility(View.VISIBLE);
-                                tvReceive.setText("去参加");
-                            } else {
-                                if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
 
-                                    switch (activityBean.getData().get(position).getAcivityType()) {
-                                        case "NONEED":
-                                            tvReceive.setVisibility(View.GONE);
-                                            break;
-                                        case "FREE":
-                                            tvReceive.setVisibility(View.VISIBLE);
-                                            tvReceive.setText("免费报名");
-                                            break;
-                                        case "SCORE":
-                                            tvReceive.setVisibility(View.VISIBLE);
-                                            tvReceive.setText(DisplayUtils.isInteger(activityBean
-                                                    .getData().get(position).getEnrollScore()) + "积分报名");
-
-                                            break;
-                                        case "CASH":
-                                            tvReceive.setVisibility(View.VISIBLE);
-
-                                            tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean
-                                                    .getData().get(position).getEnrollFee()) + "报名");
-
-                                            break;
-                                    }
-                                }
-                            }
-                        } else {
-                            tvReceive.setVisibility(View.VISIBLE);
-                            tvReceive.setText("待报名");
-                            tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
-                        }
+                    if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())
+                            && activityBean.getData().get(position).getAcivityType().equals("NONEED")) {
+                        tvReceive.setVisibility(View.GONE);
                     } else {
                         tvReceive.setVisibility(View.VISIBLE);
-                        tvReceive.setText("已结束");
-                        tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+                        if (!isFinish) {
+                            if (isStart) {
+                                tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                                if (isEnroll) {
+                                    tvReceive.setText("去参加");
+                                } else {
+                                    if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())) {
+                                        switch (activityBean.getData().get(position).getAcivityType()) {
+                                            case "FREE":
+                                                tvReceive.setText("免费报名");
+                                                break;
+                                            case "SCORE":
+                                                tvReceive.setText(DisplayUtils.isInteger(activityBean
+                                                        .getData().get(position).getEnrollScore()) + "积分报名");
+
+                                                break;
+                                            case "CASH":
+                                                tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean
+                                                        .getData().get(position).getEnrollFee()) + "报名");
+                                                break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                tvReceive.setText("待报名");
+                                tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+                            }
+                        } else {
+                            tvReceive.setText("已结束");
+                            tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+                        }
                     }
+
+
+
+
 
 
                     FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
