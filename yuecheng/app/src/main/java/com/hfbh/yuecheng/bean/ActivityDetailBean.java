@@ -552,7 +552,7 @@ public class ActivityDetailBean {
             private String extraIntroduce;
             private String isAudit;
             private String isDelete;
-            private Object isSignup;
+            private boolean isSignup;
             private int joinNumber;
             private int marketingActivitySignupId;
             private Object memberLevel;
@@ -703,11 +703,11 @@ public class ActivityDetailBean {
                 this.isDelete = isDelete;
             }
 
-            public Object getIsSignup() {
+            public boolean getIsSignup() {
                 return isSignup;
             }
 
-            public void setIsSignup(Object isSignup) {
+            public void setIsSignup(boolean isSignup) {
                 this.isSignup = isSignup;
             }
 

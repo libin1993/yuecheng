@@ -177,12 +177,11 @@ public class CalendarActivity extends BaseActivity {
                 //报名结束
                 final boolean isEnrollEnd = System.currentTimeMillis() > DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
-                //报名满额
-                final boolean isLimit = dataBean.getSignupLimitNumber() > 0 && dataBean.getSignupNumber()
-                        == dataBean.getSignupLimitNumber();
+//                //报名满额
+//                final boolean isLimit = dataBean.getSignupLimitNumber() > 0 && dataBean.getSignupNumber()
+//                        == dataBean.getSignupLimitNumber();
                 //是否报名
-                final boolean isEnroll = dataBean.getMemberSignupState() != null
-                        && dataBean.getMemberSignupState().equals("去参加");
+                final boolean isEnroll = dataBean.isIsSignup();
 
                 if (!TextUtils.isEmpty(dataBean.getAcivityType()) && dataBean.getAcivityType().equals("NONEED")) {
                     tvReceive.setVisibility(View.GONE);
@@ -197,24 +196,19 @@ public class CalendarActivity extends BaseActivity {
                                 } else {
                                     if (isEnrollEnd) {
                                         tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
-                                        tvReceive.setText("报名已结束");
+                                        tvReceive.setText("已结束");
                                     } else {
-                                        if (isLimit) {
-                                            tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
-                                            tvReceive.setText("名额已满");
-                                        } else {
-                                            tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                                            switch (dataBean.getAcivityType()) {
-                                                case "FREE":
-                                                    tvReceive.setText("免费报名");
-                                                    break;
-                                                case "SCORE":
-                                                    tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
-                                                    break;
-                                                case "CASH":
-                                                    tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
-                                                    break;
-                                            }
+                                        tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                                        switch (dataBean.getAcivityType()) {
+                                            case "FREE":
+                                                tvReceive.setText("免费报名");
+                                                break;
+                                            case "SCORE":
+                                                tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+                                                break;
+                                            case "CASH":
+                                                tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+                                                break;
                                         }
                                     }
                                 }
@@ -226,7 +220,7 @@ public class CalendarActivity extends BaseActivity {
                         }
                     } else {
                         tvReceive.setVisibility(View.VISIBLE);
-                        tvReceive.setText("活动已结束");
+                        tvReceive.setText("已结束");
                         tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                     }
                 }

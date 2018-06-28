@@ -165,6 +165,8 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                         userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             initView();
+                        } else if (userInfoBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(UserInfoActivity.this, "is_login");
                         }
                     }
                 });

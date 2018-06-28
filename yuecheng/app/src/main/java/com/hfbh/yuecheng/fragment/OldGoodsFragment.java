@@ -122,6 +122,7 @@ public class OldGoodsFragment extends BaseFragment {
                                             popGoods.clear();
                                         }
                                         popGoods.addAll(goodsBean.getData());
+
                                     }
                                     break;
                                 case "FIRSTLOOK":
@@ -131,6 +132,7 @@ public class OldGoodsFragment extends BaseFragment {
                                             newGoods.clear();
                                         }
                                         newGoods.addAll(goodsBean.getData());
+
                                     }
                                     break;
                             }

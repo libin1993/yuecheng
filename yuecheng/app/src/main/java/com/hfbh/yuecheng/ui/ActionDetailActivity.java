@@ -21,7 +21,6 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -57,6 +56,8 @@ public class ActionDetailActivity extends BaseActivity {
     TextView tvExchange;
     @BindView(R.id.rl_action_join)
     RelativeLayout rlActionJoin;
+    @BindView(R.id.tv_activity_end)
+    TextView tvActivityEnd;
     //活动id
     private int activityId;
     private ActivityDetailBean activityBean;
@@ -68,8 +69,8 @@ public class ActionDetailActivity extends BaseActivity {
     private boolean isEnrollStart;
     //是否报名结束
     private boolean isEnrollEnd;
-    //是否满额
-    private boolean isLimit;
+//    //是否满额
+//    private boolean isLimit;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,17 +142,16 @@ public class ActionDetailActivity extends BaseActivity {
     private void initView() {
         isActivityEnd = System.currentTimeMillis() > DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getActivityEndtime());
-        isEnroll = activityBean.getData().getSignupDo().getMemberSignupState() != null
-                && activityBean.getData().getSignupDo().getMemberSignupState().equals("去参加");
+        isEnroll = activityBean.getData().getSignupDo().getIsSignup();
 
         isEnrollStart = System.currentTimeMillis() >= DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getStartTime());
         isEnrollEnd = System.currentTimeMillis() > DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getEndTime());
 
-        isLimit = activityBean.getData().getSignupDo().getSignupLimitNumber() > 0 &&
-                activityBean.getData().getSignupDo().getSignupNumber()
-                        == activityBean.getData().getSignupDo().getSignupLimitNumber();
+//        isLimit = activityBean.getData().getSignupDo().getSignupLimitNumber() > 0 &&
+//                activityBean.getData().getSignupDo().getSignupNumber()
+//                        == activityBean.getData().getSignupDo().getSignupLimitNumber();
         if (!TextUtils.isEmpty(activityBean.getData().getSignupDo().getAcivityType())) {
             switch (activityBean.getData().getSignupDo().getAcivityType()) {
                 case "NONEED":
@@ -188,26 +188,29 @@ public class ActionDetailActivity extends BaseActivity {
                         tvExchange.setText("报名已结束");
                         tvExchange.setEnabled(false);
                     } else {
-                        if (!isLimit) {
-                            if (SharedPreUtils.getBoolean(this, "is_login", false)
-                                    && activityBean.getData().getSignupDo().getAcivityType().equals("SCORE")
-                                    && activityBean.getData().getSignupDo().getEnrollScore() >
-                                    activityBean.getData().getMember().getBalanceScore()) {
-
-                                tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                                tvExchange.setText("积分不足");
-                                tvExchange.setEnabled(false);
-                            } else {
-                                tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                                tvExchange.setText("立即报名");
-                                tvExchange.setEnabled(true);
-                            }
-
-                        } else {
-                            tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                            tvExchange.setText("名额已满");
-                            tvExchange.setEnabled(false);
-                        }
+                        tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+                        tvExchange.setText("去报名");
+                        tvExchange.setEnabled(true);
+//                        if (!isLimit) {
+//                            if (SharedPreUtils.getBoolean(this, "is_login", false)
+//                                    && activityBean.getData().getSignupDo().getAcivityType().equals("SCORE")
+//                                    && activityBean.getData().getSignupDo().getEnrollScore() >
+//                                    activityBean.getData().getMember().getBalanceScore()) {
+//
+//                                tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+//                                tvExchange.setText("积分不足");
+//                                tvExchange.setEnabled(false);
+//                            } else {
+//                                tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+//                                tvExchange.setText("立即报名");
+//                                tvExchange.setEnabled(true);
+//                            }
+//
+//                        } else {
+//                            tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+//                            tvExchange.setText("名额已满");
+//                            tvExchange.setEnabled(false);
+//                        }
                     }
                 }
             } else {
@@ -217,16 +220,16 @@ public class ActionDetailActivity extends BaseActivity {
             }
 
         } else {
-            tvExchange.setText("活动已结束");
-            tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-            tvExchange.setEnabled(false);
+            tvExchangeType.setVisibility(View.GONE);
+            tvExchangeScore.setVisibility(View.GONE);
+            tvExchange.setVisibility(View.GONE);
+            tvActivityEnd.setVisibility(View.VISIBLE);
         }
     }
 
 
     private void getData() {
-        Intent intent = getIntent();
-        activityId = intent.getIntExtra("activity_id", 0);
+        activityId = getIntent().getIntExtra("activity_id", 0);
     }
 
     @OnClick({R.id.iv_back_header, R.id.tv_exchange_activity})

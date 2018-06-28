@@ -256,12 +256,16 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      * 获取经纬度
      */
     private void getLocation() {
-        Location location = LocationUtils.getInstance(MainActivity.this).showLocation();
+        Location location = LocationUtils.getInstance(this).showLocation();
+
         if (location != null) {
             longitude = String.valueOf(location.getLongitude());
             latitude = String.valueOf(location.getLatitude());
             initLocation();
+        } else {
+            initLocation();
         }
+        LocationUtils.getInstance(this).removeLocationUpdatesListener();
     }
 
     /**
@@ -280,7 +284,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Call call, Exception e, int i) {
-
                         }
 
                         @Override
@@ -347,7 +350,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(HomepageFragment.newInstance());
         fragmentList.add(ActivityFragment.newInstance());
-        fragmentList.add(DiscoveryFragment.newInstance());
+//        fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
         fragmentTabUtils = new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
                 R.id.fl_main_container, rgsMainTab);
@@ -368,13 +371,13 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         drawableActivity.setBounds(0, 0, width, height);
         ((RadioButton) rgsMainTab.getChildAt(1)).setCompoundDrawables(null, drawableActivity, null, null);
 
-        Drawable drawableDiscovery = getResources().getDrawable(R.drawable.selector_discovery_tab);
-        drawableDiscovery.setBounds(0, 0, width, height);
-        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableDiscovery, null, null);
+//        Drawable drawableDiscovery = getResources().getDrawable(R.drawable.selector_discovery_tab);
+//        drawableDiscovery.setBounds(0, 0, width, height);
+//        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableDiscovery, null, null);
 
         Drawable drawableMine = getResources().getDrawable(R.drawable.selector_mine_tab);
         drawableMine.setBounds(0, 0, width, height);
-        ((RadioButton) rgsMainTab.getChildAt(3)).setCompoundDrawables(null, drawableMine, null, null);
+        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableMine, null, null);
 
     }
 
@@ -396,7 +399,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             PermissionDialog.showPermissionDialog(this, "读写内存和定位");
             initLocation();
         }
-
     }
 
     @Override

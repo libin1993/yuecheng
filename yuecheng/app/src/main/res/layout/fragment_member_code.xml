@@ -20,7 +20,7 @@
             android:background="@drawable/gradient_yellow_hor"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="电子会员码"
+            android:text="会员码"
             android:textColor="@color/gray_4b"
             android:textSize="16sp"/>
 

@@ -4,21 +4,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
-import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.bean.MemberPointsBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -26,7 +29,9 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,10 +46,14 @@ import okhttp3.Call;
 public class MemberPointsFragment extends BaseFragment {
     @BindView(R.id.rv_member_points)
     RecyclerView rvMemberPoints;
-    @BindView(R.id.tv_no_points)
-    TextView tvNoPoints;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
     private Unbinder unbinder;
     //类型
     private String type;
@@ -62,6 +71,8 @@ public class MemberPointsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_member_points, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
+        tvNullData.setText("暂无积分明细");
+        ivNullData.setImageResource(R.mipmap.ic_null_order);
         viewLoading.smoothToShow();
         initData();
         return view;
@@ -70,20 +81,23 @@ public class MemberPointsFragment extends BaseFragment {
     private void getData() {
         Bundle bundle = getArguments();
         type = bundle.getString("type");
-        time = bundle.getString("time");
     }
 
     private void initData() {
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("appType", MyApp.appType);
+        paramMap.put("appVersion", MyApp.appVersion);
+        paramMap.put("organizeId", MyApp.organizeId);
+        paramMap.put("hash", SharedPreUtils.getStr(getActivity(), "hash"));
+        paramMap.put("token", SharedPreUtils.getStr(getActivity(), "token"));
+        paramMap.put("changeType", type);
+        if (!TextUtils.isEmpty(time)) {
+            paramMap.put("createTimeStr", time);
+        }
 
         OkHttpUtils.post()
                 .url(Constant.MEMBER_POINTS_RECORD)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
-                .addParams("token",SharedPreUtils.getStr(getActivity(), "token"))
-                .addParams("changeType", type)
-                .addParams("createTimeStr", time)
+                .params(paramMap)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -93,6 +107,7 @@ public class MemberPointsFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String s, int i) {
+
                         viewLoading.smoothToHide();
                         MemberPointsBean memberPointsBean = GsonUtils.jsonToBean(s, MemberPointsBean.class);
                         if (memberPointsBean.isFlag() && memberPointsBean.getData().getPointsChangeList()
@@ -109,10 +124,10 @@ public class MemberPointsFragment extends BaseFragment {
                             }
 
                             rvMemberPoints.setVisibility(View.VISIBLE);
-                            tvNoPoints.setVisibility(View.GONE);
+                            llNullData.setVisibility(View.GONE);
                         } else {
                             rvMemberPoints.setVisibility(View.GONE);
-                            tvNoPoints.setVisibility(View.VISIBLE);
+                            llNullData.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -128,27 +143,26 @@ public class MemberPointsFragment extends BaseFragment {
             @Override
             protected void convert(ViewHolder holder, MemberPointsBean.DataBean.PointsChangeListBean
                     pointsChangeListBean, int position) {
-                holder.setText(R.id.tv_points_remark, pointsChangeListBean.getPointsRemark());
+                holder.setText(R.id.tv_points_remark, pointsChangeListBean.getChangeWay());
                 holder.setText(R.id.tv_points_time, pointsChangeListBean.getCreateTime());
                 TextView tvPoints = holder.getView(R.id.tv_points_type);
-                if (pointsChangeListBean.getChangeType() != null) {
-                    if (pointsChangeListBean.getChangeType().equals("INCREASE")) {
-                        tvPoints.setTextColor(getActivity().getResources().getColor(R.color.red_99));
-                        tvPoints.setText("+" + DisplayUtils.isInteger(pointsChangeListBean.getPoints()));
-                    } else {
-                        tvPoints.setTextColor(getActivity().getResources().getColor(R.color.gray_10));
-                        tvPoints.setText("-" + DisplayUtils.isInteger(pointsChangeListBean.getPoints()));
-                    }
+
+                double points = pointsChangeListBean.getPoints();
+                if (points > 0) {
+                    tvPoints.setTextColor(getActivity().getResources().getColor(R.color.red_99));
+                    tvPoints.setText("+"+pointsChangeListBean.getPoints());
+                } else {
+                    tvPoints.setTextColor(getActivity().getResources().getColor(R.color.gray_10));
+                    tvPoints.setText(String.valueOf(pointsChangeListBean.getPoints()));
                 }
             }
         };
         rvMemberPoints.setAdapter(adapter);
     }
 
-    public static MemberPointsFragment newInstance(String type, String time) {
+    public static MemberPointsFragment newInstance(String type) {
         Bundle args = new Bundle();
         args.putString("type", type);
-        args.putString("time", time);
         MemberPointsFragment fragment = new MemberPointsFragment();
         fragment.setArguments(args);
         return fragment;

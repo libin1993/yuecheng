@@ -53,13 +53,30 @@
             android:id="@+id/tv_exchange_activity"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="36dp"
             android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:textColor="@android:color/white"
             android:textSize="16sp"/>
+
+
+        <TextView
+            android:id="@+id/tv_activity_end"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="36dp"
+            android:layout_marginRight="36dp"
+            android:background="@drawable/bound_gray_99_33dp"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="活动已结束"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:visibility="gone"/>
     </RelativeLayout>
 </RelativeLayout>

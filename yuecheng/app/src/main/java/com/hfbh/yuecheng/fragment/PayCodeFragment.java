@@ -3,7 +3,9 @@ package com.hfbh.yuecheng.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +27,15 @@ import com.hfbh.yuecheng.utils.BarcodeUtils;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +75,9 @@ public class PayCodeFragment extends BaseFragment {
     private Bitmap barBmp;
     private Bitmap qrBmp;
 
+    private Timer mTimer;
+    private TimerTask mTimerTask;
+    private String payCode;
 
     @Nullable
     @Override
@@ -77,7 +87,15 @@ public class PayCodeFragment extends BaseFragment {
         getData();
         getCouponCount();
         initView();
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshCode();
+        TimerService.getConnect(getActivity());
     }
 
     /**
@@ -118,21 +136,42 @@ public class PayCodeFragment extends BaseFragment {
     }
 
     private void initView() {
-        String cardNumber = userInfoBean.getData().getCardNumber() + System.currentTimeMillis();
-
-        barBmp = BarcodeUtils.creatBarcode(cardNumber,
-                (int) DisplayUtils.dp2px(getActivity(), 225),
-                (int) DisplayUtils.dp2px(getActivity(), 41));
-        ivPayBarcode.setImageBitmap(barBmp);
-
-        qrBmp = QRCodeUtils.createQRCode(cardNumber, (int) DisplayUtils.dp2px(getActivity(), 200));
-
-        ivPayQrcode.setImageBitmap(qrBmp);
-
         tvPaycodeMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
-        tvPaycodeScore.setText(DisplayUtils.isInteger(userInfoBean.getData().getPoints()));
+        tvPaycodeScore.setText(String.valueOf((int) userInfoBean.getData().getPoints()));
+    }
 
-        TimerService.getConnect(getActivity());
+    /**
+     * 定时刷新付款码
+     */
+    private void refreshCode() {
+        mTimer = new Timer();
+        mTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        payCode = userInfoBean.getData().getCardNumber() + System.currentTimeMillis();
+                        if (isShow) {
+                            tvPayBarcode.setText(payCode);
+                        } else {
+                            tvPayBarcode.setText("点击查看数字");
+                        }
+
+                        barBmp = BarcodeUtils.creatBarcode(payCode,
+                                (int) DisplayUtils.dp2px(getActivity(), 225),
+                                (int) DisplayUtils.dp2px(getActivity(), 41));
+                        ivPayBarcode.setImageBitmap(barBmp);
+
+                        qrBmp = QRCodeUtils.createQRCode(payCode, (int) DisplayUtils.dp2px(getActivity(), 200));
+
+                        ivPayQrcode.setImageBitmap(qrBmp);
+                    }
+                });
+
+            }
+        };
+        mTimer.schedule(mTimerTask, 0, 60000);
     }
 
     public static PayCodeFragment newInstance(UserInfoBean userInfoBean) {
@@ -148,14 +187,14 @@ public class PayCodeFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_pay_barcode:
-                if (isShow) {
-                    tvPayBarcode.setText(userInfoBean.getData().getCardNumber() + System.currentTimeMillis());
+                if (!isShow) {
+                    tvPayBarcode.setText(payCode);
                     tvPayBarcode.setTextColor(getResources().getColor(R.color.gray_10));
-                    isShow = false;
+                    isShow = true;
                 } else {
                     tvPayBarcode.setText("点击查看数字");
                     tvPayBarcode.setTextColor(getResources().getColor(R.color.blue_a4));
-                    isShow = true;
+                    isShow = false;
                 }
                 break;
             case R.id.ll_paycode_money:
@@ -170,16 +209,35 @@ public class PayCodeFragment extends BaseFragment {
         }
     }
 
+
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-        recycleBitmap();
+    public void onPause() {
+        super.onPause();
+        stopTimer();
+
+    }
+
+    /**
+     * 取消定时器
+     */
+    private void stopTimer() {
         //停止由AlarmManager启动的循环
         TimerService.stop(getActivity());
         //停止由服务启动的循环
         Intent intent = new Intent(getActivity(), TimerService.class);
         getActivity().stopService(intent);
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimerTask.cancel();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+        recycleBitmap();
+        stopTimer();
     }
 
 

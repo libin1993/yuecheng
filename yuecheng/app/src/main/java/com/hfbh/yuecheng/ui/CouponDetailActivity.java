@@ -73,7 +73,7 @@ public class CouponDetailActivity extends BaseActivity {
     TextView tvCouponType;
 
     private int couponId;
-    private int couponType;
+    //    private int couponType;
     private CouponDetailBean couponBean;
     //已领取数量
     private int hasGetNum;
@@ -131,7 +131,7 @@ public class CouponDetailActivity extends BaseActivity {
         tvCouponName.setText(couponBean.getData().getCouponName());
 
 
-        if (couponType == 9) {
+        if (couponBean.getData().getCouponTypeCy() == 9) {
             //返利
             double rebate = 0.015;
             if (SharedPreUtils.getBoolean(this, "is_login", false)) {
@@ -196,12 +196,12 @@ public class CouponDetailActivity extends BaseActivity {
                     tvExchangeCoupon.setEnabled(false);
 
                 } else {
-                    tvExchangeCoupon.setText("立即兑换");
+                    tvExchangeCoupon.setText("立即领取");
                     tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gradient_red);
                     tvExchangeCoupon.setEnabled(true);
                 }
             } else {
-                tvExchangeCoupon.setText("立即兑换");
+                tvExchangeCoupon.setText("立即领取");
                 tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gradient_red);
                 tvExchangeCoupon.setEnabled(true);
             }
@@ -215,7 +215,6 @@ public class CouponDetailActivity extends BaseActivity {
     private void getData() {
         Intent intent = getIntent();
         couponId = intent.getIntExtra("coupon_id", 0);
-        couponType = intent.getIntExtra("coupon_type", 0);
     }
 
     @OnClick({R.id.iv_header_back, R.id.tv_exchange_coupon_now})
@@ -246,7 +245,7 @@ public class CouponDetailActivity extends BaseActivity {
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                     .addParams("token", SharedPreUtils.getStr(this, "token"))
-                    .addParams("cyCouponId", String.valueOf(couponType))
+                    .addParams("cyCouponId", String.valueOf(couponBean.getData().getCouponTypeCy()))
                     .addParams("couponId", String.valueOf(couponId))
                     .addParams("exchangeValue", String.valueOf(couponBean.getData().getAccessValue()))
                     .addParams("exchangeNum", "1")

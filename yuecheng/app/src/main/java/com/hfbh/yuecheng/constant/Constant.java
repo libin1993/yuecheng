@@ -6,7 +6,7 @@ package com.hfbh.yuecheng.constant;
  * Describe：接口
  */
 public class Constant {
-//        private static final String HOST = "https://ceshi.wmalle.com";
+//        private static final String HOST = "http://ceshi.wmalle.com";
     private static final String HOST = "https://m.hfbh.com.cn";
     //定位
     public static final String LOCATION = HOST + "/wechat/appRequest/nearestMall.json";

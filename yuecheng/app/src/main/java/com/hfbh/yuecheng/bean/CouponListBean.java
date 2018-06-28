@@ -146,7 +146,7 @@ public class CouponListBean {
         private int couponNum;
         private int couponTypeCy;
         private String couponTypeKind;
-        private int couponValue;
+        private double couponValue;
         private int dayBroughtNum;
         private int limitNum;
         private int limitPerDayNum;
@@ -240,11 +240,11 @@ public class CouponListBean {
             this.couponTypeKind = couponTypeKind;
         }
 
-        public int getCouponValue() {
+        public double getCouponValue() {
             return couponValue;
         }
 
-        public void setCouponValue(int couponValue) {
+        public void setCouponValue(double couponValue) {
             this.couponValue = couponValue;
         }
 

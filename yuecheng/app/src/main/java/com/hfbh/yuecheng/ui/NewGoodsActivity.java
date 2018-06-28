@@ -97,7 +97,9 @@ public class NewGoodsActivity extends BaseActivity {
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
 
                         if (goodsBean.isFlag() && goodsBean.getData().size() > 0) {
-
+                            if (goodsBean.getPage()!= null){
+                                pages = goodsBean.getPage().getPages();
+                            }
                             pages = goodsBean.getPage().getPages();
                             if (isRefresh) {
                                 goodsList.clear();

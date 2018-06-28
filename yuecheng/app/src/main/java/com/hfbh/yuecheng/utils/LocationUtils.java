@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.smarttop.library.utils.LogUtil;
+
 import java.util.List;
 
 import static org.greenrobot.eventbus.EventBus.TAG;
@@ -37,7 +39,7 @@ public class LocationUtils {
         if (uniqueInstance == null) {
             synchronized (LocationUtils.class) {
                 if (uniqueInstance == null) {
-                    uniqueInstance = new LocationUtils( context );
+                    uniqueInstance = new LocationUtils(context);
                 }
             }
         }
@@ -46,42 +48,40 @@ public class LocationUtils {
 
     private void getLocation() {
         //1.获取位置管理器
-        locationManager = (LocationManager) mContext.getSystemService( Context.LOCATION_SERVICE );
+        locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         //2.获取位置提供器，GPS或是NetWork
-        List<String> providers = locationManager.getProviders( true );
-        if (providers.contains( LocationManager.NETWORK_PROVIDER )) {
+        List<String> providers = locationManager.getProviders(true);
+        if (providers.contains(LocationManager.GPS_PROVIDER)) {
             //如果是网络定位
-            locationProvider = LocationManager.NETWORK_PROVIDER;
-        } else if (providers.contains( LocationManager.GPS_PROVIDER )) {
-            //如果是GPS定位
             locationProvider = LocationManager.GPS_PROVIDER;
+        } else if (providers.contains(LocationManager.NETWORK_PROVIDER)) {
+            //如果是GPS定位
+            locationProvider = LocationManager.NETWORK_PROVIDER;
         } else {
             return;
         }
         // 需要检查权限,否则编译报错,想抽取成方法都不行,还是会报错。只能这样重复 code 了。
         if (Build.VERSION.SDK_INT >= 23 &&
-                ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        if (ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_FINE_LOCATION )
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( mContext,
-                Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         //3.获取上次的位置，一般第一次运行，此值为null
-        Location location = locationManager.getLastKnownLocation( locationProvider );
+        Location location = locationManager.getLastKnownLocation(locationProvider);
         if (location != null) {
-            setLocation( location );
+            setLocation(location);
         }
         // 监视地理位置变化，第二个和第三个参数分别为更新的最短时间minTime和最短距离minDistace
-        locationManager.requestLocationUpdates( locationProvider, 0, 0, locationListener );
+        locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
     }
 
     private void setLocation(Location location) {
         this.location = location;
-        String address = "纬度：" + location.getLatitude() + "经度：" + location.getLongitude();
-        Log.d( TAG, address );
     }
 
     //获取经纬度
@@ -93,13 +93,13 @@ public class LocationUtils {
     public void removeLocationUpdatesListener() {
         // 需要检查权限,否则编译不过
         if (Build.VERSION.SDK_INT >= 23 &&
-                ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission( mContext, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         if (locationManager != null) {
             uniqueInstance = null;
-            locationManager.removeUpdates( locationListener );
+            locationManager.removeUpdates(locationListener);
         }
     }
 
@@ -140,7 +140,7 @@ public class LocationUtils {
         @Override
         public void onLocationChanged(Location location) {
             location.getAccuracy();//精确度
-            setLocation( location );
+            setLocation(location);
         }
     };
 }

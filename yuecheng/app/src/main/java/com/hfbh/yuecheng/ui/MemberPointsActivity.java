@@ -80,14 +80,9 @@ public class MemberPointsActivity extends BaseActivity {
         titleList.add("获取");
         titleList.add("消费");
 
-        Calendar c = Calendar.getInstance();
-        selectYear = c.get(Calendar.YEAR);
-        selectMonth = c.get(Calendar.MONTH) + 1;
-        String time = selectYear + "-" + selectMonth + "-01";
-
-        fragmentList.add(MemberPointsFragment.newInstance("", time));
-        fragmentList.add(MemberPointsFragment.newInstance("INCREASE", time));
-        fragmentList.add(MemberPointsFragment.newInstance("DECREASE", time));
+        fragmentList.add(MemberPointsFragment.newInstance(""));
+        fragmentList.add(MemberPointsFragment.newInstance("INCREASE"));
+        fragmentList.add(MemberPointsFragment.newInstance("DECREASE"));
 
         initView();
     }
@@ -132,6 +127,11 @@ public class MemberPointsActivity extends BaseActivity {
         Calendar c = Calendar.getInstance();
         int currentYear = c.get(Calendar.YEAR);
         int currentMonth = c.get(Calendar.MONTH) + 1;
+
+        if (selectYear == 0){
+            selectYear = currentYear;
+            selectMonth = currentMonth;
+        }
 
         picker.setRangeStart(2000, 1);
         picker.setRangeEnd(currentYear, currentMonth);

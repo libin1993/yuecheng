@@ -104,7 +104,6 @@ public class AboutUsActivity extends BaseActivity {
         if (!TextUtils.isEmpty(MyApp.updateUrl)) {
             View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_update, null);
 
-
             final PopupWindow mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
 

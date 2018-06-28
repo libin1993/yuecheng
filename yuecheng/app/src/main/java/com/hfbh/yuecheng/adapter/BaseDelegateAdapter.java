@@ -44,7 +44,9 @@ public class BaseDelegateAdapter extends DelegateAdapter.Adapter<ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+
     }
+
 
     /**
      * 必须重写不然会出现滑动不流畅的情况

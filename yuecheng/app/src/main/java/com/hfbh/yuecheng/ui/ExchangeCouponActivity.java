@@ -297,7 +297,6 @@ public class ExchangeCouponActivity extends BaseActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(ExchangeCouponActivity.this, CouponDetailActivity.class);
                         intent.putExtra("coupon_id", dataBean.getCouponId());
-                        intent.putExtra("coupon_type", dataBean.getCouponTypeCy());
                         startActivity(intent);
                     }
                 });

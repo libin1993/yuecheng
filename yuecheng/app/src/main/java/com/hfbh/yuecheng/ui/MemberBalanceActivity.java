@@ -93,6 +93,8 @@ public class MemberBalanceActivity extends BaseActivity {
                         UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             tvMemberBalance.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
+                        }else if (userInfoBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(MemberBalanceActivity.this, "is_login");
                         }
                     }
                 });

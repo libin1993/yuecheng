@@ -20,6 +20,7 @@ import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.CouponActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
+import com.hfbh.yuecheng.ui.MainActivity;
 import com.hfbh.yuecheng.ui.MemberBalanceActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.MemberPointsActivity;
@@ -123,6 +124,8 @@ public class MineFragment extends BaseFragment {
                             userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                             if (userInfoBean.isFlag()) {
                                 initView();
+                            } else if (userInfoBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(getActivity(), "is_login");
                             }
                         }
                     });
@@ -145,7 +148,7 @@ public class MineFragment extends BaseFragment {
             ivMineAvatar.setImageURI(userInfoBean.getData().getMemberHead());
         }
         tvMineMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
-        tvMineScore.setText(DisplayUtils.isInteger(userInfoBean.getData().getPoints()));
+        tvMineScore.setText(String.valueOf((int) userInfoBean.getData().getPoints()));
         tvMineGrade.setText(userInfoBean.getData().getCardLevel());
     }
 

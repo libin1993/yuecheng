@@ -86,8 +86,8 @@ public class GiftDetailActivity extends BaseActivity {
     private int limitNum;
     //剩余数量
     private int balanceNum;
-    //已领取数量
-    private int getNum;
+
+    private boolean isExchange = false;
 
 
     @Override
@@ -123,19 +123,18 @@ public class GiftDetailActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-
                         giftBean = GsonUtils.jsonToBean(response, GiftDetailBean.class);
                         if (giftBean.isFlag()) {
                             score = giftBean.getData().getNeedScore();
                             balanceNum = giftBean.getData().getBalanceNum();
                             limitNum = giftBean.getData().getLimitGetNum();
-                            if (SharedPreUtils.getBoolean(GiftDetailActivity.this, "is_login", false)) {
-                                getNum = limitNum - giftBean.getData().getBalanceGetNum();
-                            } else {
-                                getNum = 0;
-                            }
 
-                            initView();
+                            if (isExchange) {
+                                isExchange = false;
+                                initCount();
+                            } else {
+                                initView();
+                            }
                         }
                     }
                 });
@@ -159,16 +158,30 @@ public class GiftDetailActivity extends BaseActivity {
      * 数量
      */
     private void initCount() {
-        if (num == 1) {
-            tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_ee));
-            tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_99));
-        } else if (num < limitNum - getNum) {
-            tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_99));
-            tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_99));
+        if (limitNum == 0) {
+            if (num == 1) {
+                tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_ee));
+                tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_99));
+            } else if (num < balanceNum) {
+                tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_99));
+                tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_99));
+            } else {
+                tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_99));
+                tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_ee));
+            }
         } else {
-            tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_99));
-            tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_ee));
+            if (num == 1) {
+                tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_ee));
+                tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_99));
+            } else if (num < Math.min(limitNum, balanceNum)) {
+                tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_99));
+                tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_99));
+            } else {
+                tvGiftReduce.setTextColor(getResources().getColor(R.color.gray_99));
+                tvGiftAdd.setTextColor(getResources().getColor(R.color.gray_ee));
+            }
         }
+
 
         tvGiftCount.setText("还剩" + balanceNum + "件");
         tvExchangeGiftCount.setText(String.valueOf(num));
@@ -185,26 +198,28 @@ public class GiftDetailActivity extends BaseActivity {
 
         if (!isFinish) {
             if (isOnline) {
-                if (balanceNum > 0) {
-                    if (limitNum > 0) {
-                        if (getNum > 0 && getNum >= limitNum) {
-                            tvExchange.setText("已兑换");
-                            tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                            tvExchange.setEnabled(false);
-                        } else {
-                            tvExchange.setText("立即兑换");
-                            tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                            tvExchange.setEnabled(true);
-                        }
-                    } else {
+                switch (giftBean.getData().getState()) {
+                    case "CANEXCHANGE":
                         tvExchange.setText("立即兑换");
                         tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
                         tvExchange.setEnabled(true);
-                    }
-                } else {
-                    tvExchange.setText("已抢光");
-                    tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                    tvExchange.setEnabled(false);
+                        break;
+                    case "NOHAVE":
+                        tvExchange.setText("已抢光");
+                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                        tvExchange.setEnabled(false);
+                        break;
+                    case "EXCHANGED":
+                        tvExchange.setText("已兑换");
+                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                        tvExchange.setEnabled(false);
+                        break;
+                    case "NOPOINTS":
+                        tvExchange.setText("积分不足");
+                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                        tvExchange.setEnabled(false);
+                        break;
+
                 }
             } else {
                 tvExchange.setText("已失效");
@@ -234,17 +249,23 @@ public class GiftDetailActivity extends BaseActivity {
             case R.id.tv_gift_add:
                 if (giftBean.getData() != null) {
                     if (limitNum > 0) {
-                        if (num < limitNum - getNum) {
-                            num++;
+                        if (limitNum < balanceNum) {
+                            if (num < limitNum) {
+                                num++;
+                            } else {
+                                ToastUtils.showToast(this, "每人限制兑换" + limitNum + "个哦");
+                            }
                         } else {
-                            ToastUtils.showToast(this, "每人限制兑换" + limitNum + "个哦");
+                            if (num < balanceNum) {
+                                num++;
+                            }
                         }
+
                     } else {
                         if (num < balanceNum) {
                             num++;
                         }
                     }
-
                     initCount();
                 }
                 break;
@@ -292,12 +313,11 @@ public class GiftDetailActivity extends BaseActivity {
                                 boolean flag = jsonObject.getBoolean("flag");
                                 String msg = jsonObject.getString("msg");
                                 if (flag) {
-                                    JSONObject data = jsonObject.getJSONObject("data");
-                                    balanceNum = data.getInt("balanceNum");
-                                    getNum += num;
-                                    initCount();
+                                    isExchange = true;
+                                    initData();
                                     exChangeResult(true, "您兑换的礼品已放置于“我的-兑换”，记得到店核销兑换哦！");
                                 } else {
+                                    isExchange = false;
                                     exChangeResult(false, msg);
                                 }
                             } catch (JSONException e) {
@@ -368,7 +388,6 @@ public class GiftDetailActivity extends BaseActivity {
             }
         });
     }
-
 
 
     @Subscribe

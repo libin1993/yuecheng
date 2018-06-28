@@ -24,7 +24,9 @@ import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -92,7 +94,7 @@ public class MyMemberCardActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -105,6 +107,8 @@ public class MyMemberCardActivity extends BaseActivity {
                         userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             initView();
+                        } else if (userInfoBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(MyMemberCardActivity.this, "is_login");
                         }
                     }
                 });
@@ -117,7 +121,7 @@ public class MyMemberCardActivity extends BaseActivity {
         tvTitleHeaderWhite.setText("电子会员卡");
         ivMemberCard.setImageURI(userInfoBean.getData().getMemberCardGradeDTO().getAppPic());
         tvMemberCardMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
-        tvMemberCardScore.setText(DisplayUtils.isInteger(userInfoBean.getData().getPoints()));
+        tvMemberCardScore.setText(String.valueOf((int) userInfoBean.getData().getPoints()));
         tvMemberCardGrade.setText(String.valueOf(userInfoBean.getData().getCardLevel()));
         tvMemberCardNo.setText("NO." + userInfoBean.getData().getCardNumber());
 
@@ -177,7 +181,7 @@ public class MyMemberCardActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override

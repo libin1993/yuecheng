@@ -22,6 +22,7 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -65,6 +66,7 @@ public class CloseGiftActivity extends BaseActivity {
     private CloseGiftBean giftBean;
 
     private Bitmap qrBmp;
+    private boolean isOnline = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,6 +138,11 @@ public class CloseGiftActivity extends BaseActivity {
         if (!TextUtils.isEmpty(giftBean.getData().getEndTime())) {
             endTime = DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",
                     "yyyy.MM.dd", giftBean.getData().getEndTime());
+
+            if (System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd HH:mm:ss",
+                    giftBean.getData().getEndTime())) {
+                isOnline = false;
+            }
         }
 
         tvGiftTime.setText("有效时间：" + startTime + " - " + endTime);
@@ -161,9 +168,13 @@ public class CloseGiftActivity extends BaseActivity {
                 break;
             case R.id.tv_activity_detail:
                 if (giftBean != null && giftBean.getData() != null) {
-                    Intent intent = new Intent(this, GiftDetailActivity.class);
-                    intent.putExtra("id", giftBean.getData().getPointsRewardId());
-                    startActivity(intent);
+                    if (isOnline) {
+                        Intent intent = new Intent(this, GiftDetailActivity.class);
+                        intent.putExtra("id", giftBean.getData().getPointsRewardId());
+                        startActivity(intent);
+                    } else {
+                        ToastUtils.showToast(CloseGiftActivity.this, "sorry，礼品已下架~");
+                    }
                 }
                 break;
         }

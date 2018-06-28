@@ -105,7 +105,7 @@ public class CouponBean {
         private String couponName;
         private int couponTypeCy;
         private String couponTypeKind;
-        private int couponValue;
+        private double couponValue;
         private int dayBroughtNum;
         private Object endTime;
         private Object endTimeStr;
@@ -113,13 +113,13 @@ public class CouponBean {
         private Object id;
         private int limitNum;
         private Object limitPerDayNum;
-        private Object listCouponShop;
+        private List<ListCouponShopBean> listCouponShop;
         private int memberBroughtNum;
         private Object memberSignupState;
         private int needScore;
         private int objectId;
         private Object relateName;
-        private Object serviceAmount;
+        private double serviceAmount;
         private boolean signup;
         private Object sort;
         private Object startTime;
@@ -226,11 +226,11 @@ public class CouponBean {
             this.couponTypeKind = couponTypeKind;
         }
 
-        public int getCouponValue() {
+        public double getCouponValue() {
             return couponValue;
         }
 
-        public void setCouponValue(int couponValue) {
+        public void setCouponValue(double couponValue) {
             this.couponValue = couponValue;
         }
 
@@ -290,11 +290,11 @@ public class CouponBean {
             this.limitPerDayNum = limitPerDayNum;
         }
 
-        public Object getListCouponShop() {
+        public List<ListCouponShopBean> getListCouponShop() {
             return listCouponShop;
         }
 
-        public void setListCouponShop(Object listCouponShop) {
+        public void setListCouponShop(List<ListCouponShopBean> listCouponShop) {
             this.listCouponShop = listCouponShop;
         }
 
@@ -338,11 +338,11 @@ public class CouponBean {
             this.relateName = relateName;
         }
 
-        public Object getServiceAmount() {
+        public double getServiceAmount() {
             return serviceAmount;
         }
 
-        public void setServiceAmount(Object serviceAmount) {
+        public void setServiceAmount(double serviceAmount) {
             this.serviceAmount = serviceAmount;
         }
 
@@ -416,6 +416,52 @@ public class CouponBean {
 
         public void setVoteStartTime(Object voteStartTime) {
             this.voteStartTime = voteStartTime;
+        }
+
+        public static class ListCouponShopBean {
+            /**
+             * couponId : 603
+             * couponShopId : 197
+             * shopId : 31
+             * shopName : 巴宝莉11111111111111111111111111111111111111111111111
+             */
+
+            private int couponId;
+            private int couponShopId;
+            private int shopId;
+            private String shopName;
+
+            public int getCouponId() {
+                return couponId;
+            }
+
+            public void setCouponId(int couponId) {
+                this.couponId = couponId;
+            }
+
+            public int getCouponShopId() {
+                return couponShopId;
+            }
+
+            public void setCouponShopId(int couponShopId) {
+                this.couponShopId = couponShopId;
+            }
+
+            public int getShopId() {
+                return shopId;
+            }
+
+            public void setShopId(int shopId) {
+                this.shopId = shopId;
+            }
+
+            public String getShopName() {
+                return shopName;
+            }
+
+            public void setShopName(String shopName) {
+                this.shopName = shopName;
+            }
         }
     }
 }

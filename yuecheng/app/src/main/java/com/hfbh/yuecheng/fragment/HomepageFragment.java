@@ -54,6 +54,7 @@ import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
 import com.hfbh.yuecheng.ui.GameActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
+import com.hfbh.yuecheng.ui.GoodsActivity;
 import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
@@ -228,7 +229,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                             topicBean = GsonUtils.jsonToBean(response, TopicBean.class);
                                             break;
                                         case "COUPON":
-                                            LogUtils.log(response);
                                             couponBean = GsonUtils.jsonToBean(response, CouponBean.class);
                                             break;
                                         case "ACTIVITY":
@@ -247,16 +247,18 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             if (count == typeBean.getData().size()) {
                                 loadingView.smoothToHide();
                                 count = 0;
-                                if (isRefresh) {
-                                    refreshLayout.finishRefresh();
-                                    isRefresh = false;
-                                    for (int j = 0; j < mAdapters.size(); j++) {
-                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                } else {
-                                    initView();
-                                }
+//                                if (isRefresh) {
+//                                    refreshLayout.finishRefresh();
+//                                    isRefresh = false;
+//                                    couponAdapter.notifyDataSetChanged();
+//                                    for (int j = 0; j < mAdapters.size(); j++) {
+//                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
+//                                        adapter.notifyDataSetChanged();
+//                                    }
+//                                } else {
+//                                    initView();
+//                                }
+                                initView();
                             }
                         }
                     });
@@ -541,8 +543,32 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                     TextView tvCouponName = holder.getView(R.id.tv_home_coupon_title);
 
-
                     holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getCouponDesc());
+
+
+                    if (couponBean.getData().get(position).getCouponTypeKind() != null &&
+                            couponBean.getData().get(position).getCouponTypeKind().equals("VOUCHER")) {
+                        if (couponBean.getData().get(position).getListCouponShop() != null &&
+                                couponBean.getData().get(position).getListCouponShop().size() > 0) {
+                            StringBuilder shop = new StringBuilder();
+                            for (int i = 0; i < couponBean.getData().get(position).getListCouponShop().size(); i++) {
+                                if (i < couponBean.getData().get(position).getListCouponShop().size() - 1) {
+                                    shop.append(couponBean.getData().get(position).getListCouponShop().get(i).getShopName()).append("、");
+                                } else {
+                                    shop.append(couponBean.getData().get(position).getListCouponShop().get(i).getShopName());
+                                }
+                            }
+
+                            holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils.isInteger(couponBean.getData().get(position).getServiceAmount()) + "元可用,限" + shop.toString());
+                        } else {
+                            holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils.isInteger(couponBean.getData().get(position).getServiceAmount()) + "元可用");
+                        }
+
+                    } else {
+                        holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getCouponDesc());
+                    }
+
+
                     holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData().get(position).getBalanceNum());
 
                     TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
@@ -630,7 +656,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), CouponDetailActivity.class);
                             intent.putExtra("coupon_id", couponBean.getData().get(position).getObjectId());
-                            intent.putExtra("coupon_type", couponBean.getData().get(position).getCouponTypeCy());
                             startActivity(intent);
                         }
                     });
@@ -721,8 +746,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                     final boolean isStart = System.currentTimeMillis() >= DateUtils.getTime(
                             "yyyy-MM-dd HH:mm:ss", activityBean.getData().get(position).getVoteStartTime());
-                    final boolean isEnroll = activityBean.getData().get(position).getMemberSignupState()
-                            != null && activityBean.getData().get(position).getMemberSignupState().equals("去参加");
+                    final boolean isEnroll = activityBean.getData().get(position).isSignup();
 
                     if (!TextUtils.isEmpty(activityBean.getData().get(position).getAcivityType())
                             && activityBean.getData().get(position).getAcivityType().equals("NONEED")) {
@@ -743,7 +767,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                             case "SCORE":
                                                 tvReceive.setText(DisplayUtils.isInteger(activityBean
                                                         .getData().get(position).getEnrollScore()) + "积分报名");
-
                                                 break;
                                             case "CASH":
                                                 tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean
@@ -761,10 +784,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                         }
                     }
-
-
-
-
 
 
                     FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
