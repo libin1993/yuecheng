@@ -54,6 +54,7 @@ public class NewGoodsActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
+    //当前页
     private int page = 1;
     //刷新
     private boolean isRefresh;

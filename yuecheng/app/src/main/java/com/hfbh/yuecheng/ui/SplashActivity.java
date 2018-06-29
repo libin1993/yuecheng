@@ -42,7 +42,7 @@ public class SplashActivity extends BaseActivity {
     RelativeLayout rlSplash;
     @BindView(R.id.ll_splash)
     LinearLayout llSplash;
-
+    //引导图当前页
     private int currentItem = 0;
 
 

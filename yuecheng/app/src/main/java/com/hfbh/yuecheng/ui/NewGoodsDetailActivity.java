@@ -25,7 +25,7 @@ import static android.webkit.WebSettings.LOAD_NO_CACHE;
 /**
  * Author：Libin on 2018/6/11 12:31
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：新品详情
  */
 public class NewGoodsDetailActivity extends BaseActivity {
     @BindView(R.id.webview_goods_detail)

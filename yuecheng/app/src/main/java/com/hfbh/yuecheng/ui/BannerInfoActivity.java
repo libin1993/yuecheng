@@ -32,7 +32,6 @@ public class BannerInfoActivity extends BaseActivity {
     ImageView ivGoodsBack;
     @BindView(R.id.rl_pop_goods_buy)
     RelativeLayout rlPopGoodsBuy;
-    private String url;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

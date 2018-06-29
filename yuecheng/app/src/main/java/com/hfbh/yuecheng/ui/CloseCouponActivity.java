@@ -64,7 +64,10 @@ public class CloseCouponActivity extends BaseActivity {
     View viewHeaderLine;
     @BindView(R.id.tv_activity_tip)
     TextView tvCouponTip;
+
+    //优惠券id
     private int couponId;
+    //优惠券type
     private int couponType;
     private CloseCouponBean couponBean;
 

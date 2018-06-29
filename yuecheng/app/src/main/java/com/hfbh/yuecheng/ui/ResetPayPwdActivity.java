@@ -44,6 +44,7 @@ public class ResetPayPwdActivity extends BaseActivity {
     TextView tvForgetPwd;
     //validate:密码验证   reset:验证码验证   bind:绑定
     private String type;
+    //输入次数
     private int count;
     //验证密码
     private String validatePwd;
@@ -178,7 +179,7 @@ public class ResetPayPwdActivity extends BaseActivity {
                     .addParams("appVersion", MyApp.appVersion)
                     .addParams("organizeId", MyApp.organizeId)
                     .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                    .addParams("token",SharedPreUtils.getStr(this, "token"))
+                    .addParams("token", SharedPreUtils.getStr(this, "token"))
                     .addParams("payPassword", newPwd)
                     .addParams("confirmPayPassword", secPwd)
                     .build()
@@ -215,7 +216,7 @@ public class ResetPayPwdActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("payPassword", validatePwd)
                 .build()
                 .execute(new StringCallback() {

@@ -33,8 +33,11 @@ public class GameActivity extends BaseActivity {
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
 
+    //游戏url
     private String gameUrl;
+    //app id
     private String appId;
+    //token
     private String privateToken;
 
     @Override

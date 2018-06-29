@@ -51,8 +51,9 @@ public class MemberPointsActivity extends BaseActivity {
 
     private List<String> titleList;
     private List<Fragment> fragmentList;
-    //时间
+    //年
     private int selectYear;
+    //月
     private int selectMonth;
 
 

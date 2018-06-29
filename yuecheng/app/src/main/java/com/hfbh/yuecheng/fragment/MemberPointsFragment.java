@@ -59,7 +59,7 @@ public class MemberPointsFragment extends BaseFragment {
     private String type;
     //日期
     private String time;
-
+    //刷新
     private boolean isRefresh;
 
     private List<MemberPointsBean.DataBean.PointsChangeListBean> dataList = new ArrayList<>();

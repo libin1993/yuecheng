@@ -62,10 +62,13 @@ public class CloseGiftActivity extends BaseActivity {
     TextView tvGiftExchangeType;
     @BindView(R.id.tv_activity_phone)
     TextView tvGiftPhone;
+
+    //核销id
     private int gainId;
     private CloseGiftBean giftBean;
 
     private Bitmap qrBmp;
+    //是否上架状态
     private boolean isOnline = true;
 
     @Override

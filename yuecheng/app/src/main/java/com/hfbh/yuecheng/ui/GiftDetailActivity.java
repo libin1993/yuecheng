@@ -75,7 +75,7 @@ public class GiftDetailActivity extends BaseActivity {
     @BindView(R.id.tv_exchange_gift_info)
     TextView tvExchangeGiftInfo;
 
-
+    //礼品id
     private int giftId;
     private GiftDetailBean giftBean;
     //数量
@@ -86,7 +86,7 @@ public class GiftDetailActivity extends BaseActivity {
     private int limitNum;
     //剩余数量
     private int balanceNum;
-
+    //是否兑换
     private boolean isExchange = false;
 
 

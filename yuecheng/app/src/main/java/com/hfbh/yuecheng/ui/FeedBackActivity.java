@@ -83,6 +83,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
     private ArrayList<String> photoList = new ArrayList<>();
 
     static final String[] permissionStr = {Manifest.permission.CAMERA};
+    //反馈图片url
     private String imgUrl;
 
     @Override

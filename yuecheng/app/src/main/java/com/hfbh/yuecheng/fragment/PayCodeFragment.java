@@ -69,7 +69,7 @@ public class PayCodeFragment extends BaseFragment {
     LinearLayout llPaycodeTicket;
     private Unbinder unbinder;
     private UserInfoBean userInfoBean;
-
+    //显示隐藏付款码
     private boolean isShow;
 
     private Bitmap barBmp;
@@ -77,6 +77,7 @@ public class PayCodeFragment extends BaseFragment {
 
     private Timer mTimer;
     private TimerTask mTimerTask;
+    //付款码
     private String payCode;
 
     @Nullable

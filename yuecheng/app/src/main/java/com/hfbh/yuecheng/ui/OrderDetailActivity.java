@@ -44,7 +44,6 @@ import okhttp3.Call;
  */
 public class OrderDetailActivity extends BaseActivity {
 
-
     @BindView(R.id.tv_header_title)
     TextView tvHeaderTitle;
     @BindView(R.id.iv_header_back)

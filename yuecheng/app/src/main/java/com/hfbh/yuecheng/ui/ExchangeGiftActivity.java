@@ -59,10 +59,11 @@ public class ExchangeGiftActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
-
+    //积分排序是否高到低
     private boolean isUp;
+    //积分排序
     private String sortType = "DEFAULT";
-
+    //当前页
     private int page = 1;
     //刷新
     private boolean isRefresh;
@@ -102,7 +103,7 @@ public class ExchangeGiftActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("pageNum", String.valueOf(page))
                 .addParams("pointsRewardType", "GIFT")
                 .addParams("sortType", sortType)
@@ -118,7 +119,7 @@ public class ExchangeGiftActivity extends BaseActivity {
                         tvGiftScore.setEnabled(true);
                         GiftListBean ListBean = GsonUtils.jsonToBean(response, GiftListBean.class);
                         pages = ListBean.getPage().getPages();
-                        if (ListBean.isFlag() && ListBean.getData() != null &&ListBean.getData().size() > 0) {
+                        if (ListBean.isFlag() && ListBean.getData() != null && ListBean.getData().size() > 0) {
                             if (isRefresh) {
                                 dataList.clear();
                             }

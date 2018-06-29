@@ -52,6 +52,7 @@ public class ChangeMarketActivity extends BaseActivity {
     RecyclerView rvMarketList;
 
     private CityListBean cityBean;
+    //当前城市
     private int currentCity;
 
     @Override

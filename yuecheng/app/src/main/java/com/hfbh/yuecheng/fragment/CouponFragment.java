@@ -61,6 +61,7 @@ public class CouponFragment extends BaseFragment {
     private Unbinder unbinder;
 
     private List<MyCouponBean.DataBean> dataList = new ArrayList<>();
+    //优惠券状态
     private String type;
     private CommonAdapter<MyCouponBean.DataBean> adapter;
 

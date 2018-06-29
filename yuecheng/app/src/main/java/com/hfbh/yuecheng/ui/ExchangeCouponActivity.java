@@ -80,7 +80,7 @@ public class ExchangeCouponActivity extends BaseActivity {
     @BindView(R.id.ll_null_data)
     LinearLayout llNullData;
 
-
+    //当前页数
     private int page = 1;
     //刷新
     private boolean isRefresh;
@@ -236,7 +236,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                                 break;
                         }
                     }
-
+                    //积分返利
                     if (!TextUtils.isEmpty(accessType) && accessType.equals("POINT")) {
                         tvCouponName.setText(DisplayUtils.isInteger(needScore * rebate)
                                 + "元-" + dataBean.getCouponName());

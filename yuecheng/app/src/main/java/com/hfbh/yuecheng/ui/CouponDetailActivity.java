@@ -72,8 +72,8 @@ public class CouponDetailActivity extends BaseActivity {
     @BindView(R.id.tv_exchange_coupon_type)
     TextView tvCouponType;
 
+    //优惠券id
     private int couponId;
-    //    private int couponType;
     private CouponDetailBean couponBean;
     //已领取数量
     private int hasGetNum;
@@ -94,6 +94,9 @@ public class CouponDetailActivity extends BaseActivity {
         initData();
     }
 
+    /**
+     * 加载数据
+     */
     private void initData() {
         OkHttpUtils.post()
                 .url(Constant.COUPON_DETAIL)

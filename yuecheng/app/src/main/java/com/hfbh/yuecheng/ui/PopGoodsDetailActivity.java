@@ -25,7 +25,7 @@ import static android.webkit.WebSettings.LOAD_NO_CACHE;
 /**
  * Author：Libin on 2018/6/4 14:28
  * Email：1993911441@qq.com
- * Describe：商品详情
+ * Describe：人气单品详情
  */
 public class PopGoodsDetailActivity extends BaseActivity {
     @BindView(R.id.webview_goods_detail)
@@ -38,6 +38,7 @@ public class PopGoodsDetailActivity extends BaseActivity {
     TextView tvGoodsPrice;
     @BindView(R.id.tv_buy_goods)
     TextView tvBuyGoods;
+    //商品详情
     private int goodsId;
 
     @Override

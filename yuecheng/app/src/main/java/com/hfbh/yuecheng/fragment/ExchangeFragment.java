@@ -67,6 +67,7 @@ public class ExchangeFragment extends BaseFragment {
     private Unbinder unbinder;
     //分类
     private String type;
+    //当前页
     private int page = 1;
     //刷新
     private boolean isRefresh;

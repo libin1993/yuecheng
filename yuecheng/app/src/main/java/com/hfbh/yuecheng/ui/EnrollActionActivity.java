@@ -31,15 +31,12 @@ import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.hfbh.yuecheng.view.PermissionDialog;
-import com.smarttop.library.utils.LogUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
-import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -103,10 +100,14 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
     private int picPosition;
     private HeaderAndFooterWrapper headerAndFooterWrapper;
+    //必填项数量
     private int totalNum;
+    //已填数量
     private int inputNum;
-    private boolean flag = true;
-    private boolean flag2 = true;
+    //是否首次选择性别
+    private boolean isSelectSex = true;
+    //是否首次上传照片
+    private boolean isUploadPic = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -285,8 +286,8 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                if (flag) {
-                    flag = false;
+                if (isSelectSex) {
+                    isSelectSex = false;
                     if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
                             optionListBean.getRequired().equals("true")) {
                         inputNum++;
@@ -435,7 +436,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    boolean flag = jsonObject.getBoolean("flag");
+                                    boolean flag = jsonObject.getBoolean("isSelectSex");
 
                                     if (flag) {
                                         enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
@@ -577,8 +578,8 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                             ResponseBean responseBean = GsonUtils.jsonToBean(response.body().string(),
                                     ResponseBean.class);
                             if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
-                                if (flag2) {
-                                    flag2 = false;
+                                if (isUploadPic) {
+                                    isUploadPic = false;
                                     if (!TextUtils.isEmpty(dataList.get(picPosition).getRequired()) &&
                                             dataList.get(picPosition).getRequired().equals("true")) {
                                         inputNum++;

@@ -95,8 +95,10 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     //纬度
     private String latitude = "";
     private FragmentTabUtils fragmentTabUtils;
+    //是否检测更新
     private boolean isCheckUpdate = true;
     private DownloadService downloadService;
+    //是否切换商城
     private boolean isChangeCity;
 
     @Override

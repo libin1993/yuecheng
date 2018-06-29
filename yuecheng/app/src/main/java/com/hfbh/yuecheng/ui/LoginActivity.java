@@ -89,6 +89,7 @@ public class LoginActivity extends BaseActivity {
     private boolean isCode;
     //0：验证码登录 1：密码登录
     private int loginType;
+    //显示隐藏密码
     private boolean isShow;
 
     @Override

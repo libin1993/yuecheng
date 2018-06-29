@@ -64,7 +64,7 @@ public class ValidateActivity extends BaseActivity {
     private boolean isPhone;
     //是否输入验证码
     private boolean isCode;
-
+    //validate:密码验证   reset:验证码验证   bind:绑定
     private String type;
 
     @Override

@@ -69,6 +69,7 @@ public class CloseActionActivity extends BaseActivity {
     private Bitmap qrBmp;
 
     private CloseActivityBean activityBean;
+    //活动id
     private int activityId;
 
 

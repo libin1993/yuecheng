@@ -71,6 +71,7 @@ public class MyActivityFragment extends BaseFragment {
 
     //分类
     private int type;
+    //当前页
     private int page = 1;
     //刷新
     private boolean isRefresh;

@@ -67,6 +67,7 @@ public class ActivityListFragment extends BaseFragment {
     private Unbinder unbinder;
     //标签id
     private int tagId;
+    //当前页
     private int page = 1;
     //刷新
     private boolean isRefresh;

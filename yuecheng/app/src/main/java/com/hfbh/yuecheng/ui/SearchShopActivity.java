@@ -97,7 +97,9 @@ public class SearchShopActivity extends BaseActivity {
     private String floorName;
     //类型名称
     private String industryName;
+    //当前业态
     private int industryNum = 0;
+    //当前楼层
     private int floorNum = 0;
 
     private List<SearchShopBean.ShopListBean> shopList = new ArrayList<>();
