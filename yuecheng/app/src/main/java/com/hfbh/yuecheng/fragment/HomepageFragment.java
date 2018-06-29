@@ -144,6 +144,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     private BaseDelegateAdapter couponAdapter;
     private MarqueeView marqueeView;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle

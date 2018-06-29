@@ -264,5 +264,4 @@ public class GoodsFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-
 }
