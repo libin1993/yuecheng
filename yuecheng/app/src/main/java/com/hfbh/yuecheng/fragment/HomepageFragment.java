@@ -386,7 +386,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             };
             mAdapters.add(functionAdapter);
         }
-
         
         if (broadcastBean != null && broadcastBean.getData().size() > 0) {
             if (broadcastBean.getData() != null && broadcastBean.getData().size() > 0) {
