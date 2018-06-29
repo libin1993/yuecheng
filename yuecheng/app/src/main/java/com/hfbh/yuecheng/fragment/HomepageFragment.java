@@ -154,7 +154,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         initType();
         return view;
     }
-    
+
     /**
      * 加载模块
      */
@@ -386,8 +386,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             };
             mAdapters.add(functionAdapter);
         }
-
-
+        
         if (broadcastBean != null && broadcastBean.getData().size() > 0) {
             if (broadcastBean.getData() != null && broadcastBean.getData().size() > 0) {
                 final List<String> dataList = new ArrayList<>();
