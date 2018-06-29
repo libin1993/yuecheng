@@ -154,8 +154,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         initType();
         return view;
     }
-
-
+    
     /**
      * 加载模块
      */
