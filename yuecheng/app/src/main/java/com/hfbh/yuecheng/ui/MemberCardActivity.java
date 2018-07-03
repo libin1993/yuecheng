@@ -60,7 +60,7 @@ public class MemberCardActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -73,7 +73,7 @@ public class MemberCardActivity extends BaseActivity {
                         userInfoBean = GsonUtils.jsonToBean(s, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             initView();
-                        }else if (userInfoBean.getCode() == 4002) {
+                        } else if (userInfoBean.getCode() == 4002) {
                             SharedPreUtils.deleteStr(MemberCardActivity.this, "is_login");
                         }
 

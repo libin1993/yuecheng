@@ -44,10 +44,6 @@ public class ActionDetailActivity extends BaseActivity {
 
     @BindView(R.id.webview_activity_detail)
     WebView webView;
-    @BindView(R.id.tv_title_header)
-    TextView tvTitleHeader;
-    @BindView(R.id.iv_back_header)
-    ImageView ivBackHeader;
     @BindView(R.id.tv_exchange_activity_score)
     TextView tvExchangeScore;
     @BindView(R.id.tv_exchange_activity_type)
@@ -58,6 +54,10 @@ public class ActionDetailActivity extends BaseActivity {
     RelativeLayout rlActionJoin;
     @BindView(R.id.tv_activity_end)
     TextView tvActivityEnd;
+    @BindView(R.id.tv_header_title)
+    TextView tvHeaderTitle;
+    @BindView(R.id.iv_header_back)
+    ImageView ivHeaderBack;
     //活动id
     private int activityId;
     private ActivityDetailBean activityBean;
@@ -78,7 +78,7 @@ public class ActionDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_action_detail);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        tvTitleHeader.setText("活动详情");
+        tvHeaderTitle.setText("活动详情");
         getData();
         initData();
         initWebView();
@@ -232,10 +232,10 @@ public class ActionDetailActivity extends BaseActivity {
         activityId = getIntent().getIntExtra("activity_id", 0);
     }
 
-    @OnClick({R.id.iv_back_header, R.id.tv_exchange_activity})
+    @OnClick({R.id.iv_header_back, R.id.tv_exchange_activity})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_back_header:
+            case R.id.iv_header_back:
                 if (webView.canGoBack()) {
                     webView.goBack();
                 } else {

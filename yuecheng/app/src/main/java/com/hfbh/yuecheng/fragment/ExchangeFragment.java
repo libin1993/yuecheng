@@ -55,7 +55,6 @@ public class ExchangeFragment extends BaseFragment {
     RecyclerView rvGift;
     @BindView(R.id.layout_refresh_my_activity)
     SmartRefreshLayout refreshLayout;
-
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
     @BindView(R.id.iv_null_data)

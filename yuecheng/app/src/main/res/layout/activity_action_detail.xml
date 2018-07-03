@@ -5,17 +5,15 @@
                 android:background="@color/gray_ed"
                 android:fitsSystemWindows="true"
                 android:orientation="vertical">
-
+    <include
+        layout="@layout/layout_widget_header"/>
     <WebView
         android:id="@+id/webview_activity_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/rl_action_join">
+        android:layout_above="@+id/rl_action_join"
+        android:layout_marginTop="44dp">
     </WebView>
-
-
-    <include
-        layout="@layout/layout_header_gray"/>
 
     <RelativeLayout
         android:id="@+id/rl_action_join"

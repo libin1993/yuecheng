@@ -31,6 +31,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     fresco:actualImageScaleType="centerCrop"
+                    fresco:placeholderImage="@mipmap/ic_app_logo"
+                    fresco:placeholderImageScaleType="centerCrop"
                     fresco:roundAsCircle="true"/>
 
                 <LinearLayout

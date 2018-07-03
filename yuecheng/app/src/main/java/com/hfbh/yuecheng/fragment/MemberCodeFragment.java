@@ -33,6 +33,8 @@ public class MemberCodeFragment extends BaseFragment {
     ImageView ivMemberQrcode;
     @BindView(R.id.tv_member_qrcode)
     TextView tvMemberQrcode;
+    @BindView(R.id.tv_member_card_level)
+    TextView tvMemberCard;
     private Unbinder unbinder;
     private UserInfoBean memberCodeBean;
     private Bitmap barBmp;
@@ -53,6 +55,7 @@ public class MemberCodeFragment extends BaseFragment {
     }
 
     private void initView() {
+        tvMemberCard.setText(memberCodeBean.getData().getCardLevel());
         String cardNumber = memberCodeBean.getData().getCardNumber();
         barBmp = BarcodeUtils.creatBarcode(cardNumber,
                 (int) DisplayUtils.dp2px(getActivity(), 225),

@@ -197,21 +197,19 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
 
             @Override
             public void onResponse(Call call, final Response response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            ResponseBean responseBean = GsonUtils.jsonToBean(response.body().string(),
-                                    ResponseBean.class);
-                            if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
-                                imgUrl = responseBean.getData();
-                                submitData();
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+
+                try {
+                    ResponseBean responseBean = GsonUtils.jsonToBean(response.body().string(),
+                            ResponseBean.class);
+                    if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
+                        imgUrl = responseBean.getData();
+                        submitData();
+                    }else {
+                        submitData();
                     }
-                });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -254,7 +252,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
                             ToastUtils.showToast(FeedBackActivity.this, "反馈成功");
                             finish();
                         } else {
-                            ToastUtils.showToast(FeedBackActivity.this, "反馈失败");
+                            ToastUtils.showToast(FeedBackActivity.this, responseBean.getMsg());
                         }
                     }
                 });

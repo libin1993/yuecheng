@@ -140,6 +140,7 @@ public class ActivityListFragment extends BaseFragment {
                         } else {
                             refreshLayout.finishLoadMore();
                             if (page == 1) {
+                                refreshLayout.finishRefresh();
                                 svNoActivity.setVisibility(View.VISIBLE);
                                 rvActivity.setVisibility(View.GONE);
                             }

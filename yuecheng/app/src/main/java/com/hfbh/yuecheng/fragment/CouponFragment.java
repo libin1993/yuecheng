@@ -92,6 +92,7 @@ public class CouponFragment extends BaseFragment {
                 .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
                 .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
                 .addParams("cardNumber", SharedPreUtils.getStr(getActivity(), "card_number"))
+                .addParams("memberId", SharedPreUtils.getStr(getActivity(), "member_id"))
                 .addParams("couponTypeKind", "VOUCHER")
                 .addParams("queryType", type)
                 .build()

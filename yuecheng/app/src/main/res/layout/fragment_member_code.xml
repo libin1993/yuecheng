@@ -25,12 +25,12 @@
             android:textSize="16sp"/>
 
         <TextView
+            android:id="@+id/tv_member_card_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="20dp"
-            android:text="VIP积分卡"
             android:textColor="@color/gray_10"
             android:textSize="16sp"/>
 

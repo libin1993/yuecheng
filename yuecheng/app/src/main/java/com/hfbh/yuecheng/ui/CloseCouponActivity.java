@@ -95,7 +95,7 @@ public class CloseCouponActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("couponId", String.valueOf(couponType))
                 .addParams("memberCouponId", String.valueOf(couponId))
                 .build()
@@ -141,9 +141,24 @@ public class CloseCouponActivity extends BaseActivity {
                         "yyyy.MM.dd", couponBean.getData().getEndTime()));
         tvCouponAddress.setText("适用范围：" + couponBean.getData().getUseRange());
 
-        tvExchangeTime.setText("兑换时间：" + couponBean.getData().getExchangeTime());
+        tvExchangeTime.setText("领取时间：" + couponBean.getData().getExchangeTime());
 
-        tvExchangeType.setText("兑换积分：" + couponBean.getData().getAccessValue() + "积分");
+        double needScore = couponBean.getData().getAccessValue();
+
+        if (!TextUtils.isEmpty(couponBean.getData().getAccessType())) {
+            switch (couponBean.getData().getAccessType()) {
+                case "FREE":
+                    tvExchangeType.setText("领取费用：免费");
+                    break;
+                case "POINT":
+                    tvExchangeType.setText("领取积分：" + DisplayUtils.isInteger(needScore) + "积分");
+                    break;
+                case "BUY":
+                    tvExchangeType.setText("领取费用：" + DisplayUtils.isInteger(needScore) + "元");
+                    break;
+            }
+        }
+
     }
 
     private void getData() {

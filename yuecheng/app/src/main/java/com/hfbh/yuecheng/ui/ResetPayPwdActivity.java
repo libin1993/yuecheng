@@ -255,6 +255,7 @@ public class ResetPayPwdActivity extends BaseActivity {
                 Intent intent = new Intent(ResetPayPwdActivity.this, ValidateActivity.class);
                 intent.putExtra("type", "reset");
                 startActivity(intent);
+                finish();
                 break;
         }
     }

@@ -199,63 +199,23 @@ public class MyActivityFragment extends BaseFragment {
                 final TextView tvJoin = holder.getView(R.id.tv_activity_join);
                 final TextView tvStatus = holder.getView(R.id.tv_activity_status);
 
-                final String status = dataBean.getMemberSignupState();
+                String status = dataBean.getMemberSignupState();
 
-                final boolean isFinish = System.currentTimeMillis() > DateUtils.getTime(
-                        "yyyy-MM-dd HH:mm:ss", dataBean.getActivityEndtime());
 
-                if (!isFinish) {
-                    if (!TextUtils.isEmpty(status)) {
-                        switch (status) {
-                            case "待报名":
-                            case "已结束":
-                                tvStatus.setVisibility(View.VISIBLE);
-                                tvJoin.setVisibility(View.GONE);
-                                tvStatus.setText(status);
-                                break;
-                            case "去报名":
-                            case "去参加":
-                                tvStatus.setVisibility(View.GONE);
-                                tvJoin.setVisibility(View.VISIBLE);
-                                tvJoin.setText(status);
-                                break;
-
-                        }
+                if (!TextUtils.isEmpty(status)) {
+                    switch (status) {
+                        case "去参加":
+                            tvStatus.setVisibility(View.GONE);
+                            tvJoin.setVisibility(View.VISIBLE);
+                            tvJoin.setText(status);
+                            break;
+                        default:
+                            tvStatus.setVisibility(View.VISIBLE);
+                            tvJoin.setVisibility(View.GONE);
+                            tvStatus.setText(status);
+                            break;
                     }
-                } else {
-                    tvStatus.setVisibility(View.VISIBLE);
-                    tvJoin.setVisibility(View.GONE);
-                    tvStatus.setText("已结束");
                 }
-
-                tvStatus.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
-
-
-                tvJoin.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (!TextUtils.isEmpty(status)) {
-                            Intent intent = null;
-                            switch (status) {
-                                case "去报名":
-                                    intent = new Intent(getActivity(), EnrollActionActivity.class);
-                                    break;
-                                case "去参加":
-                                    intent = new Intent(getActivity(), CloseActionActivity.class);
-                                    break;
-                            }
-                            intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
-                            startActivity(intent);
-                        }
-
-                    }
-                });
 
             }
         };
@@ -266,7 +226,7 @@ public class MyActivityFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
+                Intent intent = new Intent(getActivity(), CloseActionActivity.class);
                 intent.putExtra("activity_id", dataList.get(position).getMarketingActivitySignupId());
                 startActivity(intent);
             }

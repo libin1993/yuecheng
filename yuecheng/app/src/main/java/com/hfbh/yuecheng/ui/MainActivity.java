@@ -1,10 +1,8 @@
 package com.hfbh.yuecheng.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
@@ -36,10 +34,8 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.LocationBean;
 import com.hfbh.yuecheng.bean.UpdateBean;
-import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.ActivityFragment;
-import com.hfbh.yuecheng.fragment.DiscoveryFragment;
 import com.hfbh.yuecheng.fragment.HomepageFragment;
 import com.hfbh.yuecheng.fragment.MineFragment;
 import com.hfbh.yuecheng.service.DownloadService;
@@ -48,11 +44,9 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LocationUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
-import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -126,7 +120,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     /**
      * 检测更新
      */
-    private void checkUpDate() {
+    private void checkUpdate() {
         if (isCheckUpdate && !isChangeCity) {
             OkHttpUtils.post()
                     .url(Constant.CHECK_UPDATE)
@@ -356,8 +350,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         fragmentList.add(MineFragment.newInstance());
         fragmentTabUtils = new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
                 R.id.fl_main_container, rgsMainTab);
-        checkUpDate();
+        checkUpdate();
     }
+
 
     /**
      * 初始化icon
@@ -382,6 +377,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableMine, null, null);
 
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

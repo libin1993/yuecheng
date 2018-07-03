@@ -449,8 +449,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         holder.setText(R.id.tv_action_title, topicBean.getData().get(0).getActivityList().get(position).getName());
 
                         TextView tvSubtitle = holder.getView(R.id.tv_action_sub_title);
-                        final String status = topicBean.getData().get(0).getActivityList().get(position).getMemberSignupState();
-                        tvSubtitle.setText(status);
+                        if (topicBean.getData().get(0).getActivityList().get(position).getActivityType().equals("NONEED")) {
+                            tvSubtitle.setText("");
+                        } else {
+                            String status = topicBean.getData().get(0).getActivityList().get(position).getMemberSignupState();
+                            tvSubtitle.setText(status);
+                        }
 
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -528,11 +532,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         }
 
+        //优惠券
+        initTitle("优惠券", 5);
+
 
         if (couponBean != null && couponBean.getData() != null && couponBean.getData().size() > 0) {
-            //优惠券
-            initTitle("优惠券", 5);
-
             couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                     R.layout.rv_coupon_item, couponBean.getData().size(), 6) {
                 @Override
@@ -674,10 +678,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             mAdapters.add(couponAdapter);
         }
 
-        if (giftBean != null && giftBean.getData() != null && giftBean.getData().size() > 0) {
-            //积分兑换
-            initTitle("积分兑礼", 7);
 
+        //积分兑换
+        initTitle("积分兑礼", 7);
+
+        if (giftBean != null && giftBean.getData() != null && giftBean.getData().size() > 0) {
             GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
             gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getActivity(), 12),
                     0, (int) DisplayUtils.dp2px(getActivity(), 12), 0);
@@ -721,10 +726,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
 
-        if (activityBean != null && activityBean.getData() != null && activityBean.getData().size() > 0) {
-            //精彩活动
-            initTitle("精彩活动", 9);
+        //精彩活动
+        initTitle("精彩活动", 9);
 
+        if (activityBean != null && activityBean.getData() != null && activityBean.getData().size() > 0) {
             GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
             BaseDelegateAdapter activityAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper1,
                     R.layout.rv_activity_item, activityBean.getData().size(), 10) {
