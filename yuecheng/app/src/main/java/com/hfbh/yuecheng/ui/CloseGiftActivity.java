@@ -108,8 +108,10 @@ public class CloseGiftActivity extends BaseActivity {
                     @Override
                     public void onResponse(String s, int i) {
                         giftBean = GsonUtils.jsonToBean(s, CloseGiftBean.class);
-                        if (giftBean != null && giftBean.getData() != null) {
+                        if (giftBean.isFlag() && giftBean != null && giftBean.getData() != null) {
                             initView();
+                        } else if (giftBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(CloseGiftActivity.this, "is_login");
                         }
                     }
                 });

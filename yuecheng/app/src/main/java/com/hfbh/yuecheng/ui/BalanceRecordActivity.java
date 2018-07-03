@@ -97,6 +97,9 @@ public class BalanceRecordActivity extends BaseActivity {
                             initView();
                         } else {
                             llNullData.setVisibility(View.VISIBLE);
+                            if (balanceBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(BalanceRecordActivity.this, "is_login");
+                            }
                         }
                     }
                 });

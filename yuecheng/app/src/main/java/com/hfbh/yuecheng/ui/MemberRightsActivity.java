@@ -86,6 +86,8 @@ public class MemberRightsActivity extends BaseActivity {
                         memberBean = GsonUtils.jsonToBean(response, MemberRightsBean.class);
                         if (memberBean.isFlag() && memberBean.getData() != null && memberBean.getData().size() > 0) {
                             initView();
+                        }else if (memberBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(MemberRightsActivity.this, "is_login");
                         }
                     }
                 });

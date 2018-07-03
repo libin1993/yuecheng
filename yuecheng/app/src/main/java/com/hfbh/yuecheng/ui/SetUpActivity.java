@@ -157,7 +157,7 @@ public class SetUpActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -177,6 +177,9 @@ public class SetUpActivity extends BaseActivity {
                             finish();
                         } else {
                             ToastUtils.showToast(SetUpActivity.this, responseBean.getMsg());
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(SetUpActivity.this, "is_login");
+                            }
                         }
                     }
                 });

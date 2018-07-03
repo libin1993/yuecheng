@@ -288,7 +288,7 @@ public class ValidateActivity extends BaseActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            ToastUtils.showToast(ValidateActivity.this, "验证失败");
+                            ToastUtils.showToast(ValidateActivity.this, responseBean.getMsg());
                         }
                     }
                 });

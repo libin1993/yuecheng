@@ -52,6 +52,7 @@ import com.hfbh.yuecheng.ui.CouponDetailActivity;
 import com.hfbh.yuecheng.ui.EnrollActionActivity;
 import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
+import com.hfbh.yuecheng.ui.ForgetPwdActivity;
 import com.hfbh.yuecheng.ui.GameActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
 import com.hfbh.yuecheng.ui.GoodsActivity;
@@ -771,11 +772,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                                 break;
                                             case "SCORE":
                                                 tvReceive.setText(DisplayUtils.isInteger(activityBean
-                                                        .getData().get(position).getEnrollScore()) + "积分报名");
+                                                        .getData().get(position).getNeedScore()) + "积分报名");
                                                 break;
                                             case "CASH":
                                                 tvReceive.setText("¥" + DisplayUtils.isInteger(activityBean
-                                                        .getData().get(position).getEnrollFee()) + "报名");
+                                                        .getData().get(position).getAccessValue()) + "报名");
                                                 break;
                                         }
                                     }
@@ -887,6 +888,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 int data = jsonObject.getInt("data");
                                 couponBean.getData().get(position).setBalanceNum(data);
                                 couponAdapter.notifyDataSetChanged();
+                            } else if (jsonObject.getInt("code") == 4002) {
+                                SharedPreUtils.deleteStr(getActivity(), "is_login");
                             }
 
                         } catch (JSONException e) {
@@ -936,7 +939,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         if (responseBean.isFlag()) {
                             startActivity(new Intent(getActivity(), MemberCardActivity.class));
                         } else {
-                            setPayPwd();
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(getActivity(), "is_login");
+                            } else {
+                                setPayPwd();
+                            }
                         }
                     }
                 });

@@ -160,6 +160,9 @@ public class BindCardActivity extends BaseActivity {
                             finish();
                         } else {
                             ToastUtils.showToast(BindCardActivity.this, responseBean.getMsg());
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(BindCardActivity.this, "is_login");
+                            }
                         }
                     }
                 });

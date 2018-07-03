@@ -11,6 +11,7 @@ import android.os.IBinder;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.bean.OrderDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.ForgetPwdActivity;
 import com.hfbh.yuecheng.ui.OrderDetailActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -76,12 +77,13 @@ public class TimerService extends Service {
 
     //请求网络获取数据
     private void getHttp() {
-        OkHttpUtils.post().url(Constant.QUERY_ORDER)
+        OkHttpUtils.post()
+                .url(Constant.QUERY_ORDER)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(context, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -102,6 +104,8 @@ public class TimerService extends Service {
                             Intent intent = new Intent(TimerService.this, OrderDetailActivity.class);
                             intent.putExtra("order", orderDetailBean);
                             startActivity(intent);
+                        } else if (orderDetailBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(TimerService.this, "is_login");
                         }
                     }
                 });

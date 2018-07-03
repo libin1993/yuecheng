@@ -154,6 +154,8 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
                             }
                             initView();
+                        } else if (activityBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(EnrollActionActivity.this, "is_login");
                         }
                     }
                 });
@@ -436,7 +438,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    boolean flag = jsonObject.getBoolean("isSelectSex");
+                                    boolean flag = jsonObject.getBoolean("flag");
 
                                     if (flag) {
                                         enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
@@ -446,6 +448,10 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                                         String msg = jsonObject.getString("msg");
                                         enrollResult(false, msg);
                                         tvEnrollScore.setEnabled(true);
+
+                                        if (jsonObject.getInt("code") == 4002) {
+                                            SharedPreUtils.deleteStr(EnrollActionActivity.this, "is_login");
+                                        }
                                     }
 
                                 } catch (JSONException e) {

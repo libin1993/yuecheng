@@ -132,7 +132,7 @@ public class MineFragment extends BaseFragment {
         } else {
             tvMineUsername.setText("注册/登录");
             ivMineAvatar.setImageResource(R.mipmap.img_default_avatar);
-            tvMineMoney.setText("0.00");
+            tvMineMoney.setText("0");
             tvMineScore.setText("0");
             tvMineGrade.setText("领取会员卡");
         }

@@ -94,7 +94,7 @@ public class ActivityBean {
          */
 
         private Object accessType;
-        private Object accessValue;
+        private double accessValue;
         private String acivityType;
         private String activityName;
         private String activityPic;
@@ -157,11 +157,11 @@ public class ActivityBean {
             this.accessType = accessType;
         }
 
-        public Object getAccessValue() {
+        public double getAccessValue() {
             return accessValue;
         }
 
-        public void setAccessValue(Object accessValue) {
+        public void setAccessValue(double accessValue) {
             this.accessValue = accessValue;
         }
 

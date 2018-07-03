@@ -319,6 +319,10 @@ public class GiftDetailActivity extends BaseActivity {
                                 } else {
                                     isExchange = false;
                                     exChangeResult(false, msg);
+
+                                    if (jsonObject.getInt("code") == 4002) {
+                                        SharedPreUtils.deleteStr(GiftDetailActivity.this, "is_login");
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

@@ -196,7 +196,10 @@ public class ResetPayPwdActivity extends BaseActivity {
                                 ToastUtils.showToast(ResetPayPwdActivity.this, "密码设置成功");
                                 finish();
                             } else {
-                                ToastUtils.showToast(ResetPayPwdActivity.this, "密码设置失败");
+                                ToastUtils.showToast(ResetPayPwdActivity.this, responseBean.getMsg());
+                                if (responseBean.getCode() == 4002) {
+                                    SharedPreUtils.deleteStr(ResetPayPwdActivity.this, "is_login");
+                                }
                             }
                         }
                     });
@@ -232,7 +235,10 @@ public class ResetPayPwdActivity extends BaseActivity {
                             count++;
                             initView();
                         } else {
-                            ToastUtils.showToast(ResetPayPwdActivity.this, "密码错误");
+                            ToastUtils.showToast(ResetPayPwdActivity.this, responseBean.getMsg());
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(ResetPayPwdActivity.this, "is_login");
+                            }
                         }
                     }
                 });

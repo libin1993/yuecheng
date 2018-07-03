@@ -17,6 +17,8 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.MemberPointsBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.ForgetPwdActivity;
+import com.hfbh.yuecheng.ui.MemberPointsActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -128,6 +130,10 @@ public class MemberPointsFragment extends BaseFragment {
                         } else {
                             rvMemberPoints.setVisibility(View.GONE);
                             llNullData.setVisibility(View.VISIBLE);
+
+                            if (memberPointsBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(getActivity(), "is_login");
+                            }
                         }
                     }
                 });

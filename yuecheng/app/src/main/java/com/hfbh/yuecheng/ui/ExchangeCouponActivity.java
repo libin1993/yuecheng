@@ -404,6 +404,8 @@ public class ExchangeCouponActivity extends BaseActivity {
                                 dataList.get(position).setBalanceNum(data);
                                 dataList.get(position).setMemberBroughtNum(dataList.get(position).getMemberBroughtNum() + 1);
                                 adapter.notifyDataSetChanged();
+                            }else if (jsonObject.getInt("code") == 4002) {
+                                SharedPreUtils.deleteStr(ExchangeCouponActivity.this, "is_login");
                             }
 
                         } catch (JSONException e) {

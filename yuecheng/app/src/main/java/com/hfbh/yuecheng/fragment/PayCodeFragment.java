@@ -126,6 +126,8 @@ public class PayCodeFragment extends BaseFragment {
                         if (couponBean.isFlag() && couponBean.getData() != null
                                 && couponBean.getData().size() > 0) {
                             tvPaycodeTicket.setText(String.valueOf(couponBean.getData().size()));
+                        } else if (couponBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(getActivity(), "is_login");
                         }
                     }
                 });
@@ -202,7 +204,9 @@ public class PayCodeFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), MemberBalanceActivity.class));
                 break;
             case R.id.ll_paycode_score:
-                startActivity(new Intent(getActivity(), MemberPointsActivity.class));
+                Intent intent = new Intent(getActivity(), MemberPointsActivity.class);
+                intent.putExtra("points", userInfoBean.getData().getPoints());
+                startActivity(intent);
                 break;
             case R.id.ll_paycode_ticket:
                 startActivity(new Intent(getActivity(), CouponActivity.class));

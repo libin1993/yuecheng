@@ -72,7 +72,7 @@ public class SetPwdActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -83,16 +83,20 @@ public class SetPwdActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
-                        Intent intent;
-                        if (responseBean.isFlag()) {
-                            intent = new Intent(SetPwdActivity.this, ResetPayPwdActivity.class);
-                            intent.putExtra("type", "validate");
-                        } else {
-                            intent = new Intent(SetPwdActivity.this, ValidateActivity.class);
-                            intent.putExtra("type", "bind");
-                        }
-                        startActivity(intent);
 
+                        if (responseBean.isFlag()) {
+                            Intent intent = new Intent(SetPwdActivity.this, ResetPayPwdActivity.class);
+                            intent.putExtra("type", "validate");
+                            startActivity(intent);
+                        } else {
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(SetPwdActivity.this, "is_login");
+                            } else {
+                                Intent intent = new Intent(SetPwdActivity.this, ValidateActivity.class);
+                                intent.putExtra("type", "bind");
+                                startActivity(intent);
+                            }
+                        }
                     }
                 });
     }

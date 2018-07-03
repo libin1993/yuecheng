@@ -525,7 +525,10 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
                     }
                     ToastUtils.showToast(UserInfoActivity.this, "修改成功");
                 } else {
-                    ToastUtils.showToast(UserInfoActivity.this, "修改失败");
+                    ToastUtils.showToast(UserInfoActivity.this, responseBean.getMsg());
+                    if (responseBean.getCode() == 4002) {
+                        SharedPreUtils.deleteStr(UserInfoActivity.this, "is_login");
+                    }
                 }
 
             }

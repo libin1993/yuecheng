@@ -265,6 +265,9 @@ public class ResetLoginPwdActivity extends BaseActivity {
                                 finish();
                             } else {
                                 ToastUtils.showToast(ResetLoginPwdActivity.this, responseBean.getMsg());
+                                if (responseBean.getCode() == 4002) {
+                                    SharedPreUtils.deleteStr(ResetLoginPwdActivity.this, "is_login");
+                                }
                             }
                         }
                     });

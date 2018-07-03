@@ -272,6 +272,9 @@ public class CouponDetailActivity extends BaseActivity {
                                     exChangeResult(true, "您兑换的优惠券已放置于“我的-票券”，记得去查看哦！");
                                 } else {
                                     exChangeResult(false, msg);
+                                    if (jsonObject.getInt("code")== 4002) {
+                                        SharedPreUtils.deleteStr(CouponDetailActivity.this, "is_login");
+                                    }
                                 }
 
                             } catch (JSONException e) {

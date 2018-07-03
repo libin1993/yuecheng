@@ -97,7 +97,7 @@ public class PayCardActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("pageNum", String.valueOf(page))
                 .build()
                 .execute(new StringCallback() {
@@ -137,6 +137,10 @@ public class PayCardActivity extends BaseActivity {
                             if (page == 1) {
                                 llNullData.setVisibility(View.VISIBLE);
                                 rvCard.setVisibility(View.GONE);
+                            }
+
+                            if (balanceBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(PayCardActivity.this, "is_login");
                             }
                         }
                     }
@@ -237,7 +241,7 @@ public class PayCardActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("id", String.valueOf(cardId))
                 .build()
                 .execute(new StringCallback() {
@@ -259,7 +263,10 @@ public class PayCardActivity extends BaseActivity {
 
                             ToastUtils.showToast(PayCardActivity.this, "删除成功");
                         } else {
-                            ToastUtils.showToast(PayCardActivity.this, "删除失败");
+                            ToastUtils.showToast(PayCardActivity.this, responseBean.getMsg());
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(PayCardActivity.this, "is_login");
+                            }
                         }
                     }
                 });

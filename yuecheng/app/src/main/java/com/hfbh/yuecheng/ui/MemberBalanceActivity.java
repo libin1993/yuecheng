@@ -128,6 +128,9 @@ public class MemberBalanceActivity extends BaseActivity {
                         } else {
                             tvBalanceCount.setText("预付卡  (0)");
                             rvMemberBalance.setVisibility(View.GONE);
+                            if (balanceBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(MemberBalanceActivity.this, "is_login");
+                            }
                         }
                     }
                 });
@@ -210,7 +213,11 @@ public class MemberBalanceActivity extends BaseActivity {
                         if (responseBean.isFlag()) {
                             startActivity(new Intent(MemberBalanceActivity.this, BindCardActivity.class));
                         } else {
-                            setPayPwd();
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(MemberBalanceActivity.this, "is_login");
+                            } else {
+                                setPayPwd();
+                            }
                         }
                     }
                 });

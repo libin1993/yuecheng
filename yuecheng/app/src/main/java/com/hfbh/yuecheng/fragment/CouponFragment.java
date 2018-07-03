@@ -19,6 +19,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.MyCouponBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.ui.CloseCouponActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -113,6 +114,9 @@ public class CouponFragment extends BaseFragment {
                             llNullData.setVisibility(View.GONE);
                         } else {
                             llNullData.setVisibility(View.VISIBLE);
+                            if (couponBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(getActivity(), "is_login");
+                            }
                         }
                     }
                 });

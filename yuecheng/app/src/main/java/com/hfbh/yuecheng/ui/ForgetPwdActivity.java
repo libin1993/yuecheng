@@ -264,6 +264,9 @@ public class ForgetPwdActivity extends BaseActivity {
                                 finish();
                             } else {
                                 ToastUtils.showToast(ForgetPwdActivity.this, "修改失败");
+                                if (responseBean.getCode() == 4002) {
+                                    SharedPreUtils.deleteStr(ForgetPwdActivity.this, "is_login");
+                                }
                             }
                         }
                     });

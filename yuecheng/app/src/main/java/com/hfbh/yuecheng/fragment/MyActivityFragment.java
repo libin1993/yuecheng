@@ -147,6 +147,9 @@ public class MyActivityFragment extends BaseFragment {
                                 rvActivity.setVisibility(View.GONE);
                                 llNullData.setVisibility(View.VISIBLE);
                             }
+                            if (activityListBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(getActivity(), "is_login");
+                            }
                         }
                     }
                 });
@@ -188,11 +191,11 @@ public class MyActivityFragment extends BaseFragment {
                             break;
                         case "SCORE":
                             tvCost.setVisibility(View.VISIBLE);
-                            tvCost.setText("已报名： " + DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分");
+                            tvCost.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分");
                             break;
                         case "CASH":
                             tvCost.setVisibility(View.VISIBLE);
-                            tvCost.setText("已支付： ¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()));
+                            tvCost.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()));
                             break;
                     }
                 }

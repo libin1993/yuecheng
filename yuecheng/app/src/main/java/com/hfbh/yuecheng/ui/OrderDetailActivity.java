@@ -40,7 +40,7 @@ import okhttp3.Call;
 /**
  * Author：Libin on 2018/6/12 15:24
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：被扫订单
  */
 public class OrderDetailActivity extends BaseActivity {
 
@@ -158,7 +158,7 @@ public class OrderDetailActivity extends BaseActivity {
     private void inputPwd() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_validate_pwd, null);
 
-        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, (int) DisplayUtils.dp2px(this,191));
+        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, (int) DisplayUtils.dp2px(this, 191));
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
@@ -222,7 +222,7 @@ public class OrderDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("payPassword", validatePwd)
                 .build()
                 .execute(new StringCallback() {
@@ -241,6 +241,9 @@ public class OrderDetailActivity extends BaseActivity {
                             confirmBuy();
                         } else {
                             ToastUtils.showToast(OrderDetailActivity.this, "密码错误");
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(OrderDetailActivity.this, "is_login");
+                            }
                         }
                     }
                 });
@@ -258,7 +261,7 @@ public class OrderDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("orderNo", orderBean.getData().getOrderNo())
                 .build()
                 .execute(new StringCallback() {
@@ -278,6 +281,9 @@ public class OrderDetailActivity extends BaseActivity {
                             } else {
                                 String msg = jsonObject.getString("msg");
                                 ToastUtils.showToast(OrderDetailActivity.this, msg);
+                                if (jsonObject.getInt("code") == 4002) {
+                                    SharedPreUtils.deleteStr(OrderDetailActivity.this, "is_login");
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

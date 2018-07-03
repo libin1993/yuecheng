@@ -196,7 +196,11 @@ public class MyMemberCardActivity extends BaseActivity {
                         if (responseBean.isFlag()) {
                             startActivity(new Intent(MyMemberCardActivity.this, MemberCardActivity.class));
                         } else {
-                            setPayPwd();
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(MyMemberCardActivity.this, "is_login");
+                            } else {
+                                setPayPwd();
+                            }
                         }
                     }
                 });

@@ -150,6 +150,10 @@ public class ExchangeFragment extends BaseFragment {
                                 rvGift.setVisibility(View.GONE);
                                 llNullData.setVisibility(View.VISIBLE);
                             }
+
+                            if (giftBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(getActivity(), "is_login");
+                            }
                         }
                     }
                 });

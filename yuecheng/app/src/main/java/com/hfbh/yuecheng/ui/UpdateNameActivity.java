@@ -103,6 +103,9 @@ public class UpdateNameActivity extends BaseActivity {
                         finish();
                     } else {
                         ToastUtils.showToast(UpdateNameActivity.this, responseBean.getMsg());
+                        if (responseBean.getCode() == 4002) {
+                            SharedPreUtils.deleteStr(UpdateNameActivity.this, "is_login");
+                        }
                     }
                 }
             });

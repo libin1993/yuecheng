@@ -94,7 +94,7 @@ public class DisplayUtils {
     /**
      * @return 保留两位小数
      */
-    public static String decimalFormat(Float value) {
+    public static String decimalFormat(double value) {
         DecimalFormat df = new DecimalFormat("0.00");
         df.setRoundingMode(RoundingMode.DOWN);
         return df.format(value);
@@ -104,6 +104,6 @@ public class DisplayUtils {
      * @return double是否为整数
      */
     public static String isInteger(double value) {
-        return (int) value == value ? String.valueOf((int) value) : decimalFormat((float) value);
+        return (int) value == value ? String.valueOf((int) value) : decimalFormat(value);
     }
 }
