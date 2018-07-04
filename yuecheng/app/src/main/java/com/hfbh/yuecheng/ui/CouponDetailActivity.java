@@ -159,7 +159,8 @@ public class CouponDetailActivity extends BaseActivity {
             }
 
         } else {
-            tvCouponName.setText(couponBean.getData().getCouponName());
+            tvCouponName.setText(DisplayUtils.isInteger(couponBean.getData().getCouponValue())
+                    + "元-" + couponBean.getData().getCouponName());
         }
 
         tvCouponTime.setText(DateUtils.formatTime("yyyy-MM-dd HH:mm:ss",

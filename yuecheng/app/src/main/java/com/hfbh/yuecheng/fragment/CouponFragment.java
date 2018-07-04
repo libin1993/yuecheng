@@ -23,8 +23,12 @@ import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.ui.CloseCouponActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -65,6 +69,8 @@ public class CouponFragment extends BaseFragment {
     //优惠券状态
     private String type;
     private CommonAdapter<MyCouponBean.DataBean> adapter;
+    //刷新
+    private boolean isRefresh;
 
     @Nullable
     @Override
@@ -74,6 +80,7 @@ public class CouponFragment extends BaseFragment {
         ivNullData.setImageResource(R.mipmap.ic_null_coupon);
         tvNullData.setText("暂无优惠券");
         getData();
+        viewLoading.smoothToShow();
         initData();
         initView();
         return view;
@@ -84,7 +91,7 @@ public class CouponFragment extends BaseFragment {
      * 获取优惠券
      */
     private void initData() {
-        viewLoading.smoothToShow();
+
         OkHttpUtils.post()
                 .url(Constant.MY_COUPON)
                 .addParams("appType", MyApp.appType)
@@ -105,7 +112,12 @@ public class CouponFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        viewLoading.smoothToHide();
+                        if (isRefresh) {
+                            dataList.clear();
+                            isRefresh = false;
+                        } else {
+                            viewLoading.smoothToHide();
+                        }
                         MyCouponBean couponBean = GsonUtils.jsonToBean(response, MyCouponBean.class);
                         if (couponBean.isFlag() && couponBean.getData() != null
                                 && couponBean.getData().size() > 0) {
@@ -124,6 +136,9 @@ public class CouponFragment extends BaseFragment {
     }
 
 
+    /**
+     * 加载视图
+     */
     private void initView() {
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableLoadMore(false);
@@ -210,9 +225,17 @@ public class CouponFragment extends BaseFragment {
         };
 
         refreshLayout.setEnableLoadMore(false);
-        refreshLayout.setEnableRefresh(false);
-
+        refreshLayout.setEnableRefresh(true);
         rvCoupon.setAdapter(adapter);
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                isRefresh = true;
+                refreshLayout.finishRefresh(1000, true);
+                initData();
+            }
+        });
 
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override

@@ -92,7 +92,6 @@ public class MineFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         unbinder = ButterKnife.bind(this, view);
-        initData();
         return view;
     }
 
@@ -102,7 +101,16 @@ public class MineFragment extends BaseFragment {
         initData();
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            initData();
+        }
+    }
+
     private void initData() {
+        LogUtils.log("a");
         if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
             OkHttpUtils.post()
                     .url(Constant.USER_INFO)

@@ -64,7 +64,7 @@ public class ScanCodeActivity extends BaseActivity {
         ToastUtils.showToast(this, "仅支持本平台商品");
         finish();
     }
-
+    
 
     /**
      * 振动

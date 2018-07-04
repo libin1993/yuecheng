@@ -102,7 +102,7 @@ public class GiftDetailActivity extends BaseActivity {
 
 
     private void getData() {
-        giftId = getIntent().getIntExtra("id", 0);
+        giftId = getIntent().getIntExtra("gift_id", 0);
     }
 
     private void initData() {

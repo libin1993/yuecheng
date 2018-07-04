@@ -181,7 +181,7 @@ public class ExchangeGiftActivity extends BaseActivity {
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
 
                 Intent intent = new Intent(ExchangeGiftActivity.this, GiftDetailActivity.class);
-                intent.putExtra("id", dataList.get(position).getPointsRewardId());
+                intent.putExtra("gift_id", dataList.get(position).getPointsRewardId());
                 startActivity(intent);
 
             }

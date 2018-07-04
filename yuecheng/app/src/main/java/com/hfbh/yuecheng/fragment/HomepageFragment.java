@@ -311,9 +311,32 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     banner.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(int position) {
-                            Intent intent = new Intent(getActivity(), BannerInfoActivity.class);
-                            intent.putExtra("url", bannerBean.getData().get(position).getAdvertUrl());
-                            startActivity(intent);
+                            String moduleCode = bannerBean.getData().get(position).getModuleCode();
+                            int id = bannerBean.getData().get(position).getObjectId();
+                            if (TextUtils.isEmpty(moduleCode) || id == 0) {
+                                Intent intent = new Intent(getActivity(), BannerInfoActivity.class);
+                                intent.putExtra("url", bannerBean.getData().get(position).getAdvertUrl());
+                                startActivity(intent);
+                            } else {
+                                switch (moduleCode) {
+                                    case "ACTIVITY":
+                                        Intent intent1 = new Intent(getActivity(), ActionDetailActivity.class);
+                                        intent1.putExtra("activity_id", id);
+                                        startActivity(intent1);
+                                        break;
+                                    case "COUPON":
+                                        Intent intent2 = new Intent(getActivity(), CouponDetailActivity.class);
+                                        intent2.putExtra("coupon_id", id);
+                                        startActivity(intent2);
+                                        break;
+                                    case "GIFT":
+                                        Intent intent3 = new Intent(getActivity(), GiftDetailActivity.class);
+                                        intent3.putExtra("gift_id", id);
+                                        startActivity(intent3);
+                                        break;
+
+                                }
+                            }
                         }
                     });
                 }
@@ -439,7 +462,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                         ImageView ivActivity = holder.getView(R.id.iv_homepage_game);
 
-
                         Glide.with(getActivity())
                                 .load(topicBean.getData().get(0).getActivityList().get(position).getPic())
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -478,7 +500,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 //                                startActivity(intent);
 
                                 Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
-                                intent.putExtra("activity_id", topicBean.getData().get(0).getActivityList().get(position).getActivityId());
+                                intent.putExtra("activity_id", topicBean.getData().get(0)
+                                        .getActivityList().get(position).getActivityId());
                                 startActivity(intent);
                             }
                         });
@@ -501,8 +524,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     public void onBindViewHolder(ViewHolder holder, final int position) {
                         super.onBindViewHolder(holder, position);
 
-                        holder.setText(R.id.tv_action_title, topicBean.getData().get(0).getGameList().get(position).getName());
-                        holder.setText(R.id.tv_action_sub_title, topicBean.getData().get(0).getGameList().get(position).getByname());
+                        holder.setText(R.id.tv_action_title, topicBean.getData().get(0)
+                                .getGameList().get(position).getName());
+                        holder.setText(R.id.tv_action_sub_title, topicBean.getData().get(0)
+                                .getGameList().get(position).getByname());
                         ImageView ivActivity = holder.getView(R.id.iv_homepage_game);
 
 
@@ -517,9 +542,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             public void onClick(View v) {
                                 if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
                                     Intent intent = new Intent(getActivity(), GameActivity.class);
-                                    intent.putExtra("game_url", topicBean.getData().get(0).getGameList().get(position).getUrl());
-                                    intent.putExtra("app_id", topicBean.getData().get(0).getGameList().get(position).getAppId());
-                                    intent.putExtra("private_token", topicBean.getData().get(0).getGameList().get(position).getPrivateToken());
+                                    intent.putExtra("game_url", topicBean.getData().get(0)
+                                            .getGameList().get(position).getUrl());
+                                    intent.putExtra("app_id", topicBean.getData().get(0)
+                                            .getGameList().get(position).getAppId());
+                                    intent.putExtra("private_token", topicBean.getData()
+                                            .get(0).getGameList().get(position).getPrivateToken());
                                     startActivity(intent);
                                 } else {
                                     startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -558,15 +586,21 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             StringBuilder shop = new StringBuilder();
                             for (int i = 0; i < couponBean.getData().get(position).getListCouponShop().size(); i++) {
                                 if (i < couponBean.getData().get(position).getListCouponShop().size() - 1) {
-                                    shop.append(couponBean.getData().get(position).getListCouponShop().get(i).getShopName()).append("、");
+                                    shop.append(couponBean.getData().get(position).getListCouponShop()
+                                            .get(i).getShopName()).append("、");
                                 } else {
-                                    shop.append(couponBean.getData().get(position).getListCouponShop().get(i).getShopName());
+                                    shop.append(couponBean.getData().get(position).getListCouponShop()
+                                            .get(i).getShopName());
                                 }
                             }
 
-                            holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils.isInteger(couponBean.getData().get(position).getServiceAmount()) + "元可用,限" + shop.toString());
+                            holder.setText(R.id.tv_home_coupon_content, "满" +
+                                    DisplayUtils.isInteger(couponBean.getData().get(position)
+                                            .getServiceAmount()) + "元可用,限" + shop.toString());
                         } else {
-                            holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils.isInteger(couponBean.getData().get(position).getServiceAmount()) + "元可用");
+                            holder.setText(R.id.tv_home_coupon_content, "满" +
+                                    DisplayUtils.isInteger(couponBean.getData().get(position)
+                                            .getServiceAmount()) + "元可用");
                         }
 
                     } else {
@@ -574,7 +608,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     }
 
 
-                    holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData().get(position).getBalanceNum());
+                    holder.setText(R.id.tv_home_coupon_remain, "剩余" + couponBean.getData()
+                            .get(position).getBalanceNum());
 
                     TextView tvReceive = holder.getView(R.id.tv_home_coupon_receive);
 
@@ -607,7 +642,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         }
 
                     } else {
-                        tvCouponName.setText(couponBean.getData().get(position).getCouponName());
+                        tvCouponName.setText(DisplayUtils.isInteger(couponBean.getData().get(position).getCouponValue())
+                                + "元-" + couponBean.getData().get(position).getCouponName());
                     }
 
 
@@ -649,8 +685,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 }
                             }
                         }
-
-
                     } else {
                         tvReceive.setText("已抢光");
                     }
@@ -717,7 +751,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), GiftDetailActivity.class);
-                            intent.putExtra("id", giftBean.getData().get(position).getObjectId());
+                            intent.putExtra("gift_id", giftBean.getData().get(position).getObjectId());
                             startActivity(intent);
                         }
                     });

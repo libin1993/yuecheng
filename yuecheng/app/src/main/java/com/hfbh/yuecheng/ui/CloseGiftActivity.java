@@ -175,7 +175,7 @@ public class CloseGiftActivity extends BaseActivity {
                 if (giftBean != null && giftBean.getData() != null) {
                     if (isOnline) {
                         Intent intent = new Intent(this, GiftDetailActivity.class);
-                        intent.putExtra("id", giftBean.getData().getPointsRewardId());
+                        intent.putExtra("gift_id", giftBean.getData().getPointsRewardId());
                         startActivity(intent);
                     } else {
                         ToastUtils.showToast(CloseGiftActivity.this, "sorry，礼品已下架~");

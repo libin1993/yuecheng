@@ -26,7 +26,8 @@
             android:layout_marginLeft="10dp"
             fresco:roundedCornerRadius="4dp"
             fresco:placeholderImage="@mipmap/img_place"
-            fresco:placeholderImageScaleType="centerCrop"/>
+            fresco:placeholderImageScaleType="centerCrop"
+            fresco:actualImageScaleType="centerCrop"/>
 
         <LinearLayout
             android:layout_width="match_parent"

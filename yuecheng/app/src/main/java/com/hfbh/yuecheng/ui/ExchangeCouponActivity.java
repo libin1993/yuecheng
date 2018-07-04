@@ -191,7 +191,6 @@ public class ExchangeCouponActivity extends BaseActivity {
 
                 TextView tvCouponName = holder.getView(R.id.tv_home_coupon_title);
 
-
                 if (dataBean.getCouponTypeKind() != null && dataBean.getCouponTypeKind().equals("VOUCHER")) {
                     if (dataBean.getListCouponShop() != null && dataBean.getListCouponShop().size() > 0) {
                         StringBuilder shop = new StringBuilder();
@@ -203,9 +202,11 @@ public class ExchangeCouponActivity extends BaseActivity {
                             }
                         }
 
-                        holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils.isInteger(dataBean.getServiceAmount()) + "元可用,限" + shop.toString());
+                        holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils
+                                .isInteger(dataBean.getServiceAmount()) + "元可用,限" + shop.toString());
                     } else {
-                        holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils.isInteger(dataBean.getServiceAmount()) + "元可用");
+                        holder.setText(R.id.tv_home_coupon_content, "满" + DisplayUtils
+                                .isInteger(dataBean.getServiceAmount()) + "元可用");
                     }
 
                 } else {
@@ -243,11 +244,10 @@ public class ExchangeCouponActivity extends BaseActivity {
                     } else {
                         tvCouponName.setText(dataBean.getCouponName());
                     }
-
                 } else {
-                    tvCouponName.setText(dataBean.getCouponName());
+                    tvCouponName.setText(DisplayUtils.isInteger(dataBean.getCouponValue())
+                            + "元-" + dataBean.getCouponName());
                 }
-
 
                 if (dataBean.getBalanceNum() > 0) {
                     int limitNum = dataBean.getLimitNum();
@@ -404,7 +404,7 @@ public class ExchangeCouponActivity extends BaseActivity {
                                 dataList.get(position).setBalanceNum(data);
                                 dataList.get(position).setMemberBroughtNum(dataList.get(position).getMemberBroughtNum() + 1);
                                 adapter.notifyDataSetChanged();
-                            }else if (jsonObject.getInt("code") == 4002) {
+                            } else if (jsonObject.getInt("code") == 4002) {
                                 SharedPreUtils.deleteStr(ExchangeCouponActivity.this, "is_login");
                             }
 
