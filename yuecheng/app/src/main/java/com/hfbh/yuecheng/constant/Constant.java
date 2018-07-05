@@ -7,7 +7,7 @@ package com.hfbh.yuecheng.constant;
  */
 public class Constant {
     private static final String HOST = "http://ceshi.wmalle.com";
-    //    private static final String HOST = "https://m.hfbh.com.cn";
+//        private static final String HOST = "https://m.hfbh.com.cn";
     //定位
     public static final String LOCATION = HOST + "/wechat/appRequest/nearestMall.json";
     //首页分类

@@ -109,8 +109,11 @@ public class MineFragment extends BaseFragment {
         }
     }
 
+
+    /**
+     * 会员数据
+     */
     private void initData() {
-        LogUtils.log("a");
         if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
             OkHttpUtils.post()
                     .url(Constant.USER_INFO)

@@ -24,7 +24,7 @@ import okhttp3.Call;
 /**
  * Author：Libin on 2018/6/12 13:48
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：定时查询服务
  */
 public class TimerService extends Service {
     private boolean pushThread = true;

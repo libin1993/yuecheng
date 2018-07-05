@@ -13,6 +13,11 @@ android {
         versionName "1.0.0"
         multiDexEnabled true
 
+        manifestPlaceholders = [
+                GETUI_APP_ID : "LtNtcjNIOe6Yj7JyJ1eFk9",
+                GETUI_APP_KEY : "EGj1lyD0BO89pks8VXeHs1",
+                GETUI_APP_SECRET : "J5UR6eP2Ym6e4mvO1J5JH1"
+        ]
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86_64"
@@ -100,6 +105,17 @@ dependencies {
     compile 'com.google.zxing:core:3.3.2'
     compile 'com.jungly:gridPasswordView:0.3'
     compile 'com.sunfusheng:marqueeview:1.3.3'
+    compile 'com.umeng.sdk:common:latest.integration'
+    compile 'com.umeng.sdk:analytics:latest.integration'
+    compile 'com.getui:sdk:2.10.2.0'
     compile project(':calendarview')
     compile project(path: ':addressselector')
+    compile files('libs/MobCommons-2018.0614.1541.jar')
+    compile files('libs/ShareSDK-Core-3.2.0.jar')
+    compile files('libs/MobTools-2018.0614.1510.jar')
+    compile files('libs/ShareSDK-SinaWeibo-3.2.0.jar')
+    compile files('libs/ShareSDK-QQ-3.2.0.jar')
+    compile files('libs/ShareSDK-Wechat-3.2.0.jar')
+    compile files('libs/ShareSDK-Wechat-Core-3.2.0.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-3.2.0.jar')
 }

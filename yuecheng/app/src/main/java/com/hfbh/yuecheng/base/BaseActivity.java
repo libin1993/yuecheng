@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.hfbh.yuecheng.service.GeTuiIntentService;
+import com.hfbh.yuecheng.service.GeTuiService;
 import com.hfbh.yuecheng.utils.AppManagerUtils;
+import com.igexin.sdk.PushManager;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Author：Libin on 2018/5/14 14:20
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：activity基类
  */
 public class BaseActivity extends AppCompatActivity {
     @Override
@@ -20,6 +24,26 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppManagerUtils.getInstance().addActivity(this);
+
+        //个推
+        PushManager.getInstance().initialize(this.getApplicationContext(), GeTuiService.class);
+        PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), GeTuiIntentService.class);
+        //友盟统计
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+
     }
 
     /**

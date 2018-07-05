@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.hfbh.yuecheng.R;
+import com.mob.MobSDK;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -22,6 +23,7 @@ import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.umeng.commonsdk.UMConfigure;
 import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -103,7 +105,10 @@ public class MyApp extends Application {
         OkHttpUtils.initClient(okHttpClient);
 
         getVersionName();
-
+        //友盟
+        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, null);
+        //ShareSdk
+        MobSDK.init(this);
     }
 
     /**

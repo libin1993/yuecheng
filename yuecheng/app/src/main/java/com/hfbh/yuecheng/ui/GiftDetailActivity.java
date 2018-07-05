@@ -24,6 +24,7 @@ import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
+import com.hfbh.yuecheng.utils.ShareUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.smarttop.library.utils.LogUtil;
@@ -273,6 +274,7 @@ public class GiftDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_exchange_share:
+                ShareUtils.showShare(this,"www","111","111","111");
                 break;
             case R.id.tv_exchange_now:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {

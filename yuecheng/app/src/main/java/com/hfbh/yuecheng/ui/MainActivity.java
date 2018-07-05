@@ -44,9 +44,11 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FragmentTabUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LocationUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -321,9 +323,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
                     @Override
                     public void onResponse(String s, int i) {
-                        loadingView.smoothToHide();
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
+                            loadingView.smoothToHide();
                             MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
                             MyApp.organizeName = locationBean.getData().getOrganizeName();
                             boolean isLogin = SharedPreUtils.getBoolean(MainActivity.this, "is_login", false);

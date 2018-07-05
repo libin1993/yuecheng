@@ -44,7 +44,6 @@ import okhttp3.Call;
  */
 public class GoodsFragment extends BaseFragment {
 
-
     @BindView(R.id.rv_discovery_goods)
     RecyclerView rvGoods;
     @BindView(R.id.layout_refresh_goods)

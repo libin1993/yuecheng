@@ -32,77 +32,98 @@
         </com.hfbh.yuecheng.view.FlowLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="10dp"
-        android:background="@android:color/white"
-        android:gravity="center_vertical">
+        android:background="@android:color/white">
 
         <ImageView
+            android:id="@+id/iv_activity_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="8dp"
             android:scaleType="center"
             android:src="@mipmap/ic_activity_time"/>
 
         <TextView
+            android:id="@+id/tv_activity_term"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_activity_time"
             android:text="活动时间"
             android:textColor="@color/gray_33"
             android:textSize="15sp"/>
 
-        <TextView
-            android:id="@+id/tv_action_time"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
             android:layout_marginRight="12dp"
-            android:layout_marginLeft="12dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textColor="@color/gray_95"
-            android:textSize="13sp"
-            android:gravity="right"/>
+            android:layout_toRightOf="@id/tv_activity_term"
+            android:gravity="right"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_action_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_95"
+                android:textSize="11sp"/>
+        </LinearLayout>
 
-    <LinearLayout
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="1dp"
-        android:background="@android:color/white"
-        android:gravity="center_vertical">
+        android:background="@android:color/white">
 
         <ImageView
+            android:id="@+id/iv_activity_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="8dp"
             android:scaleType="center"
             android:src="@mipmap/ic_activity_location"/>
 
         <TextView
+            android:id="@+id/tv_activity_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_activity_address"
             android:text="活动地点"
             android:textColor="@color/gray_33"
             android:textSize="15sp"/>
 
-        <TextView
-            android:id="@+id/tv_action_address"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
             android:layout_marginRight="12dp"
-            android:textColor="@color/gray_95"
-            android:textSize="13sp"
-            android:layout_marginLeft="12dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:gravity="right"/>
+            android:layout_toRightOf="@id/tv_activity_location"
+            android:gravity="right"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_action_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_95"
+                android:textSize="11sp"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_action_info"
@@ -168,9 +189,9 @@
             android:background="@null"
             android:gravity="right|center"
             android:hint="请输入真实姓名"
-            android:singleLine="true"
             android:maxLength="10"
             android:paddingRight="12dp"
+            android:singleLine="true"
             android:textColor="@color/gray_33"
             android:textColorHint="@color/gray_9f"
             android:textSize="13sp"/>

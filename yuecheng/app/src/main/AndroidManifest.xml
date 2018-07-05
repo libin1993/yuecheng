@@ -55,6 +55,17 @@
             android:name="com.hfbh.yuecheng.utils.GlideConfigUtils"
             android:value="GlideModule"/>
 
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5afe48c1f29d985252000048"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}"/>
+
+        <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
+        <meta-data android:name="Mob-AppKey" android:value="26b2dae9e874a"/>
+        <meta-data android:name="Mob-AppSecret" android:value="0796da212acbeb94fe45e61ad98b9712"/>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.hfbh.yuecheng.fileprovider"
@@ -138,10 +149,58 @@
         <activity android:name=".ui.GuideActivity"/>
         <activity android:name=".ui.GoodsActivity"/>
 
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+            <!-- QQ和QQ空间分享 QQ登录的回调必须要配置的 -->
+            <intent-filter>
+                <data android:scheme="tencent1106093527"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
+            <!-- 新浪微博客户端分享回调必须配置 -->
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <!-- 微信分享配置 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:scheme="wx07c2173e7686741e"/>
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".service.TimerService"
             android:enabled="true"
             android:exported="true"/>
+        <service android:name=".service.GeTuiIntentService"/>
+        <service
+            android:name=".service.GeTuiService"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":pushservice">
+        </service>
     </application>
 
 </manifest>
