@@ -36,7 +36,9 @@
             android:singleLine="true"
             android:textColor="@color/gray_10"
             android:textColorHint="@color/gray_cc"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
     </LinearLayout>
 
@@ -64,7 +66,7 @@
             android:background="@null"
             android:digits="@string/pwd_digits"
             android:hint="验证码"
-            android:maxLength="16"
+            android:maxLength="6"
             android:singleLine="true"
             android:textColor="@color/gray_10"
             android:textColorHint="@color/gray_cc"

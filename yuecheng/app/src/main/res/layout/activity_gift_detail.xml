@@ -251,7 +251,7 @@
         android:paddingTop="10dp"
         android:scaleType="center"
         android:src="@mipmap/btn_headerbar_share"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

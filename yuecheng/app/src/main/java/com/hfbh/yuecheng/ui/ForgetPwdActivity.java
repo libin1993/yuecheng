@@ -322,23 +322,6 @@ public class ForgetPwdActivity extends BaseActivity {
                             } else {
                                 if (type == 1) {
                                     sendPhoneNumber();
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            for (int i = 60; i > 0; i--) {
-                                                Message msg = new Message();
-                                                msg.what = 1;
-                                                msg.arg1 = i;
-                                                mHandler.sendMessage(msg);
-                                                try {
-                                                    Thread.sleep(1000);
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            mHandler.sendEmptyMessage(2);
-                                        }
-                                    }).start();
                                 } else if (type == 2) {
                                     updatePwd();
                                 }
@@ -405,6 +388,25 @@ public class ForgetPwdActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getBoolean("flag")){
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 60; i > 0; i--) {
+                                            Message msg = new Message();
+                                            msg.what = 1;
+                                            msg.arg1 = i;
+                                            mHandler.sendMessage(msg);
+                                            try {
+                                                Thread.sleep(1000);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        mHandler.sendEmptyMessage(2);
+                                    }
+                                }).start();
+                            }
                             String msg = jsonObject.getString("msg");
 
                             ToastUtils.showToast(ForgetPwdActivity.this, msg);

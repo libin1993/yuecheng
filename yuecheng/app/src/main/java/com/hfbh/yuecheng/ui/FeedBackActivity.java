@@ -23,6 +23,7 @@ import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
+import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
@@ -156,12 +157,21 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
                 break;
             case R.id.tv_confirm_feedback:
                 if (!TextUtils.isEmpty(etContent.getText().toString().trim())) {
-                    loadingView.smoothToShow();
-                    if (photoList.size() > 0) {
-                        uploadImg();
+                    if (!TextUtils.isEmpty(etFeedbackPhone.getText().toString().trim())) {
+                        if (PhoneNumberUtils.judgePhoneNumber(etFeedbackPhone.getText().toString().trim())) {
+                            loadingView.smoothToShow();
+                            if (photoList.size() > 0) {
+                                uploadImg();
+                            } else {
+                                submitData();
+                            }
+                        } else {
+                            ToastUtils.showToast(this, "手机号格式不正确，请重新输入");
+                        }
                     } else {
-                        submitData();
+                        ToastUtils.showToast(this, "请输入手机号");
                     }
+
                 } else {
                     ToastUtils.showToast(this, "请留下您的宝贵意见");
                 }
@@ -204,7 +214,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
                     if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
                         imgUrl = responseBean.getData();
                         submitData();
-                    }else {
+                    } else {
                         submitData();
                     }
                 } catch (IOException e) {
@@ -218,7 +228,6 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
      * 提交反馈
      */
     private void submitData() {
-        String phone = etFeedbackPhone.getText().toString().trim();
         Map<String, String> map = new HashMap<>();
         map.put("appType", MyApp.appType);
         map.put("appVersion", MyApp.appVersion);
@@ -229,10 +238,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
         if (imgUrl != null) {
             map.put("imgPath", imgUrl);
         }
-
-        if (!TextUtils.isEmpty(phone)) {
-            map.put("phone", phone);
-        }
+        map.put("phone", etFeedbackPhone.getText().toString().trim());
 
         OkHttpUtils.post()
                 .url(Constant.FEED_BACK)

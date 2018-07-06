@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="33dp"
         android:scaleType="fitCenter"
-        android:src="@mipmap/img_default_avatar"/>
+        android:src="@mipmap/ic_app_logo"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -8,8 +8,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -102,6 +104,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initView() {
+        InputFilter[] filters = {new InputFilter.LengthFilter(6)};
+        etCode.setFilters(filters);
+//        etCode.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+
         ((RadioButton) rgsLogin.getChildAt(0)).setChecked(true);
 
         rgsLogin.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -196,6 +202,10 @@ public class LoginActivity extends BaseActivity {
             etCode.setText(null);
             etCode.setHint("输入验证码");
             etCode.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            InputFilter[] filters = {new InputFilter.LengthFilter(6)};
+            etCode.setFilters(filters);
+//            etCode.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+
         } else {
             tvLoginTitle.setText("账号密码登录");
             rlLoginCode.setVisibility(View.GONE);
@@ -206,7 +216,9 @@ public class LoginActivity extends BaseActivity {
             isShow = false;
             etCode.setTransformationMethod(PasswordTransformationMethod.getInstance());
             ivLoginCode.setImageResource(R.mipmap.btn_signin_invisiable);
-
+            InputFilter[] filters = {new InputFilter.LengthFilter(16)};
+            etCode.setFilters(filters);
+//            etCode.setKeyListener(DigitsKeyListener.getInstance("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ"));
         }
     }
 
@@ -416,7 +428,7 @@ public class LoginActivity extends BaseActivity {
                                     userInfoBean.getData().getCardLevel());
 
                             EventBus.getDefault().post("login_success");
-                            if (getIntent().getIntExtra("type",0) == 1){
+                            if (getIntent().getIntExtra("type", 0) == 1) {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.putExtra("change_market", true);
                                 startActivity(intent);
@@ -483,7 +495,7 @@ public class LoginActivity extends BaseActivity {
                                         userInfoBean.getData().getCardLevel());
 
                                 EventBus.getDefault().post("login_success");
-                                if (getIntent().getIntExtra("type",0) == 1){
+                                if (getIntent().getIntExtra("type", 0) == 1) {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("change_market", true);
                                     startActivity(intent);
@@ -508,25 +520,6 @@ public class LoginActivity extends BaseActivity {
         if (!TextUtils.isEmpty(etPhone.getText().toString().trim())) {
             if (isPhone) {
                 sendPhoneNumber();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 60; i > 0; i--) {
-                            Message msg = new Message();
-                            msg.what = 1;
-                            msg.arg1 = i;
-                            mHandler.sendMessage(msg);
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        mHandler.sendEmptyMessage(2);
-                    }
-                }).start();
-
-
             } else {
                 ToastUtils.showToast(this, "手机号格式不正确，请重新输入");
             }
@@ -560,6 +553,26 @@ public class LoginActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getBoolean("flag")) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 60; i > 0; i--) {
+                                            Message msg = new Message();
+                                            msg.what = 1;
+                                            msg.arg1 = i;
+                                            mHandler.sendMessage(msg);
+                                            try {
+                                                Thread.sleep(1000);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        mHandler.sendEmptyMessage(2);
+                                    }
+                                }).start();
+                            }
+
                             String msg = jsonObject.getString("msg");
                             ToastUtils.showToast(LoginActivity.this, msg);
                         } catch (JSONException e) {

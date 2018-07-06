@@ -175,9 +175,9 @@ public class CalendarActivity extends BaseActivity {
                 //报名开始
                 final boolean isEnrollStart = System.currentTimeMillis() >= DateUtils.getTime(
                         "yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
-                //报名结束
-                final boolean isEnrollEnd = System.currentTimeMillis() > DateUtils.getTime(
-                        "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+//                //报名结束
+//                final boolean isEnrollEnd = System.currentTimeMillis() > DateUtils.getTime(
+//                        "yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
 //                //报名满额
 //                final boolean isLimit = dataBean.getSignupLimitNumber() > 0 && dataBean.getSignupNumber()
 //                        == dataBean.getSignupLimitNumber();
@@ -195,22 +195,35 @@ public class CalendarActivity extends BaseActivity {
                                     tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
                                     tvReceive.setText("去参加");
                                 } else {
-                                    if (isEnrollEnd) {
-                                        tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
-                                        tvReceive.setText("已结束");
-                                    } else {
-                                        tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
-                                        switch (dataBean.getAcivityType()) {
-                                            case "FREE":
-                                                tvReceive.setText("免费报名");
-                                                break;
-                                            case "SCORE":
-                                                tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
-                                                break;
-                                            case "CASH":
-                                                tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
-                                                break;
-                                        }
+//                                    if (isEnrollEnd) {
+//                                        tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+//                                        tvReceive.setText("已结束");
+//                                    } else {
+//                                        tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+//                                        switch (dataBean.getAcivityType()) {
+//                                            case "FREE":
+//                                                tvReceive.setText("免费报名");
+//                                                break;
+//                                            case "SCORE":
+//                                                tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+//                                                break;
+//                                            case "CASH":
+//                                                tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+//                                                break;
+//                                        }
+//                                    }
+
+                                    tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
+                                    switch (dataBean.getAcivityType()) {
+                                        case "FREE":
+                                            tvReceive.setText("免费报名");
+                                            break;
+                                        case "SCORE":
+                                            tvReceive.setText(DisplayUtils.isInteger(dataBean.getEnrollScore()) + "积分报名");
+                                            break;
+                                        case "CASH":
+                                            tvReceive.setText("¥" + DisplayUtils.isInteger(dataBean.getEnrollFee()) + "报名");
+                                            break;
                                     }
                                 }
                             }

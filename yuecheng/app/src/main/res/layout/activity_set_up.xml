@@ -9,155 +9,160 @@
         layout="@layout/layout_widget_header"/>
 
     <LinearLayout
-        android:id="@+id/ll_set_pwd"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_marginTop="54dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="密码设置"
-            android:textColor="@color/gray_10"
-            android:textSize="16sp"/>
+        <LinearLayout
+            android:id="@+id/ll_set_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="密码设置"
+                android:textColor="@color/gray_10"
+                android:textSize="16sp"/>
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="12dp"
-            android:scaleType="center"
-            android:src="@mipmap/btn_user_next"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="12dp"
+                android:scaleType="center"
+                android:src="@mipmap/btn_user_next"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_set_pay_type"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="支付设置"
+                android:textColor="@color/gray_10"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="12dp"
+                android:scaleType="center"
+                android:src="@mipmap/btn_user_next"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_clear_cache"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="清除缓存"
+                android:textColor="@color/gray_10"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_clear_cache"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textColor="@color/gray_99"
+                android:textSize="15sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="12dp"
+                android:scaleType="center"
+                android:src="@mipmap/btn_user_next"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_feed_back"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="意见反馈"
+                android:textColor="@color/gray_10"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="12dp"
+                android:scaleType="center"
+                android:src="@mipmap/btn_user_next"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_about_app"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="关于"
+                android:textColor="@color/gray_10"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="12dp"
+                android:scaleType="center"
+                android:src="@mipmap/btn_user_next"/>
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_set_pay_type"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_below="@id/ll_set_pwd"
-        android:layout_marginTop="1dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="支付设置"
-            android:textColor="@color/gray_10"
-            android:textSize="16sp"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="12dp"
-            android:scaleType="center"
-            android:src="@mipmap/btn_user_next"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_clear_cache"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_below="@id/ll_set_pay_type"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="清除缓存"
-            android:textColor="@color/gray_10"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/tv_clear_cache"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textColor="@color/gray_99"
-            android:textSize="15sp"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="12dp"
-            android:scaleType="center"
-            android:src="@mipmap/btn_user_next"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_feed_back"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_below="@id/ll_clear_cache"
-        android:layout_marginTop="1dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="意见反馈"
-            android:textColor="@color/gray_10"
-            android:textSize="16sp"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="12dp"
-            android:scaleType="center"
-            android:src="@mipmap/btn_user_next"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/ll_about_app"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_below="@id/ll_feed_back"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="关于"
-            android:textColor="@color/gray_10"
-            android:textSize="16sp"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="12dp"
-            android:scaleType="center"
-            android:src="@mipmap/btn_user_next"/>
-    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_log_out"

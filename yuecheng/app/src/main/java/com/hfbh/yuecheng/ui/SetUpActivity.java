@@ -73,6 +73,9 @@ public class SetUpActivity extends BaseActivity {
         tvClearCache.setText(totalCacheSize);
         if (SharedPreUtils.getBoolean(this, "is_login", false)) {
             tvLogOut.setVisibility(View.VISIBLE);
+            llSetPwd.setVisibility(View.VISIBLE);
+        }else {
+            llSetPwd.setVisibility(View.GONE);
         }
     }
 
@@ -127,11 +130,7 @@ public class SetUpActivity extends BaseActivity {
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-
                 logOut();
-
-
             }
         });
         //为“取消”按钮注册监听事件
@@ -218,6 +217,7 @@ public class SetUpActivity extends BaseActivity {
     public void isLogin(String msg) {
         if ("login_success".equals(msg)) {
             tvLogOut.setVisibility(View.VISIBLE);
+            llSetPwd.setVisibility(View.VISIBLE);
         }
     }
 

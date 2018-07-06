@@ -85,7 +85,7 @@
                 android:background="@null"
                 android:digits="@string/pwd_digits"
                 android:hint="输入验证码"
-                android:maxLength="16"
+                android:maxLength="6"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/gray_f7"

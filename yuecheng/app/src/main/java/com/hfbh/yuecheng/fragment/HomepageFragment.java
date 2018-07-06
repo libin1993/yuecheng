@@ -472,11 +472,26 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         holder.setText(R.id.tv_action_title, topicBean.getData().get(0).getActivityList().get(position).getName());
 
                         TextView tvSubtitle = holder.getView(R.id.tv_action_sub_title);
-                        if (topicBean.getData().get(0).getActivityList().get(position).getActivityType().equals("NONEED")) {
-                            tvSubtitle.setText("");
-                        } else {
-                            String status = topicBean.getData().get(0).getActivityList().get(position).getMemberSignupState();
-                            tvSubtitle.setText(status);
+//                        if (topicBean.getData().get(0).getActivityList().get(position).getActivityType().equals("NONEED")) {
+//                            tvSubtitle.setText("");
+//                        } else {
+//                            String status = topicBean.getData().get(0).getActivityList().get(position).getMemberSignupState();
+//                            tvSubtitle.setText(status);
+//                        }
+//
+                        switch (topicBean.getData().get(0).getActivityList().get(position).getActivityType()) {
+                            case "NONEED":
+                                tvSubtitle.setText("无需报名");
+                                break;
+                            case "FREE":
+                                tvSubtitle.setText("免费参加");
+                                break;
+                            case "SCORE":
+                                tvSubtitle.setText("积分参加");
+                                break;
+                            case "CASH":
+                                tvSubtitle.setText("现金参加");
+                                break;
                         }
 
 

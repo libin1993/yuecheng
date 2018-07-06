@@ -33,6 +33,7 @@ import com.hfbh.yuecheng.ui.UserInfoActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
+import com.hfbh.yuecheng.utils.ShareUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -104,7 +105,7 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             initData();
         }
     }
@@ -161,6 +162,8 @@ public class MineFragment extends BaseFragment {
         tvMineMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
         tvMineScore.setText(String.valueOf((int) userInfoBean.getData().getPoints()));
         tvMineGrade.setText(userInfoBean.getData().getCardLevel());
+        SharedPreUtils.saveStr(getActivity(), "member_card",
+                userInfoBean.getData().getCardLevel());
     }
 
     public static MineFragment newInstance() {

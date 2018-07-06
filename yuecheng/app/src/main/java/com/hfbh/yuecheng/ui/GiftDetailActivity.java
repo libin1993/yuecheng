@@ -187,51 +187,81 @@ public class GiftDetailActivity extends BaseActivity {
         tvGiftCount.setText("还剩" + balanceNum + "件");
         tvExchangeGiftCount.setText(String.valueOf(num));
         tvTotalScore.setText(String.valueOf(score * num));
-        boolean isFinish = false;
-        if (!TextUtils.isEmpty(giftBean.getData().getOfflineTime())) {
-            isFinish = System.currentTimeMillis() > DateUtils.getTime(
-                    "yyyy-MM-dd HH:mm:ss", giftBean.getData().getOfflineTime());
-        }
+//        boolean isFinish = false;
+//        if (!TextUtils.isEmpty(giftBean.getData().getOfflineTime())) {
+//            isFinish = System.currentTimeMillis() > DateUtils.getTime(
+//                    "yyyy-MM-dd HH:mm:ss", giftBean.getData().getOfflineTime());
+//        }
         boolean isOnline = true;
         if (!TextUtils.isEmpty(giftBean.getData().getRewardState()) && giftBean.getData().getRewardState().equals("OFFLINE")) {
             isOnline = false;
         }
 
-        if (!isFinish) {
-            if (isOnline) {
-                switch (giftBean.getData().getState()) {
-                    case "CANEXCHANGE":
-                        tvExchange.setText("立即兑换");
-                        tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                        tvExchange.setEnabled(true);
-                        break;
-                    case "NOHAVE":
-                        tvExchange.setText("已抢光");
-                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                        tvExchange.setEnabled(false);
-                        break;
-                    case "EXCHANGED":
-                        tvExchange.setText("已兑换");
-                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                        tvExchange.setEnabled(false);
-                        break;
-                    case "NOPOINTS":
-                        tvExchange.setText("积分不足");
-                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                        tvExchange.setEnabled(false);
-                        break;
+        if (isOnline) {
+            switch (giftBean.getData().getState()) {
+                case "CANEXCHANGE":
+                    tvExchange.setText("立即兑换");
+                    tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+                    tvExchange.setEnabled(true);
+                    break;
+                case "NOHAVE":
+                    tvExchange.setText("已抢光");
+                    tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                    tvExchange.setEnabled(false);
+                    break;
+                case "EXCHANGED":
+                    tvExchange.setText("已兑换");
+                    tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                    tvExchange.setEnabled(false);
+                    break;
+                case "NOPOINTS":
+                    tvExchange.setText("积分不足");
+                    tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                    tvExchange.setEnabled(false);
+                    break;
 
-                }
-            } else {
-                tvExchange.setText("已失效");
-                tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                tvExchange.setEnabled(false);
             }
         } else {
             tvExchange.setText("已失效");
             tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
             tvExchange.setEnabled(false);
         }
+
+//        if (!isFinish) {
+//            if (isOnline) {
+//                switch (giftBean.getData().getState()) {
+//                    case "CANEXCHANGE":
+//                        tvExchange.setText("立即兑换");
+//                        tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
+//                        tvExchange.setEnabled(true);
+//                        break;
+//                    case "NOHAVE":
+//                        tvExchange.setText("已抢光");
+//                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+//                        tvExchange.setEnabled(false);
+//                        break;
+//                    case "EXCHANGED":
+//                        tvExchange.setText("已兑换");
+//                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+//                        tvExchange.setEnabled(false);
+//                        break;
+//                    case "NOPOINTS":
+//                        tvExchange.setText("积分不足");
+//                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+//                        tvExchange.setEnabled(false);
+//                        break;
+//
+//                }
+//            } else {
+//                tvExchange.setText("已失效");
+//                tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+//                tvExchange.setEnabled(false);
+//            }
+//        } else {
+//            tvExchange.setText("已失效");
+//            tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+//            tvExchange.setEnabled(false);
+//        }
     }
 
     @OnClick({R.id.tv_gift_reduce, R.id.tv_gift_add, R.id.iv_exchange_back, R.id.iv_exchange_share,
@@ -274,7 +304,7 @@ public class GiftDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_exchange_share:
-                ShareUtils.showShare(this,"www","111","111","111");
+//                ShareUtils.showShare(this,"www","111","111","111");
                 break;
             case R.id.tv_exchange_now:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {

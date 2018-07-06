@@ -352,7 +352,7 @@ public class RegisterActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etRegisterPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
@@ -370,23 +370,7 @@ public class RegisterActivity extends BaseActivity {
                             if (flag) {
                                 if (type == 1) {
                                     sendPhoneNumber();
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            for (int i = 60; i > 0; i--) {
-                                                Message msg = new Message();
-                                                msg.what = 1;
-                                                msg.arg1 = i;
-                                                mHandler.sendMessage(msg);
-                                                try {
-                                                    Thread.sleep(1000);
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            mHandler.sendEmptyMessage(2);
-                                        }
-                                    }).start();
+
                                 } else if (type == 2) {
                                     register();
                                 }
@@ -441,7 +425,7 @@ public class RegisterActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etRegisterPhone.getText().toString().trim())
                 .build()
                 .execute(new StringCallback() {
@@ -455,6 +439,25 @@ public class RegisterActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getBoolean("flag")) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (int i = 60; i > 0; i--) {
+                                            Message msg = new Message();
+                                            msg.what = 1;
+                                            msg.arg1 = i;
+                                            mHandler.sendMessage(msg);
+                                            try {
+                                                Thread.sleep(1000);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        mHandler.sendEmptyMessage(2);
+                                    }
+                                }).start();
+                            }
                             String msg = jsonObject.getString("msg");
                             ToastUtils.showToast(RegisterActivity.this, msg);
                         } catch (JSONException e) {

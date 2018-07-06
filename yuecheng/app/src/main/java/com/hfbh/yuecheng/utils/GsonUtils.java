@@ -32,7 +32,7 @@ public class GsonUtils {
      * @param object
      * @return
      */
-    public static String jsonString(Object object) {
+    public static String jsonToString(Object object) {
         String gsonString = null;
         if (gson != null) {
             gsonString = gson.toJson(object);

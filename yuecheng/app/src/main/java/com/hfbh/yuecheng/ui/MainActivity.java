@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.LocationBean;
 import com.hfbh.yuecheng.bean.UpdateBean;
+import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.ActivityFragment;
 import com.hfbh.yuecheng.fragment.HomepageFragment;
@@ -60,7 +62,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -291,6 +295,10 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                                 boolean isLogin = jsonObject.getBoolean("data");
                                 if (!isLogin) {
                                     SharedPreUtils.deleteStr(MainActivity.this, "is_login");
+                                    SharedPreUtils.saveStr(MainActivity.this, "member_card",
+                                            "VIP积分卡");
+                                } else {
+                                    getUserInfo();
                                 }
                                 requestPermission();
                             } catch (JSONException e) {
@@ -301,7 +309,35 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         } else {
             requestPermission();
         }
+    }
 
+    /**
+     * 获取会员等级
+     */
+    private void getUserInfo() {
+        OkHttpUtils.post()
+                .url(Constant.USER_INFO)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
+                        if (userInfoBean.isFlag()) {
+                            SharedPreUtils.saveStr(MainActivity.this, "member_card",
+                                    userInfoBean.getData().getCardLevel());
+                        }
+                    }
+                });
     }
 
 
@@ -309,11 +345,16 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
      * 获取商场id ,hash值
      */
     private void initLocation() {
+        Map<String, String> map = new HashMap<>();
+        map.put("lng", longitude);
+        map.put("lat", longitude);
+        if (!TextUtils.isEmpty(SharedPreUtils.getStr(this, "hash"))) {
+            map.put("hash", SharedPreUtils.getStr(this, "hash"));
+        }
 
         OkHttpUtils.post()
                 .url(Constant.LOCATION)
-                .addParams("lng", longitude)
-                .addParams("lat", latitude)
+                .params(map)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -333,7 +374,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                             if (!isLogin) {
                                 SharedPreUtils.saveStr(MainActivity.this, "hash", locationBean.getHash());
                             }
-
                             initView();
                         }
                     }
