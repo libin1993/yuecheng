@@ -1,17 +1,26 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
+import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.MD5Utils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
@@ -61,9 +70,14 @@ public class GameActivity extends BaseActivity {
         ws.setCacheMode(LOAD_NO_CACHE);
         ws.setUseWideViewPort(true);
         ws.setLoadWithOverviewMode(true);
+        //支持H5 DOM Storage
+        ws.setDomStorageEnabled(true);
+        //https加载http资源
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
 
         String uid = SharedPreUtils.getStr(this, "hash");
-
 
         String[] split = gameUrl.split("/");
         String gameId = "";
@@ -71,12 +85,19 @@ public class GameActivity extends BaseActivity {
             gameId = split[split.length - 1];
         }
 
-        String raw_str = appId + gameId + uid + privateToken;
+        String raw_str = appId + gameId + uid + "," + MyApp.organizeId + privateToken;
         String token = MD5Utils.md5(raw_str);
 
-        String url = gameUrl + "?appid=" + appId + "&uid=" + uid + "&token=" + token;
+        String url = gameUrl + "?appid=" + appId + "&uid=" + uid + "," + MyApp.organizeId + "&token=" + token;
+
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                LogUtils.log("aaa");
+                handler.proceed();
+            }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);

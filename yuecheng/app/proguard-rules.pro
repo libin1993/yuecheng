@@ -508,9 +508,7 @@ public void xxxxxx(**);
 -dontwarn com.qiyukf.**
 -keep class com.qiyukf.** {*;}
 
--keep class com.chad.library.adapter.** {
-*;
-}
+-keep class com.chad.library.adapter.** {*;}
 -keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
 -keep public class * extends com.chad.library.adapter.base.BaseViewHolder
 -keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
@@ -539,3 +537,7 @@ public void xxxxxx(**);
 -keepclasseswithmembers class * {
     public <init>(android.content.Context);
 }
+
+#x5webview
+-dontwarn com.tencent.smtt.**
+-keep class com.tencent.smtt.** { *; }

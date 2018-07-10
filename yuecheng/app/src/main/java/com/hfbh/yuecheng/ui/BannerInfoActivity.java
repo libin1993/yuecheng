@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -54,6 +55,11 @@ public class BannerInfoActivity extends BaseActivity {
         ws.setCacheMode(LOAD_NO_CACHE);
         ws.setUseWideViewPort(true);
         ws.setLoadWithOverviewMode(true);
+        //支持H5 DOM Storage
+        ws.setDomStorageEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
 
 
         webView.loadUrl(url);

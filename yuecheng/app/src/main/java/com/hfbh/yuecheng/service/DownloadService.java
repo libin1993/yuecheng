@@ -35,7 +35,7 @@ public class DownloadService extends BroadcastReceiver {
             Uri contentUri;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                contentUri = FileProvider.getUriForFile(context, "com.hfbh.yuecheng.fileprovider", file);
+                contentUri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
 
                 List<ResolveInfo> resInfoList = context.getPackageManager()
                         .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);

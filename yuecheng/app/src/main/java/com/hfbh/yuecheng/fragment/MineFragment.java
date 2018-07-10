@@ -1,5 +1,7 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +18,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
+import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.CouponActivity;
@@ -30,6 +33,7 @@ import com.hfbh.yuecheng.ui.MyExchangeActivity;
 import com.hfbh.yuecheng.ui.MyMemberCardActivity;
 import com.hfbh.yuecheng.ui.SetUpActivity;
 import com.hfbh.yuecheng.ui.UserInfoActivity;
+import com.hfbh.yuecheng.ui.ValidateActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -132,7 +136,6 @@ public class MineFragment extends BaseFragment {
 
                         @Override
                         public void onResponse(String response, int id) {
-
                             userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                             if (userInfoBean.isFlag()) {
                                 initView();
@@ -200,7 +203,7 @@ public class MineFragment extends BaseFragment {
                 toLogin(MyExchangeActivity.class);
                 break;
             case R.id.rl_mine_activity:
-                toLogin(MyActionActivity.class);
+                isSetPayPwd();
                 break;
             case R.id.rl_mine_tool:
                 break;
@@ -215,6 +218,77 @@ public class MineFragment extends BaseFragment {
                 break;
         }
     }
+
+    /**
+     * 是否设置支付密码
+     */
+    private void isSetPayPwd() {
+        if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
+            OkHttpUtils.post()
+                    .url(Constant.IS_SET_PAY_PWD)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("organizeId", MyApp.organizeId)
+                    .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                    .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+
+                            if (responseBean.isFlag()) {
+                                startActivity(new Intent(getActivity(), MemberCardActivity.class));
+                            } else {
+                                if (responseBean.getCode() == 4002) {
+                                    SharedPreUtils.deleteStr(getActivity(), "is_login");
+                                } else {
+                                    setPayPwd();
+                                }
+                            }
+                        }
+                    });
+        } else {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+
+    }
+
+    /**
+     * 设置支付密码
+     */
+    private void setPayPwd() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("您尚未设置支付密码，是否前去设置？");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), ValidateActivity.class);
+                intent.putExtra("type", "bind");
+                startActivity(intent);
+
+            }
+        });
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
+    }
+
 
     /**
      * 会员余额

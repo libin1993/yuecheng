@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     /**
-     * 首次进入或者切换商城
+     * 是否需要定位
      */
     private void getData() {
         Intent intent = getIntent();
@@ -347,7 +347,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private void initLocation() {
         Map<String, String> map = new HashMap<>();
         map.put("lng", longitude);
-        map.put("lat", longitude);
+        map.put("lat", latitude);
         if (!TextUtils.isEmpty(SharedPreUtils.getStr(this, "hash"))) {
             map.put("hash", SharedPreUtils.getStr(this, "hash"));
         }

@@ -33,7 +33,6 @@ public class GeTuiIntentService extends GTIntentService {
 
         String msg = new String(gtTransmitMessage.getPayload());
 
-        LogUtils.log(msg);
     }
 
     @Override

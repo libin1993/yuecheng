@@ -68,7 +68,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.hfbh.yuecheng.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true"
             tools:replace="android:authorities">
@@ -189,6 +189,7 @@
                 <data android:scheme="wx07c2173e7686741e"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ui.NewGameActivity"/>
 
         <service
             android:name=".service.TimerService"

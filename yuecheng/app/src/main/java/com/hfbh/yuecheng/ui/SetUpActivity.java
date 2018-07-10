@@ -169,9 +169,9 @@ public class SetUpActivity extends BaseActivity {
                         ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
                         if (responseBean.isFlag()) {
                             SharedPreUtils.deleteStr(SetUpActivity.this, "is_login");
+                            SharedPreUtils.deleteStr(SetUpActivity.this, "hash");
                             ToastUtils.showToast(SetUpActivity.this, "退出成功");
                             Intent intent = new Intent(SetUpActivity.this, MainActivity.class);
-                            intent.putExtra("change_market", true);
                             startActivity(intent);
                             finish();
                         } else {

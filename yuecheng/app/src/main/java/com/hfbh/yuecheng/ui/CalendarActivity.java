@@ -303,6 +303,7 @@ public class CalendarActivity extends BaseActivity {
                 return false;
             }
         });
+
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Calendar calendar, boolean isClick) {

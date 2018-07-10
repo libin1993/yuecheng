@@ -1,6 +1,8 @@
 package com.hfbh.yuecheng.ui;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -108,6 +110,8 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     private boolean isSelectSex = true;
     //是否首次上传照片
     private boolean isUploadPic = true;
+    //报名类型
+    private String type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -329,7 +333,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                 + activityBean.getData().getSignupActivity().getActivityEndtime());
         tvActionAddress.setText(activityBean.getData().getSignupActivity().getAcivityAddress());
 
-        String type = activityBean.getData().getSignupActivity().getAcivityType();
+        type = activityBean.getData().getSignupActivity().getAcivityType();
         if (!TextUtils.isEmpty(type)) {
             switch (type) {
                 case "NONEED":
@@ -386,7 +390,8 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                 finish();
                 break;
             case R.id.tv_enroll_activity:
-                enrollActivity();
+                isSetPayPwd();
+
                 break;
         }
     }
@@ -398,6 +403,8 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         if (etUsername != null && etPhone != null && !TextUtils.isEmpty(etUsername.getText().toString().trim())
                 && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && inputNum == totalNum) {
             if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {
+
+
                 tvEnrollScore.setEnabled(false);
                 Map<String, String> paramMap = new HashMap<>();
                 paramMap.put("appType", MyApp.appType);
@@ -467,6 +474,75 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
             ToastUtils.showToast(this, "请完善报名信息");
         }
 
+    }
+
+    /**
+     * 是否设置支付密码
+     */
+    private void isSetPayPwd() {
+        if (!TextUtils.isEmpty(type) && type.equals("CASH") && activityBean.getData()
+                .getSignupActivity().getEnrollFee() > 0) {
+            OkHttpUtils.post()
+                    .url(Constant.IS_SET_PAY_PWD)
+                    .addParams("appType", MyApp.appType)
+                    .addParams("appVersion", MyApp.appVersion)
+                    .addParams("organizeId", MyApp.organizeId)
+                    .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                    .addParams("token", SharedPreUtils.getStr(this, "token"))
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+                            if (responseBean.isFlag()) {
+                                enrollActivity();
+                            } else {
+                                if (responseBean.getCode() == 4002) {
+                                    SharedPreUtils.deleteStr(EnrollActionActivity.this, "is_login");
+                                } else {
+                                    setPayPwd();
+                                }
+                            }
+                        }
+                    });
+        } else {
+            enrollActivity();
+        }
+
+    }
+
+    /**
+     * 设置支付密码
+     */
+    private void setPayPwd() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this,
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("您尚未设置支付密码，是否前去设置？");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(EnrollActionActivity.this, ValidateActivity.class);
+                intent.putExtra("type", "bind");
+                startActivity(intent);
+            }
+        });
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
     }
 
 

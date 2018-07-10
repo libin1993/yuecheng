@@ -59,6 +59,7 @@ import com.hfbh.yuecheng.ui.GoodsActivity;
 import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
+import com.hfbh.yuecheng.ui.NewGameActivity;
 import com.hfbh.yuecheng.ui.ResetPayPwdActivity;
 import com.hfbh.yuecheng.ui.ScanCodeActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
@@ -1013,6 +1014,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 Intent intent = new Intent(getActivity(), ValidateActivity.class);
                 intent.putExtra("type", "bind");
                 startActivity(intent);
+
             }
         });
 
