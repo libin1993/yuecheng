@@ -149,14 +149,20 @@ public class MemberPointsFragment extends BaseFragment {
             @Override
             protected void convert(ViewHolder holder, MemberPointsBean.DataBean.PointsChangeListBean
                     pointsChangeListBean, int position) {
-                holder.setText(R.id.tv_points_remark, pointsChangeListBean.getChangeWay());
+                TextView tvRemark = holder.getView(R.id.tv_points_remark);
+                if (pointsChangeListBean.getType() == 20 && pointsChangeListBean.getType() == 21) {
+                    tvRemark.setText(TextUtils.isEmpty(pointsChangeListBean.getPointsRemark()) ?
+                            "线上积分变动" : pointsChangeListBean.getPointsRemark());
+                } else {
+                    tvRemark.setText(pointsChangeListBean.getChangeWay());
+                }
                 holder.setText(R.id.tv_points_time, pointsChangeListBean.getCreateTime());
                 TextView tvPoints = holder.getView(R.id.tv_points_type);
 
                 double points = pointsChangeListBean.getPoints();
                 if (points > 0) {
                     tvPoints.setTextColor(getActivity().getResources().getColor(R.color.red_99));
-                    tvPoints.setText("+"+pointsChangeListBean.getPoints());
+                    tvPoints.setText("+" + pointsChangeListBean.getPoints());
                 } else {
                     tvPoints.setTextColor(getActivity().getResources().getColor(R.color.gray_10));
                     tvPoints.setText(String.valueOf(pointsChangeListBean.getPoints()));

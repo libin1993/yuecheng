@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
@@ -43,32 +42,24 @@ import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.TopicBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.ui.AboutUsActivity;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.ui.BannerInfoActivity;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
-import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.ui.CouponDetailActivity;
-import com.hfbh.yuecheng.ui.EnrollActionActivity;
 import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
-import com.hfbh.yuecheng.ui.ForgetPwdActivity;
 import com.hfbh.yuecheng.ui.GameActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
-import com.hfbh.yuecheng.ui.GoodsActivity;
 import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
-import com.hfbh.yuecheng.ui.NewGameActivity;
-import com.hfbh.yuecheng.ui.ResetPayPwdActivity;
+import com.hfbh.yuecheng.ui.PayActivity;
 import com.hfbh.yuecheng.ui.ScanCodeActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
-import com.hfbh.yuecheng.ui.SetPwdActivity;
 import com.hfbh.yuecheng.ui.ValidateActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
@@ -77,10 +68,8 @@ import com.hfbh.yuecheng.view.PermissionDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.smarttop.library.utils.LogUtil;
 import com.sunfusheng.marqueeview.MarqueeView;
 import com.wang.avi.AVLoadingIndicatorView;
-import com.wang.avi.indicators.BallSpinFadeLoaderIndicator;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -1112,11 +1101,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 startActivity(new Intent(getActivity(), ChangeMarketActivity.class));
                 break;
             case R.id.iv_home_scan:
-                if (!EasyPermissions.hasPermissions(getActivity(), permissionStr)) {
-                    EasyPermissions.requestPermissions(this, "", 123, permissionStr);
-                } else {
-                    startActivity(new Intent(getActivity(), ScanCodeActivity.class));
-                }
+                startActivity(new Intent(getActivity(), PayActivity.class));
+//                if (!EasyPermissions.hasPermissions(getActivity(), permissionStr)) {
+//                    EasyPermissions.requestPermissions(this, "", 123, permissionStr);
+//                } else {
+//                    startActivity(new Intent(getActivity(), ScanCodeActivity.class));
+//                }
                 break;
         }
     }

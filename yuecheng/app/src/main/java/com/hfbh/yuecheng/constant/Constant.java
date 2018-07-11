@@ -7,9 +7,9 @@ package com.hfbh.yuecheng.constant;
  */
 public class Constant {
 
-    //    private static final String HOST = "https://m.hfbh.com.cn";
-        private static final String HOST = "http://ceshi.wmalle.com";
-//    private static final String HOST = "http://yjwang.wmalle.com";
+//    private static final String HOST = "https://m.hfbh.com.cn";
+    //    private static final String HOST = "http://ceshi.wmalle.com";
+        private static final String HOST = "http://yjwang.wmalle.com";
     //定位
     public static final String LOCATION = HOST + "/wechat/appRequest/nearestMall.json";
     //首页分类
@@ -110,6 +110,16 @@ public class Constant {
     public static final String CHECK_UPDATE = HOST + "/wechat/appRequest/appVersion.json";
     //室内导航
     public static final String FLOOR_GUIDE = HOST + "/wechat/mallFloor/floorList.json";
+    //消费记录
+    public static final String CONSUME_RECORD = HOST + "/wechat/member/saleIntems.json";
+    //未读消息
+    public static final String UNREAD_MSG = HOST + "/wechat/broadcast/notReadNum.json";
+    //消息列表
+    public static final String MSG_LIST = HOST + "/wechat/broadcast/list.json";
+    //设置已读消息
+    public static final String READ_MSG = HOST + "/wechat/broadcast/update.json";
+    //支付参数
+    public static final String PAY_DATA = HOST + "/wechat/order/getPayData.json";
 
     //WebView
     //活动详情

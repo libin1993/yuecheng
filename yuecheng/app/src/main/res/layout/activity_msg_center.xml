@@ -10,6 +10,7 @@
         layout="@layout/layout_widget_header"/>
 
     <LinearLayout
+        android:id="@+id/ll_broad_msg"
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:layout_marginTop="10dp"
@@ -34,13 +35,13 @@
             android:textSize="17sp"/>
 
         <TextView
+            android:id="@+id/tv_broad_msg"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:layout_marginRight="8dp"
             android:background="@drawable/bound_red_9dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="99+"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             android:visibility="gone"/>
@@ -55,6 +56,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_system_msg"
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:layout_marginTop="1dp"
@@ -79,13 +81,13 @@
             android:textSize="17sp"/>
 
         <TextView
+            android:id="@+id/tv_system_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:background="@drawable/bound_red_9dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="1"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             android:visibility="gone"/>
@@ -96,7 +98,6 @@
             android:layout_marginRight="12dp"
             android:scaleType="center"
             android:src="@mipmap/btn_user_next"/>
-
     </LinearLayout>
 
 </LinearLayout>

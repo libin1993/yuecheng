@@ -9,8 +9,8 @@ android {
         applicationId "com.hfbh.yuecheng"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.0.0"
+        versionCode 5
+        versionName "1.0.6"
         multiDexEnabled true
 
         manifestPlaceholders = [
@@ -20,7 +20,7 @@ android {
         ]
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86_64", "mips"
+            abiFilters "armeabi", "armeabi-v7a", "x86_64"
         }
     }
 
@@ -118,5 +118,5 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-3.2.0.jar')
     compile files('libs/ShareSDK-Wechat-Core-3.2.0.jar')
     compile files('libs/ShareSDK-Wechat-Moments-3.2.0.jar')
-    compile files('libs/tbs_sdk_thirdapp_v3.6.0.1249_43610_sharewithdownload_withoutGame_obfs_20180608_114954.jar')
+    compile files('libs/alipaySdk-20180601.jar')
 }

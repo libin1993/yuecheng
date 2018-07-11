@@ -192,7 +192,7 @@ public class MineFragment extends BaseFragment {
                 toLogin(UserInfoActivity.class);
                 break;
             case R.id.rl_mine_paycode:
-                toLogin(MemberCardActivity.class);
+                isSetPayPwd();
                 break;
             case R.id.rl_mine_ticket:
                 toLogin(CouponActivity.class);
@@ -203,7 +203,7 @@ public class MineFragment extends BaseFragment {
                 toLogin(MyExchangeActivity.class);
                 break;
             case R.id.rl_mine_activity:
-                isSetPayPwd();
+                toLogin(MyActionActivity.class);
                 break;
             case R.id.rl_mine_tool:
                 break;

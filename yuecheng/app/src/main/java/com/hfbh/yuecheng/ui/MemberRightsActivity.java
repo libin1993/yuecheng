@@ -95,7 +95,7 @@ public class MemberRightsActivity extends BaseActivity {
     }
 
     private void initView() {
-        vpMemberRights.setOffscreenPageLimit(memberBean.getData().size());
+//        vpMemberRights.setOffscreenPageLimit(memberBean.getData().size());
         vpMemberRights.setPageTransformer(false, new FadePageTransformer());
         vpMemberRights.setPageMargin((int) DisplayUtils.dp2px(this, 10));
         final MyPagerAdapter adapter = new MyPagerAdapter(memberBean.getData(), this);

@@ -390,8 +390,8 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         fragmentList.add(ActivityFragment.newInstance());
 //        fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
-        fragmentTabUtils = new FragmentTabUtils(this, getSupportFragmentManager(), fragmentList,
-                R.id.fl_main_container, rgsMainTab);
+        fragmentTabUtils = new FragmentTabUtils(this, getSupportFragmentManager(),
+                fragmentList, R.id.fl_main_container, rgsMainTab);
         checkUpdate();
     }
 

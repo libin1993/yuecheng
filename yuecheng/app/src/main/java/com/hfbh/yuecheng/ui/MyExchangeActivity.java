@@ -82,7 +82,7 @@ public class MyExchangeActivity extends BaseActivity {
 
         MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),
                 fragmentList, titleList);
-        vpGift.setOffscreenPageLimit(titleList.size());
+//        vpGift.setOffscreenPageLimit(titleList.size());
         vpGift.setAdapter(adapter);
         tabGift.setViewPager(vpGift);
         tabGift.setCurrentTab(0);

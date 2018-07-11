@@ -133,7 +133,7 @@ public class ActivityFragment extends BaseFragment {
         }
         MyFragmentAdapter adapter = new MyFragmentAdapter(getChildFragmentManager(),
                 fragmentList, titleList);
-        vpActivity.setOffscreenPageLimit(titleList.size());
+//        vpActivity.setOffscreenPageLimit(titleList.size());
         vpActivity.setAdapter(adapter);
 
         tabActivity.setViewPager(vpActivity);
