@@ -33,11 +33,13 @@ import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.hfbh.yuecheng.view.PermissionDialog;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -390,8 +392,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                 finish();
                 break;
             case R.id.tv_enroll_activity:
-                isSetPayPwd();
-
+                enrollActivity();
                 break;
         }
     }
@@ -403,8 +404,6 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         if (etUsername != null && etPhone != null && !TextUtils.isEmpty(etUsername.getText().toString().trim())
                 && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && inputNum == totalNum) {
             if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {
-
-
                 tvEnrollScore.setEnabled(false);
                 Map<String, String> paramMap = new HashMap<>();
                 paramMap.put("appType", MyApp.appType);
@@ -442,15 +441,19 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
                             @Override
                             public void onResponse(String response, int id) {
-
+                                LogUtils.log(response);
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
                                     boolean flag = jsonObject.getBoolean("flag");
-
                                     if (flag) {
-                                        enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
-                                        tvEnrollActivity.setText("已报名");
-                                        tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                        if (!TextUtils.isEmpty(type) && type.equals("CASH") && activityBean.getData()
+                                                .getSignupActivity().getEnrollFee() > 0) {
+
+                                        }else {
+                                            enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
+                                            tvEnrollActivity.setText("已报名");
+                                            tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                        }
                                     } else {
                                         String msg = jsonObject.getString("msg");
                                         enrollResult(false, msg);

@@ -106,7 +106,7 @@ public class LoginActivity extends BaseActivity {
     private void initView() {
         InputFilter[] filters = {new InputFilter.LengthFilter(6)};
         etCode.setFilters(filters);
-//        etCode.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+
 
         ((RadioButton) rgsLogin.getChildAt(0)).setChecked(true);
 
@@ -204,7 +204,7 @@ public class LoginActivity extends BaseActivity {
             etCode.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             InputFilter[] filters = {new InputFilter.LengthFilter(6)};
             etCode.setFilters(filters);
-//            etCode.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+
 
         } else {
             tvLoginTitle.setText("账号密码登录");
@@ -218,7 +218,6 @@ public class LoginActivity extends BaseActivity {
             ivLoginCode.setImageResource(R.mipmap.btn_signin_invisiable);
             InputFilter[] filters = {new InputFilter.LengthFilter(16)};
             etCode.setFilters(filters);
-//            etCode.setKeyListener(DigitsKeyListener.getInstance("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ"));
         }
     }
 
@@ -538,6 +537,7 @@ public class LoginActivity extends BaseActivity {
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
+                .addParams("code", SharedPreUtils.getStr(this, "hash"))
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etPhone.getText().toString().trim())

@@ -186,7 +186,7 @@ public class MineFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), SetUpActivity.class));
                 break;
             case R.id.iv_mine_msg:
-                startActivity(new Intent(getActivity(), MsgCenterActivity.class));
+                toLogin(MsgCenterActivity.class);
                 break;
             case R.id.rl_mine_info:
                 toLogin(UserInfoActivity.class);

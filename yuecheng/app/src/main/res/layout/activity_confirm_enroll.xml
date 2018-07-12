@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/gray_ed"
+                android:fitsSystemWindows="true">
+
+    <include
+        layout="@layout/layout_widget_header"/>
+
+    <TextView
+        android:id="@+id/tv_enroll_activity_name"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="44dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="11111"
+        android:textColor="@color/gray_33"
+        android:textSize="15sp"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_activity_time"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_below="@id/tv_enroll_activity_name"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="报名时间"
+            android:textColor="@color/gray_33"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_enroll_activity_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:text="2016.5.5"
+            android:textColor="@color/gray_33"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_activity_fee"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_below="@id/rl_activity_time"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="报名金额"
+            android:textColor="@color/gray_33"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_enroll_activity_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:text="2016.5.5"
+            android:textColor="@color/gray_33"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_activity_fee"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginLeft="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@mipmap/ic_pay_cash"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="余额抵扣"
+                android:textColor="@color/gray_10"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:text="余额"
+                android:textColor="@color/gray_10"
+                android:textSize="14sp"/>
+            <EditText
+                android:layout_width="149dp"
+                android:layout_height="38dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

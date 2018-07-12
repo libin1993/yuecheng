@@ -209,6 +209,9 @@
             android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
         <activity android:name=".ui.PayActivity"/>
+        <activity android:name=".ui.BroadMsgActivity"/>
+        <activity android:name=".ui.ConsumeRecordActivity"/>
+        <activity android:name=".ui.ConfirmEnrollActivity"/>
 
         <service
             android:name=".service.TimerService"

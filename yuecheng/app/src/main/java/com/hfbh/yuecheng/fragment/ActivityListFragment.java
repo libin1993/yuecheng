@@ -115,7 +115,6 @@ public class ActivityListFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(tagId+"'");
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         if (activityListBean.getPage() != null) {
                             pages = activityListBean.getPage().getPages();

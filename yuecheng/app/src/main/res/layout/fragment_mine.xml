@@ -47,8 +47,7 @@
         android:paddingRight="11dp"
         android:paddingTop="11.5dp"
         android:scaleType="center"
-        android:src="@mipmap/ic_mine_msg"
-        android:visibility="gone"/>
+        android:src="@mipmap/ic_mine_msg"/>
 
     <RelativeLayout
         android:id="@+id/rl_mine_info"

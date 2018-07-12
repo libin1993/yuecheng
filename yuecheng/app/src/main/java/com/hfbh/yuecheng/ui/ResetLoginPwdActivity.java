@@ -375,6 +375,7 @@ public class ResetLoginPwdActivity extends BaseActivity {
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
+                .addParams("code", SharedPreUtils.getStr(this, "hash"))
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("memberPhone", etResetPhone.getText().toString().trim())

@@ -36,7 +36,6 @@ import okhttp3.Call;
  */
 public class MemberCardActivity extends BaseActivity {
 
-
     @BindView(R.id.iv_member_back)
     ImageView ivMemberBack;
     @BindView(R.id.rgs_member_code)
@@ -50,6 +49,12 @@ public class MemberCardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_card);
         ButterKnife.bind(this);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initData();
     }
 

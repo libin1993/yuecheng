@@ -64,7 +64,7 @@ public class NowActionActivity extends BaseActivity {
     TextView tvNullData;
     @BindView(R.id.ll_null_data)
     LinearLayout llNullData;
-
+    //当前页数
     private int page = 1;
     //刷新
     private boolean isRefresh;

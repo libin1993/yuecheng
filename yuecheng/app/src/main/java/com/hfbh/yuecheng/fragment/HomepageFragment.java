@@ -29,7 +29,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.adapter.BannerAdapter;
 import com.hfbh.yuecheng.adapter.BaseDelegateAdapter;
+import com.hfbh.yuecheng.adapter.FunctionAdapter;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityBean;
@@ -275,6 +277,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         rvHomepage.setAdapter(delegateAdapter);
 
         if (bannerBean != null && bannerBean.getData() != null && bannerBean.getData().size() > 0) {
+//            BannerAdapter bannerAdapter = new BannerAdapter(getActivity(), new LinearLayoutHelper(),
+//                    R.layout.layout_homepage_banner, bannerBean.getData(), 1, 1);
             BaseDelegateAdapter bannerAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                     R.layout.layout_homepage_banner, 1, 1) {
                 @Override
@@ -336,6 +340,9 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
         if (functionBean != null && functionBean.getData() != null && functionBean.getData().size() > 0) {
             //功能模块
+//            FunctionAdapter functionAdapter = new FunctionAdapter(getActivity(), new
+//                    GridLayoutHelper(2, 1), R.layout.layout_homepage_function,
+//                    functionBean.getData(), 1, 2);
             BaseDelegateAdapter functionAdapter = new BaseDelegateAdapter(getActivity(), new
                     GridLayoutHelper(2, 1), R.layout.layout_homepage_function,
                     1, 2) {
@@ -1101,12 +1108,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 startActivity(new Intent(getActivity(), ChangeMarketActivity.class));
                 break;
             case R.id.iv_home_scan:
-                startActivity(new Intent(getActivity(), PayActivity.class));
-//                if (!EasyPermissions.hasPermissions(getActivity(), permissionStr)) {
-//                    EasyPermissions.requestPermissions(this, "", 123, permissionStr);
-//                } else {
-//                    startActivity(new Intent(getActivity(), ScanCodeActivity.class));
-//                }
+//                startActivity(new Intent(getActivity(), PayActivity.class));
+                if (!EasyPermissions.hasPermissions(getActivity(), permissionStr)) {
+                    EasyPermissions.requestPermissions(this, "", 123, permissionStr);
+                } else {
+                    startActivity(new Intent(getActivity(), ScanCodeActivity.class));
+                }
                 break;
         }
     }

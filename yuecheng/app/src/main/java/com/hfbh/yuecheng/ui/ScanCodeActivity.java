@@ -14,13 +14,19 @@ import android.widget.RelativeLayout;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.yanzhenjie.zbar.camera.CameraPreview;
 import com.yanzhenjie.zbar.camera.ScanCallback;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Request;
 
 /**
  * Author：Libin on 2018/6/4 15:33
@@ -52,7 +58,23 @@ public class ScanCodeActivity extends BaseActivity {
         capturePreview.setScanCallback(new ScanCallback() {
             @Override
             public void onScanResult(String content) {
-                vibrator();
+                try {
+                    vibrator();
+                    URL url = new URL(content);
+                    String protocol = url.getProtocol();
+                    String host = url.getHost();
+                    int port = url.getPort();
+                    String query = url.getQuery();
+                    if (port > 0 && query.matches("[0-9]{1,}")) {
+                        ToastUtils.showToast(ScanCodeActivity.this, "aaaaa");
+                    }else {
+                        scanFail();
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    scanFail();
+                }
+
             }
         });
     }
@@ -64,7 +86,7 @@ public class ScanCodeActivity extends BaseActivity {
         ToastUtils.showToast(this, "仅支持本平台商品");
         finish();
     }
-    
+
 
     /**
      * 振动

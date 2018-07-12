@@ -164,5 +164,4 @@ public class ActivityFragment extends BaseFragment {
                 break;
         }
     }
-
 }
