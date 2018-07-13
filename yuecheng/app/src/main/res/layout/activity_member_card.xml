@@ -5,29 +5,8 @@
                 android:background="@drawable/gradient_red_ver"
                 android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:id="@+id/rl_member_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <ImageView
-            android:id="@+id/iv_member_back"
-            android:layout_width="60dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dp"
-            android:scaleType="fitStart"
-            android:src="@mipmap/ic_back_white"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="会员卡二维码"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"/>
-    </RelativeLayout>
+    <include
+        layout="@layout/layout_header_white"/>
 
     <RadioGroup
         android:id="@+id/rgs_member_code"
@@ -69,7 +48,6 @@
         android:id="@+id/fl_member_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rl_member_code"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="74dp"/>
 
 </RelativeLayout>

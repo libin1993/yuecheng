@@ -52,10 +52,12 @@ import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
 import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
 import com.hfbh.yuecheng.ui.GameActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
+import com.hfbh.yuecheng.ui.GroupGoodsActivity;
 import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.PayActivity;
+import com.hfbh.yuecheng.ui.RushBuyActivity;
 import com.hfbh.yuecheng.ui.ScanCodeActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
 import com.hfbh.yuecheng.ui.ValidateActivity;
@@ -1070,7 +1072,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 startActivity(new Intent(getActivity(), ExchangeCouponActivity.class));
                                 break;
                             case 7:
-                                startActivity(new Intent(getActivity(), ExchangeGiftActivity.class));
+                                startActivity(new Intent(getActivity(), RushBuyActivity.class));
                                 break;
                             case 9:
                                 EventBus.getDefault().post("activity");

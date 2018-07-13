@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -87,7 +88,6 @@ public class MyMemberCardActivity extends BaseActivity {
     }
 
     private void initData() {
-
         OkHttpUtils.post()
                 .url(Constant.USER_INFO)
                 .addParams("appType", MyApp.appType)
@@ -104,6 +104,7 @@ public class MyMemberCardActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             initView();
@@ -117,32 +118,36 @@ public class MyMemberCardActivity extends BaseActivity {
 
 
     private void initView() {
-
         tvTitleHeaderWhite.setText("电子会员卡");
-        ivMemberCard.setImageURI(userInfoBean.getData().getMemberCardGradeDTO().getAppPic());
+
+        if (userInfoBean.getData().getMemberCardGradeDTO() != null) {
+            ivMemberCard.setImageURI(userInfoBean.getData().getMemberCardGradeDTO().getAppPic());
+        }
         tvMemberCardMoney.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
         tvMemberCardScore.setText(String.valueOf((int) userInfoBean.getData().getPoints()));
         tvMemberCardGrade.setText(String.valueOf(userInfoBean.getData().getCardLevel()));
         tvMemberCardNo.setText("NO." + userInfoBean.getData().getCardNumber());
+        if (userInfoBean.getData().getMemberCardGradeDTO() != null) {
+            rvMemberRights.setLayoutManager(new GridLayoutManager(this, 3));
+            CommonAdapter<UserInfoBean.DataBean.MemberCardGradeDTOBean.ListPrivilegeBean> adapter = new
+                    CommonAdapter<UserInfoBean.DataBean.MemberCardGradeDTOBean.ListPrivilegeBean>(
+                            MyMemberCardActivity.this, R.layout.rv_member_rights_item,
+                            userInfoBean.getData().getMemberCardGradeDTO().getListPrivilege()) {
+                        @Override
+                        protected void convert(ViewHolder holder, UserInfoBean.DataBean.MemberCardGradeDTOBean
+                                .ListPrivilegeBean listPrivilegeBean, int position) {
 
-        rvMemberRights.setLayoutManager(new GridLayoutManager(this, 3));
-        CommonAdapter<UserInfoBean.DataBean.MemberCardGradeDTOBean.ListPrivilegeBean> adapter = new
-                CommonAdapter<UserInfoBean.DataBean.MemberCardGradeDTOBean.ListPrivilegeBean>(
-                        MyMemberCardActivity.this, R.layout.rv_member_rights_item,
-                        userInfoBean.getData().getMemberCardGradeDTO().getListPrivilege()) {
-                    @Override
-                    protected void convert(ViewHolder holder, UserInfoBean.DataBean.MemberCardGradeDTOBean
-                            .ListPrivilegeBean listPrivilegeBean, int position) {
+                            Glide.with(MyMemberCardActivity.this)
+                                    .load(listPrivilegeBean.getAppPic())
+                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                    .into((ImageView) holder.getView(R.id.iv_member_rights));
 
-                        Glide.with(MyMemberCardActivity.this)
-                                .load(listPrivilegeBean.getAppPic())
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                .into((ImageView) holder.getView(R.id.iv_member_rights));
+                            holder.setText(R.id.tv_member_rights, listPrivilegeBean.getPrivilegeName());
+                        }
+                    };
+            rvMemberRights.setAdapter(adapter);
+        }
 
-                        holder.setText(R.id.tv_member_rights, listPrivilegeBean.getPrivilegeName());
-                    }
-                };
-        rvMemberRights.setAdapter(adapter);
     }
 
     @OnClick({R.id.iv_back_header_white, R.id.ll_member_card_money, R.id.ll_member_card_score,
@@ -164,6 +169,7 @@ public class MyMemberCardActivity extends BaseActivity {
                 startActivity(new Intent(this, MemberRightsActivity.class));
                 break;
             case R.id.rl_member_recode:
+                startActivity(new Intent(this, ConsumeRecordActivity.class));
                 break;
             case R.id.iv_member_card_code:
                 isSetPayPwd();

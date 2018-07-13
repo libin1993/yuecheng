@@ -14,10 +14,10 @@
 
     <ImageView
         android:id="@+id/iv_back_header_white"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingLeft="12dp"
-        android:paddingRight="30dp"
-        android:scaleType="center"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:paddingLeft="10dp"
+        android:scaleType="fitStart"
         android:src="@mipmap/ic_back_white"/>
 </RelativeLayout>

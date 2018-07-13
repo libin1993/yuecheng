@@ -94,7 +94,6 @@ public class GameActivity extends BaseActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                LogUtils.log("aaa");
                 handler.proceed();
             }
 

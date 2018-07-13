@@ -184,7 +184,6 @@ public class GoodsActivity extends BaseActivity {
                             } else if (isLoadMore) { //加载更多
                                 refreshLayout.finishLoadMore();
                                 isLoadMore = false;
-
                             }
                             for (int j = 0; j < mAdapters.size(); j++) {
                                 DelegateAdapter.Adapter adapter = mAdapters.get(j);

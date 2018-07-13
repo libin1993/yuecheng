@@ -172,7 +172,6 @@ public class ExchangeCouponActivity extends BaseActivity {
                                 adapter.notifyDataSetChanged();
                                 llNullData.setVisibility(View.VISIBLE);
                                 refreshLayout.finishRefresh();
-
                             }
                             refreshLayout.finishLoadMore();
                         }

@@ -21,6 +21,7 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.ShareUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -58,6 +59,8 @@ public class ActionDetailActivity extends BaseActivity {
     TextView tvHeaderTitle;
     @BindView(R.id.iv_header_back)
     ImageView ivHeaderBack;
+    @BindView(R.id.iv_header_share)
+    ImageView ivHeaderShare;
     //活动id
     private int activityId;
     private ActivityDetailBean activityBean;
@@ -69,6 +72,7 @@ public class ActionDetailActivity extends BaseActivity {
     private boolean isEnrollStart;
     //是否报名结束
     private boolean isEnrollEnd;
+    private String url;
 //    //是否满额
 //    private boolean isLimit;
 
@@ -79,6 +83,7 @@ public class ActionDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         tvHeaderTitle.setText("活动详情");
+        ivHeaderShare.setVisibility(View.VISIBLE);
         getData();
         initData();
         initWebView();
@@ -100,7 +105,7 @@ public class ActionDetailActivity extends BaseActivity {
             ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
-        String url = Constant.ACTIVITY_DETAIL + "?appType=Android&id=" + activityId + "&appVersion="
+        url = Constant.ACTIVITY_DETAIL + "?appType=Android&id=" + activityId + "&appVersion="
                 + MyApp.appVersion + "&organizeId=" + MyApp.organizeId
                 + "&token=" + SharedPreUtils.getStr(this, "token")
                 + "&hash=" + SharedPreUtils.getStr(this, "hash");
@@ -234,7 +239,7 @@ public class ActionDetailActivity extends BaseActivity {
         activityId = getIntent().getIntExtra("activity_id", 0);
     }
 
-    @OnClick({R.id.iv_header_back, R.id.tv_exchange_activity})
+    @OnClick({R.id.iv_header_back, R.id.tv_exchange_activity, R.id.iv_header_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_header_back:
@@ -246,6 +251,14 @@ public class ActionDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_exchange_activity:
                 enrollActivity();
+                break;
+            case R.id.iv_header_share:
+                if (activityBean != null){
+                    ShareUtils.showShare(this,activityBean.getData().getSignupDo()
+                            .getActivityPicture(),activityBean.getData().getSignupDo().getActivityTitle(),
+                            "",url+"&share=true");
+                }
+
                 break;
         }
     }

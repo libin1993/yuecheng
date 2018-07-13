@@ -212,6 +212,9 @@
         <activity android:name=".ui.BroadMsgActivity"/>
         <activity android:name=".ui.ConsumeRecordActivity"/>
         <activity android:name=".ui.ConfirmEnrollActivity"/>
+        <activity android:name=".ui.ConsumeDetailActivity"/>
+        <activity android:name=".ui.GroupGoodsActivity"/>
+        <activity android:name=".ui.RushBuyActivity"/>
 
         <service
             android:name=".service.TimerService"

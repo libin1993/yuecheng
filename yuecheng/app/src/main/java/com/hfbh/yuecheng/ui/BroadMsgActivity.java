@@ -62,7 +62,6 @@ public class BroadMsgActivity extends BaseActivity {
     LinearLayout llNullData;
 
     private List<BroadMsgBean.DataBean> dataList = new ArrayList<>();
-    //活动总数量
     private CommonAdapter<BroadMsgBean.DataBean> adapter;
     //刷新
     private boolean isRefresh;
@@ -103,9 +102,9 @@ public class BroadMsgActivity extends BaseActivity {
                         if (!isRefresh) {
                             viewLoading.smoothToHide();
                             isRefresh = false;
+                        }else {
+                            refreshLayout.finishRefresh();
                         }
-                        refreshLayout.finishRefresh();
-
                         BroadMsgBean msgBean = GsonUtils.jsonToBean(response, BroadMsgBean.class);
                         if (msgBean.isFlag() && msgBean.getData() != null && msgBean.getData().size() > 0) {
                             dataList.clear();
@@ -114,6 +113,10 @@ public class BroadMsgActivity extends BaseActivity {
                             llNullData.setVisibility(View.GONE);
                             readMsg();
                         } else {
+                            if (isRefresh) {
+                                refreshLayout.finishRefresh();
+                                isRefresh = false;
+                            }
                             dataList.clear();
                             adapter.notifyDataSetChanged();
                             llNullData.setVisibility(View.VISIBLE);
@@ -145,7 +148,6 @@ public class BroadMsgActivity extends BaseActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                LogUtils.log(response);
                             }
                         });
             }

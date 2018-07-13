@@ -50,9 +50,14 @@ public class MsgCenterActivity extends BaseActivity {
         setContentView(R.layout.activity_msg_center);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("消息");
-        initData();
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
 
     /**
      * 加载数据

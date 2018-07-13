@@ -172,7 +172,7 @@ public class GoodsBean {
         private Object activityDesc;
         private Object berthNo;
         private int buyLimitNum;
-        private Object buyNum;
+        private int buyNum;
         private int clickNum;
         private int commodityId;
         private String commodityIntro;
@@ -203,11 +203,11 @@ public class GoodsBean {
         private Object modifyTimeBegin;
         private Object modifyTimeEnd;
         private Object nowDate;
-        private Object nowPrice;
+        private double nowPrice;
         private String offlineTime;
         private Object offlineTimeBegin;
         private Object offlineTimeEnd;
-        private Object oldPrice;
+        private double oldPrice;
         private String onlineTime;
         private Object onlineTimeBegin;
         private Object onlineTimeEnd;
@@ -264,11 +264,11 @@ public class GoodsBean {
             this.buyLimitNum = buyLimitNum;
         }
 
-        public Object getBuyNum() {
+        public int getBuyNum() {
             return buyNum;
         }
 
-        public void setBuyNum(Object buyNum) {
+        public void setBuyNum(int buyNum) {
             this.buyNum = buyNum;
         }
 
@@ -512,11 +512,11 @@ public class GoodsBean {
             this.nowDate = nowDate;
         }
 
-        public Object getNowPrice() {
+        public double getNowPrice() {
             return nowPrice;
         }
 
-        public void setNowPrice(Object nowPrice) {
+        public void setNowPrice(double nowPrice) {
             this.nowPrice = nowPrice;
         }
 
@@ -544,11 +544,11 @@ public class GoodsBean {
             this.offlineTimeEnd = offlineTimeEnd;
         }
 
-        public Object getOldPrice() {
+        public double getOldPrice() {
             return oldPrice;
         }
 
-        public void setOldPrice(Object oldPrice) {
+        public void setOldPrice(double oldPrice) {
             this.oldPrice = oldPrice;
         }
 

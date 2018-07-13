@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
@@ -36,12 +37,15 @@ import okhttp3.Call;
  */
 public class MemberCardActivity extends BaseActivity {
 
-    @BindView(R.id.iv_member_back)
-    ImageView ivMemberBack;
+
     @BindView(R.id.rgs_member_code)
     RadioGroup rgsMemberCode;
     @BindView(R.id.fl_member_container)
     FrameLayout flMemberContainer;
+    @BindView(R.id.tv_title_header_white)
+    TextView tvTitleHeaderWhite;
+    @BindView(R.id.iv_back_header_white)
+    ImageView ivBackHeaderWhite;
     private UserInfoBean userInfoBean;
 
     @Override
@@ -49,7 +53,7 @@ public class MemberCardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_card);
         ButterKnife.bind(this);
-
+        tvTitleHeaderWhite.setText("会员卡二维码");
     }
 
     @Override
@@ -99,9 +103,8 @@ public class MemberCardActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.iv_member_back)
+    @OnClick(R.id.iv_back_header_white)
     public void onViewClicked() {
         finish();
     }
-
 }

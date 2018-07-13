@@ -441,7 +441,6 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
                             @Override
                             public void onResponse(String response, int id) {
-                                LogUtils.log(response);
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
                                     boolean flag = jsonObject.getBoolean("flag");
