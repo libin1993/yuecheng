@@ -69,7 +69,7 @@ public class EnrollActivityBean {
         private Object signupId;
         private SignupActivityBean signupActivity;
         private Object memberLevelObj;
-        private Object signupStatistics;
+        private int signupStatistics;
         private String columnIsActive;
         private List<OptionListBean> optionList;
 
@@ -105,11 +105,11 @@ public class EnrollActivityBean {
             this.memberLevelObj = memberLevelObj;
         }
 
-        public Object getSignupStatistics() {
+        public int getSignupStatistics() {
             return signupStatistics;
         }
 
-        public void setSignupStatistics(Object signupStatistics) {
+        public void setSignupStatistics(int signupStatistics) {
             this.signupStatistics = signupStatistics;
         }
 

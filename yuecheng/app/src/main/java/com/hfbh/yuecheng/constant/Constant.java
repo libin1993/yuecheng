@@ -7,9 +7,9 @@ package com.hfbh.yuecheng.constant;
  */
 public class Constant {
 
-//    private static final String HOST = "https://m.hfbh.com.cn";
+    //    private static final String HOST = "https://m.hfbh.com.cn";
 //        private static final String HOST = "http://ceshi.wmalle.com";
-        private static final String HOST = "http://yjwang.wmalle.com";
+    private static final String HOST = "http://yjwang.wmalle.com";
     //定位
     public static final String LOCATION = HOST + "/wechat/appRequest/nearestMall.json";
     //首页分类
@@ -30,8 +30,18 @@ public class Constant {
     public static final String CLOSE_ACTIVITY = HOST + "/wechat/wechat/signup_activity/verify_codes.json";
     //活动报名数据
     public static final String ENROLL_ACTIVITY_INFO = HOST + "/wechat/wechat/signup_activity/signup_form.json";
-    //活动报名
-    public static final String ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/signup_submit.json";
+    //现金报名数据
+    public static final String CASH_ENROLL_INFO = HOST + "/wechat/wechat/signup_activity/signup_record.json";
+    //用户余额
+    public static final String USER_BALANCE = HOST + "/wechat/member/queryAmount.json";
+    //活动报名冻结余额
+    public static final String FROZEN_ENROLL_BALANCE = HOST + "/wechat/wechat/signup_activity/preparePay.json";
+    //活动报名余额支付
+    public static final String ENROLL_BALANCE_PAY = "/wechat/wechat/signup_activity/getPayDataSuccess.json";
+    //积分报名
+    public static final String POINTS_ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/signup_submit.json";
+    //现金报名
+    public static final String CASH_ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/getPayData.json";
     //切换城市
     public static final String CHANGE_CITY = HOST + "/wechat/cityConfig/cityList.json";
     //店铺列表
@@ -87,7 +97,7 @@ public class Constant {
     //积分记录
     public static final String MEMBER_POINTS_RECORD = HOST + "/wechat/member/pointsRecord.json";
     //预付卡
-    public static final String MEMBER_BALANCE = HOST + "/wechat/member/prePaidCardList.json";
+    public static final String MEMBER_CARD_BALANCE = HOST + "/wechat/member/prePaidCardList.json";
     //删除预付卡
     public static final String DELETE_PAY_CARD = HOST + "/wechat/member/deleteCard.json";
     //绑定预付卡

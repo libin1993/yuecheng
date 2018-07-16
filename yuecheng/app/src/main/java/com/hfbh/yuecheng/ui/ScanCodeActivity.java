@@ -61,13 +61,12 @@ public class ScanCodeActivity extends BaseActivity {
                 try {
                     vibrator();
                     URL url = new URL(content);
-                    String protocol = url.getProtocol();
-                    String host = url.getHost();
                     int port = url.getPort();
                     String query = url.getQuery();
-                    if (port > 0 && query.matches("[0-9]{1,}")) {
-                        ToastUtils.showToast(ScanCodeActivity.this, "aaaaa");
-                    }else {
+                    String ip = content.split("\\?")[0];
+                    if (ip != null && port > 0 && query.matches("[0-9]{1,}")) {
+                        Intent intent = new Intent(ScanCodeActivity.this, ScanOrderActivity.class);
+                    } else {
                         scanFail();
                     }
                 } catch (MalformedURLException e) {

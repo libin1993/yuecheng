@@ -16,7 +16,6 @@
         android:background="@android:color/white"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:text="11111"
         android:textColor="@color/gray_33"
         android:textSize="15sp"/>
 
@@ -44,7 +43,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:text="2016.5.5"
             android:textColor="@color/gray_33"
             android:textSize="14sp"/>
     </RelativeLayout>
@@ -73,12 +71,12 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:text="2016.5.5"
             android:textColor="@color/gray_33"
             android:textSize="14sp"/>
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_enroll_money"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rl_activity_fee"
@@ -110,27 +108,125 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_ed"/>
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginTop="15dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_weight="1"
-                android:text="余额"
+                android:text="余额:"
                 android:textColor="@color/gray_10"
                 android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_user_money"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="15"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"/>
+
             <EditText
+                android:id="@+id/et_input_money"
                 android:layout_width="149dp"
-                android:layout_height="38dp"/>
+                android:layout_height="38dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/stroke_white_4dp"
+                android:gravity="center_vertical|right"
+                android:inputType="numberDecimal"
+                android:maxLength="10"
+                android:paddingRight="4dp"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginBottom="13dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="13dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="余额支付："
+                android:textColor="@color/gray_10"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_input_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:text="¥0.00"/>
+        </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_enroll_money"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:text="本活动报名后，不支持退款！"
+        android:textColor="@color/gray_8d"
+        android:textSize="12sp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gradient_orange_hor"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="¥"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_enroll_money"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+
+        <TextView
+            android:id="@+id/tv_confirm_enroll"
+            android:layout_width="150dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/gradient_red_33dp"
+            android:gravity="center"
+            android:text="去支付"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
 </RelativeLayout>

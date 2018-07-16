@@ -92,7 +92,7 @@ public class PayCardActivity extends BaseActivity {
 
     private void initData() {
         OkHttpUtils.post()
-                .url(Constant.MEMBER_BALANCE)
+                .url(Constant.MEMBER_CARD_BALANCE)
                 .addParams("appType", MyApp.appType)
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
