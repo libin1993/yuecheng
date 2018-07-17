@@ -47,6 +47,8 @@ import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -116,12 +118,17 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     private boolean isUploadPic = true;
     //报名类型
     private String type;
+    //活动报名id
+    private int enrollId;
+    //报名成功
+    private boolean isEnroll;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enroll_action);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         tvHeaderTitle.setText("活动报名");
         getData();
         initData();
@@ -146,8 +153,10 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         activityBean = GsonUtils.jsonToBean(response, EnrollActivityBean.class);
                         if (activityBean.isFlag()) {
+                            enrollId = activityBean.getData().getSignupId();
                             if (activityBean.getData().getOptionList() != null && activityBean
                                     .getData().getOptionList().size() > 0) {
 
@@ -407,7 +416,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                 && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && inputNum == totalNum) {
             if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {
                 tvEnrollActivity.setEnabled(false);
-                Map<String, String> paramMap = new HashMap<>();
+                final Map<String, String> paramMap = new HashMap<>();
                 paramMap.put("appType", MyApp.appType);
                 paramMap.put("appVersion", MyApp.appVersion);
                 paramMap.put("organizeId", MyApp.organizeId);
@@ -430,24 +439,60 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 //                info = info.replaceAll(",", ";");
 //                paramMap.put("appData", info);
 //            }
-
-
+                //现金报名
                 if (!TextUtils.isEmpty(type) && type.equals("CASH") && activityBean.getData()
-                        .getSignupActivity().getEnrollFee() > 0) {
-//                    cashEnroll(paramMap);
-                    pointsEnroll(paramMap);
-//                    Intent intent = new Intent(EnrollActionActivity.this, ConfirmEnrollActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    SerializableMap serializableMap = new SerializableMap();
-//                    serializableMap.setMap(paramMap);
-//                    bundle.putSerializable("map", serializableMap);
-//                    bundle.putInt("activity_id", activityId);
-//                    bundle.putInt("enroll_id", activityBean.getData().getSignupStatistics());
-//                    intent.putExtras(bundle);
-//                    startActivity(intent);
+                        .getSignupActivity().getEnrollFee() > 0 && enrollId > 0) {
+                    cashEnroll(paramMap);
                 } else {
-                    pointsEnroll(paramMap);
+                    OkHttpUtils.post()
+                            .url(Constant.POINTS_ENROLL_ACTIVITY)
+                            .params(paramMap)
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    tvEnrollActivity.setEnabled(true);
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    tvEnrollActivity.setEnabled(true);
+                                    LogUtils.log(response);
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        boolean flag = jsonObject.getBoolean("flag");
+                                        if (flag) {
+                                            if (!TextUtils.isEmpty(type) && type.equals("CASH") && activityBean.getData()
+                                                    .getSignupActivity().getEnrollFee() > 0) {
+
+                                                JSONObject data = jsonObject.getJSONObject("data");
+                                                enrollId = data.getInt("data");
+
+                                                cashEnroll(paramMap);
+
+                                            } else {
+                                                enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
+                                                tvEnrollActivity.setText("已报名");
+                                                tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                            }
+
+                                        } else {
+                                            String msg = jsonObject.getString("msg");
+                                            enrollResult(false, msg);
+
+                                            if (jsonObject.getInt("code") == 4002) {
+                                                SharedPreUtils.deleteStr(EnrollActionActivity.this, "is_login");
+                                            }
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                 }
+
+
             } else {
                 ToastUtils.showToast(this, "手机号输入格式有误");
             }
@@ -459,156 +504,19 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     }
 
     /**
-     * @param paramMap 现金报名
+     * 现金报名
      */
-    private void cashEnroll(Map<String, String> paramMap) {
-        OkHttpUtils.get()
-                .url(Constant.CASH_ENROLL_ACTIVITY)
-                .params(paramMap)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        tvEnrollActivity.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        LogUtils.log(response);
-//                        try {
-//                            JSONObject jsonObject = new JSONObject(response);
-//                            boolean flag = jsonObject.getBoolean("flag");
-//                            if (flag) {
-//                                enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
-//                                tvEnrollActivity.setText("已报名");
-//                                tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-//                            } else {
-//                                String msg = jsonObject.getString("msg");
-//                                enrollResult(false, msg);
-//                                tvEnrollActivity.setEnabled(true);
-//
-//                                if (jsonObject.getInt("code") == 4002) {
-//                                    SharedPreUtils.deleteStr(EnrollActionActivity.this, "is_login");
-//                                }
-//                            }
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-                    }
-                });
+    private void cashEnroll(Map<String, String> map) {
+        Intent intent = new Intent(EnrollActionActivity.this, ConfirmEnrollActivity.class);
+        Bundle bundle = new Bundle();
+        SerializableMap serializableMap = new SerializableMap();
+        serializableMap.setMap(map);
+        bundle.putSerializable("map", serializableMap);
+        bundle.putInt("activity_id", activityId);
+        bundle.putInt("enroll_id", enrollId);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
-
-    /**
-     * @param paramMap 积分报名
-     */
-    private void pointsEnroll(Map<String, String> paramMap) {
-        OkHttpUtils.post()
-                .url(Constant.POINTS_ENROLL_ACTIVITY)
-                .params(paramMap)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        tvEnrollActivity.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        LogUtils.log(response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            if (flag) {
-                                enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
-                                tvEnrollActivity.setText("已报名");
-                                tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                            } else {
-                                String msg = jsonObject.getString("msg");
-                                enrollResult(false, msg);
-                                tvEnrollActivity.setEnabled(true);
-
-                                if (jsonObject.getInt("code") == 4002) {
-                                    SharedPreUtils.deleteStr(EnrollActionActivity.this, "is_login");
-                                }
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
-
-    /**
-     * 是否设置支付密码
-     */
-    private void isSetPayPwd() {
-        if (!TextUtils.isEmpty(type) && type.equals("CASH") && activityBean.getData()
-                .getSignupActivity().getEnrollFee() > 0) {
-            OkHttpUtils.post()
-                    .url(Constant.IS_SET_PAY_PWD)
-                    .addParams("appType", MyApp.appType)
-                    .addParams("appVersion", MyApp.appVersion)
-                    .addParams("organizeId", MyApp.organizeId)
-                    .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                    .addParams("token", SharedPreUtils.getStr(this, "token"))
-                    .build()
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onError(Call call, Exception e, int id) {
-
-                        }
-
-                        @Override
-                        public void onResponse(String response, int id) {
-                            ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
-                            if (responseBean.isFlag()) {
-                                enrollActivity();
-                            } else {
-                                if (responseBean.getCode() == 4002) {
-                                    SharedPreUtils.deleteStr(EnrollActionActivity.this, "is_login");
-                                } else {
-                                    setPayPwd();
-                                }
-                            }
-                        }
-                    });
-        } else {
-            enrollActivity();
-        }
-
-    }
-
-    /**
-     * 设置支付密码
-     */
-    private void setPayPwd() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this,
-                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
-        dialog.setTitle("提示");
-        dialog.setMessage("您尚未设置支付密码，是否前去设置？");
-        //为“确定”按钮注册监听事件
-        dialog.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(EnrollActionActivity.this, ValidateActivity.class);
-                intent.putExtra("type", "bind");
-                startActivity(intent);
-            }
-        });
-
-        //为“取消”按钮注册监听事件
-        dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.create();
-        dialog.show();
-    }
-
 
     /**
      * 兑换结果
@@ -776,4 +684,31 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         PermissionDialog.showPermissionDialog(this, "相机");
     }
 
+
+    /**
+     * @param msg 余额全款支付回调
+     */
+    @Subscribe
+    public void enrollSuccess(String msg) {
+        if ("enroll_success".equals(msg)) {
+            isEnroll = true;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isEnroll){
+            isEnroll = false;
+            enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
+            tvEnrollActivity.setText("已报名");
+            tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

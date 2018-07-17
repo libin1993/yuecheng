@@ -1,31 +1,46 @@
 package com.hfbh.yuecheng.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.ActivityRecordBean;
+import com.hfbh.yuecheng.bean.EnrollOrderBean;
+import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.UserBalanceBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.MoneyInputFilter;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.InputMoneyFilter;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SerializableMap;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.utils.ToastUtils;
+import com.jungly.gridpasswordview.GridPasswordView;
+import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,13 +78,26 @@ public class ConfirmEnrollActivity extends BaseActivity {
     @BindView(R.id.tv_confirm_enroll)
     TextView tvConfirmEnroll;
 
+    //报名参数
     private Map<String, String> map;
+    //活动id
     private int activityId;
-
+    //报名记录id
+    private int enrollId;
     private ActivityRecordBean activityBean;
     private UserBalanceBean balanceBean;
-    private int enrollId;
+    //用户余额
     private double balance;
+    //活动数据是否请求
+    private boolean isActivity;
+    //余额是否请求
+    private boolean isBalance;
+    //活动报名金额
+    private double enrollFee;
+    //使用余额
+    private double useBalance;
+    private PopupWindow mPopupWindow;
+    private EnrollOrderBean orderBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,67 +105,17 @@ public class ConfirmEnrollActivity extends BaseActivity {
         setContentView(R.layout.activity_confirm_enroll);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("确认报名");
-        etInputMoney.setEnabled(false);
+        etInputMoney.setFocusable(false);
+        etInputMoney.setFocusableInTouchMode(false);
+        tvConfirmEnroll.setEnabled(false);
         getData();
         initData();
         initBalance();
     }
 
-    private void initBalance() {
-        OkHttpUtils.get()
-                .url(Constant.USER_BALANCE)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token", SharedPreUtils.getStr(this, "token"))
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        balanceBean = GsonUtils.jsonToBean(response, UserBalanceBean.class);
-                        if (balanceBean.isFlag() && balanceBean.getData() != null) {
-                            initUserInfo();
-                        }
-                    }
-                });
-    }
-
-    private void initUserInfo() {
-        balance = balanceBean.getData().getAccountBalance();
-        tvUserMoney.setText("¥" + DisplayUtils.decimalFormat(balance));
-        etInputMoney.setEnabled(true);
-        etInputMoney.setFilters(new InputFilter[]{new InputMoneyFilter(balance)});
-        etInputMoney.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(s.toString())) {
-                    String money = DisplayUtils.isInteger(Double.parseDouble(s.toString()));
-//                    etInputMoney.setText(money);
-                    tvInputMoney.setText("¥" + money);
-                } else {
-                    tvInputMoney.setText("¥0.00");
-                }
-            }
-        });
-
-    }
-
+    /**
+     * 活动数据
+     */
     private void initData() {
         OkHttpUtils.get()
                 .url(Constant.CASH_ENROLL_INFO)
@@ -158,16 +136,116 @@ public class ConfirmEnrollActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         activityBean = GsonUtils.jsonToBean(response, ActivityRecordBean.class);
                         if (activityBean.isFlag() && activityBean.getData() != null) {
+                            enrollFee = activityBean.getData().getActivity().getEnrollFee();
+
+                            isActivity = true;
                             initView();
+                            if (isBalance) {
+                                initUserBalance();
+                            }
+
                         }
                     }
                 });
     }
 
+    /**
+     * 余额
+     */
+    private void initBalance() {
+        OkHttpUtils.get()
+                .url(Constant.USER_BALANCE)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        balanceBean = GsonUtils.jsonToBean(response, UserBalanceBean.class);
+                        if (balanceBean.isFlag() && balanceBean.getData() != null) {
+                            balance = balanceBean.getData().getAccountBalance();
+                            if (balance > 0) {
+                                etInputMoney.setFocusable(true);
+                                etInputMoney.setFocusableInTouchMode(true);
+                            }
+                            isBalance = true;
+                            if (isActivity) {
+                                initUserBalance();
+                            }
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 余额
+     */
+    private void initUserBalance() {
+        tvEnrollMoney.setText(DisplayUtils.decimalFormat(enrollFee));
+        tvConfirmEnroll.setEnabled(true);
+        tvUserMoney.setText("¥" + DisplayUtils.decimalFormat(balance));
+        etInputMoney.setEnabled(true);
+        etInputMoney.setFilters(new InputFilter[]{new MoneyInputFilter(Math.min(balance, enrollFee))});
+
+
+        etInputMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s.toString())) {
+                    useBalance = Double.parseDouble(s.toString());
+
+                    if (useBalance > Math.min(enrollFee, balance)) {
+                        etInputMoney.removeTextChangedListener(this);
+                        useBalance = Math.min(enrollFee, balance);
+                        etInputMoney.setText(DisplayUtils.isInteger(useBalance));
+                        etInputMoney.setSelection(etInputMoney.getText().toString().length());
+                        etInputMoney.addTextChangedListener(this);
+                    } else if (useBalance != (int) useBalance && String.valueOf(useBalance).length()
+                            - String.valueOf(useBalance).indexOf(".") >= 3) {
+                        etInputMoney.removeTextChangedListener(this);
+                        useBalance = Double.parseDouble(DisplayUtils.decimalFormat(useBalance));
+                        etInputMoney.setText(DisplayUtils.isInteger(useBalance));
+                        etInputMoney.setSelection(etInputMoney.getText().toString().length());
+                        etInputMoney.addTextChangedListener(this);
+                    }
+                    tvInputMoney.setText("¥" + DisplayUtils.decimalFormat(useBalance));
+                    tvEnrollMoney.setText(DisplayUtils.decimalFormat(enrollFee - useBalance));
+
+                } else {
+                    useBalance = 0;
+                    tvInputMoney.setText("¥0.00");
+                    tvEnrollMoney.setText(DisplayUtils.decimalFormat(enrollFee));
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 活动
+     */
     private void initView() {
         tvActivityName.setText(activityBean.getData().getActivity().getActivityTitle());
         tvActivityTime.setText(activityBean.getData().getRecord().getSignupTime());
-        tvActivityFee.setText("¥" + activityBean.getData().getActivity().getEnrollFee());
+        tvActivityFee.setText("¥" + DisplayUtils.decimalFormat(enrollFee));
     }
 
     private void getData() {
@@ -185,7 +263,308 @@ public class ConfirmEnrollActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_confirm_enroll:
+                if (useBalance > 0) {
+                    isSetPayPwd();
+                } else {
+                    cashEnroll();
+                }
                 break;
         }
     }
+
+
+    /**
+     * 是否设置支付密码
+     */
+    private void isSetPayPwd() {
+        OkHttpUtils.post()
+                .url(Constant.IS_SET_PAY_PWD)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+                        if (responseBean.isFlag()) {
+                            inputPwd();
+                        } else {
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(ConfirmEnrollActivity.this, "is_login");
+                            } else {
+                                setPayPwd();
+                            }
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 设置支付密码
+     */
+    private void setPayPwd() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this,
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("您尚未设置支付密码，是否前去设置？");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(ConfirmEnrollActivity.this, ValidateActivity.class);
+                intent.putExtra("type", "bind");
+                startActivity(intent);
+            }
+        });
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("下次再说", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
+    }
+
+
+    /**
+     * 输入密码弹窗
+     */
+    private void inputPwd() {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_validate_pwd, null);
+
+        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, (int) DisplayUtils.dp2px(this, 191));
+        mPopupWindow.setContentView(contentView);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        DisplayUtils.setBackgroundAlpha(this, true);
+
+        ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_cancel_pay);
+
+        TextView tvForget = (TextView) contentView.findViewById(R.id.tv_forget_pay_pwd);
+
+
+        GridPasswordView pwdView = (GridPasswordView) contentView.findViewById(R.id.et_validate_pay_pwd);
+
+
+        ivCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
+        tvForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ConfirmEnrollActivity.this, ValidateActivity.class);
+                intent.putExtra("type", "reset");
+                startActivity(intent);
+            }
+        });
+
+        pwdView.setOnPasswordChangedListener(new GridPasswordView.OnPasswordChangedListener() {
+            @Override
+            public void onTextChanged(String s) {
+
+            }
+
+            @Override
+            public void onInputFinish(String s) {
+                validatePwd(s);
+            }
+        });
+
+
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                DisplayUtils.setBackgroundAlpha(ConfirmEnrollActivity.this, false);
+            }
+        });
+    }
+
+    /**
+     * 密码验证
+     */
+    private void validatePwd(String validatePwd) {
+        OkHttpUtils.post()
+                .url(Constant.VALIDATE_PWD)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .addParams("payPassword", validatePwd)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
+                        if (responseBean.isFlag()) {
+                            if (mPopupWindow != null && mPopupWindow.isShowing()) {
+                                mPopupWindow.dismiss();
+                            }
+                            cashEnroll();
+
+                        } else {
+                            ToastUtils.showToast(ConfirmEnrollActivity.this, "密码错误");
+                            if (responseBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(ConfirmEnrollActivity.this, "is_login");
+                            }
+                        }
+                    }
+                });
+
+
+    }
+
+    /**
+     * 现金报名
+     */
+    private void cashEnroll() {
+        if (useBalance > 0) {
+            map.put("enrollFee", String.valueOf(useBalance));
+        }
+        OkHttpUtils.get()
+                .url(Constant.CASH_ENROLL_ACTIVITY)
+                .params(map)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        orderBean = GsonUtils.jsonToBean(response, EnrollOrderBean.class);
+                        if (orderBean.isFlag() && orderBean.getData() != null) {
+                            if (useBalance == 0) {
+                                payMoney();
+                            } else if (useBalance < enrollFee) {
+                                frozenMoney(orderBean.getData().getOrder().getTranNo());
+                            } else {
+                                frozenMoney(orderBean.getData().getOrder().getTranNo());
+                            }
+                        } else {
+                            ToastUtils.showToast(ConfirmEnrollActivity.this, orderBean.getMsg());
+                        }
+                    }
+                });
+
+    }
+
+    /**
+     * 付现金
+     */
+    private void payMoney() {
+        Intent intent = new Intent(ConfirmEnrollActivity.this, EnrollOrderActivity.class);
+        intent.putExtra("order_no", orderBean.getData().getOrder().getTranNo());
+        intent.putExtra("pay_type", "ACTIVITY");
+        intent.putExtra("total_money", enrollFee);
+        intent.putExtra("balance_money", useBalance);
+        intent.putExtra("pay_money", enrollFee - useBalance);
+        startActivity(intent);
+    }
+
+
+    /**
+     * 现金报名
+     */
+    private void frozenMoney(String orderNo) {
+        OkHttpUtils.post()
+                .url(Constant.FROZEN_ENROLL_BALANCE)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .addParams("orderNo", orderNo)
+                .addParams("enrollFee", String.valueOf(useBalance))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean flag = jsonObject.getBoolean("flag");
+                            if (flag) {
+                                if (useBalance == enrollFee) {
+                                    balancePay();
+                                } else {
+                                    payMoney();
+                                }
+                            } else {
+                                String msg = jsonObject.getString("msg");
+                                ToastUtils.showToast(ConfirmEnrollActivity.this, msg);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 预付卡全额支付
+     */
+    private void balancePay() {
+        OkHttpUtils.get()
+                .url(Constant.ENROLL_BALANCE_PAY)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .addParams("orderNo", orderBean.getData().getOrder().getTranNo())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean flag = jsonObject.getBoolean("flag");
+                            if (flag) {
+                                EventBus.getDefault().post("enroll_success");
+                                finish();
+                            } else {
+                                String msg = jsonObject.getString("msg");
+                                ToastUtils.showToast(ConfirmEnrollActivity.this, msg);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
 }

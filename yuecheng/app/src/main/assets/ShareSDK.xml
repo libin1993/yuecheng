@@ -90,8 +90,8 @@
     <Wechat
         Id="4"
         SortId="1"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wxde304ec90e9db692"
+        AppSecret="2bf6169f6504c7ecf3cec586de20ae5c"
 		UserName="gh_afb25ac019c9"
 		Path="pages/index/index.html?id=1"
         BypassApproval="false"
@@ -102,8 +102,8 @@
     <WechatMoments
         Id="5"
         SortId="2"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wxde304ec90e9db692"
+        AppSecret="2bf6169f6504c7ecf3cec586de20ae5c"
         BypassApproval="true"
         Enable="true" />
         

@@ -1072,7 +1072,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 startActivity(new Intent(getActivity(), ExchangeCouponActivity.class));
                                 break;
                             case 7:
-                                startActivity(new Intent(getActivity(), RushBuyActivity.class));
+                                startActivity(new Intent(getActivity(), GroupGoodsActivity.class));
                                 break;
                             case 9:
                                 EventBus.getDefault().post("activity");
@@ -1114,7 +1114,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 if (!EasyPermissions.hasPermissions(getActivity(), permissionStr)) {
                     EasyPermissions.requestPermissions(this, "", 123, permissionStr);
                 } else {
-                    startActivity(new Intent(getActivity(), ScanCodeActivity.class));
+                    startActivity(new Intent(getActivity(), PayActivity.class));
                 }
                 break;
         }

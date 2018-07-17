@@ -216,6 +216,11 @@
         <activity android:name=".ui.GroupGoodsActivity"/>
         <activity android:name=".ui.RushBuyActivity"/>
         <activity android:name=".ui.ScanOrderActivity"/>
+        <activity android:name=".ui.EnrollOrderActivity"/>
+        <activity android:name=".ui.PayResultActivity"/>
+        <activity android:name=".ui.GroupGoodsDetailActivity"/>
+        <activity android:name=".ui.RushGoodsDetailActivity"/>
+        <activity android:name=".wxapi.WXPayEntryActivity"/>
 
         <service
             android:name=".service.TimerService"
@@ -228,6 +233,12 @@
             android:label="PushService"
             android:process=":pushservice">
         </service>
+
+        <receiver android:name=".service.AppRegister">
+            <intent-filter>
+                <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

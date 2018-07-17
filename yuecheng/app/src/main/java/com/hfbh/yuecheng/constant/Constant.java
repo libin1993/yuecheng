@@ -10,6 +10,8 @@ public class Constant {
     //    private static final String HOST = "https://m.hfbh.com.cn";
 //        private static final String HOST = "http://ceshi.wmalle.com";
     private static final String HOST = "http://yjwang.wmalle.com";
+    //微信appid
+    public static final String APP_ID = "wxde304ec90e9db692";
     //定位
     public static final String LOCATION = HOST + "/wechat/appRequest/nearestMall.json";
     //首页分类
@@ -36,8 +38,8 @@ public class Constant {
     public static final String USER_BALANCE = HOST + "/wechat/member/queryAmount.json";
     //活动报名冻结余额
     public static final String FROZEN_ENROLL_BALANCE = HOST + "/wechat/wechat/signup_activity/preparePay.json";
-    //活动报名余额支付
-    public static final String ENROLL_BALANCE_PAY = "/wechat/wechat/signup_activity/getPayDataSuccess.json";
+    //预付卡全额支付回调
+    public static final String ENROLL_BALANCE_PAY = HOST + "/wechat/wechat/signup_activity/getPayDataSuccess.json";
     //积分报名
     public static final String POINTS_ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/signup_submit.json";
     //现金报名
@@ -130,6 +132,8 @@ public class Constant {
     public static final String READ_MSG = HOST + "/wechat/broadcast/update.json";
     //支付参数
     public static final String PAY_DATA = HOST + "/wechat/order/getPayData.json";
+    //商品详情
+    public static final String GOODS_DETAIL = HOST + "/wechat/commodity/commodity.json";
 
     //WebView
     //活动详情

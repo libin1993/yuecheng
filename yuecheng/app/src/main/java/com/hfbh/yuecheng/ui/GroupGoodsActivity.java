@@ -154,7 +154,8 @@ public class GroupGoodsActivity extends BaseActivity {
                 ivGoods.setImageURI(dataBean.getPicturePath());
 
                 holder.setText(R.id.tv_group_goods_name, dataBean.getCommodityName());
-                holder.setText(R.id.tv_group_goods_num, "已拼" + dataBean.getJoinNum() + "件");
+                holder.setText(R.id.tv_group_goods_buy, "去拼团");
+                holder.setText(R.id.tv_group_goods_num, "已拼" + dataBean.getSaleNum() + "件");
 
                 TextView tvOld = holder.getView(R.id.tv_group_goods_price);
                 tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
@@ -170,9 +171,9 @@ public class GroupGoodsActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-//                Intent intent = new Intent(GroupGoodsActivity.this, PopGoodsDetailActivity.class);
-//                intent.putExtra("goods_id", goodsList.get(position).getCommodityId());
-//                startActivity(intent);
+                Intent intent = new Intent(GroupGoodsActivity.this, GroupGoodsDetailActivity.class);
+                intent.putExtra("goods_id", goodsList.get(position).getCommodityId());
+                startActivity(intent);
             }
 
             @Override

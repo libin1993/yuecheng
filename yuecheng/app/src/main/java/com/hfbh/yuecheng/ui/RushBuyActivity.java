@@ -1,10 +1,12 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,10 +20,12 @@ import com.hfbh.yuecheng.bean.GoodsBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -95,6 +99,7 @@ public class RushBuyActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        LogUtils.log(response);
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
                         if (goodsBean.getPage() != null) {
                             pages = goodsBean.getPage().getPages();
@@ -148,11 +153,15 @@ public class RushBuyActivity extends BaseActivity {
                 ivGoods.setImageURI(dataBean.getPicturePath());
 
                 holder.setText(R.id.tv_group_goods_name, dataBean.getCommodityName());
+                holder.setText(R.id.tv_group_goods_buy, "去抢购");
                 holder.setVisible(R.id.ll_rush_buy, true);
-                holder.setText(R.id.tv_group_goods_num, "已抢" + dataBean.getJoinNum() + "件");
+                holder.setText(R.id.tv_group_goods_num, "已抢" + dataBean.getSaleNum() + "件");
 
                 ProgressBar progressBar = holder.getView(R.id.progressbar_goods);
-                int progress = dataBean.getBuyNum() / dataBean.getBuyLimitNum() * 100;
+                int progress = 0;
+                if (dataBean.getCommodityNum() > 0) {
+                    progress = dataBean.getSaleNum() / dataBean.getCommodityNum() * 100;
+                }
                 progressBar.setProgress(progress);
                 holder.setText(R.id.tv_group_goods_limit, progress + "%");
                 holder.setText(R.id.tv_group_goods_discount, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));
@@ -170,9 +179,9 @@ public class RushBuyActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-//                Intent intent = new Intent(GroupGoodsActivity.this, PopGoodsDetailActivity.class);
-//                intent.putExtra("goods_id", goodsList.get(position).getCommodityId());
-//                startActivity(intent);
+                Intent intent = new Intent(RushBuyActivity.this, RushGoodsDetailActivity.class);
+                intent.putExtra("goods_id", goodsList.get(position).getCommodityId());
+                startActivity(intent);
             }
 
             @Override

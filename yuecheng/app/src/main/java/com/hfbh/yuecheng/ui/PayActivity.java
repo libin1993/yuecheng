@@ -14,12 +14,16 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.PayDataBean;
 import com.hfbh.yuecheng.bean.PayResultBean;
+import com.hfbh.yuecheng.bean.WechatPayBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.smarttop.library.utils.LogUtil;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -53,7 +57,7 @@ public class PayActivity extends BaseActivity {
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("totalFee", "0.01")
-                .addParams("channelId", "ALIPAY_APP")
+                .addParams("channelId", "WX_APP")
                 .addParams("payType", "COMMODITY")
                 .addParams("orderNo", "102917996223091318788")
                 .build()
@@ -65,24 +69,43 @@ public class PayActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        final PayDataBean payDataBean = GsonUtils.jsonToBean(response,PayDataBean.class);
-                        Runnable payRunnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                PayTask aliPay = new PayTask(PayActivity.this);
-                                Map<String, String> result = aliPay.payV2(payDataBean.getData().getOrderString(), true);
-                                Message msg = new Message();
-                                msg.what = 1;
-                                msg.obj = result;
-                                mHandler.sendMessage(msg);
-                            }
-                        };
-                        Thread payThread = new Thread(payRunnable);
-                        payThread.start();
+//                        LogUtils.log(response);
+//                        final PayDataBean payDataBean = GsonUtils.jsonToBean(response,PayDataBean.class);
+//                        Runnable payRunnable = new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                PayTask aliPay = new PayTask(PayActivity.this);
+//                                Map<String, String> result = aliPay.payV2(payDataBean.getData().getOrderString(), true);
+//                                Message msg = new Message();
+//                                msg.what = 1;
+//                                msg.obj = result;
+//                                mHandler.sendMessage(msg);
+//                            }
+//                        };
+//                        Thread payThread = new Thread(payRunnable);
+//                        payThread.start();
+                        WechatPayBean wechatPayBean = GsonUtils.jsonToBean(response, WechatPayBean.class);
+                        IWXAPI api = WXAPIFactory.createWXAPI(PayActivity.this, Constant.APP_ID);
+                        if (!api.isWXAppInstalled()) {
+                            ToastUtils.showToast(PayActivity.this, "没有安装微信");
+                        }
+                        if (!api.isWXAppSupportAPI()) {
+                            ToastUtils.showToast(PayActivity.this, "当前版本不支持支付功能");
+                        }
+
+                        PayReq req = new PayReq();
+                        req.appId = Constant.APP_ID;
+                        req.partnerId = wechatPayBean.getData().getMch_id();
+                        req.prepayId = wechatPayBean.getData().getPrepay_id();
+                        req.nonceStr = wechatPayBean.getData().getNonce_str();
+                        req.timeStamp = wechatPayBean.getData().getTimestamp();
+                        req.packageValue = "Sign=WXPay";
+                        req.sign = wechatPayBean.getData().getSign();
+                        api.sendReq(req);
+
                     }
                 });
     }
-
 
 
     /**
@@ -99,12 +122,12 @@ public class PayActivity extends BaseActivity {
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        ToastUtils.showToast(PayActivity.this, "支付成功："+resultInfo);
+                        ToastUtils.showToast(PayActivity.this, "支付成功：" + resultInfo);
 
 
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        ToastUtils.showToast(PayActivity.this, "支付失败："+resultInfo);
+                        ToastUtils.showToast(PayActivity.this, "支付失败：" + resultInfo);
 
                     }
                     break;

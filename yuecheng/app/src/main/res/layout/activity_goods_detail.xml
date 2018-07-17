@@ -33,8 +33,7 @@
         android:paddingRight="10dp"
         android:paddingTop="10dp"
         android:scaleType="center"
-        android:src="@mipmap/btn_headerbar_share"
-        android:visibility="gone"/>
+        android:src="@mipmap/btn_headerbar_share"/>
 
     <RelativeLayout
         android:id="@+id/rl_pop_goods_buy"
@@ -45,27 +44,57 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-        <TextView
-            android:id="@+id/tv_goods_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:textColor="@android:color/white"
-            android:textSize="22sp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_goods_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:text="¥"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tv_goods_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/tv_goods_money"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_buy_goods"
+                android:layout_width="150dp"
+                android:layout_height="36dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/bound_gradient_red"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/tv_buy_goods"
-            android:layout_width="150dp"
+            android:id="@+id/tv_goods_status"
+            android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="36dp"
-            android:background="@drawable/bound_gradient_red"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/bound_white_33dp"
             android:gravity="center"
-            android:text="立即购买"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
+            android:textColor="@color/gray_e0"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+
+
     </RelativeLayout>
 
 </RelativeLayout>
