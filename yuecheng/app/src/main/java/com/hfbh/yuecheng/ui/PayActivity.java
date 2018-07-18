@@ -41,10 +41,13 @@ import okhttp3.Call;
  * Describe：
  */
 public class PayActivity extends BaseActivity {
+    private IWXAPI api;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
+        api = WXAPIFactory.createWXAPI(PayActivity.this, Constant.APP_ID,true);
         initData();
     }
 
@@ -69,7 +72,7 @@ public class PayActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-//                        LogUtils.log(response);
+                        LogUtils.log(response);
 //                        final PayDataBean payDataBean = GsonUtils.jsonToBean(response,PayDataBean.class);
 //                        Runnable payRunnable = new Runnable() {
 //                            @Override
@@ -85,7 +88,7 @@ public class PayActivity extends BaseActivity {
 //                        Thread payThread = new Thread(payRunnable);
 //                        payThread.start();
                         WechatPayBean wechatPayBean = GsonUtils.jsonToBean(response, WechatPayBean.class);
-                        IWXAPI api = WXAPIFactory.createWXAPI(PayActivity.this, Constant.APP_ID);
+
                         if (!api.isWXAppInstalled()) {
                             ToastUtils.showToast(PayActivity.this, "没有安装微信");
                         }
@@ -95,7 +98,7 @@ public class PayActivity extends BaseActivity {
 
                         PayReq req = new PayReq();
                         req.appId = Constant.APP_ID;
-                        req.partnerId = wechatPayBean.getData().getMch_id();
+                        req.partnerId = wechatPayBean.getData().getSub_mch_id();
                         req.prepayId = wechatPayBean.getData().getPrepay_id();
                         req.nonceStr = wechatPayBean.getData().getNonce_str();
                         req.timeStamp = wechatPayBean.getData().getTimestamp();

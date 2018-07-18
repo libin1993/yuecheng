@@ -37,6 +37,8 @@ import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.jungly.gridpasswordview.GridPasswordView;
 import com.smarttop.library.utils.LogUtil;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -88,9 +90,9 @@ public class ConfirmEnrollActivity extends BaseActivity {
     private UserBalanceBean balanceBean;
     //用户余额
     private double balance;
-    //活动数据是否请求
+    //活动接口是否成功
     private boolean isActivity;
-    //余额是否请求
+    //余额接口是否成功
     private boolean isBalance;
     //活动报名金额
     private double enrollFee;
@@ -99,15 +101,17 @@ public class ConfirmEnrollActivity extends BaseActivity {
     private PopupWindow mPopupWindow;
     private EnrollOrderBean orderBean;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_enroll);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("确认报名");
+        tvConfirmEnroll.setText("去支付");
         etInputMoney.setFocusable(false);
         etInputMoney.setFocusableInTouchMode(false);
-        tvConfirmEnroll.setEnabled(false);
+
         getData();
         initData();
         initBalance();

@@ -26,6 +26,9 @@ import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.smarttop.library.utils.LogUtil;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -71,6 +74,7 @@ public class EnrollOrderActivity extends BaseActivity {
     private double discount;
     //支付方式
     private String type = "WX_APP";
+    private IWXAPI api;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +82,7 @@ public class EnrollOrderActivity extends BaseActivity {
         setContentView(R.layout.activity_enroll_order);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("确认支付");
+        api = WXAPIFactory.createWXAPI(this, Constant.APP_ID);
         getData();
         initView();
 
@@ -147,9 +152,9 @@ public class EnrollOrderActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         LogUtils.log(response);
-                        if ("ALIPAY_APP".equals(type)){
+                        if ("ALIPAY_APP".equals(type)) {
                             final PayDataBean payDataBean = GsonUtils.jsonToBean(response, PayDataBean.class);
-                            if (payDataBean.isFlag() && payDataBean.getData() != null){
+                            if (payDataBean.isFlag() && payDataBean.getData() != null) {
                                 Runnable payRunnable = new Runnable() {
                                     @Override
                                     public void run() {
@@ -164,8 +169,26 @@ public class EnrollOrderActivity extends BaseActivity {
                                 Thread payThread = new Thread(payRunnable);
                                 payThread.start();
                             }
-                        }else {
-//                            WechatPayBean wechatPayBean = GsonUtils.jsonToBean(response,WechatPayBean.class);
+                        } else {
+                            WechatPayBean wechatPayBean = GsonUtils.jsonToBean(response, WechatPayBean.class);
+                            if (!api.isWXAppInstalled()) {
+                                ToastUtils.showToast(EnrollOrderActivity.this, "没有安装微信");
+                            }
+                            if (!api.isWXAppSupportAPI()) {
+                                ToastUtils.showToast(EnrollOrderActivity.this, "当前版本不支持支付功能");
+                            }
+
+                            PayReq req = new PayReq();
+                            req.appId = Constant.APP_ID;
+                            req.partnerId = wechatPayBean.getData().getSub_mch_id();
+                            req.prepayId = wechatPayBean.getData().getPrepay_id();
+                            req.nonceStr = wechatPayBean.getData().getNonce_str();
+                            req.timeStamp = wechatPayBean.getData().getTimestamp();
+                            req.packageValue = "Sign=WXPay";
+                            req.sign = wechatPayBean.getData().getSign();
+                            LogUtils.log(GsonUtils.jsonToString(req));
+                            api.sendReq(req);
+
                         }
                     }
                 });

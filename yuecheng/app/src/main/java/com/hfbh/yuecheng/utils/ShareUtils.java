@@ -56,18 +56,20 @@ public class ShareUtils {
         oks.setCallback(new PlatformActionListener() {
             @Override
             public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-
+                ToastUtils.showToast(activity,"11111");
             }
 
 
             @Override
             public void onError(Platform platform, int i, Throwable throwable) {
-
+                LogUtils.log("bbbbb");
+                LogUtils.log(throwable.getMessage());
+                ToastUtils.showToast(activity,throwable.getMessage());
             }
 
             @Override
             public void onCancel(Platform platform, int i) {
-
+                ToastUtils.showToast(activity,"2222");
             }
         });
 

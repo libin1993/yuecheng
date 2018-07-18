@@ -74,7 +74,7 @@ public class SetUpActivity extends BaseActivity {
         if (SharedPreUtils.getBoolean(this, "is_login", false)) {
             tvLogOut.setVisibility(View.VISIBLE);
             llSetPwd.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             llSetPwd.setVisibility(View.GONE);
         }
     }
@@ -172,6 +172,7 @@ public class SetUpActivity extends BaseActivity {
                             SharedPreUtils.deleteStr(SetUpActivity.this, "hash");
                             ToastUtils.showToast(SetUpActivity.this, "退出成功");
                             Intent intent = new Intent(SetUpActivity.this, MainActivity.class);
+                            intent.putExtra("log_out", true);
                             startActivity(intent);
                             finish();
                         } else {

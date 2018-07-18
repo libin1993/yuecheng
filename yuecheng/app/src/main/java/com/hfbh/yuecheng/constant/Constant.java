@@ -144,5 +144,9 @@ public class Constant {
     public static final String NEW_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/newDetail";
     //用户协议
     public static final String USER_AGREEMENT = HOST + "/mall/baida-app-h5/index.html#/protocol";
+    //秒杀商品详情
+    public static final String RUSH_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/secKill";
+    //团购商品详情
+    public static final String GROUP_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/secKill";
 
 }

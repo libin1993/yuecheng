@@ -367,8 +367,11 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
                             loadingView.smoothToHide();
-                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
-                            MyApp.organizeName = locationBean.getData().getOrganizeName();
+                            if (!getIntent().getBooleanExtra("log_out", false)) {
+                                MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
+                                MyApp.organizeName = locationBean.getData().getOrganizeName();
+                            }
+
                             boolean isLogin = SharedPreUtils.getBoolean(MainActivity.this, "is_login", false);
                             //是否已经登录
                             if (!isLogin) {

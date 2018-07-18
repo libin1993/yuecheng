@@ -29,9 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
-import com.hfbh.yuecheng.adapter.BannerAdapter;
 import com.hfbh.yuecheng.adapter.BaseDelegateAdapter;
-import com.hfbh.yuecheng.adapter.FunctionAdapter;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityBean;
@@ -40,6 +38,7 @@ import com.hfbh.yuecheng.bean.BroadcastBean;
 import com.hfbh.yuecheng.bean.CouponBean;
 import com.hfbh.yuecheng.bean.FunctionBean;
 import com.hfbh.yuecheng.bean.GiftBean;
+import com.hfbh.yuecheng.bean.GroupGoodsBean;
 import com.hfbh.yuecheng.bean.HomepageTypeBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.TopicBean;
@@ -49,7 +48,6 @@ import com.hfbh.yuecheng.ui.BannerInfoActivity;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
 import com.hfbh.yuecheng.ui.CouponDetailActivity;
 import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
-import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
 import com.hfbh.yuecheng.ui.GameActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
 import com.hfbh.yuecheng.ui.GroupGoodsActivity;
@@ -57,8 +55,7 @@ import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.PayActivity;
-import com.hfbh.yuecheng.ui.RushBuyActivity;
-import com.hfbh.yuecheng.ui.ScanCodeActivity;
+import com.hfbh.yuecheng.ui.RushGoodsActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
 import com.hfbh.yuecheng.ui.ValidateActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
@@ -130,6 +127,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     private CouponBean couponBean;
     //礼品兑换
     private GiftBean giftBean;
+    //团购
+    private GroupGoodsBean groupBean;
+    //秒杀
+    private GroupGoodsBean rushBean;
     //模块数量
     private int count;
     private List<DelegateAdapter.Adapter> mAdapters;
@@ -231,6 +232,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                             break;
                                         case "GIFT":
                                             giftBean = GsonUtils.jsonToBean(response, GiftBean.class);
+                                            break;
+                                        case "GROUPON":
+                                            groupBean = GsonUtils.jsonToBean(response, GroupGoodsBean.class);
+                                            break;
+                                        case "SECKILL":
+                                            rushBean = GsonUtils.jsonToBean(response, GroupGoodsBean.class);
                                             break;
                                     }
                                 }
@@ -1072,7 +1079,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 startActivity(new Intent(getActivity(), ExchangeCouponActivity.class));
                                 break;
                             case 7:
-                                startActivity(new Intent(getActivity(), GroupGoodsActivity.class));
+                                startActivity(new Intent(getActivity(), RushGoodsActivity.class));
                                 break;
                             case 9:
                                 EventBus.getDefault().post("activity");

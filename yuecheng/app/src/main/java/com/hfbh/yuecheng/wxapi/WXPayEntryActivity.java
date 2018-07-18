@@ -7,7 +7,10 @@ import android.os.Bundle;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.smarttop.library.utils.LogUtil;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -48,7 +51,10 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onResp(BaseResp resp) {
+        LogUtils.log(GsonUtils.jsonToString(resp));
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+            LogUtils.log("a"+resp.errCode+resp.errStr);
+            ToastUtils.showToast(this,resp.errStr);
             switch (resp.errCode) {
                 case 0:
                     errCode = "支付成功";

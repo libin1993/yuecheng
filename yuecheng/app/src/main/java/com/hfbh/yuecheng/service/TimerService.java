@@ -11,10 +11,8 @@ import android.os.IBinder;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.bean.OrderDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.ui.ForgetPwdActivity;
-import com.hfbh.yuecheng.ui.OrderDetailActivity;
+import com.hfbh.yuecheng.ui.ScanedOrderActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -24,7 +22,7 @@ import okhttp3.Call;
 /**
  * Author：Libin on 2018/6/12 13:48
  * Email：1993911441@qq.com
- * Describe：定时查询服务
+ * Describe：付款码定时查询
  */
 public class TimerService extends Service {
     private boolean pushThread = true;
@@ -101,7 +99,7 @@ public class TimerService extends Service {
                             Intent intent1 = new Intent(context, TimerService.class);
                             stopService(intent1);
 
-                            Intent intent = new Intent(TimerService.this, OrderDetailActivity.class);
+                            Intent intent = new Intent(TimerService.this, ScanedOrderActivity.class);
                             intent.putExtra("order", orderDetailBean);
                             startActivity(intent);
                         } else if (orderDetailBean.getCode() == 4002) {
