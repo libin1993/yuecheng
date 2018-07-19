@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.hfbh.yuecheng.R;
+import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.mob.MobSDK;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
@@ -50,6 +51,7 @@ public class MyApp extends Application {
     public static String updateVersion;
     //更新内容
     public static String updateContent;
+    public static PayOrderBean orderBean;
 
     static {
         //设置全局的Header构建器

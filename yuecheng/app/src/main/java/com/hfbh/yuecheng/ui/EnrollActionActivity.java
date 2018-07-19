@@ -153,7 +153,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
+
                         activityBean = GsonUtils.jsonToBean(response, EnrollActivityBean.class);
                         if (activityBean.isFlag()) {
                             enrollId = activityBean.getData().getSignupId();
@@ -415,7 +415,6 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         if (etUsername != null && etPhone != null && !TextUtils.isEmpty(etUsername.getText().toString().trim())
                 && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && inputNum == totalNum) {
             if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {
-                tvEnrollActivity.setEnabled(false);
                 final Map<String, String> paramMap = new HashMap<>();
                 paramMap.put("appType", MyApp.appType);
                 paramMap.put("appVersion", MyApp.appVersion);
@@ -451,13 +450,11 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                             .execute(new StringCallback() {
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
-                                    tvEnrollActivity.setEnabled(true);
                                 }
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    tvEnrollActivity.setEnabled(true);
-                                    LogUtils.log(response);
+
                                     try {
                                         JSONObject jsonObject = new JSONObject(response);
                                         boolean flag = jsonObject.getBoolean("flag");
@@ -692,6 +689,9 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     public void enrollSuccess(String msg) {
         if ("enroll_success".equals(msg)) {
             isEnroll = true;
+        }
+        if ("pay_order".equals(msg)){
+            finish();
         }
     }
 

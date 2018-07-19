@@ -38,7 +38,7 @@ public class Constant {
     public static final String USER_BALANCE = HOST + "/wechat/member/queryAmount.json";
     //活动报名冻结余额
     public static final String FROZEN_ENROLL_BALANCE = HOST + "/wechat/wechat/signup_activity/preparePay.json";
-    //预付卡全额支付回调
+    //活动余额全额支付
     public static final String ENROLL_BALANCE_PAY = HOST + "/wechat/wechat/signup_activity/getPayDataSuccess.json";
     //积分报名
     public static final String POINTS_ENROLL_ACTIVITY = HOST + "/wechat/wechat/signup_activity/signup_submit.json";
@@ -134,6 +134,14 @@ public class Constant {
     public static final String PAY_DATA = HOST + "/wechat/order/getPayData.json";
     //商品详情
     public static final String GOODS_DETAIL = HOST + "/wechat/commodity/commodity.json";
+    //提交订单
+    public static final String SUBMIT_ORDER = HOST + "/wechat/order/submitOrder.json";
+    //商品余额全额支付
+    public static final String PAY_ORDER_BALANCE = HOST + "/wechat/order/payBalanceSuccess.json";
+    //商品余额冻结
+    public static final String FROZEN_ORDER_BALANCE = HOST + "/wechat/order/freezeBalance.json";
+    //主扫订单
+    public static final String SCAN_ORDER = HOST + "/wechat/scanCodePay/getMemberPromotion.json";
 
     //WebView
     //活动详情

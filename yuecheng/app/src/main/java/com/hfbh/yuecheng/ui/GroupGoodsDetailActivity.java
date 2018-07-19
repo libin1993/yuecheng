@@ -1,15 +1,21 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,6 +68,8 @@ public class GroupGoodsDetailActivity extends BaseActivity {
     private int goodsId;
     private String url;
     private GroupGoodsDetailBean goodsBean;
+    //余额支付回调
+    private boolean paySuccess;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +81,14 @@ public class GroupGoodsDetailActivity extends BaseActivity {
         getData();
         initData();
         initWebView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (paySuccess) {
+            balancePayResult();
+        }
     }
 
     private void initData() {
@@ -123,7 +139,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
             tvGoodsStatus.setVisibility(View.VISIBLE);
             rlGoodsStatus.setVisibility(View.GONE);
         } else {
-            tvGoodsPrice.setText("¥"+DisplayUtils.isInteger(goodsBean.getData().getNowPrice()));
+            tvGoodsPrice.setText("¥" + DisplayUtils.isInteger(goodsBean.getData().getNowPrice()));
             tvBuyGoods.setText("立即团购");
             tvGoodsStatus.setVisibility(View.GONE);
             rlGoodsStatus.setVisibility(View.VISIBLE);
@@ -172,15 +188,19 @@ public class GroupGoodsDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_goods_share:
-                if (goodsBean != null && goodsBean.getData() != null) {
-                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
-                            , goodsBean.getData().getCommodityName(),
-                            "", url + "&share=true");
-                }
+//                if (goodsBean != null && goodsBean.getData() != null) {
+//                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
+//                            , goodsBean.getData().getCommodityName(),
+//                            "", url + "&share=true");
+//                }
+                Intent intent1 = new Intent(this, ConfirmOrderActivity.class);
+                intent1.putExtra("goods", goodsBean);
+                startActivity(intent1);
                 break;
             case R.id.tv_buy_goods:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {
                     Intent intent = new Intent(this, ConfirmOrderActivity.class);
+                    intent.putExtra("goods", goodsBean);
                     startActivity(intent);
                 } else {
                     startActivity(new Intent(this, LoginActivity.class));
@@ -189,11 +209,70 @@ public class GroupGoodsDetailActivity extends BaseActivity {
         }
     }
 
+
+    /**
+     * 兑换结果
+     */
+    private void balancePayResult() {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_exchange_success, null);
+        int widthPixels = DisplayUtils.getMetrics(this).widthPixels;
+        final PopupWindow mPopupWindow = new PopupWindow(contentView, (int) (widthPixels
+                - DisplayUtils.dp2px(this, 66)), ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setContentView(contentView);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        DisplayUtils.setBackgroundAlpha(this, true);
+
+        ImageView ivResult = (ImageView) contentView.findViewById(R.id.iv_exchange_result);
+        ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_exchange_cancel);
+        TextView tvResult = (TextView) contentView.findViewById(R.id.tv_exchange_result);
+        TextView tvMsg = (TextView) contentView.findViewById(R.id.tv_exchange_reason);
+        final TextView tvSuccess = (TextView) contentView.findViewById(R.id.tv_exchange_success);
+
+        ivResult.setImageResource(R.mipmap.img_success);
+        tvResult.setText("报名成功");
+        tvSuccess.setText("去查看");
+        tvSuccess.setBackgroundResource(R.drawable.bound_gradient_green);
+
+        tvMsg.setText("购买的商品已放置于“我的-订单”，记得到店提货哦！");
+
+
+        tvSuccess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(GroupGoodsDetailActivity.this, MyActionActivity.class));
+                mPopupWindow.dismiss();
+            }
+        });
+
+        ivCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                DisplayUtils.setBackgroundAlpha(GroupGoodsDetailActivity.this, false);
+            }
+        });
+    }
+
+
     @Subscribe
     public void isLogin(String msg) {
         if ("login_success".equals(msg)) {
             initData();
         }
+        if ("balance_success".equals(msg)) {
+            paySuccess = true;
+        }
+
     }
 
     @Override

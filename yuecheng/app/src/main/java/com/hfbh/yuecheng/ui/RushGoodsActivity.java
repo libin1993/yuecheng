@@ -97,7 +97,6 @@ public class RushGoodsActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
                         if (goodsBean.getPage() != null) {
                             pages = goodsBean.getPage().getPages();

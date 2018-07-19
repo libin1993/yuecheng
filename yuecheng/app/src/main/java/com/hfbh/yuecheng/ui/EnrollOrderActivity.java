@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,20 +16,23 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.PayDataBean;
+import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.bean.PayResultBean;
 import com.hfbh.yuecheng.bean.WechatPayBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
-import com.smarttop.library.utils.LogUtil;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -67,13 +69,15 @@ public class EnrollOrderActivity extends BaseActivity {
     TextView tvPayOrder;
     //订单号
     private String orderNo;
-    //商品种类
-    private String payType;
+    //订单名称
+    private String orderName;
+    //订单种类
+    private String orderType;
     private double totalMoney;
     private double needPay;
     private double discount;
     //支付方式
-    private String type = "WX_APP";
+    private String payType = "WX_APP";
     private IWXAPI api;
 
     @Override
@@ -97,10 +101,11 @@ public class EnrollOrderActivity extends BaseActivity {
     private void getData() {
         Intent intent = getIntent();
         orderNo = intent.getStringExtra("order_no");
-        payType = intent.getStringExtra("pay_type");
+        orderType = intent.getStringExtra("order_type");
         totalMoney = intent.getDoubleExtra("total_money", 0);
         discount = intent.getDoubleExtra("balance_money", 0);
         needPay = intent.getDoubleExtra("pay_money", 0);
+        orderName = intent.getStringExtra("order_name");
     }
 
     @OnClick({R.id.iv_header_back, R.id.rl_wechat_pay, R.id.rl_ali_pay, R.id.tv_pay_order})
@@ -110,18 +115,17 @@ public class EnrollOrderActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.rl_wechat_pay:
-                type = "WX_APP";
+                payType = "WX_APP";
                 ivWechatPay.setVisibility(View.VISIBLE);
                 ivAliPay.setVisibility(View.GONE);
                 break;
             case R.id.rl_ali_pay:
-                type = "ALIPAY_APP";
+                payType = "ALIPAY_APP";
                 ivWechatPay.setVisibility(View.GONE);
                 ivAliPay.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_pay_order:
                 payMoney();
-
                 break;
         }
     }
@@ -139,8 +143,8 @@ public class EnrollOrderActivity extends BaseActivity {
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("totalFee", String.valueOf(needPay))
-                .addParams("channelId", type)
-                .addParams("payType", payType)
+                .addParams("channelId", payType)
+                .addParams("payType", orderType)
                 .addParams("orderNo", orderNo)
                 .build()
                 .execute(new StringCallback() {
@@ -151,45 +155,56 @@ public class EnrollOrderActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
-                        if ("ALIPAY_APP".equals(type)) {
-                            final PayDataBean payDataBean = GsonUtils.jsonToBean(response, PayDataBean.class);
-                            if (payDataBean.isFlag() && payDataBean.getData() != null) {
-                                Runnable payRunnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        PayTask aliPay = new PayTask(EnrollOrderActivity.this);
-                                        Map<String, String> result = aliPay.payV2(payDataBean.getData().getOrderString(), true);
-                                        Message msg = new Message();
-                                        msg.what = 1;
-                                        msg.obj = result;
-                                        mHandler.sendMessage(msg);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getBoolean("flag")) {
+                                EventBus.getDefault().post("pay_order");
+                                if ("ALIPAY_APP".equals(payType)) {
+                                    final PayDataBean payDataBean = GsonUtils.jsonToBean(response, PayDataBean.class);
+                                    if (payDataBean.isFlag() && payDataBean.getData() != null) {
+                                        Runnable payRunnable = new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                PayTask aliPay = new PayTask(EnrollOrderActivity.this);
+                                                Map<String, String> result = aliPay.payV2(payDataBean.getData().getOrderString(), true);
+                                                Message msg = new Message();
+                                                msg.what = 1;
+                                                msg.obj = result;
+                                                mHandler.sendMessage(msg);
+                                            }
+                                        };
+                                        Thread payThread = new Thread(payRunnable);
+                                        payThread.start();
                                     }
-                                };
-                                Thread payThread = new Thread(payRunnable);
-                                payThread.start();
-                            }
-                        } else {
-                            WechatPayBean wechatPayBean = GsonUtils.jsonToBean(response, WechatPayBean.class);
-                            if (!api.isWXAppInstalled()) {
-                                ToastUtils.showToast(EnrollOrderActivity.this, "没有安装微信");
-                            }
-                            if (!api.isWXAppSupportAPI()) {
-                                ToastUtils.showToast(EnrollOrderActivity.this, "当前版本不支持支付功能");
-                            }
+                                } else {
+                                    WechatPayBean wechatPayBean = GsonUtils.jsonToBean(response, WechatPayBean.class);
+                                    if (!api.isWXAppInstalled()) {
+                                        ToastUtils.showToast(EnrollOrderActivity.this, "没有安装微信");
+                                    }
+                                    if (!api.isWXAppSupportAPI()) {
+                                        ToastUtils.showToast(EnrollOrderActivity.this, "当前版本不支持支付功能");
+                                    }
 
-                            PayReq req = new PayReq();
-                            req.appId = Constant.APP_ID;
-                            req.partnerId = wechatPayBean.getData().getSub_mch_id();
-                            req.prepayId = wechatPayBean.getData().getPrepay_id();
-                            req.nonceStr = wechatPayBean.getData().getNonce_str();
-                            req.timeStamp = wechatPayBean.getData().getTimestamp();
-                            req.packageValue = "Sign=WXPay";
-                            req.sign = wechatPayBean.getData().getSign();
-                            LogUtils.log(GsonUtils.jsonToString(req));
-                            api.sendReq(req);
-
+                                    PayReq req = new PayReq();
+                                    req.appId = Constant.APP_ID;
+                                    req.partnerId = wechatPayBean.getData().getSub_mch_id();
+                                    req.prepayId = wechatPayBean.getData().getPrepay_id();
+                                    req.nonceStr = wechatPayBean.getData().getNonce_str();
+                                    req.timeStamp = wechatPayBean.getData().getTimestamp();
+                                    req.packageValue = "Sign=WXPay";
+                                    req.sign = wechatPayBean.getData().getSign();
+                                    api.sendReq(req);
+                                    MyApp.orderBean = new PayOrderBean(orderNo, orderType, orderName,
+                                            "微信", false, needPay);
+                                    finish();
+                                }
+                            } else {
+                                ToastUtils.showToast(EnrollOrderActivity.this, jsonObject.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
                     }
                 });
     }
@@ -204,16 +219,20 @@ public class EnrollOrderActivity extends BaseActivity {
             switch (msg.what) {
                 case 1: {
                     PayResultBean payResultBean = new PayResultBean((Map<String, String>) msg.obj);
-                    String resultInfo = payResultBean.getResult();// 同步返回需要验证的信息
                     String resultStatus = payResultBean.getResultStatus();
                     // 判断resultStatus 为9000则代表支付成功
+                    boolean payResult;
                     if (TextUtils.equals(resultStatus, "9000")) {
+                        payResult = true;
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        ToastUtils.showToast(EnrollOrderActivity.this, "支付成功：" + resultInfo);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        ToastUtils.showToast(EnrollOrderActivity.this, "支付失败：" + resultInfo);
+                        payResult = false;
                     }
+                    MyApp.orderBean = new PayOrderBean(orderNo, orderType, orderName,
+                            "支付宝", payResult, needPay);
+                    startActivity(new Intent(EnrollOrderActivity.this, PayResultActivity.class));
+                    finish();
                     break;
                 }
             }

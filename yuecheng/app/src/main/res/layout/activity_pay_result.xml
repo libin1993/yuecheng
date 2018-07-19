@@ -21,15 +21,13 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="25dp"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/img_success"/>
+            android:scaleType="fitCenter"/>
 
         <TextView
             android:id="@+id/tv_pay_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="支付成功"
             android:textColor="@color/gray_10"
             android:textSize="15sp"/>
 
@@ -39,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
-            android:text="¥9.90"
             android:textColor="@color/gray_10"
             android:textSize="40sp"/>
 
@@ -50,6 +47,7 @@
             android:background="@color/gray_ed"/>
 
         <RelativeLayout
+            android:id="@+id/rl_order_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -79,6 +77,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:background="@android:color/white">
 
@@ -103,33 +102,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:text="支付时间"
-                android:textColor="@color/gray_9f"
-                android:textSize="13sp"/>
-
-            <TextView
-                android:id="@+id/tv_order_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/gray_9f"
-                android:textSize="13sp"/>
-        </RelativeLayout>
-
-        <RelativeLayout
+            android:id="@+id/rl_order_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -163,35 +136,86 @@
             android:background="@color/gray_ed"/>
 
         <LinearLayout
+            android:id="@+id/ll_order_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_ed"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:drawableLeft="@mipmap/btn_signin_select_actived"
+                android:drawablePadding="3dp"
+                android:text="到店自提"
+                android:textColor="@color/gray_10"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:drawableLeft="@mipmap/btn_signin_select_actived"
+                android:drawablePadding="3dp"
+                android:text="7天提货有效"
+                android:textColor="@color/gray_10"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:drawableLeft="@mipmap/btn_signin_select_actived"
+                android:drawablePadding="3dp"
+                android:text="失效未提货自动退款"
+                android:textColor="@color/gray_10"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_back_homepage"
+            <RelativeLayout
+                android:id="@+id/rl_order_back"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_weight="1"
-                android:background="@drawable/stroke_red_33dp"
-                android:gravity="center"
-                android:text="返回首页"
-                android:textColor="@color/red_99"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/tv_join_activity"
+                android:layout_marginRight="25dp">
+                <TextView
+                    android:id="@+id/tv_back_homepage"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/stroke_red_33dp"
+                    android:gravity="center"
+                    android:text="返回首页"
+                    android:textColor="@color/red_99"
+                    android:textSize="16sp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_order_detail"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="25dp"
                 android:layout_weight="1"
-                android:background="@drawable/stroke_red_33dp"
-                android:gravity="center"
-                android:text="查看活动"
-                android:textColor="@color/red_99"
-                android:textSize="16sp"/>
+                android:layout_marginRight="25dp">
+                <TextView
+                    android:id="@+id/tv_join_activity"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/stroke_red_33dp"
+                    android:gravity="center"
+                    android:textColor="@color/red_99"
+                    android:textSize="16sp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 

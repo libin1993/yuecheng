@@ -48,14 +48,17 @@ import com.hfbh.yuecheng.ui.BannerInfoActivity;
 import com.hfbh.yuecheng.ui.ChangeMarketActivity;
 import com.hfbh.yuecheng.ui.CouponDetailActivity;
 import com.hfbh.yuecheng.ui.ExchangeCouponActivity;
+import com.hfbh.yuecheng.ui.ExchangeGiftActivity;
 import com.hfbh.yuecheng.ui.GameActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
 import com.hfbh.yuecheng.ui.GroupGoodsActivity;
+import com.hfbh.yuecheng.ui.GroupGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.PayActivity;
 import com.hfbh.yuecheng.ui.RushGoodsActivity;
+import com.hfbh.yuecheng.ui.ScanCodeActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
 import com.hfbh.yuecheng.ui.ValidateActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
@@ -583,6 +586,11 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
         //优惠券
+        initTitle("团购优惠", 15);
+        //优惠券
+        initTitle("限时秒杀", 16);
+
+        //优惠券
         initTitle("优惠券", 5);
 
 
@@ -1079,10 +1087,16 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 startActivity(new Intent(getActivity(), ExchangeCouponActivity.class));
                                 break;
                             case 7:
-                                startActivity(new Intent(getActivity(), RushGoodsActivity.class));
+                                startActivity(new Intent(getActivity(), ExchangeGiftActivity.class));
                                 break;
                             case 9:
                                 EventBus.getDefault().post("activity");
+                                break;
+                            case 15:
+                                startActivity(new Intent(getActivity(), GroupGoodsActivity.class));
+                                break;
+                            case 16:
+                                startActivity(new Intent(getActivity(), RushGoodsActivity.class));
                                 break;
                         }
                     }
@@ -1117,11 +1131,15 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 startActivity(new Intent(getActivity(), ChangeMarketActivity.class));
                 break;
             case R.id.iv_home_scan:
-//                startActivity(new Intent(getActivity(), PayActivity.class));
                 if (!EasyPermissions.hasPermissions(getActivity(), permissionStr)) {
                     EasyPermissions.requestPermissions(this, "", 123, permissionStr);
                 } else {
-                    startActivity(new Intent(getActivity(), PayActivity.class));
+                    if (SharedPreUtils.getBoolean(getActivity(),"is_login",false)){
+                        startActivity(new Intent(getActivity(), ScanCodeActivity.class));
+                    }else {
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                    }
+
                 }
                 break;
         }

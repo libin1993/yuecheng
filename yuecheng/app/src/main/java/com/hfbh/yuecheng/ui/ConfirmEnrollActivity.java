@@ -43,6 +43,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -107,10 +108,12 @@ public class ConfirmEnrollActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_enroll);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         tvHeaderTitle.setText("确认报名");
         tvConfirmEnroll.setText("去支付");
         etInputMoney.setFocusable(false);
         etInputMoney.setFocusableInTouchMode(false);
+        tvConfirmEnroll.setEnabled(false);
 
         getData();
         initData();
@@ -464,8 +467,6 @@ public class ConfirmEnrollActivity extends BaseActivity {
                         if (orderBean.isFlag() && orderBean.getData() != null) {
                             if (useBalance == 0) {
                                 payMoney();
-                            } else if (useBalance < enrollFee) {
-                                frozenMoney(orderBean.getData().getOrder().getTranNo());
                             } else {
                                 frozenMoney(orderBean.getData().getOrder().getTranNo());
                             }
@@ -483,16 +484,17 @@ public class ConfirmEnrollActivity extends BaseActivity {
     private void payMoney() {
         Intent intent = new Intent(ConfirmEnrollActivity.this, EnrollOrderActivity.class);
         intent.putExtra("order_no", orderBean.getData().getOrder().getTranNo());
-        intent.putExtra("pay_type", "ACTIVITY");
+        intent.putExtra("order_type", "ACTIVITY");
         intent.putExtra("total_money", enrollFee);
         intent.putExtra("balance_money", useBalance);
         intent.putExtra("pay_money", enrollFee - useBalance);
+        intent.putExtra("order_name", "");
         startActivity(intent);
     }
 
 
     /**
-     * 现金报名
+     * 冻结余额
      */
     private void frozenMoney(String orderNo) {
         OkHttpUtils.post()
@@ -571,4 +573,19 @@ public class ConfirmEnrollActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * @param msg 支付回调
+     */
+    @Subscribe
+    public void payOrder(String msg) {
+        if ("pay_order".equals(msg)) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

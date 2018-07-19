@@ -157,6 +157,7 @@ public class GroupGoodsActivity extends BaseActivity {
                 holder.setText(R.id.tv_group_goods_buy, "去拼团");
                 holder.setText(R.id.tv_group_goods_num, "已拼" + dataBean.getSaleNum() + "件");
 
+                holder.setText(R.id.tv_group_goods_discount, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));
                 TextView tvOld = holder.getView(R.id.tv_group_goods_price);
                 tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
                 tvOld.setText("¥" + DisplayUtils.isInteger(dataBean.getOldPrice()));

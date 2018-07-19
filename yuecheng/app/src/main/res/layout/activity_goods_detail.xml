@@ -46,7 +46,8 @@
         <RelativeLayout
             android:id="@+id/rl_goods_status"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_goods_money"

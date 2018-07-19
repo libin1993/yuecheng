@@ -66,6 +66,10 @@ public class ScanCodeActivity extends BaseActivity {
                     String ip = content.split("\\?")[0];
                     if (ip != null && port > 0 && query.matches("[0-9]{1,}")) {
                         Intent intent = new Intent(ScanCodeActivity.this, ScanOrderActivity.class);
+                        intent.putExtra("ip", ip);
+                        intent.putExtra("order_no", query);
+                        startActivity(intent);
+                        finish();
                     } else {
                         scanFail();
                     }
