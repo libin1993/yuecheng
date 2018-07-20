@@ -130,7 +130,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
             tvGoodsStatus.setText("团购已结束");
             tvGoodsStatus.setVisibility(View.VISIBLE);
             rlGoodsStatus.setVisibility(View.GONE);
-        } else if (isStart) {
+        } else if (!isStart) {
             tvGoodsStatus.setText("团购未开始");
             tvGoodsStatus.setVisibility(View.VISIBLE);
             rlGoodsStatus.setVisibility(View.GONE);
@@ -139,7 +139,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
             tvGoodsStatus.setVisibility(View.VISIBLE);
             rlGoodsStatus.setVisibility(View.GONE);
         } else {
-            tvGoodsPrice.setText("¥" + DisplayUtils.isInteger(goodsBean.getData().getNowPrice()));
+            tvGoodsPrice.setText(DisplayUtils.isInteger(goodsBean.getData().getNowPrice()));
             tvBuyGoods.setText("立即团购");
             tvGoodsStatus.setVisibility(View.GONE);
             rlGoodsStatus.setVisibility(View.VISIBLE);
@@ -188,14 +188,11 @@ public class GroupGoodsDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_goods_share:
-//                if (goodsBean != null && goodsBean.getData() != null) {
-//                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
-//                            , goodsBean.getData().getCommodityName(),
-//                            "", url + "&share=true");
-//                }
-                Intent intent1 = new Intent(this, ConfirmOrderActivity.class);
-                intent1.putExtra("goods", goodsBean);
-                startActivity(intent1);
+                if (goodsBean != null && goodsBean.getData() != null) {
+                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
+                            , goodsBean.getData().getCommodityName(),
+                            "", url + "&share=true");
+                }
                 break;
             case R.id.tv_buy_goods:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {
@@ -211,7 +208,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
 
 
     /**
-     * 兑换结果
+     * 支付结果
      */
     private void balancePayResult() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_exchange_success, null);
@@ -233,7 +230,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
         final TextView tvSuccess = (TextView) contentView.findViewById(R.id.tv_exchange_success);
 
         ivResult.setImageResource(R.mipmap.img_success);
-        tvResult.setText("报名成功");
+        tvResult.setText("购买成功");
         tvSuccess.setText("去查看");
         tvSuccess.setBackgroundResource(R.drawable.bound_gradient_green);
 
@@ -243,7 +240,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
         tvSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(GroupGoodsDetailActivity.this, MyActionActivity.class));
+//                startActivity(new Intent(GroupGoodsDetailActivity.this, MyActionActivity.class));
                 mPopupWindow.dismiss();
             }
         });

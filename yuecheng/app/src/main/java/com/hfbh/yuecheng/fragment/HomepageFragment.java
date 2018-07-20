@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -64,6 +67,7 @@ import com.hfbh.yuecheng.ui.ValidateActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.NetworkImageHolderView;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
@@ -72,6 +76,7 @@ import com.hfbh.yuecheng.view.PermissionDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.smarttop.library.utils.LogUtil;
 import com.sunfusheng.marqueeview.MarqueeView;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -94,6 +99,8 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import okhttp3.Call;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static com.mob.tools.gui.BitmapProcessor.start;
 
 /**
  * Author：Libin on 2018/5/14 16:08
@@ -585,10 +592,128 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         }
 
-        //优惠券
-        initTitle("团购优惠", 15);
-        //优惠券
-        initTitle("限时秒杀", 16);
+//        //优惠券
+//        initTitle("团购优惠", 15);
+//        //优惠券
+//        initTitle("限时秒杀", 16);
+
+        BaseDelegateAdapter groupAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+                R.layout.layout_homepage_goods, 1, 15) {
+            @Override
+            public void onBindViewHolder(ViewHolder holder, int position) {
+                super.onBindViewHolder(holder, position);
+                final LinearLayout llRushGoods = holder.getView(R.id.ll_rush_goods);
+                final LinearLayout llEndTime = holder.getView(R.id.ll_end_time);
+                final TextView tvHour = holder.getView(R.id.tv_goods_hour);
+                final TextView tvMinute = holder.getView(R.id.tv_goods_minute);
+                final TextView tvSecond = holder.getView(R.id.tv_goods_second);
+                LinearLayout llGroupGoods = holder.getView(R.id.ll_group_goods);
+                TextView tvLowestPrice = holder.getView(R.id.tv_lowest_price);
+                RecyclerView rvRushGoods = holder.getView(R.id.rv_rush_goods);
+                RecyclerView rvGroupGoods = holder.getView(R.id.rv_group_goods);
+
+
+                llRushGoods.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), RushGoodsActivity.class));
+                    }
+                });
+
+                llGroupGoods.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), GroupGoodsActivity.class));
+                    }
+                });
+
+
+                if (rushBean != null && rushBean.getData().size() > 0) {
+
+                    boolean isFinish = !TextUtils.isEmpty(rushBean.getData().get(0).getEndTime()) &&
+                            System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd HH:mm:ss",
+                                    rushBean.getData().get(0).getEndTime());
+
+                    boolean isStart = !TextUtils.isEmpty(rushBean.getData().get(0).getStartTime()) &&
+                            System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd HH:mm:ss",
+                                    rushBean.getData().get(0).getStartTime());
+                    if (isStart && !isFinish) {
+                        llEndTime.setVisibility(View.VISIBLE);
+                        long time = DateUtils.getTime("yyyy-MM-dd HH:mm:ss",
+                                rushBean.getData().get(0).getEndTime()) - System.currentTimeMillis();
+
+                        new CountDownTimer(time, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                tvHour.setText(String.valueOf(millisUntilFinished / (1000* 60* 60)));
+                                tvMinute.setText(String.valueOf(millisUntilFinished % (1000* 60* 60) /(1000*60)));
+                                tvSecond.setText(String.valueOf(millisUntilFinished % (1000*60) /1000));
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                llEndTime.setVisibility(View.GONE);
+                            }
+                        }.start();
+                    }
+
+
+                    rvRushGoods.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                    CommonAdapter<GroupGoodsBean.DataBean> rushAdapter = new CommonAdapter
+                            <GroupGoodsBean.DataBean>(getActivity(), R.layout.rv_homepage_rush_item, rushBean.getData()) {
+                        @Override
+                        protected void convert(ViewHolder holder, GroupGoodsBean.DataBean dataBean, int position) {
+                            SimpleDraweeView ivGoods = holder.getView(R.id.iv_rush_goods);
+                            ivGoods.setImageURI(dataBean.getPicturePath());
+                            holder.setText(R.id.tv_rush_goods_price, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));
+                        }
+                    };
+                    rvRushGoods.setAdapter(rushAdapter);
+
+                    rushAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                            startActivity(new Intent(getActivity(), RushGoodsActivity.class));
+                        }
+
+                        @Override
+                        public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                            return false;
+                        }
+                    });
+
+                }
+
+                if (groupBean != null && groupBean.getData().size() > 0) {
+                    tvLowestPrice.setVisibility(View.VISIBLE);
+                    tvLowestPrice.setText("低至" + DisplayUtils.isInteger(groupBean.getData().get(0).getNowPrice()) + "元");
+
+                    rvGroupGoods.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                    CommonAdapter<GroupGoodsBean.DataBean> groupAdapter = new CommonAdapter
+                            <GroupGoodsBean.DataBean>(getActivity(), R.layout.rv_homepage_group_item, groupBean.getData()) {
+                        @Override
+                        protected void convert(ViewHolder holder, GroupGoodsBean.DataBean dataBean, int position) {
+                            SimpleDraweeView ivGoods = holder.getView(R.id.iv_homepage_group);
+                            ivGoods.setImageURI(dataBean.getPicturePath());
+                        }
+                    };
+                    rvGroupGoods.setAdapter(groupAdapter);
+                    groupAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                            startActivity(new Intent(getActivity(), GroupGoodsActivity.class));
+                        }
+
+                        @Override
+                        public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                            return false;
+                        }
+                    });
+                }
+
+            }
+        };
+        mAdapters.add(groupAdapter);
 
         //优惠券
         initTitle("优惠券", 5);
@@ -1134,9 +1259,9 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 if (!EasyPermissions.hasPermissions(getActivity(), permissionStr)) {
                     EasyPermissions.requestPermissions(this, "", 123, permissionStr);
                 } else {
-                    if (SharedPreUtils.getBoolean(getActivity(),"is_login",false)){
+                    if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
                         startActivity(new Intent(getActivity(), ScanCodeActivity.class));
-                    }else {
+                    } else {
                         startActivity(new Intent(getActivity(), LoginActivity.class));
                     }
 

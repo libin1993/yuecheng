@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginRight="7dp"
+              android:orientation="vertical">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_rush_goods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        fresco:actualImageScaleType="centerCrop"
+        fresco:placeholderImage="@mipmap/img_place"
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:viewAspectRatio="1"/>
+
+    <TextView
+        android:id="@+id/tv_rush_goods_price"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:paddingTop="7dp"
+        android:textColor="@color/red_990"
+        android:textSize="13sp"/>
+</LinearLayout>

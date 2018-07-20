@@ -184,7 +184,7 @@ public class GoodsBean {
         private Object createTimeBegin;
         private Object createTimeEnd;
         private Object creatorId;
-        private Object endTime;
+        private String endTime;
         private Object endTimeBegin;
         private Object endTimeEnd;
         private Object floorName;
@@ -202,7 +202,7 @@ public class GoodsBean {
         private String modifyTime;
         private Object modifyTimeBegin;
         private Object modifyTimeEnd;
-        private Object nowDate;
+        private String nowDate;
         private double nowPrice;
         private String offlineTime;
         private Object offlineTimeBegin;
@@ -219,7 +219,7 @@ public class GoodsBean {
         private String shopLogo;
         private String shopName;
         private int showSerial;
-        private Object startTime;
+        private String startTime;
         private Object startTimeBegin;
         private Object startTimeEnd;
         private int verifyNum;
@@ -360,11 +360,11 @@ public class GoodsBean {
             this.creatorId = creatorId;
         }
 
-        public Object getEndTime() {
+        public String getEndTime() {
             return endTime;
         }
 
-        public void setEndTime(Object endTime) {
+        public void setEndTime(String endTime) {
             this.endTime = endTime;
         }
 
@@ -504,11 +504,11 @@ public class GoodsBean {
             this.modifyTimeEnd = modifyTimeEnd;
         }
 
-        public Object getNowDate() {
+        public String getNowDate() {
             return nowDate;
         }
 
-        public void setNowDate(Object nowDate) {
+        public void setNowDate(String nowDate) {
             this.nowDate = nowDate;
         }
 
@@ -640,11 +640,11 @@ public class GoodsBean {
             this.showSerial = showSerial;
         }
 
-        public Object getStartTime() {
+        public String getStartTime() {
             return startTime;
         }
 
-        public void setStartTime(Object startTime) {
+        public void setStartTime(String startTime) {
             this.startTime = startTime;
         }
 

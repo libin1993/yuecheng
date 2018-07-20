@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.GoodsBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -154,13 +156,40 @@ public class GroupGoodsActivity extends BaseActivity {
                 ivGoods.setImageURI(dataBean.getPicturePath());
 
                 holder.setText(R.id.tv_group_goods_name, dataBean.getCommodityName());
-                holder.setText(R.id.tv_group_goods_buy, "去拼团");
+
                 holder.setText(R.id.tv_group_goods_num, "已拼" + dataBean.getSaleNum() + "件");
 
                 holder.setText(R.id.tv_group_goods_discount, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));
                 TextView tvOld = holder.getView(R.id.tv_group_goods_price);
                 tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
                 tvOld.setText("¥" + DisplayUtils.isInteger(dataBean.getOldPrice()));
+
+                TextView tvStatus = holder.getView(R.id.tv_group_goods_buy);
+                boolean isFinish = !TextUtils.isEmpty(dataBean.getEndTime()) &&
+                        System.currentTimeMillis()>
+                                DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                boolean isStart = !TextUtils.isEmpty(dataBean.getStartTime()) &&
+                        System.currentTimeMillis() >
+                                DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
+                boolean isBuy = "Y".equals(dataBean.getIsJoin());
+                boolean isNull = dataBean.getCommodityNum() == dataBean.getSaleNum();
+
+                if (isFinish) {
+                    tvStatus.setText("已结束");
+                    tvStatus.setBackgroundResource(R.drawable.bound_gray_15dp);
+                } else if (!isStart) {
+                    tvStatus.setText("未开始");
+                    tvStatus.setBackgroundResource(R.drawable.bound_gray_15dp);
+                } else if (isBuy) {
+                    tvStatus.setText("已参团");
+                    tvStatus.setBackgroundResource(R.drawable.bound_red_15dp);
+                } else if (isNull) {
+                    tvStatus.setText("已抢光");
+                    tvStatus.setBackgroundResource(R.drawable.bound_gray_15dp);
+                } else {
+                    tvStatus.setText("去拼团");
+                    tvStatus.setBackgroundResource(R.drawable.bound_red_15dp);
+                }
 
             }
         };

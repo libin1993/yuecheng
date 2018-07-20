@@ -497,7 +497,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     /**
      * 冻结余额
      */
-    private void frozenMoney(String orderNo) {
+    private void frozenMoney(final String orderNo) {
         OkHttpUtils.post()
                 .url(Constant.FROZEN_ORDER_BALANCE)
                 .addParams("appType", MyApp.appType)
@@ -505,7 +505,7 @@ public class ConfirmOrderActivity extends BaseActivity {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("token", SharedPreUtils.getStr(this, "token"))
-                .addParams("orderNo", orderNo)
+                .addParams("orderPayNo", orderNo)
                 .addParams("transMoney", String.valueOf(useBalance))
                 .build()
                 .execute(new StringCallback() {
@@ -521,7 +521,7 @@ public class ConfirmOrderActivity extends BaseActivity {
                             boolean flag = jsonObject.getBoolean("flag");
                             if (flag) {
                                 if (useBalance == totalPrice) {
-                                    balancePay();
+                                    balancePay(orderNo);
                                 } else {
                                     payMoney();
                                 }
@@ -539,7 +539,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     /**
      * 预付卡全额支付
      */
-    private void balancePay() {
+    private void balancePay(String orderNo) {
         OkHttpUtils.post()
                 .url(Constant.PAY_ORDER_BALANCE)
                 .addParams("appType", MyApp.appType)
@@ -547,7 +547,7 @@ public class ConfirmOrderActivity extends BaseActivity {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("token", SharedPreUtils.getStr(this, "token"))
-                .addParams("orderPayNo", "")
+                .addParams("orderPayNo", orderNo)
                 .addParams("transMoney", String.valueOf(useBalance))
                 .build()
                 .execute(new StringCallback() {

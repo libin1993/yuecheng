@@ -92,7 +92,7 @@ public class GoodsOrderBean {
         private String orderNumber;
         private String orderState;
         private int organizeId;
-        private int useAccountBalance;
+        private double useAccountBalance;
         private double wechatPay;
 
         public double getAllPrice() {
@@ -199,11 +199,11 @@ public class GoodsOrderBean {
             this.organizeId = organizeId;
         }
 
-        public int getUseAccountBalance() {
+        public double getUseAccountBalance() {
             return useAccountBalance;
         }
 
-        public void setUseAccountBalance(int useAccountBalance) {
+        public void setUseAccountBalance(double useAccountBalance) {
             this.useAccountBalance = useAccountBalance;
         }
 
