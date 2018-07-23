@@ -91,6 +91,7 @@ public class MyActivityFragment extends BaseFragment {
         ivNullData.setImageResource(R.mipmap.ic_null_activity);
         tvNullData.setText("暂无活动");
         loadingView.smoothToShow();
+        initView();
         initData();
         return view;
     }
@@ -120,37 +121,29 @@ public class MyActivityFragment extends BaseFragment {
                             pages = activityListBean.getPage().getPages();
                         }
 
-                        if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
-                            if (isRefresh) {
-                                dataList.clear();
-                            }
-                            dataList.addAll(activityListBean.getData());
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                            dataList.clear();
+                        } else if (isLoadMore) {
+                            refreshLayout.finishLoadMore();
+                        }else {
+                            loadingView.smoothToHide();
+                            dataList.clear();
+                        }
 
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                loadingView.smoothToHide();
-                                initView();
-                            }
-                            rvActivity.setVisibility(View.VISIBLE);
+                        if (activityListBean.isFlag() && activityListBean.getData() != null &&
+                                activityListBean.getData().size() > 0) {
+                            dataList.addAll(activityListBean.getData());
                             llNullData.setVisibility(View.GONE);
                         } else {
-                            refreshLayout.finishLoadMore();
-                            if (page == 1) {
-                                loadingView.smoothToHide();
-                                rvActivity.setVisibility(View.GONE);
+                            if (!isLoadMore) {
                                 llNullData.setVisibility(View.VISIBLE);
                             }
-                            if (activityListBean.getCode() == 4002) {
-                                SharedPreUtils.deleteStr(getActivity(), "is_login");
-                            }
                         }
+                        isLoadMore = false;
+                        adapter.notifyDataSetChanged();
+
                     }
                 });
     }

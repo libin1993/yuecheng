@@ -142,6 +142,10 @@ public class Constant {
     public static final String FROZEN_ORDER_BALANCE = HOST + "/wechat/order/freezeBalance.json";
     //主扫订单
     public static final String SCAN_ORDER = HOST + "/wechat/scanCodePay/getMemberPromotion.json";
+    //主扫订单金额计算
+    public static final String SCAN_ORDER_MONEY = HOST + "/wechat/scanCodePay/recountMoney.json";
+    //提交主扫订单
+    public static final String SCAN_ORDER_SUBMIT = HOST + "/wechat/scanCodePay/confirmPay.json";
 
     //WebView
     //活动详情
@@ -155,6 +159,6 @@ public class Constant {
     //秒杀商品详情
     public static final String RUSH_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/secKill";
     //团购商品详情
-    public static final String GROUP_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/secKill";
+    public static final String GROUP_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/group";
 
 }

@@ -98,8 +98,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     //是否检测更新
     private boolean isCheckUpdate = true;
     private DownloadService downloadService;
-    //是否切换商城
-    private boolean isChangeCity;
+
+    //跳转首页
+    public boolean isBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,27 +108,14 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        getData();
-    }
-
-    /**
-     * 是否需要定位
-     */
-    private void getData() {
-        Intent intent = getIntent();
-        isChangeCity = intent.getBooleanExtra("change_market", false);
-        if (isChangeCity) {
-            initView();
-        } else {
-            isLogin();
-        }
+        isLogin();
     }
 
     /**
      * 检测更新
      */
     private void checkUpdate() {
-        if (isCheckUpdate && !isChangeCity) {
+        if (isCheckUpdate) {
             OkHttpUtils.post()
                     .url(Constant.CHECK_UPDATE)
                     .addParams("appType", MyApp.appType)
@@ -150,8 +138,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                                 //取消检测更新
                                 isCheckUpdate = false;
                                 if (updateBean.getData().getVersionId() > getVersionCode()) {
-                                    //取消检测更新
-                                    isCheckUpdate = false;
 
                                     MyApp.updateUrl = updateBean.getData().getUrl();
                                     MyApp.updateContent = updateBean.getData().getContent();
@@ -367,17 +353,15 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                         LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
                         if (locationBean.isFlag()) {
                             loadingView.smoothToHide();
+                            //是否已经登录
+                            if (!SharedPreUtils.getBoolean(MainActivity.this, "is_login", false)) {
+                                SharedPreUtils.saveStr(MainActivity.this, "hash", locationBean.getHash());
+                            }
                             if (!getIntent().getBooleanExtra("log_out", false)) {
                                 MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
                                 MyApp.organizeName = locationBean.getData().getOrganizeName();
+                                initView();
                             }
-
-                            boolean isLogin = SharedPreUtils.getBoolean(MainActivity.this, "is_login", false);
-                            //是否已经登录
-                            if (!isLogin) {
-                                SharedPreUtils.saveStr(MainActivity.this, "hash", locationBean.getHash());
-                            }
-                            initView();
                         }
                     }
                 });
@@ -497,4 +481,23 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         return pi != null ? pi.versionCode : 0;
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        isBack = true;
+        boolean isLogout = getIntent().getBooleanExtra("log_out", false);
+        //退出登录，重新获取hash值
+        if (isLogout) {
+            fragmentTabUtils.setCurrentFragment(0);
+            initLocation();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isBack = false;
+    }
 }

@@ -96,7 +96,7 @@ public class MemberPointsActivity extends BaseActivity {
 
         MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),
                 fragmentList, titleList);
-//        vpMemberPoints.setOffscreenPageLimit(titleList.size());
+        vpMemberPoints.setOffscreenPageLimit(titleList.size());
         vpMemberPoints.setAdapter(adapter);
         tabMemberPoints.setViewPager(vpMemberPoints);
         tabMemberPoints.setCurrentTab(0);

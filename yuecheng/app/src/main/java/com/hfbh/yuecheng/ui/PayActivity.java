@@ -72,7 +72,6 @@ public class PayActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
 //                        final PayDataBean payDataBean = GsonUtils.jsonToBean(response,PayDataBean.class);
 //                        Runnable payRunnable = new Runnable() {
 //                            @Override

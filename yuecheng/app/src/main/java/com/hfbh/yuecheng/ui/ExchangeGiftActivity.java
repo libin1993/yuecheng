@@ -83,6 +83,7 @@ public class ExchangeGiftActivity extends BaseActivity {
         ButterKnife.bind(this);
         loadingView.smoothToShow();
         init();
+        initView();
         initData();
     }
 
@@ -118,31 +119,27 @@ public class ExchangeGiftActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         tvGiftScore.setEnabled(true);
                         GiftListBean ListBean = GsonUtils.jsonToBean(response, GiftListBean.class);
-                        pages = ListBean.getPage().getPages();
-                        if (ListBean.isFlag() && ListBean.getData() != null && ListBean.getData().size() > 0) {
-                            if (isRefresh) {
-                                dataList.clear();
-                            }
-                            dataList.addAll(ListBean.getData());
-
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                loadingView.smoothToHide();
-                                initView();
-                            }
-                        } else {
-                            if (page == 1) {
-                                loadingView.smoothToHide();
-                            }
-                            refreshLayout.finishLoadMore();
+                        if (ListBean.getPage() != null) {
+                            pages = ListBean.getPage().getPages();
                         }
+
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                            dataList.clear();
+                        } else if (isLoadMore) {
+                            refreshLayout.finishLoadMore();
+                            isLoadMore = false;
+                        } else {
+                            dataList.clear();
+                            loadingView.smoothToHide();
+                        }
+
+                        if (ListBean.isFlag() && ListBean.getData() != null && ListBean.getData().size() > 0) {
+                            dataList.addAll(ListBean.getData());
+                        }
+
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }

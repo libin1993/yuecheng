@@ -58,6 +58,7 @@ import com.hfbh.yuecheng.ui.GroupGoodsActivity;
 import com.hfbh.yuecheng.ui.GroupGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
+import com.hfbh.yuecheng.ui.MainActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
 import com.hfbh.yuecheng.ui.PayActivity;
 import com.hfbh.yuecheng.ui.RushGoodsActivity;
@@ -155,16 +156,18 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
             savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
         unbinder = ButterKnife.bind(this, view);
         initType();
         return view;
     }
 
+
     /**
      * 加载模块
      */
-    private void initType() {
+    public void initType() {
         tvHomeLocation.setText(MyApp.organizeName);
         loadingView.smoothToShow();
         OkHttpUtils.post()
@@ -645,9 +648,9 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         new CountDownTimer(time, 1000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
-                                tvHour.setText(String.valueOf(millisUntilFinished / (1000* 60* 60)));
-                                tvMinute.setText(String.valueOf(millisUntilFinished % (1000* 60* 60) /(1000*60)));
-                                tvSecond.setText(String.valueOf(millisUntilFinished % (1000*60) /1000));
+                                tvHour.setText(String.valueOf(millisUntilFinished / (1000 * 60 * 60)));
+                                tvMinute.setText(String.valueOf(millisUntilFinished % (1000 * 60 * 60) / (1000 * 60)));
+                                tvSecond.setText(String.valueOf(millisUntilFinished % (1000 * 60) / 1000));
                             }
 
                             @Override
@@ -1294,6 +1297,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     @Override
     public void onResume() {
         super.onResume();
+        if (((MainActivity)getActivity()).isBack){
+            initType();
+        }
+
         if (marqueeView != null) {
             marqueeView.startFlipping();
         }

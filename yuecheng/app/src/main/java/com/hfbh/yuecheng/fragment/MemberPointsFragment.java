@@ -76,6 +76,7 @@ public class MemberPointsFragment extends BaseFragment {
         tvNullData.setText("暂无积分明细");
         ivNullData.setImageResource(R.mipmap.ic_null_order);
         viewLoading.smoothToShow();
+        initView();
         initData();
         return view;
     }
@@ -110,31 +111,25 @@ public class MemberPointsFragment extends BaseFragment {
                     @Override
                     public void onResponse(String s, int i) {
 
-                        viewLoading.smoothToHide();
                         MemberPointsBean memberPointsBean = GsonUtils.jsonToBean(s, MemberPointsBean.class);
+                        viewLoading.smoothToHide();
+                        dataList.clear();
+                        if (isRefresh) {
+                            isRefresh = false;
+                        }
+
                         if (memberPointsBean.isFlag() && memberPointsBean.getData().getPointsChangeList()
                                 != null && memberPointsBean.getData().getPointsChangeList().size() > 0) {
-                            if (isRefresh) {
-                                dataList.clear();
-                            }
                             dataList.addAll(memberPointsBean.getData().getPointsChangeList());
-                            if (isRefresh) {
-                                adapter.notifyDataSetChanged();
-                                isRefresh = false;
-                            } else {
-                                initView();
-                            }
 
-                            rvMemberPoints.setVisibility(View.VISIBLE);
                             llNullData.setVisibility(View.GONE);
                         } else {
-                            rvMemberPoints.setVisibility(View.GONE);
                             llNullData.setVisibility(View.VISIBLE);
-
                             if (memberPointsBean.getCode() == 4002) {
                                 SharedPreUtils.deleteStr(getActivity(), "is_login");
                             }
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }

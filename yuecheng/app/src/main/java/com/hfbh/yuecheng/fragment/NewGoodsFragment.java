@@ -68,12 +68,14 @@ public class NewGoodsFragment extends BaseFragment {
     private List<GoodsBean.DataBean> goodsList = new ArrayList<>();
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_goods, container, false);
         unbinder = ButterKnife.bind(this, view);
         loadingView.smoothToShow();
+        initView();
         initData();
         return view;
     }
@@ -101,38 +103,31 @@ public class NewGoodsFragment extends BaseFragment {
                         if (goodsBean.getPage() != null) {
                             pages = goodsBean.getPage().getPages();
                         }
-                        if (goodsBean.isFlag() && goodsBean.getData().size() > 0) {
-                            pages = goodsBean.getPage().getPages();
-                            if (isRefresh) {
-                                goodsList.clear();
-                            }
-                            goodsList.addAll(goodsBean.getData());
 
-                            //是否刷新状态
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                mHeaderAndFooterWrapper.notifyDataSetChanged();
-                            } else if (isLoadMore) { //加载更多
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                mHeaderAndFooterWrapper.notifyDataSetChanged();
-                            } else {
-                                loadingView.smoothToHide();
-                                initView();
-                            }
-                            rvGoods.setVisibility(View.VISIBLE);
-                            rlNullData.setVisibility(View.GONE);
-                        } else {
 
+                        //是否刷新状态
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                            goodsList.clear();
+                        } else if (isLoadMore) { //加载更多
                             refreshLayout.finishLoadMore();
-                            if (page == 1) {
-                                loadingView.smoothToHide();
-                                rvGoods.setVisibility(View.GONE);
+                        } else {
+                            loadingView.smoothToHide();
+                            goodsList.clear();
+                        }
+
+                        if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
+                            goodsList.addAll(goodsBean.getData());
+                            rlNullData.setVisibility(View.GONE);
+                        }else {
+                            if (!isLoadMore) {
                                 rlNullData.setVisibility(View.VISIBLE);
                             }
-
                         }
+                        isLoadMore = false;
+                        mHeaderAndFooterWrapper.notifyDataSetChanged();
+
                     }
                 });
     }

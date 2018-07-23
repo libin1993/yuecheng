@@ -31,6 +31,9 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.greenrobot.eventbus.EventBus;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -51,9 +54,12 @@ public class ChangeMarketActivity extends BaseActivity {
     @BindView(R.id.rv_market_list)
     RecyclerView rvMarketList;
 
-    private CityListBean cityBean;
     //当前城市
     private int currentCity;
+    private CommonAdapter<CityListBean.DataBean> cityAdapter;
+    private List<CityListBean.DataBean> cityList = new ArrayList<>();
+    private List<CityListBean.DataBean.OrganizeListBean> marketList = new ArrayList<>();
+    private CommonAdapter<CityListBean.DataBean.OrganizeListBean> marketAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +67,7 @@ public class ChangeMarketActivity extends BaseActivity {
         setContentView(R.layout.activity_change_market);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("商场切换");
+        initView();
         initData();
     }
 
@@ -75,7 +82,7 @@ public class ChangeMarketActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -85,9 +92,20 @@ public class ChangeMarketActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        cityBean = GsonUtils.jsonToBean(s, CityListBean.class);
-                        if (cityBean.isFlag()) {
-                            initView();
+                        CityListBean cityBean = GsonUtils.jsonToBean(s, CityListBean.class);
+                        if (cityBean.isFlag() && cityBean.getData().size() > 0) {
+                            cityList.addAll(cityBean.getData());
+                            for (int j = 0; j < cityBean.getData().size(); j++) {
+                                if ("Y".equals(cityBean.getData().get(j).getIsSelected())) {
+                                    currentCity = j;
+                                    break;
+                                }
+                            }
+                            cityAdapter.notifyDataSetChanged();
+
+                            marketList.addAll(cityList.get(currentCity).getOrganizeList());
+                            marketAdapter.notifyDataSetChanged();
+
                         }
                     }
                 });
@@ -98,16 +116,10 @@ public class ChangeMarketActivity extends BaseActivity {
      * 加载城市
      */
     private void initView() {
-        for (int i = 0; i < cityBean.getData().size(); i++) {
-            if ("Y".equals(cityBean.getData().get(i).getIsSelected())) {
-                currentCity = i;
-                break;
-            }
-        }
 
         rvCityList.setLayoutManager(new LinearLayoutManager(this));
-        final CommonAdapter<CityListBean.DataBean> cityAdapter = new CommonAdapter<CityListBean.DataBean>
-                (this, R.layout.rv_city_item, cityBean.getData()) {
+        cityAdapter = new CommonAdapter<CityListBean.DataBean>
+                (this, R.layout.rv_city_item, cityList) {
             @Override
             protected void convert(ViewHolder holder, CityListBean.DataBean dataBean, int position) {
                 TextView tvCity = holder.getView(R.id.tv_city_name);
@@ -124,14 +136,15 @@ public class ChangeMarketActivity extends BaseActivity {
 
         rvCityList.setAdapter(cityAdapter);
 
-        initMarket();
-
         cityAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 currentCity = holder.getLayoutPosition();
                 cityAdapter.notifyDataSetChanged();
-                initMarket();
+
+                marketList.clear();
+                marketList.addAll(cityList.get(currentCity).getOrganizeList());
+                marketAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -141,15 +154,9 @@ public class ChangeMarketActivity extends BaseActivity {
         });
 
 
-    }
-
-    private void initMarket() {
         rvMarketList.setLayoutManager(new LinearLayoutManager(this));
-        final CommonAdapter<CityListBean.DataBean.OrganizeListBean> marketAdapter = new CommonAdapter
-                <CityListBean.DataBean.OrganizeListBean>(this, R.layout.rv_market_item,
-                cityBean.getData().get(currentCity).getOrganizeList()) {
-
-
+        marketAdapter = new CommonAdapter<CityListBean.DataBean.OrganizeListBean>(this,
+                R.layout.rv_market_item, marketList) {
             @Override
             protected void convert(ViewHolder holder, CityListBean.DataBean.OrganizeListBean
                     organizeListBean, int position) {
@@ -167,14 +174,10 @@ public class ChangeMarketActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 int currentMarket = holder.getLayoutPosition();
-                MyApp.organizeId = String.valueOf(cityBean.getData().get(currentCity)
-                        .getOrganizeList().get(currentMarket).getOrganizeId());
-                MyApp.organizeName = cityBean.getData().get(currentCity)
-                        .getOrganizeList().get(currentMarket).getOrganizeName();
+                MyApp.organizeId = String.valueOf(marketList.get(currentMarket).getOrganizeId());
+                MyApp.organizeName = marketList.get(currentMarket).getOrganizeName();
                 EventBus.getDefault().post("change_market");
-                Intent intent = new Intent(ChangeMarketActivity.this, MainActivity.class);
-                intent.putExtra("change_market", true);
-                startActivity(intent);
+                startActivity(new Intent(ChangeMarketActivity.this, MainActivity.class));
                 finish();
             }
 
@@ -184,6 +187,7 @@ public class ChangeMarketActivity extends BaseActivity {
             }
         });
     }
+
 
 
     @OnClick(R.id.iv_header_back)

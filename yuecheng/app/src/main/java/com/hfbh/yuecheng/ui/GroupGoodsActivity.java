@@ -108,38 +108,23 @@ public class GroupGoodsActivity extends BaseActivity {
                             pages = goodsBean.getPage().getPages();
                         }
 
-                        if (goodsBean.isFlag() && goodsBean.getData().size() > 0) {
-
-                            if (isRefresh) {
-                                goodsList.clear();
-                            }
-                            goodsList.addAll(goodsBean.getData());
-
-                            //是否刷新状态
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) { //加载更多
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                viewLoading.smoothToHide();
-                                adapter.notifyDataSetChanged();
-                            }
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                            goodsList.clear();
+                        } else if (isLoadMore) {
+                            refreshLayout.finishLoadMore();
+                            isLoadMore = false;
                         } else {
-                            if (page == 1) {
-                                if (isRefresh) {
-                                    refreshLayout.finishRefresh();
-                                    isRefresh = false;
-                                } else {
-                                    viewLoading.smoothToHide();
-                                }
-                                goodsList.clear();
-                                adapter.notifyDataSetChanged();
-                            }
+                            viewLoading.smoothToHide();
+                            goodsList.clear();
                         }
+
+
+                        if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
+                            goodsList.addAll(goodsBean.getData());
+                        }
+                        adapter.notifyDataSetChanged();
                     }
                 });
 
@@ -166,7 +151,7 @@ public class GroupGoodsActivity extends BaseActivity {
 
                 TextView tvStatus = holder.getView(R.id.tv_group_goods_buy);
                 boolean isFinish = !TextUtils.isEmpty(dataBean.getEndTime()) &&
-                        System.currentTimeMillis()>
+                        System.currentTimeMillis() >
                                 DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
                 boolean isStart = !TextUtils.isEmpty(dataBean.getStartTime()) &&
                         System.currentTimeMillis() >

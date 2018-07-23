@@ -108,9 +108,7 @@ public class PayResultActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_back_homepage:
-                Intent intent = new Intent(PayResultActivity.this, MainActivity.class);
-                intent.putExtra("change_market", true);
-                startActivity(intent);
+                startActivity(new Intent(PayResultActivity.this, MainActivity.class));
                 finish();
                 break;
             case R.id.tv_join_activity:

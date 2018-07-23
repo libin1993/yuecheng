@@ -72,6 +72,7 @@ public class NewGoodsActivity extends BaseActivity {
         ButterKnife.bind(this);
         tvHeaderTitle.setText("新品");
         loadingView.smoothToShow();
+        initView();
         initData();
     }
 
@@ -83,7 +84,7 @@ public class NewGoodsActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("commodityType", "FIRSTLOOK")
                 .addParams("pageNum", String.valueOf(page))
                 .build()
@@ -96,32 +97,27 @@ public class NewGoodsActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
-
-                        if (goodsBean.isFlag() && goodsBean.getData().size() > 0) {
-                            if (goodsBean.getPage()!= null){
-                                pages = goodsBean.getPage().getPages();
-                            }
+                        if (goodsBean.getPage() != null) {
                             pages = goodsBean.getPage().getPages();
-                            if (isRefresh) {
-                                goodsList.clear();
-                            }
-                            goodsList.addAll(goodsBean.getData());
-
-                            //是否刷新状态
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) { //加载更多
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                loadingView.smoothToHide();
-                                refreshLayout.finishLoadMore();
-                                initView();
-                            }
                         }
+
+                        //是否刷新状态
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                            goodsList.clear();
+                        } else if (isLoadMore) { //加载更多
+                            refreshLayout.finishLoadMore();
+                            isLoadMore = false;
+                        } else {
+                            goodsList.clear();
+                            loadingView.smoothToHide();
+                        }
+
+                        if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
+                            goodsList.addAll(goodsBean.getData());
+                        }
+                        adapter.notifyDataSetChanged();
                     }
                 });
 

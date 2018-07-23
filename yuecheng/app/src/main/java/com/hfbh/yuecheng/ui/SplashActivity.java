@@ -138,8 +138,7 @@ public class SplashActivity extends BaseActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 }
             }, 2500);
@@ -148,8 +147,7 @@ public class SplashActivity extends BaseActivity {
 
     @OnClick(R.id.tv_finish_splash)
     public void onViewClicked() {
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
         finish();
     }
 }

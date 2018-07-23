@@ -41,6 +41,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Describe：全局对象
  */
 public class MyApp extends Application {
+    private static MyApp mInstance;
     public static String appVersion;
     public static String appType = "Android";
     public static String organizeId = "";
@@ -90,6 +91,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
         //fresco
         Fresco.initialize(this);
         //okHttp
@@ -112,6 +114,10 @@ public class MyApp extends Application {
         MobSDK.init(this);
 
 
+    }
+
+    public static MyApp getInstance() {
+        return mInstance;
     }
 
     /**

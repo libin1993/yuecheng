@@ -22,6 +22,7 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.CalendarActivity;
+import com.hfbh.yuecheng.ui.MainActivity;
 import com.hfbh.yuecheng.ui.NowActionActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -73,17 +74,25 @@ public class ActivityFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
         unbinder = ButterKnife.bind(this, view);
+        tvHeaderTitle.setText("活动");
+        ivHeaderBack.setVisibility(View.GONE);
+        loadingView.smoothToShow();
         initTitle();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (((MainActivity) getActivity()).isBack) {
+            initTitle();
+        }
     }
 
     /**
      * 活动标签
      */
-    private void initTitle() {
-        tvHeaderTitle.setText("活动");
-        ivHeaderBack.setVisibility(View.GONE);
-        loadingView.smoothToShow();
+    public void initTitle() {
         OkHttpUtils.get()
                 .url(Constant.ACTIVITY_LIST)
                 .addParams("appType", MyApp.appType)
@@ -133,7 +142,7 @@ public class ActivityFragment extends BaseFragment {
         }
         MyFragmentAdapter adapter = new MyFragmentAdapter(getChildFragmentManager(),
                 fragmentList, titleList);
-//        vpActivity.setOffscreenPageLimit(titleList.size());
+        vpActivity.setOffscreenPageLimit(titleList.size());
         vpActivity.setAdapter(adapter);
 
         tabActivity.setViewPager(vpActivity);

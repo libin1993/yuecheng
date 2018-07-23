@@ -106,7 +106,7 @@ public class ExchangeCouponActivity extends BaseActivity {
         ivNullData.setImageResource(R.mipmap.ic_null_coupon);
         tvNullData.setText("暂无优惠券");
         loadingView.smoothToShow();
-
+        initView();
         initData();
 
     }
@@ -142,39 +142,33 @@ public class ExchangeCouponActivity extends BaseActivity {
                         if (ListBean.getPage() != null) {
                             pages = ListBean.getPage().getPages();
                         }
+
+                        if (isRefresh) {
+                            dataList.clear();
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                        } else if (isSearch) {
+                            dataList.clear();
+                            loadingView.smoothToHide();
+                            isSearch = false;
+                        } else if (isLoadMore) {
+                            refreshLayout.finishLoadMore();
+                        } else {
+                            dataList.clear();
+                            loadingView.smoothToHide();
+                        }
+
+
                         if (ListBean.isFlag() && ListBean.getData() != null && ListBean.getData().size() > 0) {
-                            if ((isRefresh || isSearch) && !isLoadMore) {
-                                dataList.clear();
-                            }
                             dataList.addAll(ListBean.getData());
-
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                adapter.notifyDataSetChanged();
-                                isRefresh = false;
-                            } else if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                adapter.notifyDataSetChanged();
-                                isLoadMore = false;
-                            } else if (isSearch) {
-                                adapter.notifyDataSetChanged();
-                                loadingView.smoothToHide();
-                            } else {
-                                loadingView.smoothToHide();
-                                initView();
-                            }
-
                             llNullData.setVisibility(View.GONE);
                         } else {
-                            if (page == 1) {
-                                loadingView.smoothToHide();
-                                dataList.clear();
-                                adapter.notifyDataSetChanged();
+                            if (!isLoadMore) {
                                 llNullData.setVisibility(View.VISIBLE);
-                                refreshLayout.finishRefresh();
                             }
-                            refreshLayout.finishLoadMore();
                         }
+                        isLoadMore = false;
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }

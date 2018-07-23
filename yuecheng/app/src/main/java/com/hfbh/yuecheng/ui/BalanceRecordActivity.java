@@ -24,6 +24,9 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -51,7 +54,8 @@ public class BalanceRecordActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
 
     private String accountId;
-    private BalanceRecordBean balanceBean;
+    private CommonAdapter<BalanceRecordBean.DataBean> adapter;
+    private List<BalanceRecordBean.DataBean> balanceList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +67,7 @@ public class BalanceRecordActivity extends BaseActivity {
         ivNullData.setImageResource(R.mipmap.ic_null_card);
         tvNullData.setText("暂无交易记录");
         getData();
+        initView();
         initData();
     }
 
@@ -81,7 +86,7 @@ public class BalanceRecordActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("id", accountId)
                 .build()
                 .execute(new StringCallback() {
@@ -92,9 +97,10 @@ public class BalanceRecordActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        balanceBean = GsonUtils.jsonToBean(s, BalanceRecordBean.class);
+                        BalanceRecordBean balanceBean = GsonUtils.jsonToBean(s, BalanceRecordBean.class);
                         if (balanceBean.isFlag() && balanceBean.getData() != null && balanceBean.getData().size() > 0) {
-                            initView();
+                            balanceList.addAll(balanceBean.getData());
+                            adapter.notifyDataSetChanged();
                         } else {
                             llNullData.setVisibility(View.VISIBLE);
                             if (balanceBean.getCode() == 4002) {
@@ -111,8 +117,8 @@ public class BalanceRecordActivity extends BaseActivity {
      */
     private void initView() {
         rvBalance.setLayoutManager(new LinearLayoutManager(this));
-        CommonAdapter<BalanceRecordBean.DataBean> adapter = new CommonAdapter<BalanceRecordBean.DataBean>(
-                this, R.layout.rv_member_points_item, balanceBean.getData()) {
+        adapter = new CommonAdapter<BalanceRecordBean.DataBean>(
+                this, R.layout.rv_member_points_item, balanceList) {
             @Override
             protected void convert(ViewHolder holder, BalanceRecordBean.DataBean dataBean, int position) {
                 holder.setText(R.id.tv_points_time, dataBean.getProcTime());
@@ -140,7 +146,7 @@ public class BalanceRecordActivity extends BaseActivity {
                             } else {
                                 tvTitle.setText("消费");
                                 tvPoints.setTextColor(getResources().getColor(R.color.gray_10));
-                                tvPoints.setText("-"+dataBean.getCreditMoney());
+                                tvPoints.setText("-" + dataBean.getCreditMoney());
                             }
                             break;
                     }

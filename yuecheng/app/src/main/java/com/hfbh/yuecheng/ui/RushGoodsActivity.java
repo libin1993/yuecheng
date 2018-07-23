@@ -104,38 +104,24 @@ public class RushGoodsActivity extends BaseActivity {
                             pages = goodsBean.getPage().getPages();
                         }
 
-                        if (goodsBean.isFlag() && goodsBean.getData().size() > 0) {
-
-                            if (isRefresh) {
-                                goodsList.clear();
-                            }
-                            goodsList.addAll(goodsBean.getData());
-
-                            //是否刷新状态
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) { //加载更多
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                viewLoading.smoothToHide();
-                                adapter.notifyDataSetChanged();
-                            }
+                        //是否刷新状态
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                            goodsList.clear();
+                        } else if (isLoadMore) { //加载更多
+                            isLoadMore = false;
+                            refreshLayout.finishLoadMore();
                         } else {
-                            if (page == 1) {
-                                if (isRefresh) {
-                                    refreshLayout.finishRefresh();
-                                    isRefresh = false;
-                                } else {
-                                    viewLoading.smoothToHide();
-                                }
-                                goodsList.clear();
-                                adapter.notifyDataSetChanged();
-                            }
+                            goodsList.clear();
+                            viewLoading.smoothToHide();
                         }
+
+                        if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
+                            goodsList.addAll(goodsBean.getData());
+                        }
+                        adapter.notifyDataSetChanged();
+
                     }
                 });
 
@@ -187,10 +173,10 @@ public class RushGoodsActivity extends BaseActivity {
                 } else if (isBuy) {
                     tvStatus.setText("已抢购");
                     tvStatus.setBackgroundResource(R.drawable.bound_red_15dp);
-                } else if (isNull){
+                } else if (isNull) {
                     tvStatus.setText("已抢光");
                     tvStatus.setBackgroundResource(R.drawable.bound_gray_15dp);
-                }else {
+                } else {
                     tvStatus.setText("去抢购");
                     tvStatus.setBackgroundResource(R.drawable.bound_red_15dp);
                 }

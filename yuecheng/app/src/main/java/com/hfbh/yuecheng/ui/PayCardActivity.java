@@ -86,6 +86,7 @@ public class PayCardActivity extends BaseActivity {
         llNullData.setVisibility(View.GONE);
         ivNullData.setImageResource(R.mipmap.ic_null_card);
         tvNullData.setText("暂无预付卡");
+        initView();
         initData();
     }
 
@@ -112,37 +113,25 @@ public class PayCardActivity extends BaseActivity {
                         if (balanceBean.getPage() != null) {
                             pages = balanceBean.getPage().getPages();
                         }
-
-                        if (balanceBean.isFlag() && balanceBean.getData().size() > 0) {
-                            if (isRefresh) {
-                                dataList.clear();
-                            }
-                            dataList.addAll(balanceBean.getData());
-
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                initView();
-                            }
-                            llNullData.setVisibility(View.GONE);
-                            rvCard.setVisibility(View.VISIBLE);
-                        } else {
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                        } else if (isLoadMore) {
                             refreshLayout.finishLoadMore();
-                            if (page == 1) {
+                        }
+                        if (balanceBean.isFlag() && balanceBean.getData().size() > 0) {
+                            dataList.addAll(balanceBean.getData());
+                            llNullData.setVisibility(View.GONE);
+                        } else {
+                            if (!isLoadMore) {
                                 llNullData.setVisibility(View.VISIBLE);
-                                rvCard.setVisibility(View.GONE);
                             }
-
                             if (balanceBean.getCode() == 4002) {
                                 SharedPreUtils.deleteStr(PayCardActivity.this, "is_login");
                             }
                         }
+                        isLoadMore = false;
+                        adapter.notifyDataSetChanged();
                     }
                 });
 

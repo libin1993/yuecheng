@@ -428,9 +428,7 @@ public class LoginActivity extends BaseActivity {
 
                             EventBus.getDefault().post("login_success");
                             if (getIntent().getIntExtra("type", 0) == 1) {
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("change_market", true);
-                                startActivity(intent);
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             }
                             finish();
 
@@ -495,9 +493,7 @@ public class LoginActivity extends BaseActivity {
 
                                 EventBus.getDefault().post("login_success");
                                 if (getIntent().getIntExtra("type", 0) == 1) {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.putExtra("change_market", true);
-                                    startActivity(intent);
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 }
                                 finish();
                             } else {

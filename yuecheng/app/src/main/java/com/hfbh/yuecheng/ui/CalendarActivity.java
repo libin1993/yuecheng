@@ -87,7 +87,6 @@ public class CalendarActivity extends BaseActivity {
         setContentView(R.layout.activity_calendar);
         ButterKnife.bind(this);
         tvTitleHeader.setText("活动日历");
-
         initView();
     }
 
@@ -124,29 +123,22 @@ public class CalendarActivity extends BaseActivity {
                             pages = activityListBean.getPage().getPages();
                         }
 
-                        if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
-                            if (isSelect) {
-                                dataList.clear();
-                            }
-                            dataList.addAll(activityListBean.getData());
+                        if (isSelect) {
+                            isSelect = false;
+                            viewLoading.smoothToHide();
+                            dataList.clear();
+                        }
 
-                            if (isSelect) {
-                                isSelect = false;
-                                viewLoading.smoothToHide();
-                                loadMoreWrapper.notifyDataSetChanged();
-                            } else if (isLoadMore) {
-                                isLoadMore = false;
-                                loadMoreWrapper.notifyDataSetChanged();
-                            }
+                        if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
                             llNullActivity.setVisibility(View.GONE);
                         } else {
-                            if (page == 1) {
-                                dataList.clear();
-                                loadMoreWrapper.notifyDataSetChanged();
+                            if (!isLoadMore) {
+
                                 llNullActivity.setVisibility(View.VISIBLE);
-                                viewLoading.smoothToHide();
                             }
                         }
+                        isLoadMore = false;
+                        loadMoreWrapper.notifyDataSetChanged();
                     }
                 });
     }

@@ -82,7 +82,8 @@
                 tools:replace="android:resource"/>
         </provider>
 
-        <activity android:name=".ui.MainActivity"/>
+        <activity android:name=".ui.MainActivity"
+            android:launchMode="singleTask"/>
 
         <activity android:name=".ui.SplashActivity">
             <intent-filter>

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -21,9 +22,6 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
-import com.hfbh.yuecheng.ui.CloseActionActivity;
-import com.hfbh.yuecheng.ui.EnrollActionActivity;
-import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -33,7 +31,6 @@ import com.hfbh.yuecheng.view.FlowLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
-import com.smarttop.library.utils.LogUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -65,6 +62,8 @@ public class ActivityListFragment extends BaseFragment {
     ImageView ivNullData;
     @BindView(R.id.tv_null_data)
     TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
 
     private Unbinder unbinder;
     //标签id
@@ -78,7 +77,6 @@ public class ActivityListFragment extends BaseFragment {
     private List<ActivityListBean.DataBean> dataList = new ArrayList<>();
     //总页数
     private int pages;
-    //活动总数量
     private CommonAdapter<ActivityListBean.DataBean> adapter;
 
     @Nullable
@@ -89,6 +87,7 @@ public class ActivityListFragment extends BaseFragment {
         ivNullData.setImageResource(R.mipmap.ic_null_activity);
         tvNullData.setText("暂无活动");
         getData();
+        initView();
         initData();
         return view;
     }
@@ -120,36 +119,28 @@ public class ActivityListFragment extends BaseFragment {
                             pages = activityListBean.getPage().getPages();
                         }
 
-                        if (activityListBean.isFlag() && activityListBean.getData().size() > 0) {
-                            if (isRefresh) {
-                                dataList.clear();
-                            }
-                            dataList.addAll(activityListBean.getData());
-
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                initView();
-                            }
-                            svNoActivity.setVisibility(View.GONE);
-                            rvActivity.setVisibility(View.VISIBLE);
-                        } else {
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                            dataList.clear();
+                        } else if (isLoadMore) {
                             refreshLayout.finishLoadMore();
-                            if (page == 1) {
-                                if (isRefresh) {
-                                    refreshLayout.finishRefresh();
-                                    isRefresh = false;
-                                }
+                        }else {
+                            dataList.clear();
+                        }
+
+                        if (activityListBean.isFlag() && activityListBean.getData() != null &&
+                                activityListBean.getData().size() > 0) {
+                            dataList.addAll(activityListBean.getData());
+                            svNoActivity.setVisibility(View.GONE);
+                        } else {
+                            if (!isLoadMore) {
                                 svNoActivity.setVisibility(View.VISIBLE);
-                                rvActivity.setVisibility(View.GONE);
+                                llNullData.setVisibility(View.VISIBLE);
                             }
                         }
+                        isLoadMore = false;
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }

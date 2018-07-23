@@ -308,9 +308,7 @@ public class RegisterActivity extends BaseActivity {
 
                                 EventBus.getDefault().post("login_success");
 
-                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                intent.putExtra("change_market", true);
-                                startActivity(intent);
+                                startActivity( new Intent(RegisterActivity.this, MainActivity.class));
                                 finish();
 
                             } else {

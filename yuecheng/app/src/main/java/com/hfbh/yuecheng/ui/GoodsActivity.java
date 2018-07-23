@@ -181,6 +181,7 @@ public class GoodsActivity extends BaseActivity {
                             if (isRefresh) {
                                 refreshLayout.finishRefresh();
                                 isRefresh = false;
+                                goodsList.clear();
                             } else if (isLoadMore) { //加载更多
                                 refreshLayout.finishLoadMore();
                                 isLoadMore = false;

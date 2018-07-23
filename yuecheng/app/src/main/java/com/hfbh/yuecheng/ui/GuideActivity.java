@@ -26,6 +26,9 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -43,7 +46,9 @@ public class GuideActivity extends BaseActivity {
     ImageView ivHeaderBack;
     @BindView(R.id.rv_guide)
     RecyclerView rvGuide;
-    private GuideBean guideBean;
+    private CommonAdapter<GuideBean.DataBean> adapter;
+    private List<GuideBean.DataBean> dataList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class GuideActivity extends BaseActivity {
         setContentView(R.layout.activity_guide);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("室内导航");
+        initView();
         initData();
 
     }
@@ -62,7 +68,7 @@ public class GuideActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -72,9 +78,10 @@ public class GuideActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        guideBean = GsonUtils.jsonToBean(response, GuideBean.class);
-                        if (guideBean.getData() != null && guideBean.getData().size() > 0) {
-                            initView();
+                        GuideBean guideBean = GsonUtils.jsonToBean(response, GuideBean.class);
+                        if (guideBean.isFlag() && guideBean.getData() != null && guideBean.getData().size() > 0) {
+                            dataList.addAll(guideBean.getData());
+                            adapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -82,8 +89,8 @@ public class GuideActivity extends BaseActivity {
 
     private void initView() {
         rvGuide.setLayoutManager(new LinearLayoutManager(this));
-        CommonAdapter<GuideBean.DataBean> adapter = new CommonAdapter<GuideBean.DataBean>(
-                GuideActivity.this, R.layout.rv_guide_item, guideBean.getData()) {
+        adapter = new CommonAdapter<GuideBean.DataBean>(
+                GuideActivity.this, R.layout.rv_guide_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, GuideBean.DataBean dataBean, int position) {
                 SimpleDraweeView ivGuide = holder.getView(R.id.iv_guide);

@@ -79,10 +79,10 @@ public class CouponFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         ivNullData.setImageResource(R.mipmap.ic_null_coupon);
         tvNullData.setText("暂无优惠券");
-        getData();
         viewLoading.smoothToShow();
-        initData();
+        getData();
         initView();
+        initData();
         return view;
     }
 
@@ -112,17 +112,18 @@ public class CouponFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        MyCouponBean couponBean = GsonUtils.jsonToBean(response, MyCouponBean.class);
+                        dataList.clear();
                         if (isRefresh) {
-                            dataList.clear();
                             isRefresh = false;
+                            refreshLayout.finishRefresh();
                         } else {
                             viewLoading.smoothToHide();
                         }
-                        MyCouponBean couponBean = GsonUtils.jsonToBean(response, MyCouponBean.class);
+
                         if (couponBean.isFlag() && couponBean.getData() != null
                                 && couponBean.getData().size() > 0) {
                             dataList.addAll(couponBean.getData());
-                            adapter.notifyDataSetChanged();
                             llNullData.setVisibility(View.GONE);
                         } else {
                             llNullData.setVisibility(View.VISIBLE);
@@ -130,6 +131,7 @@ public class CouponFragment extends BaseFragment {
                                 SharedPreUtils.deleteStr(getActivity(), "is_login");
                             }
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 });
 
@@ -232,7 +234,6 @@ public class CouponFragment extends BaseFragment {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 isRefresh = true;
-                refreshLayout.finishRefresh(1000, true);
                 initData();
             }
         });

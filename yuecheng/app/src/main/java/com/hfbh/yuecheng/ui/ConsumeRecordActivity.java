@@ -100,15 +100,12 @@ public class ConsumeRecordActivity extends BaseActivity {
                         viewLoading.smoothToHide();
                         ConsumeBean msgBean = GsonUtils.jsonToBean(response, ConsumeBean.class);
                         if (msgBean.isFlag() && msgBean.getData() != null && msgBean.getData().size() > 0) {
-                            dataList.clear();
                             dataList.addAll(msgBean.getData());
-                            adapter.notifyDataSetChanged();
                             llNullData.setVisibility(View.GONE);
                         } else {
-                            dataList.clear();
-                            adapter.notifyDataSetChanged();
                             llNullData.setVisibility(View.VISIBLE);
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }

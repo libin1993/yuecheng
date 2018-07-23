@@ -99,28 +99,23 @@ public class BroadMsgActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        if (!isRefresh) {
-                            viewLoading.smoothToHide();
+                        BroadMsgBean msgBean = GsonUtils.jsonToBean(response, BroadMsgBean.class);
+                        dataList.clear();
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
                             isRefresh = false;
                         }else {
-                            refreshLayout.finishRefresh();
+                            viewLoading.smoothToHide();
                         }
-                        BroadMsgBean msgBean = GsonUtils.jsonToBean(response, BroadMsgBean.class);
+
                         if (msgBean.isFlag() && msgBean.getData() != null && msgBean.getData().size() > 0) {
-                            dataList.clear();
                             dataList.addAll(msgBean.getData());
-                            adapter.notifyDataSetChanged();
                             llNullData.setVisibility(View.GONE);
                             readMsg();
                         } else {
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                            }
-                            dataList.clear();
-                            adapter.notifyDataSetChanged();
                             llNullData.setVisibility(View.VISIBLE);
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }

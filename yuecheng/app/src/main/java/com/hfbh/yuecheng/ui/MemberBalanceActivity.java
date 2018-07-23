@@ -32,6 +32,9 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -58,9 +61,10 @@ public class MemberBalanceActivity extends BaseActivity {
     @BindView(R.id.tv_bind_card)
     TextView tvBindCard;
 
-    private MemberBalanceBean balanceBean;
     private int[] imgCard = new int[]{R.mipmap.img_balance_pink, R.mipmap.img_balance_purple,
             R.mipmap.img_balance_green, R.mipmap.img_balance_orange, R.mipmap.img_balance_blue};
+    private CommonAdapter<MemberBalanceBean.DataBean> adapter;
+    private List<MemberBalanceBean.DataBean> dataList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class MemberBalanceActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         tvTitleHeader.setText("会员卡余额");
+        initView();
         initBalance();
         initData();
     }
@@ -80,7 +85,7 @@ public class MemberBalanceActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -93,7 +98,7 @@ public class MemberBalanceActivity extends BaseActivity {
                         UserInfoBean userInfoBean = GsonUtils.jsonToBean(response, UserInfoBean.class);
                         if (userInfoBean.isFlag()) {
                             tvMemberBalance.setText(DisplayUtils.isInteger(userInfoBean.getData().getAccountBalance()));
-                        }else if (userInfoBean.getCode() == 4002) {
+                        } else if (userInfoBean.getCode() == 4002) {
                             SharedPreUtils.deleteStr(MemberBalanceActivity.this, "is_login");
                         }
                     }
@@ -107,7 +112,7 @@ public class MemberBalanceActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("pageSize", "2")
                 .addParams("pageNum", "1")
                 .build()
@@ -119,19 +124,18 @@ public class MemberBalanceActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s, int i) {
-                        balanceBean = GsonUtils.jsonToBean(s, MemberBalanceBean.class);
+                        MemberBalanceBean balanceBean = GsonUtils.jsonToBean(s, MemberBalanceBean.class);
                         if (balanceBean.isFlag() && balanceBean.getPage() != null
                                 && balanceBean.getPage().getTotal() > 0) {
                             tvBalanceCount.setText("预付卡  (" + balanceBean.getPage().getTotal() + ")");
-                            rvMemberBalance.setVisibility(View.VISIBLE);
-                            initView();
+                            dataList.addAll(balanceBean.getData());
                         } else {
                             tvBalanceCount.setText("预付卡  (0)");
-                            rvMemberBalance.setVisibility(View.GONE);
                             if (balanceBean.getCode() == 4002) {
                                 SharedPreUtils.deleteStr(MemberBalanceActivity.this, "is_login");
                             }
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 });
 
@@ -142,8 +146,8 @@ public class MemberBalanceActivity extends BaseActivity {
      */
     private void initView() {
         rvMemberBalance.setLayoutManager(new LinearLayoutManager(this));
-        CommonAdapter<MemberBalanceBean.DataBean> adapter = new CommonAdapter<MemberBalanceBean.DataBean>(
-                this, R.layout.rv_member_balance_item, balanceBean.getData()) {
+        adapter = new CommonAdapter<MemberBalanceBean.DataBean>(
+                this, R.layout.rv_member_balance_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, MemberBalanceBean.DataBean dataBean, int position) {
                 SimpleDraweeView ivBg = holder.getView(R.id.iv_pay_card_bg);
@@ -159,7 +163,7 @@ public class MemberBalanceActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(MemberBalanceActivity.this, BalanceRecordActivity.class);
-                intent.putExtra("account_id", balanceBean.getData().get(position).getAccountId());
+                intent.putExtra("account_id", dataList.get(position).getAccountId());
                 startActivity(intent);
             }
 
@@ -198,7 +202,7 @@ public class MemberBalanceActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override

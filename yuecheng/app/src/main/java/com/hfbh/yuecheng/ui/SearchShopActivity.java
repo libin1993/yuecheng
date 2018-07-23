@@ -128,6 +128,7 @@ public class SearchShopActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         init();
+        initView();
         initData();
     }
 
@@ -180,15 +181,26 @@ public class SearchShopActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         SearchShopBean marketListBean = GsonUtils.jsonToBean(response, SearchShopBean.class);
-                        if (marketListBean.isFlag() && marketListBean.getShopList().size() > 0) {
-                            if ((isRefresh || isSearch) && !isLoadMore) {
-                                shopList.clear();
-                            }
-                            shopList.addAll(marketListBean.getShopList());
-                            if (marketListBean.getPage() != null) {
-                                pages = marketListBean.getPage().getPages();
-                            }
+                        if (marketListBean.getPage() != null) {
+                            pages = marketListBean.getPage().getPages();
+                        }
 
+                        if (isRefresh) {
+                            shopList.clear();
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                        } else if (isLoadMore) {
+                            refreshLayout.finishLoadMore();
+                        } else if (isSearch) {
+                            shopList.clear();
+                            loadingView.smoothToHide();
+                            isSearch = false;
+                        } else {
+                            shopList.clear();
+                            loadingView.smoothToHide();
+                        }
+
+                        if (marketListBean.isFlag() && marketListBean.getShopList().size() > 0) {
                             if (firstIn) {
                                 if (marketListBean.getFloorList().size() > 0) {
                                     SearchShopBean.FloorListBean floorBean = new SearchShopBean.FloorListBean();
@@ -206,7 +218,6 @@ public class SearchShopActivity extends BaseActivity {
                                     industryBean.setIndustryName("全部分类");
                                     industryList.add(industryBean);
 
-
                                     industryList.addAll(marketListBean.getIndustryList());
                                     industryId = industryList.get(0).getIndustryId();
                                     industryNum = 0;
@@ -216,34 +227,15 @@ public class SearchShopActivity extends BaseActivity {
                                 firstIn = false;
                             }
 
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                loadingView.smoothToHide();
-                                shopAdapter.notifyDataSetChanged();
-                            } else if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                shopAdapter.notifyDataSetChanged();
-                            } else if (isSearch) {
-                                loadingView.smoothToHide();
-                                shopAdapter.notifyDataSetChanged();
-                            } else {
-                                loadingView.smoothToHide();
-                                initView();
-                            }
-
+                            shopList.addAll(marketListBean.getShopList());
                             llNullData.setVisibility(View.GONE);
                         } else {
-                            refreshLayout.finishLoadMore();
-                            if (page == 1) {
-                                loadingView.smoothToHide();
-                                shopList.clear();
-                                shopAdapter.notifyDataSetChanged();
+                            if (!isLoadMore) {
                                 llNullData.setVisibility(View.VISIBLE);
-                                refreshLayout.finishRefresh();
                             }
                         }
+                        isLoadMore = false;
+                        shopAdapter.notifyDataSetChanged();
                     }
                 });
 
@@ -544,18 +536,24 @@ public class SearchShopActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_market_type:
-                tvMarketType.setTextColor(getResources().getColor(R.color.red_99));
-                tvMarketType.setCompoundDrawables(null, null, redDrawable, null);
-                tvMarketFloor.setTextColor(getResources().getColor(R.color.gray_1a));
-                tvMarketFloor.setCompoundDrawables(null, null, grayDrawable, null);
-                selectIndustry();
+                if (shopList.size() > 0){
+                    tvMarketType.setTextColor(getResources().getColor(R.color.red_99));
+                    tvMarketType.setCompoundDrawables(null, null, redDrawable, null);
+                    tvMarketFloor.setTextColor(getResources().getColor(R.color.gray_1a));
+                    tvMarketFloor.setCompoundDrawables(null, null, grayDrawable, null);
+                    selectIndustry();
+                }
+
                 break;
             case R.id.tv_market_floor:
-                tvMarketFloor.setTextColor(getResources().getColor(R.color.red_99));
-                tvMarketFloor.setCompoundDrawables(null, null, redDrawable, null);
-                tvMarketType.setTextColor(getResources().getColor(R.color.gray_1a));
-                tvMarketType.setCompoundDrawables(null, null, grayDrawable, null);
-                selectFloor();
+                if (shopList.size() > 0){
+                    tvMarketFloor.setTextColor(getResources().getColor(R.color.red_99));
+                    tvMarketFloor.setCompoundDrawables(null, null, redDrawable, null);
+                    tvMarketType.setTextColor(getResources().getColor(R.color.gray_1a));
+                    tvMarketType.setCompoundDrawables(null, null, grayDrawable, null);
+                    selectFloor();
+                }
+
                 break;
         }
     }

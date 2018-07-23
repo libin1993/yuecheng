@@ -70,7 +70,7 @@ public class DiscoveryFragment extends BaseFragment {
 
         MyFragmentAdapter adapter = new MyFragmentAdapter(getChildFragmentManager(),
                 fragmentList, titleList);
-//        vpDiscovery.setOffscreenPageLimit(titleList.size());
+        vpDiscovery.setOffscreenPageLimit(titleList.size());
         vpDiscovery.setAdapter(adapter);
         tabDiscovery.setViewPager(vpDiscovery);
         tabDiscovery.setCurrentTab(0);

@@ -87,7 +87,7 @@ public class CouponActivity extends BaseActivity {
 
         MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),
                 fragmentList, titleList);
-//        vpCoupon.setOffscreenPageLimit(titleList.size());
+        vpCoupon.setOffscreenPageLimit(titleList.size());
         vpCoupon.setAdapter(adapter);
         tabCoupon.setViewPager(vpCoupon);
         tabCoupon.setCurrentTab(0);

@@ -87,6 +87,7 @@ public class ExchangeFragment extends BaseFragment {
         ivNullData.setImageResource(R.mipmap.ic_null_gift);
         tvNullData.setText("暂无兑换信息");
         viewLoading.smoothToShow();
+        initView();
         initData();
         return view;
     }
@@ -120,41 +121,29 @@ public class ExchangeFragment extends BaseFragment {
                             pages = giftBean.getPage().getPages();
                         }
 
+                        if (isRefresh) {
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                            dataList.clear();
+                        } else if (isLoadMore) {
+                            refreshLayout.finishLoadMore();
+                        } else {
+                            dataList.clear();
+                            viewLoading.smoothToHide();
+                        }
                         if (giftBean.isFlag() && giftBean.getData().size() > 0) {
-                            if (isRefresh) {
-                                dataList.clear();
-                            }
                             dataList.addAll(giftBean.getData());
-
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                                adapter.notifyDataSetChanged();
-                            } else if (isLoadMore) {
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                if (viewLoading != null) {
-                                    viewLoading.smoothToHide();
-                                }
-
-                                initView();
-                            }
-                            rvGift.setVisibility(View.VISIBLE);
                             llNullData.setVisibility(View.GONE);
                         } else {
-                            refreshLayout.finishLoadMore();
-                            if (page == 1) {
-                                viewLoading.smoothToHide();
-                                rvGift.setVisibility(View.GONE);
+                            if (!isLoadMore) {
                                 llNullData.setVisibility(View.VISIBLE);
                             }
-
                             if (giftBean.getCode() == 4002) {
                                 SharedPreUtils.deleteStr(getActivity(), "is_login");
                             }
                         }
+                        isLoadMore = false;
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }
