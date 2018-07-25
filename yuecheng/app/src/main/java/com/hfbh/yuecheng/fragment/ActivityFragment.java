@@ -77,7 +77,10 @@ public class ActivityFragment extends BaseFragment {
         tvHeaderTitle.setText("活动");
         ivHeaderBack.setVisibility(View.GONE);
         loadingView.smoothToShow();
-        initTitle();
+        if (!((MainActivity) getActivity()).isBack) {
+            initTitle();
+        }
+
         return view;
     }
 
@@ -146,7 +149,7 @@ public class ActivityFragment extends BaseFragment {
         vpActivity.setAdapter(adapter);
 
         tabActivity.setViewPager(vpActivity);
-        tabActivity.setCurrentTab(0);
+        vpActivity.setCurrentItem(0);
     }
 
     public static ActivityFragment newInstance() {

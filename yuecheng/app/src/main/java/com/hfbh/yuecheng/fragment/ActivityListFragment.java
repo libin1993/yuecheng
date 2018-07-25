@@ -25,12 +25,12 @@ import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -64,6 +64,8 @@ public class ActivityListFragment extends BaseFragment {
     TextView tvNullData;
     @BindView(R.id.ll_null_data)
     LinearLayout llNullData;
+    @BindView(R.id.view_loading)
+    AVLoadingIndicatorView viewLoading;
 
     private Unbinder unbinder;
     //标签id
@@ -79,6 +81,12 @@ public class ActivityListFragment extends BaseFragment {
     private int pages;
     private CommonAdapter<ActivityListBean.DataBean> adapter;
 
+    //Fragment的View加载完毕的标记
+    private boolean isViewCreated;
+
+    //Fragment对用户可见的标记
+    private boolean isUIVisible;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,10 +94,36 @@ public class ActivityListFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         ivNullData.setImageResource(R.mipmap.ic_null_activity);
         tvNullData.setText("暂无活动");
+        isViewCreated = true;
         getData();
         initView();
-        initData();
+        isViewCreated = true;
+        lazyLoad();
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isUIVisible = true;
+            lazyLoad();
+        } else {
+            isUIVisible = false;
+        }
+    }
+
+    /**
+     * 懒加载
+     */
+    private void lazyLoad() {
+        if (isViewCreated && isUIVisible) {
+            viewLoading.smoothToShow();
+            initData();
+            //数据加载完毕,恢复标记,防止重复加载
+            isViewCreated = false;
+            isUIVisible = false;
+        }
     }
 
     /**
@@ -125,8 +159,9 @@ public class ActivityListFragment extends BaseFragment {
                             dataList.clear();
                         } else if (isLoadMore) {
                             refreshLayout.finishLoadMore();
-                        }else {
+                        } else {
                             dataList.clear();
+                            viewLoading.smoothToHide();
                         }
 
                         if (activityListBean.isFlag() && activityListBean.getData() != null &&

@@ -68,6 +68,19 @@ public class GsonUtils {
         return t;
     }
 
+
+    /**
+     * bean转成json
+     * @return
+     */
+    public static String beanToJson(Object object) {
+        String str = null;
+        if (gson != null) {
+            str = gson.toJson(object);
+        }
+        return str;
+    }
+
     /**
      * 转成list
      * 解决泛型问题

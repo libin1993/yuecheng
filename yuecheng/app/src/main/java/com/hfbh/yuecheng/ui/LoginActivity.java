@@ -428,7 +428,9 @@ public class LoginActivity extends BaseActivity {
 
                             EventBus.getDefault().post("login_success");
                             if (getIntent().getIntExtra("type", 0) == 1) {
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("homepage",false);
+                                startActivity(intent);
                             }
                             finish();
 
@@ -493,7 +495,9 @@ public class LoginActivity extends BaseActivity {
 
                                 EventBus.getDefault().post("login_success");
                                 if (getIntent().getIntExtra("type", 0) == 1) {
-                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("homepage",false);
+                                    startActivity(intent);
                                 }
                                 finish();
                             } else {

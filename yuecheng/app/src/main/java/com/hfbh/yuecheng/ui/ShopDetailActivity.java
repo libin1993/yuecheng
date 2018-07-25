@@ -79,7 +79,7 @@ public class ShopDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         getData();
         initShopData();
-//        initGoodsData();
+        initGoodsData();
     }
 
     private void getData() {
@@ -248,27 +248,25 @@ public class ShopDetailActivity extends BaseActivity {
                 return false;
             }
         });
-        refreshLayout.setEnableRefresh(false);
-        refreshLayout.setEnableLoadMore(false);
-//        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
-//            @Override
-//            public void onLoadMore(RefreshLayout refreshLayout) {
-//                if (page < pages) {
-//                    isLoadMore = true;
-//                    page++;
-//                    initGoodsData();
-//                } else {
-//                    refreshLayout.finishLoadMore();
-//                }
-//            }
-//
-//            @Override
-//            public void onRefresh(RefreshLayout refreshLayout) {
-//                isRefresh = true;
-//                page = 1;
-//                initGoodsData();
-//            }
-//        });
+        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+                if (page < pages) {
+                    isLoadMore = true;
+                    page++;
+                    initGoodsData();
+                } else {
+                    refreshLayout.finishLoadMore();
+                }
+            }
+
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                isRefresh = true;
+                page = 1;
+                initGoodsData();
+            }
+        });
 
     }
 

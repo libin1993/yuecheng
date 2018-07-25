@@ -12,6 +12,8 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.MyFragmentAdapter;
 import com.hfbh.yuecheng.base.BaseFragment;
+import com.hfbh.yuecheng.bean.GoodsOrderBean;
+import com.hfbh.yuecheng.ui.MainActivity;
 import com.hfbh.yuecheng.ui.NewGoodsActivity;
 
 import java.util.ArrayList;
@@ -41,8 +43,19 @@ public class DiscoveryFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
         unbinder = ButterKnife.bind(this, view);
-        initTitle();
+        if (!((MainActivity) getActivity()).isBack) {
+            initTitle();
+        }
         return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (((MainActivity) getActivity()).isBack) {
+            initTitle();
+        }
     }
 
     /**
@@ -55,7 +68,7 @@ public class DiscoveryFragment extends BaseFragment {
         titleList.add("美食");
         titleList.add("电影");
 
-        fragmentList.add(FoodFragment.newInstance());
+        fragmentList.add(OldGoodsFragment.newInstance());
         fragmentList.add(FoodFragment.newInstance());
         fragmentList.add(MovieFragment.newInstance());
 

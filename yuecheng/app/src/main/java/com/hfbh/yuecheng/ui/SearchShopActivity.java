@@ -370,16 +370,6 @@ public class SearchShopActivity extends BaseActivity {
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
         mPopupWindow.showAsDropDown(llSearchMarket);
-//        if (Build.VERSION.SDK_INT >= 24) {
-//            Rect visibleFrame = new Rect();
-//            llSearchMarket.getGlobalVisibleRect(visibleFrame);
-//            int height = llSearchMarket.getResources().getDisplayMetrics().heightPixels - visibleFrame.bottom;
-//            mPopupWindow.setHeight(height);
-//            mPopupWindow.showAsDropDown(llNullData, 0, 0);
-//        } else {
-//            mPopupWindow.showAsDropDown(llSearchMarket);
-//        }
-
 
         RecyclerView rvFloor = (RecyclerView) contentView.findViewById(R.id.rv_select_floor);
         View viewBg = contentView.findViewById(R.id.view_shop_bg);

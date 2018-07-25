@@ -64,6 +64,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
     RelativeLayout rlPopGoodsBuy;
     @BindView(R.id.rl_goods_status)
     RelativeLayout rlGoodsStatus;
+
     //商品id
     private int goodsId;
     private String url;

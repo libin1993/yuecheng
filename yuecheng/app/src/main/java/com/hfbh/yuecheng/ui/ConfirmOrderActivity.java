@@ -27,12 +27,12 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.GoodsOrderBean;
 import com.hfbh.yuecheng.bean.GroupGoodsDetailBean;
+import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.UserBalanceBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.MoneyInputFilter;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
@@ -45,7 +45,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -305,7 +307,8 @@ public class ConfirmOrderActivity extends BaseActivity {
     private void inputPwd() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_validate_pwd, null);
 
-        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, (int) DisplayUtils.dp2px(this, 191));
+        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                (int) DisplayUtils.dp2px(this, 191));
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
@@ -448,14 +451,19 @@ public class ConfirmOrderActivity extends BaseActivity {
      * 付现金
      */
     private void payMoney() {
-        Intent intent = new Intent(ConfirmOrderActivity.this, EnrollOrderActivity.class);
-        intent.putExtra("order_no", orderBean.getData().getOrderNumber());
-        intent.putExtra("order_type", "COMMODITY");
-        intent.putExtra("total_money", totalPrice);
-        intent.putExtra("balance_money", useBalance);
-        intent.putExtra("pay_money", totalPrice - useBalance);
-        intent.putExtra("order_name", goodsBean.getData().getCommodityName());
-        startActivity(intent);
+        List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
+        orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderBean.getData().getOrderNumber()));
+        orderInfoList.add(new PayOrderBean.OrderInfo("商品名称", goodsBean.getData().getCommodityName()));
+
+        List<PayOrderBean.DiscountBean> discountBeans = new ArrayList<>();
+        discountBeans.add(new PayOrderBean.DiscountBean("订单金额", "¥" + DisplayUtils.decimalFormat(totalPrice)));
+        discountBeans.add(new PayOrderBean.DiscountBean("余额抵扣", "-¥" + DisplayUtils.decimalFormat(useBalance)));
+
+        MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrderNumber(),
+                "COMMODITY", "", false,
+                totalPrice - useBalance, discountBeans, orderInfoList);
+
+        startActivity(new Intent(ConfirmOrderActivity.this, ConfirmPayActivity.class));
 
     }
 

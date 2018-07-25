@@ -146,6 +146,8 @@ public class Constant {
     public static final String SCAN_ORDER_MONEY = HOST + "/wechat/scanCodePay/recountMoney.json";
     //提交主扫订单
     public static final String SCAN_ORDER_SUBMIT = HOST + "/wechat/scanCodePay/confirmPay.json";
+    //积分抵扣比例
+    public static final String POINTS_RATIO = HOST + "/wechat/scanCodePay/getVipScoreMoney.json";
 
     //WebView
     //活动详情

@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -26,6 +27,10 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.GoodsBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.NewGoodsActivity;
+import com.hfbh.yuecheng.ui.NewGoodsDetailActivity;
+import com.hfbh.yuecheng.ui.PopGoodsActivity;
+import com.hfbh.yuecheng.ui.PopGoodsDetailActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -67,18 +72,18 @@ public class OldGoodsFragment extends BaseFragment {
     private List<GoodsBean.DataBean> newGoods = new ArrayList<>();
     private List<DelegateAdapter.Adapter> mAdapters = new LinkedList<>();
 
-    private boolean isRefresh;
-    //加载更多
-    private boolean isLoadMore;
-
-    //人气当前页
-    private int page1 = 1;
-    //新品当前页
-    private int page2 = 1;
-    //人气总页数
-    private int pages1;
-    //新品总页数
-    private int pages2;
+//    private boolean isRefresh;
+//    //加载更多
+//    private boolean isLoadMore;
+//
+//    //人气当前页
+//    private int page1 = 1;
+//    //新品当前页
+//    private int page2 = 1;
+//    //人气总页数
+//    private int pages1;
+//    //新品总页数
+//    private int pages2;
 
     @Nullable
     @Override
@@ -86,8 +91,8 @@ public class OldGoodsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_goods, container, false);
         unbinder = ButterKnife.bind(this, view);
         loadingView.smoothToShow();
-        initData("SPECIAL", page1);
-        initData("FIRSTLOOK", page2);
+        initData("SPECIAL");
+        initData("FIRSTLOOK");
 
         return view;
     }
@@ -95,7 +100,7 @@ public class OldGoodsFragment extends BaseFragment {
     /**
      * @param type 加载数据
      */
-    private void initData(final String type, int page) {
+    private void initData(final String type) {
         OkHttpUtils.post()
                 .url(Constant.DISCOVERY_GOODS)
                 .addParams("appType", MyApp.appType)
@@ -103,7 +108,7 @@ public class OldGoodsFragment extends BaseFragment {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(getParentFragment().getActivity(), "hash"))
                 .addParams("commodityType", type)
-                .addParams("pageNum", String.valueOf(page))
+                .addParams("pageNum", "1")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -118,22 +123,13 @@ public class OldGoodsFragment extends BaseFragment {
                             switch (type) {
                                 case "SPECIAL":
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
-                                        pages1 = goodsBean.getPage().getPages();
-                                        if (isRefresh) {
-                                            popGoods.clear();
-                                        }
                                         popGoods.addAll(goodsBean.getData());
 
                                     }
                                     break;
                                 case "FIRSTLOOK":
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
-                                        pages2 = goodsBean.getPage().getPages();
-                                        if (isRefresh) {
-                                            newGoods.clear();
-                                        }
                                         newGoods.addAll(goodsBean.getData());
-
                                     }
                                     break;
                             }
@@ -141,25 +137,8 @@ public class OldGoodsFragment extends BaseFragment {
                             count++;
                             if (count == 2) {
                                 count = 0;
-                                //是否刷新状态
-                                if (isRefresh) {
-                                    refreshLayout.finishRefresh();
-                                    isRefresh = false;
-                                    for (int j = 0; j < mAdapters.size(); j++) {
-                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                } else if (isLoadMore) {
-                                    refreshLayout.finishLoadMore();
-                                    isLoadMore = false;
-                                    for (int j = 0; j < mAdapters.size(); j++) {
-                                        BaseDelegateAdapter adapter = (BaseDelegateAdapter) mAdapters.get(j);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                } else {
-                                    loadingView.smoothToHide();
-                                    initView();
-                                }
+                                loadingView.smoothToHide();
+                                initView();
                             }
                         }
                     }
@@ -198,7 +177,7 @@ public class OldGoodsFragment extends BaseFragment {
             final int width = (int) ((widthPixels - DisplayUtils.dp2px(getParentFragment().getActivity(), 35)) / 2);
 
             @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
+            public void onBindViewHolder(ViewHolder holder, final int position) {
                 super.onBindViewHolder(holder, position);
                 ImageView ivPop = holder.getView(R.id.iv_discovery_pop);
                 ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
@@ -217,6 +196,15 @@ public class OldGoodsFragment extends BaseFragment {
                 tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
                 tvOld.setText("¥" + popGoods.get(position).getOldPrice());
 
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getParentFragment().getActivity(), PopGoodsDetailActivity.class);
+                        intent.putExtra("goods_id", popGoods.get(position).getCommodityId());
+                        startActivity(intent);
+                    }
+                });
+
             }
         };
         mAdapters.add(popAdapter);
@@ -226,7 +214,7 @@ public class OldGoodsFragment extends BaseFragment {
         BaseDelegateAdapter newAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(),
                 new LinearLayoutHelper(), R.layout.rv_new_goods_item, newGoods.size(), 4) {
             @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
+            public void onBindViewHolder(ViewHolder holder, final int position) {
                 super.onBindViewHolder(holder, position);
                 SimpleDraweeView ivNewGoods = holder.getView(R.id.iv_discovery_new);
                 ivNewGoods.setImageURI(newGoods.get(position).getPicturePath());
@@ -235,46 +223,23 @@ public class OldGoodsFragment extends BaseFragment {
                 holder.setText(R.id.tv_discovery_new_tip, newGoods.get(position).getIndustryName());
                 holder.setText(R.id.tv_discovery_new_time, newGoods.get(position).getModifyTime());
 
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getParentFragment().getActivity(), NewGoodsDetailActivity.class);
+                        intent.putExtra("goods_id", newGoods.get(position).getCommodityId());
+                        startActivity(intent);
+                    }
+                });
             }
         };
 
-
+        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setEnableLoadMore(false);
         mAdapters.add(newAdapter);
         delegateAdapter.setAdapters(mAdapters);
 
-        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                count = 0;
-                if (page1 < pages1 || page2 < pages2) {
-                    isLoadMore = true;
-                    if (page1 < pages1) {
-                        page1++;
-                        initData("SPECIAL", page1);
-                    } else {
-                        count++;
-                    }
-                    if (page2 < pages2) {
-                        page2++;
-                        initData("FIRSTLOOK", page2);
-                    } else {
-                        count++;
-                    }
-                } else {
-                    refreshLayout.finishLoadMore();
-                }
-            }
-
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                isRefresh = true;
-                count = 0;
-                page1 = 1;
-                page2 = 1;
-                initData("SPECIAL", page1);
-                initData("FIRSTLOOK", page2);
-            }
-        });
 
     }
 
@@ -282,13 +247,28 @@ public class OldGoodsFragment extends BaseFragment {
      * @param title
      * @param type  标题
      */
-    private void initTitle(final String title, int type) {
-        BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(), new LinearLayoutHelper(),
+    private void initTitle(final String title, final int type) {
+        BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(),
+                new LinearLayoutHelper(),
                 R.layout.layout_homepage_title, 1, type) {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
                 holder.setText(R.id.tv_home_title, title);
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (type) {
+                            case 1:
+                                startActivity(new Intent(getParentFragment().getActivity(), PopGoodsActivity.class));
+                                break;
+                            case 3:
+                                startActivity(new Intent(getParentFragment().getActivity(), NewGoodsActivity.class));
+                                break;
+                        }
+                    }
+                });
             }
         };
         mAdapters.add(titleAdapter);

@@ -38,6 +38,7 @@ import com.hfbh.yuecheng.bean.UpdateBean;
 import com.hfbh.yuecheng.bean.UserInfoBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.fragment.ActivityFragment;
+import com.hfbh.yuecheng.fragment.DiscoveryFragment;
 import com.hfbh.yuecheng.fragment.HomepageFragment;
 import com.hfbh.yuecheng.fragment.MineFragment;
 import com.hfbh.yuecheng.service.DownloadService;
@@ -375,7 +376,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(HomepageFragment.newInstance());
         fragmentList.add(ActivityFragment.newInstance());
-//        fragmentList.add(DiscoveryFragment.newInstance());
+        fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
         fragmentTabUtils = new FragmentTabUtils(this, getSupportFragmentManager(),
                 fragmentList, R.id.fl_main_container, rgsMainTab);
@@ -397,13 +398,13 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         drawableActivity.setBounds(0, 0, width, height);
         ((RadioButton) rgsMainTab.getChildAt(1)).setCompoundDrawables(null, drawableActivity, null, null);
 
-//        Drawable drawableDiscovery = getResources().getDrawable(R.drawable.selector_discovery_tab);
-//        drawableDiscovery.setBounds(0, 0, width, height);
-//        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableDiscovery, null, null);
+        Drawable drawableDiscovery = getResources().getDrawable(R.drawable.selector_discovery_tab);
+        drawableDiscovery.setBounds(0, 0, width, height);
+        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableDiscovery, null, null);
 
         Drawable drawableMine = getResources().getDrawable(R.drawable.selector_mine_tab);
         drawableMine.setBounds(0, 0, width, height);
-        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableMine, null, null);
+        ((RadioButton) rgsMainTab.getChildAt(3)).setCompoundDrawables(null, drawableMine, null, null);
 
     }
 
@@ -487,10 +488,16 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         super.onNewIntent(intent);
         setIntent(intent);
         isBack = true;
-        boolean isLogout = getIntent().getBooleanExtra("log_out", false);
+        Intent intent1 = getIntent();
+        //是否返回首页
+        boolean toHomepage = intent1.getBooleanExtra("homepage", true);
+        if (toHomepage) {
+            fragmentTabUtils.setCurrentFragment(0);
+        }
+
+        boolean isLogout = intent1.getBooleanExtra("log_out", false);
         //退出登录，重新获取hash值
         if (isLogout) {
-            fragmentTabUtils.setCurrentFragment(0);
             initLocation();
         }
     }

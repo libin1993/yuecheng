@@ -217,7 +217,7 @@
         <activity android:name=".ui.GroupGoodsActivity"/>
         <activity android:name=".ui.RushGoodsActivity"/>
         <activity android:name=".ui.ScanOrderActivity"/>
-        <activity android:name=".ui.EnrollOrderActivity"/>
+        <activity android:name=".ui.ConfirmPayActivity"/>
         <activity android:name=".ui.PayResultActivity"/>
         <activity android:name=".ui.GroupGoodsDetailActivity"/>
         <activity android:name=".ui.RushGoodsDetailActivity"/>

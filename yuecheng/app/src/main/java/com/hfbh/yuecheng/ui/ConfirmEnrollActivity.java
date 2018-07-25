@@ -25,20 +25,17 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.ActivityRecordBean;
 import com.hfbh.yuecheng.bean.EnrollOrderBean;
+import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.UserBalanceBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.MoneyInputFilter;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SerializableMap;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.jungly.gridpasswordview.GridPasswordView;
-import com.smarttop.library.utils.LogUtil;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -47,6 +44,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -482,14 +481,15 @@ public class ConfirmEnrollActivity extends BaseActivity {
      * 付现金
      */
     private void payMoney() {
-        Intent intent = new Intent(ConfirmEnrollActivity.this, EnrollOrderActivity.class);
-        intent.putExtra("order_no", orderBean.getData().getOrder().getTranNo());
-        intent.putExtra("order_type", "ACTIVITY");
-        intent.putExtra("total_money", enrollFee);
-        intent.putExtra("balance_money", useBalance);
-        intent.putExtra("pay_money", enrollFee - useBalance);
-        intent.putExtra("order_name", "");
-        startActivity(intent);
+        List<PayOrderBean.DiscountBean> discountBeans = new ArrayList<>();
+        discountBeans.add(new PayOrderBean.DiscountBean("订单金额", "¥" + DisplayUtils.decimalFormat(enrollFee)));
+        discountBeans.add(new PayOrderBean.DiscountBean("余额抵扣", "-¥" + DisplayUtils.decimalFormat(useBalance)));
+
+        List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
+        orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderBean.getData().getOrder().getTranNo()));
+        MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrder().getTranNo(),
+                "ACTIVITY", "", false, enrollFee-useBalance, discountBeans, orderInfoList);
+        startActivity(new Intent(ConfirmEnrollActivity.this, ConfirmPayActivity.class));
     }
 
 
