@@ -328,35 +328,6 @@ public class ScanOrderActivity extends BaseActivity {
                         }
                     });
 
-//                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                        @Override
-//                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//
-//                            couponlistBean.setCheck(isChecked);
-//                            orderBean.getData().getCouponlist().get(position).setCheck(isChecked);
-//                            checkBox.setChecked(isChecked);
-//
-//                            etCoupon.setEnabled(isChecked);
-//                            etCoupon.setFocusable(isChecked);
-//                            etCoupon.setFocusableInTouchMode(isChecked);
-//
-//                            double money = 0;
-//                            if (!TextUtils.isEmpty(etCoupon.getText().toString().trim())) {
-//                                money = Double.parseDouble(etCoupon.getText().toString().trim());
-//                            }
-//                            if (isChecked) {
-//
-//                                couponlistBean.setUseCoupon(money);
-//                                orderBean.getData().getCouponlist().get(position).setUseCoupon(money);
-//                            } else {
-//                                couponlistBean.setUseCoupon(0);
-//                                orderBean.getData().getCouponlist().get(position).setUseCoupon(0);
-//                            }
-//
-//                           adapter.notifyDataSetChanged();
-//                            needPay();
-//                        }
-//                    });
                 }
             };
             rvCoupon.setAdapter(adapter);

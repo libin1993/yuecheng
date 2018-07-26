@@ -240,7 +240,7 @@ public class RushGoodsDetailActivity extends BaseActivity {
         tvSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(RushGoodsDetailActivity.this, MyActionActivity.class));
+                startActivity(new Intent(RushGoodsDetailActivity.this, MyOrderActivity.class));
                 mPopupWindow.dismiss();
             }
         });

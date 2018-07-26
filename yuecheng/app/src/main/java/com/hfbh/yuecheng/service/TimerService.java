@@ -9,7 +9,7 @@ import android.os.Build;
 import android.os.IBinder;
 
 import com.hfbh.yuecheng.application.MyApp;
-import com.hfbh.yuecheng.bean.OrderDetailBean;
+import com.hfbh.yuecheng.bean.ScannedDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ScanedOrderActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -91,7 +91,7 @@ public class TimerService extends Service {
                     @Override
                     public void onResponse(String response, int id) {
 
-                        OrderDetailBean orderDetailBean = GsonUtils.jsonToBean(response, OrderDetailBean.class);
+                        ScannedDetailBean orderDetailBean = GsonUtils.jsonToBean(response, ScannedDetailBean.class);
                         if (orderDetailBean.isFlag()) {
                             pushThread = false;
                             stop(context);

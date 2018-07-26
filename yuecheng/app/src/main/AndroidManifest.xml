@@ -225,6 +225,8 @@
                   android:exported="true"
                   android:launchMode="singleTop"/>
         <activity android:name=".ui.ConfirmOrderActivity"/>
+        <activity android:name=".ui.MyOrderActivity"/>
+        <activity android:name=".ui.OrderDetailActivity"/>
 
         <service
             android:name=".service.TimerService"

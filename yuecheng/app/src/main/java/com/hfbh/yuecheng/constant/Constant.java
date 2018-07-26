@@ -146,8 +146,18 @@ public class Constant {
     public static final String SCAN_ORDER_MONEY = HOST + "/wechat/scanCodePay/recountMoney.json";
     //提交主扫订单
     public static final String SCAN_ORDER_SUBMIT = HOST + "/wechat/scanCodePay/confirmPay.json";
-    //积分抵扣比例
-    public static final String POINTS_RATIO = HOST + "/wechat/scanCodePay/getVipScoreMoney.json";
+    //订单列表
+    public static final String ORDER_LIST = HOST + "/wechat/memberOrderShop/listOrder.json";
+    //取消订单
+    public static final String CANCEL_ORDER = HOST + "/wechat/memberOrderShop/cancelOrder.json";
+    //订单详情
+    public static final String ORDER_DETAIL = HOST + "/wechat/memberOrderShop/queryOrderDtl.json";
+    //申请退款
+    public static final String APPLY_REFUND = HOST + "/wechat/memberRefundApply/save.json";
+    //退款列表
+    public static final String REFUND_LIST = HOST + "/wechat/memberRefundApply/queryMyRefundList.json";
+    //退款详情
+    public static final String REFUND_DETAIL = HOST + "/wechat/memberRefundApply/queryMyRefundList.json";
 
     //WebView
     //活动详情

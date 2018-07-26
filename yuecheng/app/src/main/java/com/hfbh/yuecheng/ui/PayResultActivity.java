@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.MyOrderBean;
 import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -170,7 +171,8 @@ public class PayResultActivity extends BaseActivity {
                         finish();
                         break;
                     case "COMMODITY":
-
+                        startActivity(new Intent(PayResultActivity.this, MyOrderActivity.class));
+                        finish();
                         break;
                 }
                 break;

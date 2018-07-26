@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.bean.OrderDetailBean;
+import com.hfbh.yuecheng.bean.ScannedDetailBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
@@ -66,7 +66,7 @@ public class ScanedOrderActivity extends BaseActivity {
     @BindView(R.id.tv_confirm_order)
     TextView tvConfirmOrder;
 
-    private OrderDetailBean orderBean;
+    private ScannedDetailBean orderBean;
 
     double totalDiscount = 0.00;
     private PopupWindow mPopupWindow;
@@ -126,7 +126,7 @@ public class ScanedOrderActivity extends BaseActivity {
     }
 
     private void getData() {
-        orderBean = (OrderDetailBean) getIntent().getSerializableExtra("order");
+        orderBean = (ScannedDetailBean) getIntent().getSerializableExtra("order");
     }
 
 

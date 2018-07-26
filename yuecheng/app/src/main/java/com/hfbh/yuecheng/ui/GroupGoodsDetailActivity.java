@@ -241,7 +241,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
         tvSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(GroupGoodsDetailActivity.this, MyActionActivity.class));
+                startActivity(new Intent(GroupGoodsDetailActivity.this, MyOrderActivity.class));
                 mPopupWindow.dismiss();
             }
         });

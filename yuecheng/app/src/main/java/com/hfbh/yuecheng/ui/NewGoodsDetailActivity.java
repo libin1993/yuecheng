@@ -13,12 +13,18 @@ import android.widget.RelativeLayout;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.GroupGoodsDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.ShareUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 import static android.webkit.WebSettings.LOAD_NO_CACHE;
 
@@ -38,6 +44,8 @@ public class NewGoodsDetailActivity extends BaseActivity {
     RelativeLayout rlBuyGoods;
 
     private int goodsId;
+    private GroupGoodsDetailBean goodsBean;
+    private String url;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +54,31 @@ public class NewGoodsDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         rlBuyGoods.setVisibility(View.GONE);
         getData();
+        initData();
         initView();
+    }
+
+    private void initData() {
+        OkHttpUtils.get()
+                .url(Constant.GOODS_DETAIL)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .addParams("commodityId", String.valueOf(goodsId))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        goodsBean = GsonUtils.jsonToBean(response, GroupGoodsDetailBean.class);
+                    }
+                });
     }
 
 
@@ -70,7 +102,7 @@ public class NewGoodsDetailActivity extends BaseActivity {
             ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
-        String url = Constant.NEW_GOODS_DETAIL + "?appType=Android&id=" + goodsId
+        url = Constant.NEW_GOODS_DETAIL + "?appType=Android&id=" + goodsId
                 + "&appVersion=" + MyApp.appVersion + "&organizeId=" + MyApp.organizeId
                 + "&token=" + SharedPreUtils.getStr(this, "token")
                 + "&hash=" + SharedPreUtils.getStr(this, "hash");
@@ -92,6 +124,9 @@ public class NewGoodsDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_goods_share:
+                ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
+                        , goodsBean.getData().getCommodityName(),
+                        "", url + "&share=true");
                 break;
         }
     }

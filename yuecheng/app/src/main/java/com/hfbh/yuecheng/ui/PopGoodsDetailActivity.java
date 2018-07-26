@@ -184,9 +184,12 @@ public class PopGoodsDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_goods_share:
-                ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
-                        , goodsBean.getData().getCommodityName(),
-                        "", url + "&share=true");
+                if (goodsBean !=null){
+                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
+                            , goodsBean.getData().getCommodityName(),
+                            "", url + "&share=true");
+                }
+
                 break;
             case R.id.tv_buy_goods:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {
@@ -252,7 +255,7 @@ public class PopGoodsDetailActivity extends BaseActivity {
         tvSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(GroupGoodsDetailActivity.this, MyActionActivity.class));
+                startActivity(new Intent(PopGoodsDetailActivity.this, MyOrderActivity.class));
                 mPopupWindow.dismiss();
             }
         });
