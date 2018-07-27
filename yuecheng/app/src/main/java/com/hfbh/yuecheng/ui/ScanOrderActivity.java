@@ -157,6 +157,10 @@ public class ScanOrderActivity extends BaseActivity {
         ButterKnife.bind(this);
         getData();
         tvHeaderTitle.setText("自助买单");
+        etUsePoints.setFocusable(false);
+        etUsePoints.setFocusableInTouchMode(false);
+        etUseBalance.setFocusable(false);
+        etUseBalance.setFocusableInTouchMode(false);
         viewLoading.smoothToShow();
         initData();
     }
@@ -185,7 +189,6 @@ public class ScanOrderActivity extends BaseActivity {
                         viewLoading.smoothToHide();
                         orderBean = GsonUtils.jsonToBean(response, ScanOrderBean.class);
                         if (orderBean.isFlag()) {
-
                             initView();
                         } else {
                             ToastUtils.showToast(ScanOrderActivity.this, orderBean.getMsg());
@@ -196,6 +199,7 @@ public class ScanOrderActivity extends BaseActivity {
     }
 
     private void initView() {
+
         tvOrderNo.setText(orderNo);
         tvOrderShop.setText(orderBean.getData().getStoreName());
         totalPrice = Double.parseDouble(orderBean.getData().getMoney());
@@ -340,6 +344,18 @@ public class ScanOrderActivity extends BaseActivity {
 
         userBalance = orderBean.getData().getAccountBalance();
         userPoints = orderBean.getData().getPoints();
+        if (userBalance > 0) {
+            etUseBalance.setEnabled(true);
+            etUseBalance.setFocusable(true);
+            etUseBalance.setFocusableInTouchMode(true);
+        }
+
+        if (userPoints > 0) {
+            etUsePoints.setEnabled(true);
+            etUsePoints.setFocusable(true);
+            etUsePoints.setFocusableInTouchMode(true);
+        }
+
         tvUserBalance.setText("¥" + DisplayUtils.decimalFormat(userBalance));
         tvUserPoints.setText("¥" + DisplayUtils.isInteger(userPoints));
 

@@ -106,6 +106,9 @@ public class ConfirmOrderActivity extends BaseActivity {
     private int num = 1;
     private PopupWindow mPopupWindow;
     private GoodsOrderBean orderBean;
+    private int goodsId;
+    //商品信息数据加载
+    private boolean isGoods;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,20 +121,45 @@ public class ConfirmOrderActivity extends BaseActivity {
         etUseBalance.setFocusable(false);
         etUseBalance.setFocusableInTouchMode(false);
         getData();
+        initData();
         initBalance();
-        initView();
+    }
+
+    private void initData() {
+        OkHttpUtils.get()
+                .url(Constant.GOODS_DETAIL)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .addParams("commodityId", String.valueOf(goodsId))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        goodsBean = GsonUtils.jsonToBean(response, GroupGoodsDetailBean.class);
+                        if (goodsBean.isFlag() && goodsBean.getData() != null) {
+                            initView();
+                            isGoods = true;
+                        }
+                    }
+                });
     }
 
     private void initView() {
-        if (goodsBean != null) {
-            ivShopLogo.setImageURI(goodsBean.getData().getShopLogo());
-            tvShopName.setText(goodsBean.getData().getShopName());
-            ivGoodsLogo.setImageURI(goodsBean.getData().getPicturePath());
-            tvGoodsName.setText(goodsBean.getData().getCommodityName());
-            tvNewPrice.setText("¥" + DisplayUtils.isInteger(goodsBean.getData().getNowPrice()));
-            tvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
-            tvOldPrice.setText("¥" + DisplayUtils.isInteger(goodsBean.getData().getOldPrice()));
-        }
+        ivShopLogo.setImageURI(goodsBean.getData().getShopLogo());
+        tvShopName.setText(goodsBean.getData().getShopName());
+        ivGoodsLogo.setImageURI(goodsBean.getData().getPicturePath());
+        tvGoodsName.setText(goodsBean.getData().getCommodityName());
+        tvNewPrice.setText("¥" + DisplayUtils.isInteger(goodsBean.getData().getNowPrice()));
+        tvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
+        tvOldPrice.setText("¥" + DisplayUtils.isInteger(goodsBean.getData().getOldPrice()));
     }
 
     /**
@@ -184,48 +212,50 @@ public class ConfirmOrderActivity extends BaseActivity {
                         if (balanceBean.isFlag() && balanceBean.getData() != null) {
                             balance = balanceBean.getData().getAccountBalance();
                             tvBalance.setText("¥" + DisplayUtils.isInteger(balance));
-                            initPrice();
-                            if (balance > 0) {
-                                etUseBalance.setFocusable(true);
-                                etUseBalance.setFocusableInTouchMode(true);
-                                etUseBalance.setEnabled(true);
-                                etUseBalance.addTextChangedListener(new TextWatcher() {
-                                    @Override
-                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            if (isGoods){
+                                initPrice();
+                                if (balance > 0) {
+                                    etUseBalance.setFocusable(true);
+                                    etUseBalance.setFocusableInTouchMode(true);
+                                    etUseBalance.setEnabled(true);
+                                    etUseBalance.addTextChangedListener(new TextWatcher() {
+                                        @Override
+                                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                    }
-
-                                    @Override
-                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                                    }
-
-                                    @Override
-                                    public void afterTextChanged(Editable s) {
-                                        if (!TextUtils.isEmpty(s.toString())) {
-                                            useBalance = Double.parseDouble(s.toString());
-                                            if (useBalance > Math.min(totalPrice, balance)) {
-                                                etUseBalance.removeTextChangedListener(this);
-                                                useBalance = Math.min(totalPrice, balance);
-                                                etUseBalance.setText(DisplayUtils.isInteger(useBalance));
-                                                etUseBalance.setSelection(etUseBalance.getText().toString().length());
-                                                etUseBalance.addTextChangedListener(this);
-                                            } else if (useBalance != (int) useBalance && String.valueOf(useBalance).length()
-                                                    - String.valueOf(useBalance).indexOf(".") >= 3) {
-                                                etUseBalance.removeTextChangedListener(this);
-                                                useBalance = Double.parseDouble(DisplayUtils.decimalFormat(useBalance));
-                                                etUseBalance.setText(DisplayUtils.isInteger(useBalance));
-                                                etUseBalance.setSelection(etUseBalance.getText().toString().length());
-                                                etUseBalance.addTextChangedListener(this);
-                                            }
-
-                                        } else {
-                                            useBalance = 0;
                                         }
 
-                                        initPrice();
-                                    }
-                                });
+                                        @Override
+                                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                        }
+
+                                        @Override
+                                        public void afterTextChanged(Editable s) {
+                                            if (!TextUtils.isEmpty(s.toString())) {
+                                                useBalance = Double.parseDouble(s.toString());
+                                                if (useBalance > Math.min(totalPrice, balance)) {
+                                                    etUseBalance.removeTextChangedListener(this);
+                                                    useBalance = Math.min(totalPrice, balance);
+                                                    etUseBalance.setText(DisplayUtils.isInteger(useBalance));
+                                                    etUseBalance.setSelection(etUseBalance.getText().toString().length());
+                                                    etUseBalance.addTextChangedListener(this);
+                                                } else if (useBalance != (int) useBalance && String.valueOf(useBalance).length()
+                                                        - String.valueOf(useBalance).indexOf(".") >= 3) {
+                                                    etUseBalance.removeTextChangedListener(this);
+                                                    useBalance = Double.parseDouble(DisplayUtils.decimalFormat(useBalance));
+                                                    etUseBalance.setText(DisplayUtils.isInteger(useBalance));
+                                                    etUseBalance.setSelection(etUseBalance.getText().toString().length());
+                                                    etUseBalance.addTextChangedListener(this);
+                                                }
+
+                                            } else {
+                                                useBalance = 0;
+                                            }
+
+                                            initPrice();
+                                        }
+                                    });
+                                }
                             }
                         }
                     }
@@ -233,7 +263,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     }
 
     private void getData() {
-        goodsBean = (GroupGoodsDetailBean) getIntent().getSerializableExtra("goods");
+        goodsId = getIntent().getIntExtra("goods_id", 0);
     }
 
 

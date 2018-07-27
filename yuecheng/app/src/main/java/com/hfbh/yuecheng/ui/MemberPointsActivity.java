@@ -73,7 +73,7 @@ public class MemberPointsActivity extends BaseActivity {
     private void initTitle() {
 
         tvTitleHeader.setText("会员卡积分");
-        tvMemberPoints.setText(DisplayUtils.isInteger(getIntent().getDoubleExtra("points", 0)));
+        tvMemberPoints.setText(String.valueOf((int) getIntent().getDoubleExtra("points", 0)));
 
         titleList = new ArrayList<>();
         fragmentList = new ArrayList<>();
@@ -129,7 +129,7 @@ public class MemberPointsActivity extends BaseActivity {
         int currentYear = c.get(Calendar.YEAR);
         int currentMonth = c.get(Calendar.MONTH) + 1;
 
-        if (selectYear == 0){
+        if (selectYear == 0) {
             selectYear = currentYear;
             selectMonth = currentMonth;
         }

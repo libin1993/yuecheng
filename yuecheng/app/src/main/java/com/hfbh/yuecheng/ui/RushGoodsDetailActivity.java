@@ -198,7 +198,7 @@ public class RushGoodsDetailActivity extends BaseActivity {
             case R.id.tv_buy_goods:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {
                     Intent intent = new Intent(this, ConfirmOrderActivity.class);
-                    intent.putExtra("goods",goodsBean);
+                    intent.putExtra("goods_id", goodsBean.getData().getCommodityId());
                     startActivity(intent);
                 } else {
                     startActivity(new Intent(this, LoginActivity.class));

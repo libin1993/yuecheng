@@ -168,7 +168,9 @@ public class RefundOrderFragment extends BaseFragment {
                 tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
                 String status = null;
-                if (TextUtils.isEmpty(dataBean.getRefundType()) && "AUDIT".equals(dataBean.getRefundType())) {
+                if (TextUtils.isEmpty(dataBean.getRefundType())) {
+                    status = "";
+                } else if ("AUDIT".equals(dataBean.getRefundType())) {
                     switch (dataBean.getRefundApplyType()) {
                         case "REFUND":
                             status = "仅退款，";

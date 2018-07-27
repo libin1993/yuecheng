@@ -1,7 +1,10 @@
 package com.hfbh.yuecheng.fragment;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -10,11 +13,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -26,11 +32,18 @@ import com.hfbh.yuecheng.bean.MyCouponBean;
 import com.hfbh.yuecheng.bean.MyOrderBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
+import com.hfbh.yuecheng.ui.ConfirmOrderActivity;
+import com.hfbh.yuecheng.ui.GroupGoodsActivity;
+import com.hfbh.yuecheng.ui.GroupGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.OrderDetailActivity;
+import com.hfbh.yuecheng.ui.PopGoodsDetailActivity;
+import com.hfbh.yuecheng.ui.RushGoodsDetailActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -40,6 +53,9 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +100,7 @@ public class OrderFragment extends BaseFragment {
     private CommonAdapter<MyOrderBean.DataBean> adapter;
 
     private SparseArray<CountDownTimer> countDownMap = new SparseArray<>();
+    private Bitmap qrBmp;
 
 
     @Nullable
@@ -162,7 +179,7 @@ public class OrderFragment extends BaseFragment {
         rvOrder.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new CommonAdapter<MyOrderBean.DataBean>(getActivity(), R.layout.rv_order_item, orderList) {
             @Override
-            protected void convert(ViewHolder holder, MyOrderBean.DataBean dataBean, int position) {
+            protected void convert(ViewHolder holder, final MyOrderBean.DataBean dataBean, int position) {
                 holder.setText(R.id.tv_order_shop, dataBean.getRelationName());
                 SimpleDraweeView ivGoods = holder.getView(R.id.iv_order);
                 ivGoods.setImageURI(dataBean.getOrderDtlList().get(0).getDetailPicturepath());
@@ -174,7 +191,9 @@ public class OrderFragment extends BaseFragment {
                 holder.setText(R.id.tv_order_num, "x" + dataBean.getOrderDtlList().get(0).getDetailAccount());
                 holder.setText(R.id.tv_order_total_price, "¥" + DisplayUtils.isInteger(dataBean.getPrice()));
                 final TextView tvCancel = holder.getView(R.id.tv_cancel_order);
-                TextView tvConfirm = holder.getView(R.id.tv_order_confirm);
+                final TextView tvConfirm = holder.getView(R.id.tv_order_confirm);
+
+                RelativeLayout rlGoods = holder.getView(R.id.rl_order_goods);
 
                 final TextView tvStatus = holder.getView(R.id.tv_status_order);
                 CountDownTimer countDownTimer = countDownMap.get(tvStatus.hashCode());
@@ -195,23 +214,30 @@ public class OrderFragment extends BaseFragment {
                                     long minute = millisUntilFinished / (1000 * 60);
                                     long second = millisUntilFinished % (1000 * 60) / 1000;
                                     tvStatus.setText("待付款，" + minute + ":" + second + "后取消");
+
+                                    tvCancel.setVisibility(View.VISIBLE);
+                                    tvCancel.setText("取消订单");
+                                    tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+
+                                    tvConfirm.setVisibility(View.VISIBLE);
+                                    tvConfirm.setText("去支付");
+                                    tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
+
+                                    dataBean.setStatus(1);
                                 }
 
                                 @Override
                                 public void onFinish() {
                                     tvStatus.setText("已取消");
+                                    tvCancel.setText("查看详情");
+                                    tvConfirm.setVisibility(View.GONE);
+                                    dataBean.setStatus(0);
                                 }
                             }.start();
 
                         }
 
-                        tvCancel.setVisibility(View.VISIBLE);
-                        tvCancel.setText("取消订单");
-                        tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
-                        tvConfirm.setVisibility(View.VISIBLE);
-                        tvConfirm.setText("去支付");
-                        tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
                         break;
                     case "PAID":
                         tvStatus.setText("待提货");
@@ -227,6 +253,7 @@ public class OrderFragment extends BaseFragment {
                             tvConfirm.setText("去提货");
                             tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
                         }
+                        dataBean.setStatus(2);
 
                         break;
                     case "SINGIN":
@@ -250,40 +277,106 @@ public class OrderFragment extends BaseFragment {
                             tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
                         }
 
+                        dataBean.setStatus(3);
                         break;
                     case "CLOSE":
                         switch (dataBean.getCloseType()) {
                             case "AUTO":
                             case "HAND":
                                 tvStatus.setText("已取消");
+                                tvCancel.setText("查看详情");
                                 break;
                             case "AUTO_REFUNDED":
                             case "HAND_REFUNDED":
                                 tvStatus.setText("已关闭");
+                                tvCancel.setText("查看详情");
                                 break;
                             case "UNSIGNIN":
                                 tvStatus.setText("已失效");
+                                tvCancel.setText("去退款");
+                                dataBean.setStatus(4);
                                 break;
                         }
 
                         tvCancel.setVisibility(View.VISIBLE);
-                        tvCancel.setText("查看详情");
+
                         tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
                         tvConfirm.setVisibility(View.GONE);
+
                         break;
                     case "EXPIRED":
                         tvStatus.setText("已失效");
 
                         tvCancel.setVisibility(View.VISIBLE);
-                        tvCancel.setText("查看详情");
+                        tvCancel.setText("去退款");
                         tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
                         tvConfirm.setVisibility(View.GONE);
+                        dataBean.setStatus(4);
                         break;
                 }
 
                 //将此 countDownTimer 放入list.
                 countDownMap.put(tvStatus.hashCode(), countDownTimer);
+
+                rlGoods.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent intent = null;
+                        switch (dataBean.getOrderType()) {
+
+                            case "GROUPON":
+                                intent = new Intent(getActivity(), GroupGoodsDetailActivity.class);
+                                break;
+                            case "SPECIAL":
+                                intent = new Intent(getActivity(), PopGoodsDetailActivity.class);
+                                break;
+                            case "SECKILL":
+                                intent = new Intent(getActivity(), RushGoodsDetailActivity.class);
+                                break;
+                        }
+                        intent.putExtra("goods_id", dataBean.getOrderDtlList().get(0).getDetailId());
+                        startActivity(intent);
+
+                    }
+                });
+
+                tvCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        switch (dataBean.getStatus()) {
+                            case 0:
+                                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                                intent.putExtra("order_id", dataBean.getMemberOrderShopId());
+                                startActivity(intent);
+                                break;
+                            case 1:
+                                cancelOrder(dataBean.getMemberOrderShopId());
+                                break;
+                            case 4:
+                                refundOrder(dataBean.getOrderDtlList().get(0).getMemberOrderDetailId());
+                                break;
+
+                        }
+                    }
+                });
+
+                tvConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (dataBean.getStatus()) {
+                            case 1:
+                                payMoney(dataBean.getOrderDtlList().get(0).getDetailId());
+                                break;
+                            case 2:
+                            case 3:
+                                receiveGoods(dataBean.getPickupCode());
+                                break;
+                        }
+                    }
+                });
 
             }
         };
@@ -293,8 +386,8 @@ public class OrderFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent =new Intent(getActivity(), OrderDetailActivity.class);
-                intent.putExtra("order_id",orderList.get(position).getMemberOrderShopId());
+                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                intent.putExtra("order_id", orderList.get(position).getMemberOrderShopId());
                 startActivity(intent);
             }
 
@@ -324,6 +417,123 @@ public class OrderFragment extends BaseFragment {
                 initData();
             }
         });
+    }
+
+
+    /**
+     * 提货
+     */
+    private void receiveGoods(String code) {
+        View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.ppw_receive_goods, null);
+        int width = DisplayUtils.getMetrics(getActivity()).widthPixels;
+        final PopupWindow mPopupWindow = new PopupWindow(contentView, (int) (width - DisplayUtils.dp2px(
+                getActivity(), 64)), ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setContentView(contentView);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        mPopupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        DisplayUtils.setBackgroundAlpha(getActivity(), true);
+
+        ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_cancel_receive);
+
+        TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_goods_confirm);
+
+        TextView tvCode = (TextView) contentView.findViewById(R.id.tv_goods_code);
+        ImageView ivCode = (ImageView) contentView.findViewById(R.id.iv_goods_code);
+
+
+        tvCode.setText("提货核销码：" + code);
+
+        if (!TextUtils.isEmpty(code)) {
+            qrBmp = QRCodeUtils.createQRCode(code, (int) DisplayUtils.dp2px(getActivity(), 200));
+            ivCode.setImageBitmap(qrBmp);
+        }
+
+        ivCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopupWindow.dismiss();
+            }
+        });
+
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                if (qrBmp != null) {
+                    qrBmp.recycle();
+                    qrBmp = null;
+                }
+                DisplayUtils.setBackgroundAlpha(getActivity(), false);
+                isRefresh = true;
+                page = 1;
+                initData();
+            }
+        });
+    }
+
+    /**
+     * 付款
+     */
+    private void payMoney(int goodsId) {
+        Intent intent = new Intent(getActivity(), ConfirmOrderActivity.class);
+        intent.putExtra("goods_id", goodsId);
+        startActivity(intent);
+    }
+
+    /**
+     * 退款
+     */
+    private void refundOrder(int orderId) {
+
+    }
+
+    /**
+     * 取消订单
+     */
+    private void cancelOrder(int orderId) {
+        OkHttpUtils.post()
+                .url(Constant.CANCEL_ORDER)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
+                .addParams("memberOrderShopId", String.valueOf(orderId))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean flag = jsonObject.getBoolean("flag");
+                            if (flag) {
+                                ToastUtils.showToast(getActivity(), "已取消订单");
+                                isRefresh = true;
+                                page = 1;
+                                initData();
+                            } else {
+                                String msg = jsonObject.getString("msg");
+                                ToastUtils.showToast(getActivity(), msg);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     public static OrderFragment newInstance(String type) {

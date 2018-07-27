@@ -61,8 +61,6 @@ public class MemberPointsFragment extends BaseFragment {
     private String type;
     //日期
     private String time;
-    //刷新
-    private boolean isRefresh;
 
     private List<MemberPointsBean.DataBean.PointsChangeListBean> dataList = new ArrayList<>();
     private CommonAdapter<MemberPointsBean.DataBean.PointsChangeListBean> adapter;
@@ -114,9 +112,6 @@ public class MemberPointsFragment extends BaseFragment {
                         MemberPointsBean memberPointsBean = GsonUtils.jsonToBean(s, MemberPointsBean.class);
                         viewLoading.smoothToHide();
                         dataList.clear();
-                        if (isRefresh) {
-                            isRefresh = false;
-                        }
 
                         if (memberPointsBean.isFlag() && memberPointsBean.getData().getPointsChangeList()
                                 != null && memberPointsBean.getData().getPointsChangeList().size() > 0) {
@@ -145,12 +140,13 @@ public class MemberPointsFragment extends BaseFragment {
             protected void convert(ViewHolder holder, MemberPointsBean.DataBean.PointsChangeListBean
                     pointsChangeListBean, int position) {
                 TextView tvRemark = holder.getView(R.id.tv_points_remark);
-                if (pointsChangeListBean.getType() == 20 && pointsChangeListBean.getType() == 21) {
+                if (pointsChangeListBean.getType() == 20 || pointsChangeListBean.getType() == 21) {
                     tvRemark.setText(TextUtils.isEmpty(pointsChangeListBean.getPointsRemark()) ?
                             "线上积分变动" : pointsChangeListBean.getPointsRemark());
                 } else {
                     tvRemark.setText(pointsChangeListBean.getChangeWay());
                 }
+
                 holder.setText(R.id.tv_points_time, pointsChangeListBean.getCreateTime());
                 TextView tvPoints = holder.getView(R.id.tv_points_type);
 
@@ -180,7 +176,6 @@ public class MemberPointsFragment extends BaseFragment {
      */
     public void refreshData(String selectTime) {
         time = selectTime;
-        isRefresh = true;
         initData();
     }
 

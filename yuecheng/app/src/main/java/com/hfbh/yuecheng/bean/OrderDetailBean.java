@@ -103,7 +103,7 @@ public class OrderDetailBean {
         private String createTimeBegin;
         private Object createTimeEnd;
         private String dispatchingWay;
-        private Object groupState;
+        private String groupState;
         private String isDelete;
         private MallShopDOBean mallShopDO;
         private int memberId;
@@ -116,7 +116,7 @@ public class OrderDetailBean {
         private String orderType;
         private int organizeId;
         private double payAmount;
-        private Object payTime;
+        private String payTime;
         private Object payTimeBegin;
         private Object payTimeEnd;
         private String payWay;
@@ -185,11 +185,11 @@ public class OrderDetailBean {
             this.dispatchingWay = dispatchingWay;
         }
 
-        public Object getGroupState() {
+        public String getGroupState() {
             return groupState;
         }
 
-        public void setGroupState(Object groupState) {
+        public void setGroupState(String groupState) {
             this.groupState = groupState;
         }
 
@@ -289,11 +289,11 @@ public class OrderDetailBean {
             this.payAmount = payAmount;
         }
 
-        public Object getPayTime() {
+        public String getPayTime() {
             return payTime;
         }
 
-        public void setPayTime(Object payTime) {
+        public void setPayTime(String payTime) {
             this.payTime = payTime;
         }
 

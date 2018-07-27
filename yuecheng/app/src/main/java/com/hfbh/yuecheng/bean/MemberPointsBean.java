@@ -60,14 +60,14 @@ public class MemberPointsBean {
          * balanceScore : 40000
          */
 
-        private int balanceScore;
+        private double balanceScore;
         private List<PointsChangeListBean> pointsChangeList;
 
-        public int getBalanceScore() {
+        public double getBalanceScore() {
             return balanceScore;
         }
 
-        public void setBalanceScore(int balanceScore) {
+        public void setBalanceScore(double balanceScore) {
             this.balanceScore = balanceScore;
         }
 

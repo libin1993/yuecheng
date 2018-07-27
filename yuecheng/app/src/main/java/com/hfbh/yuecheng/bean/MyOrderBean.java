@@ -201,6 +201,15 @@ public class MyOrderBean {
         private double useAccountBalance;
         private double wechatPay;
         private List<OrderDtlListBean> orderDtlList;
+        private int status;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
 
         public String getCancelFrom() {
             return cancelFrom;
