@@ -157,7 +157,7 @@ public class Constant {
     //退款列表
     public static final String REFUND_LIST = HOST + "/wechat/memberRefundApply/queryMyRefundList.json";
     //退款详情
-    public static final String REFUND_DETAIL = HOST + "/wechat/memberRefundApply/queryMyRefundList.json";
+    public static final String REFUND_DETAIL = HOST + "/wechat/memberRefundApply/queryOne.json";
 
     //WebView
     //活动详情

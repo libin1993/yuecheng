@@ -425,7 +425,9 @@ public class OrderDetailActivity extends BaseActivity {
                         break;
                     case 2:
                     case 3:
-                        refundOrder();
+                        refundOrder(orderBean.getData().getOrderDtlList().get(0).getMemberOrderDetailId(),
+                                "SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())
+                                        ? "RETURN" : "REFUND", orderBean.getData().getOrderDtlList().get(0).getDetailPrice());
                         break;
                 }
                 break;
@@ -531,8 +533,12 @@ public class OrderDetailActivity extends BaseActivity {
     /**
      * 退款
      */
-    private void refundOrder() {
-
+    private void refundOrder(int orderId, String refundType, double price) {
+        Intent intent = new Intent(this, ApplyRefundActivity.class);
+        intent.putExtra("order_id", orderId);
+        intent.putExtra("refund_type", refundType);
+        intent.putExtra("money", price);
+        startActivity(intent);
     }
 
     /**

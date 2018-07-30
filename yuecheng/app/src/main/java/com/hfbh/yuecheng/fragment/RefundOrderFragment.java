@@ -1,5 +1,6 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -22,6 +24,10 @@ import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.MyOrderBean;
 import com.hfbh.yuecheng.bean.RefundOrderBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.ui.GroupGoodsDetailActivity;
+import com.hfbh.yuecheng.ui.PopGoodsDetailActivity;
+import com.hfbh.yuecheng.ui.RefundDetailActivity;
+import com.hfbh.yuecheng.ui.RushGoodsDetailActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -147,7 +153,7 @@ public class RefundOrderFragment extends BaseFragment {
         rvOrder.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new CommonAdapter<RefundOrderBean.DataBean>(getActivity(), R.layout.rv_order_item, orderList) {
             @Override
-            protected void convert(ViewHolder holder, RefundOrderBean.DataBean dataBean, int position) {
+            protected void convert(ViewHolder holder, final RefundOrderBean.DataBean dataBean, int position) {
                 holder.setText(R.id.tv_order_shop, dataBean.getShopName());
                 SimpleDraweeView ivGoods = holder.getView(R.id.iv_order);
                 ivGoods.setImageURI(dataBean.getDetailPicturePath());
@@ -158,8 +164,9 @@ public class RefundOrderFragment extends BaseFragment {
                 tvOld.setText("¥" + DisplayUtils.isInteger(dataBean.getOriginalPrice()));
                 holder.setText(R.id.tv_order_num, "x" + dataBean.getDetailAccount());
                 holder.setText(R.id.tv_order_total_price, "¥" + DisplayUtils.isInteger(dataBean.getDealAmount()));
+                RelativeLayout rlGoods = holder.getView(R.id.rl_order_goods);
                 final TextView tvCancel = holder.getView(R.id.tv_cancel_order);
-                TextView tvConfirm = holder.getView(R.id.tv_order_confirm);
+
 
                 TextView tvStatus = holder.getView(R.id.tv_status_order);
 
@@ -199,6 +206,38 @@ public class RefundOrderFragment extends BaseFragment {
                 }
 
                 tvStatus.setText(status);
+
+                tvCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), RefundDetailActivity.class);
+                        intent.putExtra("refund_id",dataBean.getMemberRefundApplyId());
+                        startActivity(intent);
+                    }
+                });
+
+//                rlGoods.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        Intent intent = null;
+//                        switch ("") {
+//
+//                            case "GROUPON":
+//                                intent = new Intent(getActivity(), GroupGoodsDetailActivity.class);
+//                                break;
+//                            case "SPECIAL":
+//                                intent = new Intent(getActivity(), PopGoodsDetailActivity.class);
+//                                break;
+//                            case "SECKILL":
+//                                intent = new Intent(getActivity(), RushGoodsDetailActivity.class);
+//                                break;
+//                        }
+//                        intent.putExtra("goods_id", dataBean.getDetailId());
+//                        startActivity(intent);
+//
+//                    }
+//                });
             }
 
         };
@@ -208,7 +247,9 @@ public class RefundOrderFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
+                Intent intent = new Intent(getActivity(), RefundDetailActivity.class);
+                intent.putExtra("refund_id",orderList.get(position).getMemberRefundApplyId());
+                startActivity(intent);
             }
 
             @Override

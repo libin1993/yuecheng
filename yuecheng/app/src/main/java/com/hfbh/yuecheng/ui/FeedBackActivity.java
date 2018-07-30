@@ -80,10 +80,10 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
     @BindView(R.id.tv_confirm_feedback)
     TextView tvConfirmFeedback;
 
-    private CommonAdapter adapter;
+    private CommonAdapter<String> adapter;
     private ArrayList<String> photoList = new ArrayList<>();
 
-    static final String[] permissionStr = {Manifest.permission.CAMERA};
+   private String[] permissionStr = {Manifest.permission.CAMERA};
     //反馈图片url
     private String imgUrl;
 

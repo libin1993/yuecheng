@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/bound_white_8dp">
+
+    <TextView
+        android:id="@+id/tv_refund_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="退款原因"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <ImageView
+        android:id="@+id/iv_cancel_refund"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="18dp"
+        android:src="@mipmap/ic_close_gray"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_refund_content"
+        android:layout_width="match_parent"
+        android:layout_height="152dp"
+        android:layout_below="@id/tv_refund_title"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:overScrollMode="never">
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_select_refund"
+        android:layout_width="228dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/rv_refund_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/gradient_red_100dp"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

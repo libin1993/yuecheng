@@ -603,7 +603,7 @@ public class MyOrderBean {
             private String state;
             private Object thLeftDays;
             private Object useAccountBalance;
-            private Object verifyState;
+            private String verifyState;
             private Object wechatPay;
 
             public int getCommodityNum() {
@@ -902,11 +902,11 @@ public class MyOrderBean {
                 this.useAccountBalance = useAccountBalance;
             }
 
-            public Object getVerifyState() {
+            public String getVerifyState() {
                 return verifyState;
             }
 
-            public void setVerifyState(Object verifyState) {
+            public void setVerifyState(String verifyState) {
                 this.verifyState = verifyState;
             }
 

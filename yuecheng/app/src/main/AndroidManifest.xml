@@ -82,7 +82,8 @@
                 tools:replace="android:resource"/>
         </provider>
 
-        <activity android:name=".ui.MainActivity"
+        <activity
+            android:name=".ui.MainActivity"
             android:launchMode="singleTask"/>
 
         <activity android:name=".ui.SplashActivity">
@@ -221,13 +222,16 @@
         <activity android:name=".ui.PayResultActivity"/>
         <activity android:name=".ui.GroupGoodsDetailActivity"/>
         <activity android:name=".ui.RushGoodsDetailActivity"/>
-        <activity android:name=".wxapi.WXPayEntryActivity"
-                  android:exported="true"
-                  android:launchMode="singleTop"/>
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"/>
         <activity android:name=".ui.ConfirmOrderActivity"/>
         <activity android:name=".ui.MyOrderActivity"/>
         <activity android:name=".ui.OrderDetailActivity"/>
-        <activity android:name=".ui.ApplyRefundActivity"/>
+        <activity
+            android:name=".ui.ApplyRefundActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".ui.RefundDetailActivity"/>
 
         <service

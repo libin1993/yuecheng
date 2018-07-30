@@ -104,7 +104,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
     private ArrayList<String> photoList = new ArrayList<>();
 
-    static final String[] permissionStr = {Manifest.permission.CAMERA};
+    private String[] permissionStr = {Manifest.permission.CAMERA};
 
     private int picPosition;
     private HeaderAndFooterWrapper headerAndFooterWrapper;

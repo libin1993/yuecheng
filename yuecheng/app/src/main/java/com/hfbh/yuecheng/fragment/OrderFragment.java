@@ -32,6 +32,7 @@ import com.hfbh.yuecheng.bean.MyCouponBean;
 import com.hfbh.yuecheng.bean.MyOrderBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.ActionDetailActivity;
+import com.hfbh.yuecheng.ui.ApplyRefundActivity;
 import com.hfbh.yuecheng.ui.ConfirmOrderActivity;
 import com.hfbh.yuecheng.ui.GroupGoodsActivity;
 import com.hfbh.yuecheng.ui.GroupGoodsDetailActivity;
@@ -193,7 +194,7 @@ public class OrderFragment extends BaseFragment {
                 final TextView tvCancel = holder.getView(R.id.tv_cancel_order);
                 final TextView tvConfirm = holder.getView(R.id.tv_order_confirm);
 
-                RelativeLayout rlGoods = holder.getView(R.id.rl_order_goods);
+//                RelativeLayout rlGoods = holder.getView(R.id.rl_order_goods);
 
                 final TextView tvStatus = holder.getView(R.id.tv_status_order);
                 CountDownTimer countDownTimer = countDownMap.get(tvStatus.hashCode());
@@ -319,28 +320,28 @@ public class OrderFragment extends BaseFragment {
                 //将此 countDownTimer 放入list.
                 countDownMap.put(tvStatus.hashCode(), countDownTimer);
 
-                rlGoods.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent intent = null;
-                        switch (dataBean.getOrderType()) {
-
-                            case "GROUPON":
-                                intent = new Intent(getActivity(), GroupGoodsDetailActivity.class);
-                                break;
-                            case "SPECIAL":
-                                intent = new Intent(getActivity(), PopGoodsDetailActivity.class);
-                                break;
-                            case "SECKILL":
-                                intent = new Intent(getActivity(), RushGoodsDetailActivity.class);
-                                break;
-                        }
-                        intent.putExtra("goods_id", dataBean.getOrderDtlList().get(0).getDetailId());
-                        startActivity(intent);
-
-                    }
-                });
+//                rlGoods.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        Intent intent = null;
+//                        switch (dataBean.getOrderType()) {
+//
+//                            case "GROUPON":
+//                                intent = new Intent(getActivity(), GroupGoodsDetailActivity.class);
+//                                break;
+//                            case "SPECIAL":
+//                                intent = new Intent(getActivity(), PopGoodsDetailActivity.class);
+//                                break;
+//                            case "SECKILL":
+//                                intent = new Intent(getActivity(), RushGoodsDetailActivity.class);
+//                                break;
+//                        }
+//                        intent.putExtra("goods_id", dataBean.getOrderDtlList().get(0).getDetailId());
+//                        startActivity(intent);
+//
+//                    }
+//                });
 
                 tvCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -356,7 +357,8 @@ public class OrderFragment extends BaseFragment {
                                 cancelOrder(dataBean.getMemberOrderShopId());
                                 break;
                             case 4:
-                                refundOrder(dataBean.getOrderDtlList().get(0).getMemberOrderDetailId());
+                                refundOrder(dataBean.getOrderDtlList().get(0).getMemberOrderDetailId(),
+                                        dataBean.getOrderDtlList().get(0).getDetailPrice());
                                 break;
 
                         }
@@ -492,8 +494,12 @@ public class OrderFragment extends BaseFragment {
     /**
      * 退款
      */
-    private void refundOrder(int orderId) {
-
+    private void refundOrder(int orderId, double price) {
+        Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
+        intent.putExtra("order_id", orderId);
+        intent.putExtra("refund_type", "REFUND");
+        intent.putExtra("money", price);
+        startActivity(intent);
     }
 
     /**

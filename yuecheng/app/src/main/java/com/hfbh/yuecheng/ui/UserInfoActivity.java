@@ -133,7 +133,7 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
 
     private ArrayList<String> selectedPhotos = new ArrayList<>();
     //相机权限
-    static final String[] permissionStr = {Manifest.permission.CAMERA};
+    private String[] permissionStr = {Manifest.permission.CAMERA};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
