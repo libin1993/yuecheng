@@ -76,7 +76,7 @@ public class ActivityFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         tvHeaderTitle.setText("活动");
         ivHeaderBack.setVisibility(View.GONE);
-        loadingView.smoothToShow();
+//        loadingView.smoothToShow();
         if (!((MainActivity) getActivity()).isBack) {
             initTitle();
         }
@@ -114,7 +114,7 @@ public class ActivityFragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
 
-                        loadingView.smoothToHide();
+//                        loadingView.smoothToHide();
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         tagList = new ArrayList<>();
                         if (activityListBean.isFlag() && activityListBean.getTagList().size() > 0) {

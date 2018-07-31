@@ -97,7 +97,6 @@ public class ActivityListFragment extends BaseFragment {
         isViewCreated = true;
         getData();
         initView();
-        isViewCreated = true;
         lazyLoad();
         return view;
     }

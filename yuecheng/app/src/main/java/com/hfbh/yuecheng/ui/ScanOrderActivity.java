@@ -464,7 +464,7 @@ public class ScanOrderActivity extends BaseActivity {
     private void showMoreCoupon() {
         if (orderBean.getData().getCouponlist().size() <= 3) {
             couponList.addAll(orderBean.getData().getCouponlist());
-            ivCoupon.setVisibility(View.VISIBLE);
+            ivCoupon.setVisibility(View.GONE);
         } else {
             int size = 3;
             if (isOpen) {

@@ -31,17 +31,22 @@ import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.PhoneNumberUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
 import com.jungly.gridpasswordview.GridPasswordView;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,8 +99,8 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
     TextView tvConfirmRefund;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
-    //订单id
-    private int orderId;
+    //退款id
+    private int refundId;
     //退款类型
     private String refundType;
     //退款金额
@@ -175,7 +180,7 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
 
     private void getData() {
         Intent intent = getIntent();
-        orderId = intent.getIntExtra("order_id", -1);
+        refundId = intent.getIntExtra("refund_id", -1);
         refundType = intent.getStringExtra("refund_type");
         money = intent.getDoubleExtra("money", 0);
     }
@@ -211,6 +216,33 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
 
                 break;
         }
+    }
+
+
+    /**
+     * 取消订单
+     */
+    private void cancelOrder() {
+        OkHttpUtils.post()
+                .url(Constant.CANCEL_ORDER)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .addParams("memberOrderShopId", String.valueOf(refundId))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+
+                    }
+                });
     }
 
     /**
@@ -353,6 +385,7 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
         map.put("organizeId", MyApp.organizeId);
         map.put("hash", SharedPreUtils.getStr(this, "hash"));
         map.put("token", SharedPreUtils.getStr(this, "token"));
+        map.put("memberOrderDetailId", String.valueOf(refundId));
         map.put("refundApplyType", refundType);
         map.put("refundCause", refundReason);
         map.put("refundAmount", String.valueOf(money));
@@ -376,15 +409,25 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
 
                     @Override
                     public void onResponse(String response, int id) {
+
                         viewLoading.smoothToHide();
-                        ResponseBean responseBean = GsonUtils.jsonToBean(response, ResponseBean.class);
-                        if (responseBean.isFlag()) {
-//                            Intent intent = new Intent(ApplyRefundActivity.this,RefundDetailActivity.class);
-//                            startActivity(intent);
-//                            finish();
-                            finish();
-                        } else {
-                            ToastUtils.showToast(ApplyRefundActivity.this, responseBean.getMsg());
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean flag = jsonObject.getBoolean("flag");
+                            if (flag) {
+                                int data = jsonObject.getInt("data");
+                                Intent intent = new Intent(ApplyRefundActivity.this, RefundDetailActivity.class);
+                                intent.putExtra("refund_id", data);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                String msg = jsonObject.getString("msg");
+                                ToastUtils.showToast(ApplyRefundActivity.this, msg);
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
                 });

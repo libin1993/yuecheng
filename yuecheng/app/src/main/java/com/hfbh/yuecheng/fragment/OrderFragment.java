@@ -42,12 +42,14 @@ import com.hfbh.yuecheng.ui.RushGoodsDetailActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -103,6 +105,12 @@ public class OrderFragment extends BaseFragment {
     private SparseArray<CountDownTimer> countDownMap = new SparseArray<>();
     private Bitmap qrBmp;
 
+    //Fragment的View加载完毕的标记
+    private boolean isViewCreated;
+
+    //Fragment对用户可见的标记
+    private boolean isUIVisible;
+
 
     @Nullable
     @Override
@@ -114,12 +122,33 @@ public class OrderFragment extends BaseFragment {
         viewLoading.smoothToShow();
         getData();
         initView();
-        initData();
         return view;
     }
 
     private void getData() {
         type = getArguments().getString("type");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        isViewCreated = true;
+        if (isUIVisible) {
+            initData();
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isUIVisible = true;
+            if (isViewCreated) {
+                initData();
+            }
+        } else {
+            isUIVisible = false;
+        }
     }
 
     private void initData() {
@@ -153,7 +182,10 @@ public class OrderFragment extends BaseFragment {
                             refreshLayout.finishLoadMore();
                         } else {
                             orderList.clear();
-                            viewLoading.smoothToHide();
+                            if (viewLoading.isShown()) {
+                                viewLoading.smoothToHide();
+                            }
+
                         }
                         if (orderBean.isFlag() && orderBean.getData() != null
                                 && orderBean.getData().size() > 0) {
@@ -250,11 +282,13 @@ public class OrderFragment extends BaseFragment {
                         if (("GROUPON").equals(dataBean.getOrderType())) {
                             tvConfirm.setText("拼团中");
                             tvConfirm.setBackgroundResource(R.drawable.bound_gray_16dp);
+                            dataBean.setStatus(5);
                         } else {
                             tvConfirm.setText("去提货");
                             tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
+                            dataBean.setStatus(3);
                         }
-                        dataBean.setStatus(2);
+
 
                         break;
                     case "SINGIN":
@@ -494,9 +528,9 @@ public class OrderFragment extends BaseFragment {
     /**
      * 退款
      */
-    private void refundOrder(int orderId, double price) {
+    private void refundOrder(int refundId, double price) {
         Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
-        intent.putExtra("order_id", orderId);
+        intent.putExtra("refund_id", refundId);
         intent.putExtra("refund_type", "REFUND");
         intent.putExtra("money", price);
         startActivity(intent);

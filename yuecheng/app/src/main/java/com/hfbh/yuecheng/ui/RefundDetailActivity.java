@@ -197,7 +197,7 @@ public class RefundDetailActivity extends BaseActivity {
             rvRefundReason.setVisibility(View.VISIBLE);
             rvRefundReason.setLayoutManager(new LinearLayoutManager(this,
                     LinearLayout.HORIZONTAL, false));
-            String[] refundPic = orderBean.getData().getRefundApplyPic().split("，");
+            String[] refundPic = orderBean.getData().getRefundApplyPic().split(",");
             List<String> picList = new ArrayList<>(Arrays.asList(refundPic));
             CommonAdapter<String> adapter = new CommonAdapter<String>(this,
                     R.layout.rv_refund_picture_item, picList) {

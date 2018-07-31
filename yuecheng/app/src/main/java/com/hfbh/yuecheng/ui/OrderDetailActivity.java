@@ -117,8 +117,13 @@ public class OrderDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         tvHeaderTitle.setText("订单详情");
         getData();
-        initData();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 
     private void initData() {
@@ -261,7 +266,9 @@ public class OrderDetailActivity extends BaseActivity {
                 isPaid(true);
                 llOrderDetail.setVisibility(View.VISIBLE);
 
-                tvCancel.setVisibility(View.GONE);
+                tvCancel.setVisibility(View.VISIBLE);
+                tvCancel.setText("去退款");
+                tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
                 tvConfirm.setVisibility(View.VISIBLE);
                 tvConfirm.setText("去提货");
@@ -276,6 +283,7 @@ public class OrderDetailActivity extends BaseActivity {
                         tvOrderStatus.setText("已取消");
                         tvStatusInfo.setText("订单已取消～");
                         isPaid(false);
+                        llOrderDetail.setVisibility(View.GONE);
                         break;
                     case "AUTO_REFUNDED":
                         tvOrderStatus.setText("已关闭");
@@ -287,6 +295,7 @@ public class OrderDetailActivity extends BaseActivity {
                         }
 
                         isPaid(true);
+                        llOrderDetail.setVisibility(View.GONE);
                         break;
                     case "HAND_REFUNDED":
                         tvOrderStatus.setText("已关闭");
@@ -313,6 +322,7 @@ public class OrderDetailActivity extends BaseActivity {
                         }
 
                         isPaid(true);
+                        llOrderDetail.setVisibility(View.GONE);
                         break;
                     case "UNSIGNIN":
                         tvOrderStatus.setText("已失效");
@@ -425,6 +435,7 @@ public class OrderDetailActivity extends BaseActivity {
                         break;
                     case 2:
                     case 3:
+                    case 4:
                         refundOrder(orderBean.getData().getOrderDtlList().get(0).getMemberOrderDetailId(),
                                 "SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())
                                         ? "RETURN" : "REFUND", orderBean.getData().getOrderDtlList().get(0).getDetailPrice());
@@ -533,9 +544,9 @@ public class OrderDetailActivity extends BaseActivity {
     /**
      * 退款
      */
-    private void refundOrder(int orderId, String refundType, double price) {
+    private void refundOrder(int refundId, String refundType, double price) {
         Intent intent = new Intent(this, ApplyRefundActivity.class);
-        intent.putExtra("order_id", orderId);
+        intent.putExtra("refund_id", refundId);
         intent.putExtra("refund_type", refundType);
         intent.putExtra("money", price);
         startActivity(intent);

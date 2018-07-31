@@ -487,6 +487,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+
         isBack = true;
         Intent intent1 = getIntent();
         //是否返回首页

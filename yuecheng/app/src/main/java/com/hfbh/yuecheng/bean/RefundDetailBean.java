@@ -127,8 +127,8 @@ public class RefundDetailBean {
         private String refundState;
         private String refundType;
         private String shopName;
-        private int useAccountBalance;
-        private int wechatPay;
+        private double useAccountBalance;
+        private double wechatPay;
 
         public String getApplyTime() {
             return applyTime;
@@ -450,19 +450,19 @@ public class RefundDetailBean {
             this.shopName = shopName;
         }
 
-        public int getUseAccountBalance() {
+        public double getUseAccountBalance() {
             return useAccountBalance;
         }
 
-        public void setUseAccountBalance(int useAccountBalance) {
+        public void setUseAccountBalance(double useAccountBalance) {
             this.useAccountBalance = useAccountBalance;
         }
 
-        public int getWechatPay() {
+        public double getWechatPay() {
             return wechatPay;
         }
 
-        public void setWechatPay(int wechatPay) {
+        public void setWechatPay(double wechatPay) {
             this.wechatPay = wechatPay;
         }
     }

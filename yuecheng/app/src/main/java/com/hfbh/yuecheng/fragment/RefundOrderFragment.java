@@ -31,10 +31,12 @@ import com.hfbh.yuecheng.ui.RushGoodsDetailActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -82,6 +84,12 @@ public class RefundOrderFragment extends BaseFragment {
     private List<RefundOrderBean.DataBean> orderList = new ArrayList<>();
     private CommonAdapter<RefundOrderBean.DataBean> adapter;
 
+    //Fragment的View加载完毕的标记
+    private boolean isViewCreated;
+
+    //Fragment对用户可见的标记
+    private boolean isUIVisible;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,8 +99,31 @@ public class RefundOrderFragment extends BaseFragment {
         tvNullData.setText("暂无相关订单");
         viewLoading.smoothToShow();
         initView();
-        initData();
         return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        isViewCreated = true;
+        if (isUIVisible) {
+            initData();
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isUIVisible = true;
+            if (isViewCreated) {
+                initData();
+            }
+        } else {
+            isUIVisible = false;
+        }
     }
 
 
@@ -126,7 +157,10 @@ public class RefundOrderFragment extends BaseFragment {
                             refreshLayout.finishLoadMore();
                         } else {
                             orderList.clear();
-                            viewLoading.smoothToHide();
+                            if (viewLoading.isShown()){
+                                viewLoading.smoothToHide();
+                            }
+
                         }
                         if (orderBean.isFlag() && orderBean.getData() != null
                                 && orderBean.getData().size() > 0) {
@@ -257,6 +291,7 @@ public class RefundOrderFragment extends BaseFragment {
                 return false;
             }
         });
+
 
 
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {

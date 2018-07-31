@@ -62,7 +62,7 @@
                 android:background="@color/gray_ed"/>
 
             <RelativeLayout
-                android:id="@+id/rl_order_goods"
+                android:id="@+id/rl_confirm_order_goods"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
                 android:layout_below="@id/view_order_line"
@@ -121,7 +121,7 @@
                 android:id="@+id/rl_order_num"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@id/rl_order_goods"
+                android:layout_below="@id/rl_confirm_order_goods"
                 android:layout_marginTop="10dp"
                 android:background="@android:color/white">
 
