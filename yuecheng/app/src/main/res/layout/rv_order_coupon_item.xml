@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:layout_toRightOf="@id/iv_select_coupon"
-            app:cardBackgroundColor="@android:color/white"
+            app:cardBackgroundColor="@color/gray_ed"
             app:cardCornerRadius="6dp"
             app:cardElevation="6dp">
 
