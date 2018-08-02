@@ -1,12 +1,14 @@
 package com.hfbh.yuecheng.ui;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -17,6 +19,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -544,6 +547,7 @@ public class ScanOrderActivity extends BaseActivity {
         }
     }
 
+
     /**
      * 计算价格
      */
@@ -847,8 +851,8 @@ public class ScanOrderActivity extends BaseActivity {
                                     }
                                 }
 
-                                MyApp.orderBean = new PayOrderBean(orderNo,
-                                        "SCANCODE", payType, false, needPayMoney, discountBeans, orderInfoList);
+                                MyApp.orderBean = new PayOrderBean(orderNo, "SCANCODE",
+                                        payType, false, needPayMoney, discountBeans, orderInfoList);
 
                                 if (needPayMoney > 0) {
                                     startActivity(new Intent(ScanOrderActivity.this, ConfirmPayActivity.class));

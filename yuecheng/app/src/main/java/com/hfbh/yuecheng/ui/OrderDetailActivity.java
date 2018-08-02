@@ -33,6 +33,8 @@ import com.hfbh.yuecheng.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -114,6 +116,7 @@ public class OrderDetailActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("订单详情");
         getData();
@@ -593,10 +596,23 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (countDownTimer != null) {
             countDownTimer.cancel();
             countDownTimer = null;
         }
     }
+
+
+    /**
+     * @param msg 支付回调
+     */
+    @Subscribe
+    public void payOrder(String msg) {
+        if ("pay_order".equals(msg)) {
+            finish();
+        }
+    }
+
 
 }

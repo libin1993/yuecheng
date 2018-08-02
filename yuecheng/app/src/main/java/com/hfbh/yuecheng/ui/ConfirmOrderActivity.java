@@ -612,8 +612,31 @@ public class ConfirmOrderActivity extends BaseActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");
                             if (flag) {
-                                EventBus.getDefault().post("balance_success");
-                                finish();
+//                                EventBus.getDefault().post("balance_success");
+
+                                List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
+                                orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderBean.getData().getOrderNumber()));
+                                orderInfoList.add(new PayOrderBean.OrderInfo("商品名称", goodsBean.getData().getCommodityName()));
+                                orderInfoList.add(new PayOrderBean.OrderInfo("支付方式", "余额支付"));
+
+                                List<PayOrderBean.DiscountBean> discountBeans = new ArrayList<>();
+                                discountBeans.add(new PayOrderBean.DiscountBean("订单金额",
+                                        "¥" + DisplayUtils.decimalFormat(totalPrice)));
+                                discountBeans.add(new PayOrderBean.DiscountBean("余额抵扣",
+                                        "-¥" + DisplayUtils.decimalFormat(useBalance)));
+
+
+                                MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrderNumber(),
+                                        "COMMODITY", "", false,
+                                        totalPrice - useBalance, discountBeans, orderInfoList);
+
+
+                                MyApp.orderBean.setPayResult(true);
+
+                                startActivity(new Intent(ConfirmOrderActivity.this, PayResultActivity.class));
+
+
+                                EventBus.getDefault().post("pay_order");
                             } else {
                                 String msg = jsonObject.getString("msg");
                                 ToastUtils.showToast(ConfirmOrderActivity.this, msg);

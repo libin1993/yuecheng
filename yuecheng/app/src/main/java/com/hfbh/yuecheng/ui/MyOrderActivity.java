@@ -15,6 +15,9 @@ import com.hfbh.yuecheng.fragment.CouponFragment;
 import com.hfbh.yuecheng.fragment.OrderFragment;
 import com.hfbh.yuecheng.fragment.RefundOrderFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +47,7 @@ public class MyOrderActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_activity);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("我的订单");
         initTitle();
@@ -85,4 +89,22 @@ public class MyOrderActivity extends BaseActivity {
     public void onViewClicked() {
         finish();
     }
+
+
+    /**
+     * @param msg 支付回调
+     */
+    @Subscribe
+    public void payOrder(String msg) {
+        if ("pay_order".equals(msg)) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }
