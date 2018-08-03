@@ -168,6 +168,7 @@ public class ScanOrderActivity extends BaseActivity {
         initData();
     }
 
+    
 
     private void initData() {
         OkHttpUtils.post()
@@ -359,8 +360,9 @@ public class ScanOrderActivity extends BaseActivity {
             etUsePoints.setFocusableInTouchMode(true);
         }
 
+
         tvUserBalance.setText("¥" + DisplayUtils.decimalFormat(userBalance));
-        tvUserPoints.setText("¥" + DisplayUtils.isInteger(userPoints));
+        tvUserPoints.setText(DisplayUtils.isInteger(userPoints)+"分");
 
         pointsRatio = orderBean.getData().getExchangeRate();
         tvPointsValue.setText("(" + DisplayUtils.isInteger(1.0 / pointsRatio) + "分=1元)");
