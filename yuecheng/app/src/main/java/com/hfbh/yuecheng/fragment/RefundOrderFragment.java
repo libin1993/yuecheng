@@ -109,6 +109,7 @@ public class RefundOrderFragment extends BaseFragment {
 
         isViewCreated = true;
         if (isUIVisible) {
+            page = 1;
             initData();
         }
     }
@@ -119,6 +120,7 @@ public class RefundOrderFragment extends BaseFragment {
         if (isVisibleToUser) {
             isUIVisible = true;
             if (isViewCreated) {
+                page = 1;
                 initData();
             }
         } else {
@@ -157,7 +159,7 @@ public class RefundOrderFragment extends BaseFragment {
                             refreshLayout.finishLoadMore();
                         } else {
                             orderList.clear();
-                            if (viewLoading.isShown()){
+                            if (viewLoading != null && viewLoading.isShown()) {
                                 viewLoading.smoothToHide();
                             }
 
@@ -165,10 +167,12 @@ public class RefundOrderFragment extends BaseFragment {
                         if (orderBean.isFlag() && orderBean.getData() != null
                                 && orderBean.getData().size() > 0) {
                             orderList.addAll(orderBean.getData());
-                            llNullData.setVisibility(View.GONE);
+                            if (llNullData != null) {
+                                llNullData.setVisibility(View.GONE);
+                            }
+
                         } else {
                             if (!isLoadMore) {
-                                llNullData.setVisibility(View.VISIBLE);
                                 llNullData.setVisibility(View.VISIBLE);
                             }
 
@@ -245,7 +249,7 @@ public class RefundOrderFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), RefundDetailActivity.class);
-                        intent.putExtra("refund_id",dataBean.getMemberRefundApplyId());
+                        intent.putExtra("refund_id", dataBean.getMemberRefundApplyId());
                         startActivity(intent);
                     }
                 });
@@ -282,7 +286,7 @@ public class RefundOrderFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(getActivity(), RefundDetailActivity.class);
-                intent.putExtra("refund_id",orderList.get(position).getMemberRefundApplyId());
+                intent.putExtra("refund_id", orderList.get(position).getMemberRefundApplyId());
                 startActivity(intent);
             }
 
@@ -291,7 +295,6 @@ public class RefundOrderFragment extends BaseFragment {
                 return false;
             }
         });
-
 
 
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {

@@ -202,6 +202,33 @@ public class MyOrderBean {
         private double wechatPay;
         private List<OrderDtlListBean> orderDtlList;
         private int status;
+        private String refundApplyType;
+        private int memberRefundApplyId;
+        private String refundType;
+
+        public String getRefundType() {
+            return refundType;
+        }
+
+        public void setRefundType(String refundType) {
+            this.refundType = refundType;
+        }
+
+        public int getMemberRefundApplyId() {
+            return memberRefundApplyId;
+        }
+
+        public void setMemberRefundApplyId(int memberRefundApplyId) {
+            this.memberRefundApplyId = memberRefundApplyId;
+        }
+
+        public String getRefundApplyType() {
+            return refundApplyType;
+        }
+
+        public void setRefundApplyType(String refundApplyType) {
+            this.refundApplyType = refundApplyType;
+        }
 
         public int getStatus() {
             return status;

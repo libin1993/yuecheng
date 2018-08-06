@@ -329,7 +329,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         public void onItemClick(int position) {
                             String moduleCode = bannerBean.getData().get(position).getModuleCode();
                             int id = bannerBean.getData().get(position).getObjectId();
-                            if (TextUtils.isEmpty(moduleCode) || id == 0) {
+                            if (TextUtils.isEmpty(moduleCode)) {
                                 Intent intent = new Intent(getActivity(), BannerInfoActivity.class);
                                 intent.putExtra("url", bannerBean.getData().get(position).getAdvertUrl());
                                 startActivity(intent);

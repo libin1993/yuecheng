@@ -168,7 +168,6 @@ public class ScanOrderActivity extends BaseActivity {
         initData();
     }
 
-    
 
     private void initData() {
         OkHttpUtils.post()
@@ -206,12 +205,12 @@ public class ScanOrderActivity extends BaseActivity {
 
         tvOrderNo.setText(orderNo);
         tvOrderShop.setText(orderBean.getData().getStoreName());
-        totalPrice = Double.parseDouble(orderBean.getData().getMoney());
+        totalPrice = Double.parseDouble(orderBean.getData().getMoney()) / 100;
         tvOrderPrice.setText("¥" + DisplayUtils.decimalFormat(totalPrice));
         tvMemberCard.setText(orderBean.getData().getCardtypename());
 
-        double totalDiscount = Double.parseDouble(orderBean.getData().getTotaldisc());
-        cardDiscount = Double.parseDouble(orderBean.getData().getTotalmemdisc());
+        double totalDiscount = Double.parseDouble(orderBean.getData().getTotaldisc()) / 100;
+        cardDiscount = Double.parseDouble(orderBean.getData().getTotalmemdisc()) / 100;
         otherDiscount = totalDiscount - cardDiscount;
 
         tvCardDiscount.setText("-¥" + DisplayUtils.decimalFormat(cardDiscount));
@@ -231,8 +230,9 @@ public class ScanOrderActivity extends BaseActivity {
                     ImageView ivCoupon = holder.getView(R.id.iv_select_coupon);
 
                     holder.setText(R.id.tv_order_coupon_name, couponlistBean.getName());
-                    holder.setText(R.id.tv_order_coupon_value, DisplayUtils.isInteger(Double.parseDouble(couponlistBean.getBalance())));
-                    final double usableMoney = Double.parseDouble(couponlistBean.getPayable());
+                    holder.setText(R.id.tv_order_coupon_value, DisplayUtils.isInteger(
+                            Double.parseDouble(couponlistBean.getBalance()) / 100));
+                    final double usableMoney = Double.parseDouble(couponlistBean.getPayable()) / 100;
                     holder.setText(R.id.tv_coupon_limit_value, "¥" + DisplayUtils.decimalFormat(usableMoney));
                     final EditText etCoupon = holder.getView(R.id.et_use_coupon);
 
@@ -362,7 +362,7 @@ public class ScanOrderActivity extends BaseActivity {
 
 
         tvUserBalance.setText("¥" + DisplayUtils.decimalFormat(userBalance));
-        tvUserPoints.setText(DisplayUtils.isInteger(userPoints)+"分");
+        tvUserPoints.setText(DisplayUtils.isInteger(userPoints) + "分");
 
         pointsRatio = orderBean.getData().getExchangeRate();
         tvPointsValue.setText("(" + DisplayUtils.isInteger(1.0 / pointsRatio) + "分=1元)");
@@ -563,25 +563,19 @@ public class ScanOrderActivity extends BaseActivity {
         map.put("token", SharedPreUtils.getStr(this, "token"));
 
         map.put("serverIp", ip);
-        map.put("cashCardVal", String.valueOf(balanceDiscount));
-        if (pointsDiscount > 0) {
-            map.put("scoreVal", String.valueOf(pointsDiscount));
-        }
-
 
         List<ConfirmOrderBean.CouponList> list = new ArrayList<>();
         for (int i = 0; i < orderBean.getData().getCouponlist().size(); i++) {
             if (orderBean.getData().getCouponlist().get(i).isCheck()) {
                 ConfirmOrderBean.CouponList couponBean = new ConfirmOrderBean.CouponList(
                         orderBean.getData().getCouponlist().get(i).getCouponid(),
-                        String.valueOf(orderBean.getData().getCouponlist().get(i).getUseCoupon()));
+                        String.valueOf((int) (orderBean.getData().getCouponlist().get(i).getUseCoupon() * 100)));
                 list.add(couponBean);
             }
         }
         ConfirmOrderBean confirmOrderBean = new ConfirmOrderBean(orderNo,
                 SharedPreUtils.getStr(this, "card_number"),
-                String.valueOf(totalPrice),
-                list);
+                String.valueOf((int) (totalPrice) * 100), list);
 
         map.put("dataStr", GsonUtils.beanToJson(confirmOrderBean));
 
@@ -597,7 +591,7 @@ public class ScanOrderActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        LogUtils.log(response);
+
                     }
                 });
 
@@ -786,9 +780,9 @@ public class ScanOrderActivity extends BaseActivity {
             map.put("existOtherPay", "N");
         }
         map.put("serverIp", ip);
-        map.put("cashCardVal", String.valueOf(balanceDiscount));
+        map.put("cashCardVal", String.valueOf((int) (balanceDiscount * 100)));
         if (pointsDiscount > 0) {
-            map.put("scoreVal", String.valueOf(pointsDiscount));
+            map.put("scoreVal", String.valueOf((int) (pointsDiscount / pointsRatio)));
         }
 
 
@@ -797,13 +791,13 @@ public class ScanOrderActivity extends BaseActivity {
             if (orderBean.getData().getCouponlist().get(i).isCheck()) {
                 ConfirmOrderBean.CouponList couponBean = new ConfirmOrderBean.CouponList(
                         orderBean.getData().getCouponlist().get(i).getCouponid(),
-                        String.valueOf(orderBean.getData().getCouponlist().get(i).getUseCoupon()));
+                        String.valueOf((int) (orderBean.getData().getCouponlist().get(i).getUseCoupon() * 100)));
                 list.add(couponBean);
             }
         }
         ConfirmOrderBean confirmOrderBean = new ConfirmOrderBean(orderNo,
                 SharedPreUtils.getStr(this, "card_number"),
-                String.valueOf(totalPrice),
+                String.valueOf((int) (totalPrice * 100)),
                 list);
 
         map.put("dataStr", GsonUtils.beanToJson(confirmOrderBean));
@@ -827,12 +821,18 @@ public class ScanOrderActivity extends BaseActivity {
                             if (flag) {
 
                                 List<PayOrderBean.DiscountBean> discountBeans = new ArrayList<>();
-                                discountBeans.add(new PayOrderBean.DiscountBean("订单金额", "¥" + DisplayUtils.decimalFormat(totalPrice)));
-                                discountBeans.add(new PayOrderBean.DiscountBean("会员折扣", "-¥" + DisplayUtils.decimalFormat(cardDiscount)));
-                                discountBeans.add(new PayOrderBean.DiscountBean("其他折扣", "-¥" + DisplayUtils.decimalFormat(otherDiscount)));
-                                discountBeans.add(new PayOrderBean.DiscountBean("电子券减免", "-¥" + DisplayUtils.decimalFormat(couponDiscount)));
-                                discountBeans.add(new PayOrderBean.DiscountBean("积分抵扣", "-¥" + DisplayUtils.decimalFormat(pointsDiscount)));
-                                discountBeans.add(new PayOrderBean.DiscountBean("余额抵扣", "-¥" + DisplayUtils.decimalFormat(balanceDiscount)));
+                                discountBeans.add(new PayOrderBean.DiscountBean("订单金额",
+                                        "¥" + DisplayUtils.decimalFormat(totalPrice)));
+                                discountBeans.add(new PayOrderBean.DiscountBean("会员折扣",
+                                        "-¥" + DisplayUtils.decimalFormat(cardDiscount)));
+                                discountBeans.add(new PayOrderBean.DiscountBean("其他折扣",
+                                        "-¥" + DisplayUtils.decimalFormat(otherDiscount)));
+                                discountBeans.add(new PayOrderBean.DiscountBean("电子券减免",
+                                        "-¥" + DisplayUtils.decimalFormat(couponDiscount)));
+                                discountBeans.add(new PayOrderBean.DiscountBean("积分抵扣",
+                                        "-¥" + DisplayUtils.decimalFormat(pointsDiscount)));
+                                discountBeans.add(new PayOrderBean.DiscountBean("余额抵扣",
+                                        "-¥" + DisplayUtils.decimalFormat(balanceDiscount)));
 
 
                                 List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();

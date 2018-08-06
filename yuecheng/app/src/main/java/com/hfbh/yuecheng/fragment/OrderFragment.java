@@ -38,6 +38,7 @@ import com.hfbh.yuecheng.ui.GroupGoodsActivity;
 import com.hfbh.yuecheng.ui.GroupGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.OrderDetailActivity;
 import com.hfbh.yuecheng.ui.PopGoodsDetailActivity;
+import com.hfbh.yuecheng.ui.RefundDetailActivity;
 import com.hfbh.yuecheng.ui.RushGoodsDetailActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
@@ -134,6 +135,7 @@ public class OrderFragment extends BaseFragment {
         super.onResume();
         isViewCreated = true;
         if (isUIVisible) {
+            page = 1;
             initData();
         }
     }
@@ -144,6 +146,7 @@ public class OrderFragment extends BaseFragment {
         if (isVisibleToUser) {
             isUIVisible = true;
             if (isViewCreated) {
+                page = 1;
                 initData();
             }
         } else {
@@ -182,7 +185,7 @@ public class OrderFragment extends BaseFragment {
                             refreshLayout.finishLoadMore();
                         } else {
                             orderList.clear();
-                            if (viewLoading.isShown()) {
+                            if (viewLoading != null && viewLoading.isShown()) {
                                 viewLoading.smoothToHide();
                             }
 
@@ -190,10 +193,12 @@ public class OrderFragment extends BaseFragment {
                         if (orderBean.isFlag() && orderBean.getData() != null
                                 && orderBean.getData().size() > 0) {
                             orderList.addAll(orderBean.getData());
-                            llNullData.setVisibility(View.GONE);
+                            if (llNullData != null) {
+                                llNullData.setVisibility(View.GONE);
+                            }
+
                         } else {
                             if (!isLoadMore) {
-                                llNullData.setVisibility(View.VISIBLE);
                                 llNullData.setVisibility(View.VISIBLE);
                             }
 
@@ -235,121 +240,163 @@ public class OrderFragment extends BaseFragment {
                     countDownTimer.cancel();
                     countDownTimer = null;
                 }
-                switch (dataBean.getState()) {
-                    case "UNPAID":
-                        long currentTime = System.currentTimeMillis();
-                        long orderTime = DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getSumbitTime());
 
-                        if (currentTime - orderTime < 15 * 60 * 1000) {
-                            countDownTimer = new CountDownTimer(15 * 60 * 1000 + orderTime - currentTime, 1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-                                    long minute = millisUntilFinished / (1000 * 60);
-                                    long second = millisUntilFinished % (1000 * 60) / 1000;
-                                    tvStatus.setText("待付款，" + minute + ":" + second + "后取消");
+                if ("NORMAL".equals(dataBean.getRefundState())) {
+                    switch (dataBean.getState()) {
+                        case "UNPAID":
+                            long currentTime = System.currentTimeMillis();
+                            long orderTime = DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getSumbitTime());
 
-                                    tvCancel.setVisibility(View.VISIBLE);
-                                    tvCancel.setText("取消订单");
-                                    tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+                            if (currentTime - orderTime < 15 * 60 * 1000) {
+                                countDownTimer = new CountDownTimer(15 * 60 * 1000 + orderTime - currentTime, 1000) {
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                        long minute = millisUntilFinished / (1000 * 60);
+                                        long second = millisUntilFinished % (1000 * 60) / 1000;
+                                        tvStatus.setText("待付款，" + minute + ":" + second + "后取消");
 
-                                    tvConfirm.setVisibility(View.VISIBLE);
-                                    tvConfirm.setText("去支付");
-                                    tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
+                                        tvCancel.setVisibility(View.VISIBLE);
+                                        tvCancel.setText("取消订单");
+                                        tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
-                                    dataBean.setStatus(1);
-                                }
+                                        tvConfirm.setVisibility(View.VISIBLE);
+                                        tvConfirm.setText("去支付");
+                                        tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
 
-                                @Override
-                                public void onFinish() {
+                                        dataBean.setStatus(1);
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        tvStatus.setText("已取消");
+                                        tvCancel.setText("查看详情");
+                                        tvConfirm.setVisibility(View.GONE);
+                                        dataBean.setStatus(0);
+                                    }
+                                }.start();
+
+                            }
+
+
+                            break;
+                        case "PAID":
+                            tvStatus.setText("待提货");
+
+                            tvCancel.setVisibility(View.GONE);
+
+                            tvConfirm.setVisibility(View.VISIBLE);
+
+                            if (("GROUPON").equals(dataBean.getOrderType())) {
+                                tvConfirm.setText("拼团中");
+                                tvConfirm.setBackgroundResource(R.drawable.bound_gray_16dp);
+                                dataBean.setStatus(5);
+                            } else {
+                                tvConfirm.setText("去提货");
+                                tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
+                                dataBean.setStatus(3);
+                            }
+
+
+                            break;
+                        case "SINGIN":
+                            tvStatus.setText("已完成");
+
+                            tvCancel.setVisibility(View.VISIBLE);
+                            tvCancel.setText("查看详情");
+                            tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+
+                            tvConfirm.setVisibility(View.GONE);
+                            break;
+                        case "GROUP_SUCCESS":
+                            tvStatus.setText("待提货");
+
+                            tvCancel.setVisibility(View.GONE);
+
+                            tvConfirm.setVisibility(View.VISIBLE);
+
+                            if (("GROUPON").equals(dataBean.getOrderType())) {
+                                tvConfirm.setText("去提货");
+                                tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
+                            }
+
+                            dataBean.setStatus(3);
+                            break;
+                        case "CLOSE":
+                            switch (dataBean.getCloseType()) {
+                                case "AUTO":
+                                case "HAND":
                                     tvStatus.setText("已取消");
                                     tvCancel.setText("查看详情");
-                                    tvConfirm.setVisibility(View.GONE);
-                                    dataBean.setStatus(0);
-                                }
-                            }.start();
+                                    break;
+                                case "AUTO_REFUNDED":
+                                case "HAND_REFUNDED":
+                                    tvStatus.setText("已关闭");
+                                    tvCancel.setText("查看详情");
+                                    break;
+                                case "UNSIGNIN":
+                                    tvStatus.setText("已失效");
+                                    tvCancel.setText("去退款");
+                                    dataBean.setStatus(4);
+                                    break;
+                            }
 
-                        }
+                            tvCancel.setVisibility(View.VISIBLE);
 
+                            tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
-                        break;
-                    case "PAID":
-                        tvStatus.setText("待提货");
+                            tvConfirm.setVisibility(View.GONE);
 
-                        tvCancel.setVisibility(View.GONE);
+                            break;
+                        case "EXPIRED":
+                            tvStatus.setText("已失效");
 
-                        tvConfirm.setVisibility(View.VISIBLE);
+                            tvCancel.setVisibility(View.VISIBLE);
+                            tvCancel.setText("去退款");
+                            tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+                            tvConfirm.setVisibility(View.GONE);
+                            dataBean.setStatus(4);
+                            break;
+                    }
 
-                        if (("GROUPON").equals(dataBean.getOrderType())) {
-                            tvConfirm.setText("拼团中");
-                            tvConfirm.setBackgroundResource(R.drawable.bound_gray_16dp);
-                            dataBean.setStatus(5);
-                        } else {
-                            tvConfirm.setText("去提货");
-                            tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
-                            dataBean.setStatus(3);
-                        }
+                } else {
+                    tvConfirm.setVisibility(View.GONE);
+                    tvCancel.setVisibility(View.VISIBLE);
+                    tvCancel.setVisibility(View.VISIBLE);
+                    tvCancel.setText("查看详情");
+                    tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
-
-                        break;
-                    case "SINGIN":
-                        tvStatus.setText("已完成");
-
-                        tvCancel.setVisibility(View.VISIBLE);
-                        tvCancel.setText("查看详情");
-                        tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
-
-                        tvConfirm.setVisibility(View.GONE);
-                        break;
-                    case "GROUP_SUCCESS":
-                        tvStatus.setText("待提货");
-
-                        tvCancel.setVisibility(View.GONE);
-
-                        tvConfirm.setVisibility(View.VISIBLE);
-
-                        if (("GROUPON").equals(dataBean.getOrderType())) {
-                            tvConfirm.setText("去提货");
-                            tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
-                        }
-
-                        dataBean.setStatus(3);
-                        break;
-                    case "CLOSE":
-                        switch (dataBean.getCloseType()) {
-                            case "AUTO":
-                            case "HAND":
-                                tvStatus.setText("已取消");
-                                tvCancel.setText("查看详情");
+                    String status = null;
+                    if (TextUtils.isEmpty(dataBean.getRefundApplyType())) {
+                        status = "";
+                    } else if ("AUDIT".equals(dataBean.getRefundType())) {
+                        switch (dataBean.getRefundApplyType()) {
+                            case "REFUND":
+                                status = "仅退款，";
                                 break;
-                            case "AUTO_REFUNDED":
-                            case "HAND_REFUNDED":
-                                tvStatus.setText("已关闭");
-                                tvCancel.setText("查看详情");
-                                break;
-                            case "UNSIGNIN":
-                                tvStatus.setText("已失效");
-                                tvCancel.setText("去退款");
-                                dataBean.setStatus(4);
+                            case "RETURN":
+                                status = "退货退款，";
                                 break;
                         }
+                    } else {
+                        status = "自动退款，";
+                    }
 
-                        tvCancel.setVisibility(View.VISIBLE);
+                    switch (dataBean.getRefundState()) {
+                        case "REFUNDING":
+                            status += "退款中";
+                            break;
+                        case "REFUNDED":
+                            status += "退款成功";
+                            break;
+                        case "REFUND_FAIL":
+                            status += "退款失败";
+                            break;
+                    }
 
-                        tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
-
-                        tvConfirm.setVisibility(View.GONE);
-
-                        break;
-                    case "EXPIRED":
-                        tvStatus.setText("已失效");
-
-                        tvCancel.setVisibility(View.VISIBLE);
-                        tvCancel.setText("去退款");
-                        tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
-                        tvConfirm.setVisibility(View.GONE);
-                        dataBean.setStatus(4);
-                        break;
+                    tvStatus.setText(status);
+                    dataBean.setStatus(6);
                 }
+
 
                 //将此 countDownTimer 放入list.
                 countDownMap.put(tvStatus.hashCode(), countDownTimer);
@@ -383,9 +430,7 @@ public class OrderFragment extends BaseFragment {
 
                         switch (dataBean.getStatus()) {
                             case 0:
-                                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-                                intent.putExtra("order_id", dataBean.getMemberOrderShopId());
-                                startActivity(intent);
+                                orderDetail(dataBean.getMemberOrderShopId());
                                 break;
                             case 1:
                                 cancelOrder(dataBean.getMemberOrderShopId());
@@ -393,6 +438,10 @@ public class OrderFragment extends BaseFragment {
                             case 4:
                                 refundOrder(dataBean.getOrderDtlList().get(0).getMemberOrderDetailId(),
                                         dataBean.getOrderDtlList().get(0).getDetailPrice());
+                                break;
+                            case 6:
+                                refundDetail(dataBean.getMemberRefundApplyId());
+
                                 break;
 
                         }
@@ -422,9 +471,12 @@ public class OrderFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-                intent.putExtra("order_id", orderList.get(position).getMemberOrderShopId());
-                startActivity(intent);
+                if (orderList.get(position).getStatus() == 6) {
+                    refundDetail(orderList.get(position).getMemberRefundApplyId());
+                } else {
+                    orderDetail(orderList.get(position).getMemberOrderShopId());
+                }
+
             }
 
             @Override
@@ -453,6 +505,24 @@ public class OrderFragment extends BaseFragment {
                 initData();
             }
         });
+    }
+
+    /**
+     * @param memberOrderShopId 订单详情
+     */
+    private void orderDetail(int memberOrderShopId) {
+        Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+        intent.putExtra("order_id", memberOrderShopId);
+        startActivity(intent);
+    }
+
+    /**
+     * @param memberRefundApplyId 退款详情
+     */
+    private void refundDetail(int memberRefundApplyId) {
+        Intent intent = new Intent(getActivity(), RefundDetailActivity.class);
+        intent.putExtra("refund_id", memberRefundApplyId);
+        startActivity(intent);
     }
 
 
@@ -509,7 +579,7 @@ public class OrderFragment extends BaseFragment {
                     qrBmp = null;
                 }
                 DisplayUtils.setBackgroundAlpha(getActivity(), false);
-                isRefresh = true;
+
                 page = 1;
                 initData();
             }
@@ -562,7 +632,6 @@ public class OrderFragment extends BaseFragment {
                             boolean flag = jsonObject.getBoolean("flag");
                             if (flag) {
                                 ToastUtils.showToast(getActivity(), "已取消订单");
-                                isRefresh = true;
                                 page = 1;
                                 initData();
                             } else {

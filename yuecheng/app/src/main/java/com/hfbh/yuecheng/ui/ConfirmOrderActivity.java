@@ -218,7 +218,7 @@ public class ConfirmOrderActivity extends BaseActivity {
                         if (balanceBean.isFlag() && balanceBean.getData() != null) {
                             isBalance = true;
                             balance = balanceBean.getData().getAccountBalance();
-                            tvBalance.setText("¥" + DisplayUtils.isInteger(balance));
+                            tvBalance.setText("¥" + DisplayUtils.decimalFormat(balance));
                             if (isGoods) {
                                 isBalance = false;
                                 init();
