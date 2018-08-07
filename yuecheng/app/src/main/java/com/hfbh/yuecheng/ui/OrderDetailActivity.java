@@ -161,204 +161,202 @@ public class OrderDetailActivity extends BaseActivity {
 
     private void initView() {
 
-        switch (orderBean.getData().getState()) {
-            case "UNPAID":
-                long currentTime = System.currentTimeMillis();
-                long orderTime = DateUtils.getTime("yyyy-MM-dd HH:mm:ss", orderBean.getData().getSumbitTime());
+        if ("NORMAL".equals(orderBean.getData().getRefundState())) {
+            switch (orderBean.getData().getState()) {
+                case "UNPAID":
+                    long currentTime = System.currentTimeMillis();
+                    long orderTime = DateUtils.getTime("yyyy-MM-dd HH:mm:ss", orderBean.getData().getSumbitTime());
 
-                if (currentTime - orderTime < 15 * 60 * 1000) {
-                    countDownTimer = new CountDownTimer(15 * 60 * 1000 + orderTime - currentTime, 1000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            long minute = millisUntilFinished / (1000 * 60);
-                            long second = millisUntilFinished % (1000 * 60) / 1000;
-                            tvOrderStatus.setText("待支付");
-                            tvStatusInfo.setText("订单已提交,请在" + minute + ":" + second + "内完成支付，超时自动取消");
-
-
-                            llOrderDetail.setVisibility(View.VISIBLE);
+                    if (currentTime - orderTime < 15 * 60 * 1000) {
+                        countDownTimer = new CountDownTimer(15 * 60 * 1000 + orderTime - currentTime, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                long minute = millisUntilFinished / (1000 * 60);
+                                long second = millisUntilFinished % (1000 * 60) / 1000;
+                                tvOrderStatus.setText("待支付");
+                                tvStatusInfo.setText("订单已提交,请在" + minute + ":" + second + "内完成支付，超时自动取消");
 
 
-                            tvCancel.setVisibility(View.VISIBLE);
-                            tvCancel.setText("取消订单");
-                            tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+                                llOrderDetail.setVisibility(View.VISIBLE);
 
-                            tvConfirm.setVisibility(View.VISIBLE);
-                            tvConfirm.setText("去支付");
-                            tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
 
-                            type = 1;
-                        }
+                                tvCancel.setVisibility(View.VISIBLE);
+                                tvCancel.setText("取消订单");
+                                tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
-                        @Override
-                        public void onFinish() {
-                            tvOrderStatus.setText("已取消");
-                            tvStatusInfo.setText("订单已取消～");
+                                tvConfirm.setVisibility(View.VISIBLE);
+                                tvConfirm.setText("去支付");
+                                tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
 
-                            llOrderDetail.setVisibility(View.GONE);
-                        }
-                    }.start();
-                }
-
-                isPaid(false);
-                break;
-            case "PAID":
-                tvOrderStatus.setText("待提货");
-
-                if (("GROUPON").equals(orderBean.getData().getOrderType())) {
-                    tvStatusInfo.setText("拼团中，活动结束拼团不成功自动退款");
-                    llOrderDetail.setVisibility(View.GONE);
-                } else {
-                    tvStatusInfo.setText("请在" + orderBean.getData().getOrderDtlList().get(0)
-                            .getGetTimeLimit() + "天内到店提货哟！失效未提货自动退款");
-
-                    llOrderDetail.setVisibility(View.VISIBLE);
-
-                    tvCancel.setVisibility(View.VISIBLE);
-                    tvCancel.setText("去退款");
-                    tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
-
-                    tvConfirm.setVisibility(View.VISIBLE);
-                    tvConfirm.setText("去提货");
-                    tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
-
-                    type = 2;
-                }
-
-                isPaid(true);
-
-                break;
-            case "SINGIN":
-                tvOrderStatus.setText("已完成");
-                switch (orderBean.getData().getOrderType()) {
-                    case "GROUPON":
-                        tvStatusInfo.setText("团购成功，您已成功提货");
-                        break;
-                    case "SECKILL":
-                        tvStatusInfo.setText("秒杀成功，您已成功提货");
-                        break;
-                    case "SPECIAL":
-                        tvStatusInfo.setText("购买成功，您已成功提货");
-                        break;
-                }
-
-                if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())) {
-                    llOrderDetail.setVisibility(View.VISIBLE);
-
-                    tvCancel.setVisibility(View.VISIBLE);
-                    tvCancel.setText("退货退款");
-                    tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
-
-                    tvConfirm.setVisibility(View.GONE);
-
-                    type = 3;
-                } else {
-                    llOrderDetail.setVisibility(View.GONE);
-                }
-
-                isPaid(true);
-                break;
-            case "GROUP_SUCCESS":
-                tvOrderStatus.setText("待提货");
-
-                if (("GROUPON").equals(orderBean.getData().getOrderType())) {
-                    tvStatusInfo.setText("拼团成功，请在活动结束后" + orderBean.getData()
-                            .getOrderDtlList().get(0).getGetTimeLimit() + "天内到店提货哟！");
-                }
-
-                isPaid(true);
-                llOrderDetail.setVisibility(View.VISIBLE);
-
-                tvCancel.setVisibility(View.VISIBLE);
-                tvCancel.setText("去退款");
-                tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
-
-                tvConfirm.setVisibility(View.VISIBLE);
-                tvConfirm.setText("去提货");
-                tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
-
-                type = 4;
-                break;
-            case "CLOSE":
-                switch (orderBean.getData().getCloseType()) {
-                    case "AUTO":
-                    case "HAND":
-                        tvOrderStatus.setText("已取消");
-                        tvStatusInfo.setText("订单已取消～");
-                        isPaid(false);
-                        llOrderDetail.setVisibility(View.GONE);
-                        break;
-                    case "AUTO_REFUNDED":
-                        tvOrderStatus.setText("已关闭");
-                        if (("GROUPON").equals(orderBean.getData().getOrderType())
-                                && "GROUP_FAIL".equals(orderBean.getData().getGroupState())) {
-                            tvStatusInfo.setText("拼团失败，自动退款成功");
-                        } else {
-                            tvStatusInfo.setText("未提货且已失效，自动退款成功");
-                        }
-
-                        isPaid(true);
-                        llOrderDetail.setVisibility(View.GONE);
-                        break;
-                    case "HAND_REFUNDED":
-                        tvOrderStatus.setText("已关闭");
-                        if (("GROUPON").equals(orderBean.getData().getOrderType())
-                                && "GROUP_CLOSE".equals(orderBean.getData().getGroupState())) {
-                            if ("SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())) {
-                                tvStatusInfo.setText("拼团成功已完成提货，申请退货退款成功");
-                            } else {
-                                tvStatusInfo.setText("拼团成功未提货且已失效，申请退款成功");
-//                                if () {
-//                                    tvStatusInfo.setText("拼团成功未提货且已失效，申请退款成功");
-//                                } else {
-//                                    tvStatusInfo.setText("拼团成功未提货，申请退款成功");
-//                                }
-
+                                type = 1;
                             }
 
-                        } else {
-                            if ("SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())) {
-                                tvStatusInfo.setText("已完成提货，申请退货退款成功");
-                            } else {
-                                tvStatusInfo.setText("未提货，申请退款成功");
+                            @Override
+                            public void onFinish() {
+                                tvOrderStatus.setText("已取消");
+                                tvStatusInfo.setText("订单已取消～");
+
+                                llOrderDetail.setVisibility(View.GONE);
                             }
-                        }
+                        }.start();
+                    }
 
-                        isPaid(true);
+                    isPaid(false);
+                    break;
+                case "PAID":
+                    tvOrderStatus.setText("待提货");
+
+                    if (("GROUPON").equals(orderBean.getData().getOrderType())) {
+                        tvStatusInfo.setText("拼团中，活动结束拼团不成功自动退款");
                         llOrderDetail.setVisibility(View.GONE);
-                        break;
-                    case "UNSIGNIN":
-                        tvOrderStatus.setText("已失效");
-                        if (("GROUPON").equals(orderBean.getData().getOrderType())) {
-                            tvStatusInfo.setText("团购成功，您未在有效时间内提货，可申请退款~");
-                        }
+                    } else {
+                        tvStatusInfo.setText("请在" + orderBean.getData().getOrderDtlList().get(0)
+                                .getGetTimeLimit() + "天内到店提货哟！失效未提货自动退款");
 
-                        isPaid(true);
                         llOrderDetail.setVisibility(View.VISIBLE);
+
                         tvCancel.setVisibility(View.VISIBLE);
                         tvCancel.setText("去退款");
                         tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
+                        tvConfirm.setVisibility(View.VISIBLE);
+                        tvConfirm.setText("去提货");
+                        tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
+
+                        type = 2;
+                    }
+
+                    isPaid(true);
+
+                    break;
+                case "SINGIN":
+                    tvOrderStatus.setText("已完成");
+                    switch (orderBean.getData().getOrderType()) {
+                        case "GROUPON":
+                            tvStatusInfo.setText("团购成功，您已成功提货");
+                            break;
+                        case "SECKILL":
+                            tvStatusInfo.setText("秒杀成功，您已成功提货");
+                            break;
+                        case "SPECIAL":
+                            tvStatusInfo.setText("购买成功，您已成功提货");
+                            break;
+                    }
+
+                    if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())
+                            && orderBean.getData().getOrderDtlList().get(0).getSingInDays() >= 0
+                            && (orderBean.getData().getRefundState().equals("REFUND_FAIL") ||
+                            orderBean.getData().getRefundState().equals("NORMAL"))) {
+                        llOrderDetail.setVisibility(View.VISIBLE);
+
+                        tvCancel.setVisibility(View.VISIBLE);
+                        tvCancel.setText("退货退款");
+                        tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+
                         tvConfirm.setVisibility(View.GONE);
+
                         type = 3;
-                        break;
-                }
+                    } else {
+                        llOrderDetail.setVisibility(View.GONE);
+                    }
 
-                break;
-            case "EXPIRED":
-                tvOrderStatus.setText("已失效");
-                if (("GROUPON").equals(orderBean.getData().getOrderType())) {
-                    tvStatusInfo.setText("团购成功，您未在有效时间内提货，可申请退款~");
-                }
-                isPaid(true);
-                llOrderDetail.setVisibility(View.VISIBLE);
-                tvCancel.setVisibility(View.VISIBLE);
-                tvCancel.setText("去退款");
-                tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+                    isPaid(true);
+                    break;
+                case "GROUP_SUCCESS":
+                    tvOrderStatus.setText("待提货");
 
-                tvConfirm.setVisibility(View.GONE);
-                break;
+                    if (("GROUPON").equals(orderBean.getData().getOrderType())) {
+                        tvStatusInfo.setText("拼团成功，请在活动结束后" + orderBean.getData()
+                                .getOrderDtlList().get(0).getGetTimeLimit() + "天内到店提货哟！");
+                    }
+
+                    isPaid(true);
+                    llOrderDetail.setVisibility(View.GONE);
+
+//                    tvCancel.setVisibility(View.VISIBLE);
+//                    tvCancel.setText("去退款");
+//                    tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+//
+//                    tvConfirm.setVisibility(View.VISIBLE);
+//                    tvConfirm.setText("去提货");
+//                    tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
+//
+//                    type = 4;
+                    break;
+                case "CLOSE":
+                    switch (orderBean.getData().getCloseType()) {
+                        case "AUTO":
+                        case "HAND":
+                            tvOrderStatus.setText("已取消");
+                            tvStatusInfo.setText("订单已取消～");
+                            isPaid(false);
+                            llOrderDetail.setVisibility(View.GONE);
+                            break;
+                        case "AUTO_REFUNDED":
+                            tvOrderStatus.setText("已关闭");
+                            if (("GROUPON").equals(orderBean.getData().getOrderType())
+                                    && "GROUP_FAIL".equals(orderBean.getData().getGroupState())) {
+                                tvStatusInfo.setText("拼团失败，自动退款成功");
+                            } else {
+                                tvStatusInfo.setText("未提货且已失效，自动退款成功");
+                            }
+
+                            isPaid(true);
+                            llOrderDetail.setVisibility(View.GONE);
+                            break;
+                        case "HAND_REFUNDED":
+                            tvOrderStatus.setText("已关闭");
+                            if (("GROUPON").equals(orderBean.getData().getOrderType())
+                                    && "GROUP_CLOSE".equals(orderBean.getData().getGroupState())) {
+                                if ("SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())) {
+                                    tvStatusInfo.setText("拼团成功已完成提货，申请退货退款成功");
+                                } else {
+                                    tvStatusInfo.setText("拼团成功未提货且已失效，申请退款成功");
+                                }
+
+                            } else {
+                                if ("SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())) {
+                                    tvStatusInfo.setText("已完成提货，申请退货退款成功");
+                                } else {
+                                    tvStatusInfo.setText("未提货，申请退款成功");
+                                }
+                            }
+
+                            isPaid(true);
+                            llOrderDetail.setVisibility(View.GONE);
+                            break;
+                        case "UNSIGNIN":
+                            expiredGroup();
+
+                            break;
+                    }
+
+                    break;
+                case "EXPIRED":
+                    expiredGroup();
+                    break;
+            }
+        } else {
+
+            String status = null;
+            switch (orderBean.getData().getRefundState()) {
+                case "REFUNDING":
+                    status = "退款中";
+                    break;
+                case "REFUNDED":
+                    status = "退款成功";
+                    break;
+                case "REFUND_FAIL":
+                    status = "退款失败";
+                    break;
+            }
+
+            tvOrderStatus.setText(status);
+            tvStatusInfo.setText("");
+            isPaid(true);
+            llOrderDetail.setVisibility(View.GONE);
         }
+
 
         tvOrderShop.setText(orderBean.getData().getRelationName());
         ivOrder.setImageURI(orderBean.getData().getOrderDtlList().get(0).getDetailPicturepath());
@@ -403,12 +401,46 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     /**
+     * 团购未提货超时
+     */
+    private void expiredGroup() {
+        tvOrderStatus.setText("已失效");
+        if (("GROUPON").equals(orderBean.getData().getOrderType())
+                && (orderBean.getData().getRefundState().equals("REFUND_FAIL")
+                || orderBean.getData().getRefundState().equals("NORMAL"))) {
+            tvStatusInfo.setText("团购成功，您未在有效时间内提货，可申请退款~");
+        }
+
+        isPaid(true);
+        llOrderDetail.setVisibility(View.VISIBLE);
+        tvCancel.setVisibility(View.VISIBLE);
+        tvCancel.setText("去退款");
+        tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+
+        tvConfirm.setVisibility(View.GONE);
+        type = 3;
+    }
+
+    /**
      * 是否已支付
      */
     private void isPaid(boolean flag) {
         if (flag) {
             llOrderPay.setVisibility(View.VISIBLE);
             tvBalancePay.setText("¥" + DisplayUtils.decimalFormat(orderBean.getData().getUseAccountBalance()));
+
+            switch (orderBean.getData().getPayWay()) {
+                case "WX_SPAY":
+                case "WX_JSAPI":
+                case "WX_APP":
+                    tvPayType.setText("微信支付");
+                    break;
+                case "ALIPAY_WAP":
+                case "ALIPAY_APP":
+                    tvPayType.setText("支付宝支付");
+                    break;
+            }
+
             tvCashPay.setText("¥" + DisplayUtils.decimalFormat(orderBean.getData().getWechatPay()));
             tvTotalPay.setText("¥" + DisplayUtils.decimalFormat(orderBean.getData().getPrice()));
 
@@ -438,7 +470,6 @@ public class OrderDetailActivity extends BaseActivity {
                         break;
                     case 2:
                     case 3:
-                    case 4:
                         refundOrder(orderBean.getData().getOrderDtlList().get(0).getMemberOrderDetailId(),
                                 "SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())
                                         ? "RETURN" : "REFUND", orderBean.getData().getOrderDtlList().get(0).getDetailPrice());
@@ -451,7 +482,6 @@ public class OrderDetailActivity extends BaseActivity {
                         payMoney();
                         break;
                     case 2:
-                    case 4:
                         receiveGoods();
                         break;
                 }

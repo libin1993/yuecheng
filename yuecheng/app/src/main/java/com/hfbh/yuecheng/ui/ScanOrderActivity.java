@@ -120,8 +120,9 @@ public class ScanOrderActivity extends BaseActivity {
     RelativeLayout rlScanOrder;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
-
+    //ip
     private String ip;
+    //订单号
     private String orderNo;
 
     private ScanOrderBean orderBean;
@@ -538,7 +539,7 @@ public class ScanOrderActivity extends BaseActivity {
                 break;
             case R.id.tv_confirm_order:
                 if (orderBean != null) {
-                    calculatePrice();
+//                    calculatePrice();
                     if (balanceDiscount > 0) {
                         isSetPayPwd();
                     } else {
@@ -760,8 +761,6 @@ public class ScanOrderActivity extends BaseActivity {
                         }
                     }
                 });
-
-
     }
 
     /**

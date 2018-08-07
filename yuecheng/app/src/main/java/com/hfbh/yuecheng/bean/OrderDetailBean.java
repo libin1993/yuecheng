@@ -750,7 +750,7 @@ public class OrderDetailBean {
             private Object refundTimeBegin;
             private Object refundTimeEnd;
             private int refundTimeLimit;
-            private Object singInDays;
+            private int singInDays;
             private String startTime;
             private String state;
             private Object thLeftDays;
@@ -1014,11 +1014,11 @@ public class OrderDetailBean {
                 this.refundTimeLimit = refundTimeLimit;
             }
 
-            public Object getSingInDays() {
+            public int getSingInDays() {
                 return singInDays;
             }
 
-            public void setSingInDays(Object singInDays) {
+            public void setSingInDays(int singInDays) {
                 this.singInDays = singInDays;
             }
 

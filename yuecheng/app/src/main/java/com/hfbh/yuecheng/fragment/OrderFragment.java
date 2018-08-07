@@ -366,35 +366,20 @@ public class OrderFragment extends BaseFragment {
                     tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
                     String status = null;
-                    if (TextUtils.isEmpty(dataBean.getRefundApplyType())) {
-                        status = "";
-                    } else if ("AUDIT".equals(dataBean.getRefundType())) {
-                        switch (dataBean.getRefundApplyType()) {
-                            case "REFUND":
-                                status = "仅退款，";
-                                break;
-                            case "RETURN":
-                                status = "退货退款，";
-                                break;
-                        }
-                    } else {
-                        status = "自动退款，";
-                    }
-
                     switch (dataBean.getRefundState()) {
                         case "REFUNDING":
-                            status += "退款中";
+                            status = "退款中";
                             break;
                         case "REFUNDED":
-                            status += "退款成功";
+                            status = "退款成功";
                             break;
                         case "REFUND_FAIL":
-                            status += "退款失败";
+                            status = "退款失败";
                             break;
                     }
 
                     tvStatus.setText(status);
-                    dataBean.setStatus(6);
+                    dataBean.setStatus(0);
                 }
 
 
@@ -439,10 +424,6 @@ public class OrderFragment extends BaseFragment {
                                 refundOrder(dataBean.getOrderDtlList().get(0).getMemberOrderDetailId(),
                                         dataBean.getOrderDtlList().get(0).getDetailPrice());
                                 break;
-                            case 6:
-                                refundDetail(dataBean.getMemberRefundApplyId());
-
-                                break;
 
                         }
                     }
@@ -471,12 +452,7 @@ public class OrderFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                if (orderList.get(position).getStatus() == 6) {
-                    refundDetail(orderList.get(position).getMemberRefundApplyId());
-                } else {
-                    orderDetail(orderList.get(position).getMemberOrderShopId());
-                }
-
+                orderDetail(orderList.get(position).getMemberOrderShopId());
             }
 
             @Override
@@ -515,16 +491,6 @@ public class OrderFragment extends BaseFragment {
         intent.putExtra("order_id", memberOrderShopId);
         startActivity(intent);
     }
-
-    /**
-     * @param memberRefundApplyId 退款详情
-     */
-    private void refundDetail(int memberRefundApplyId) {
-        Intent intent = new Intent(getActivity(), RefundDetailActivity.class);
-        intent.putExtra("refund_id", memberRefundApplyId);
-        startActivity(intent);
-    }
-
 
     /**
      * 提货

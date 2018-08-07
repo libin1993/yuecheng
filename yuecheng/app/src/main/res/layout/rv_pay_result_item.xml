@@ -23,5 +23,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
         android:textColor="@color/gray_9f"
-        android:textSize="13sp"/>
+        android:textSize="13sp"
+        android:maxEms="20"
+        android:singleLine="true"/>
 </RelativeLayout>

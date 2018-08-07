@@ -202,9 +202,8 @@ public class RefundOrderFragment extends BaseFragment {
                 tvOld.setText("¥" + DisplayUtils.isInteger(dataBean.getOriginalPrice()));
                 holder.setText(R.id.tv_order_num, "x" + dataBean.getDetailAccount());
                 holder.setText(R.id.tv_order_total_price, "¥" + DisplayUtils.isInteger(dataBean.getDealAmount()));
-                RelativeLayout rlGoods = holder.getView(R.id.rl_order_goods);
-                final TextView tvCancel = holder.getView(R.id.tv_cancel_order);
 
+                final TextView tvCancel = holder.getView(R.id.tv_cancel_order);
 
                 TextView tvStatus = holder.getView(R.id.tv_status_order);
 
