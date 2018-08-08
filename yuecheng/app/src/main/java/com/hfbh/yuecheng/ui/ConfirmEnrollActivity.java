@@ -199,7 +199,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
         tvConfirmEnroll.setEnabled(true);
         tvUserMoney.setText("¥" + DisplayUtils.decimalFormat(balance));
         etInputMoney.setEnabled(true);
-        etInputMoney.setFilters(new InputFilter[]{new MoneyInputFilter(Math.min(balance, enrollFee))});
+//        etInputMoney.setFilters(new InputFilter[]{new MoneyInputFilter(Math.min(balance, enrollFee))});
 
 
         etInputMoney.addTextChangedListener(new TextWatcher() {
@@ -216,7 +216,12 @@ public class ConfirmEnrollActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString())) {
-                    useBalance = Double.parseDouble(s.toString());
+                    if (".".equals(s.toString())){
+                        useBalance = Math.min(enrollFee, balance);
+                    }else {
+                        useBalance = Double.parseDouble(s.toString());
+                    }
+
 
                     if (useBalance > Math.min(enrollFee, balance)) {
                         etInputMoney.removeTextChangedListener(this);

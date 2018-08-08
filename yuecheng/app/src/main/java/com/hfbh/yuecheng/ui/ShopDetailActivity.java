@@ -206,6 +206,13 @@ public class ShopDetailActivity extends BaseActivity {
 
         tvShopDetailInfo.setText(shopBean.getShop().getShopIntro());
 
+        llTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ShopDetailActivity.this, NewGoodsActivity.class));
+            }
+        });
+
         return view;
     }
 

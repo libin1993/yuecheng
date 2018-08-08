@@ -151,7 +151,8 @@ public class CouponDetailActivity extends BaseActivity {
                 }
             }
 
-            if (!TextUtils.isEmpty(couponBean.getData().getAccessType()) && couponBean.getData().getAccessType().equals("POINT")) {
+            if (!TextUtils.isEmpty(couponBean.getData().getAccessType())
+                    && couponBean.getData().getAccessType().equals("POINT")) {
                 tvCouponName.setText(DisplayUtils.isInteger(couponBean.getData().getAccessValue() * rebate)
                         + "元-" + couponBean.getData().getCouponName());
             } else {

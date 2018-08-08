@@ -112,6 +112,8 @@ public class ConfirmOrderActivity extends BaseActivity {
     //余额数据加载
     private boolean isBalance;
 
+    private String orderNo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,7 +192,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         tvUseBalance.setText("¥" + DisplayUtils.decimalFormat(useBalance));
         tvNeedMoney.setText(DisplayUtils.decimalFormat(totalPrice - useBalance));
 
-        etUseBalance.setFilters(new InputFilter[]{new MoneyInputFilter(Math.min(balance, totalPrice))});
+//        etUseBalance.setFilters(new InputFilter[]{new MoneyInputFilter(Math.min(balance, totalPrice))});
 
     }
 
@@ -248,7 +250,12 @@ public class ConfirmOrderActivity extends BaseActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (!TextUtils.isEmpty(s.toString())) {
-                        useBalance = Double.parseDouble(s.toString());
+                        if (".".equals(s.toString())){
+                            useBalance = Math.min(totalPrice, balance);
+                        }else {
+                            useBalance = Double.parseDouble(s.toString());
+                        }
+
                         if (useBalance > Math.min(totalPrice, balance)) {
                             etUseBalance.removeTextChangedListener(this);
                             useBalance = Math.min(totalPrice, balance);

@@ -70,7 +70,7 @@ public class OldGoodsFragment extends BaseFragment {
     private int count;
     private List<GoodsBean.DataBean> popGoods = new ArrayList<>();
     private List<GoodsBean.DataBean> newGoods = new ArrayList<>();
-    private List<DelegateAdapter.Adapter> mAdapters = new LinkedList<>();
+    private List<DelegateAdapter.Adapter> mAdapters;
 
 //    private boolean isRefresh;
 //    //加载更多
@@ -122,12 +122,13 @@ public class OldGoodsFragment extends BaseFragment {
                         if (goodsBean.isFlag()) {
                             switch (type) {
                                 case "SPECIAL":
+                                    popGoods.clear();
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
                                         popGoods.addAll(goodsBean.getData());
-
                                     }
                                     break;
                                 case "FIRSTLOOK":
+                                    newGoods.clear();
                                     if (goodsBean.getData() != null && goodsBean.getData().size() > 0) {
                                         newGoods.addAll(goodsBean.getData());
                                     }
@@ -149,7 +150,7 @@ public class OldGoodsFragment extends BaseFragment {
      * 加载视图
      */
     private void initView() {
-
+        mAdapters = new ArrayList<>();
         //初始化
         VirtualLayoutManager layoutManager = new VirtualLayoutManager(getParentFragment().getActivity());
         rvGoods.setLayoutManager(layoutManager);

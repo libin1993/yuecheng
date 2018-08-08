@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -56,6 +57,12 @@ public class PopGoodsActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
 
     private int page = 1;
     //刷新
@@ -73,6 +80,8 @@ public class PopGoodsActivity extends BaseActivity {
         setContentView(R.layout.activity_now_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("人气");
+        ivNullData.setImageResource(R.mipmap.ic_null_goods);
+        tvNullData.setText("暂无商品");
         loadingView.smoothToShow();
         initView();
         initData();
@@ -118,7 +127,13 @@ public class PopGoodsActivity extends BaseActivity {
 
                         if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
                             goodsList.addAll(goodsBean.getData());
+                            llNullData.setVisibility(View.GONE);
+                        } else {
+                            if (!isLoadMore) {
+                                llNullData.setVisibility(View.VISIBLE);
+                            }
                         }
+                        isLoadMore = false;
                         adapter.notifyDataSetChanged();
 
                     }

@@ -558,6 +558,7 @@ public class OrderFragment extends BaseFragment {
     private void payMoney(int goodsId) {
         Intent intent = new Intent(getActivity(), ConfirmOrderActivity.class);
         intent.putExtra("goods_id", goodsId);
+
         startActivity(intent);
     }
 

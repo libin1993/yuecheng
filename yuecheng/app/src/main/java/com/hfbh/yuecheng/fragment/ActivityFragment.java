@@ -76,7 +76,7 @@ public class ActivityFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         tvHeaderTitle.setText("活动");
         ivHeaderBack.setVisibility(View.GONE);
-//        loadingView.smoothToShow();
+
         if (!((MainActivity) getActivity()).isBack) {
             initTitle();
         }
@@ -114,7 +114,6 @@ public class ActivityFragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
 
-//                        loadingView.smoothToHide();
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
                         tagList = new ArrayList<>();
                         if (activityListBean.isFlag() && activityListBean.getTagList().size() > 0) {
@@ -135,14 +134,12 @@ public class ActivityFragment extends BaseFragment {
         for (int i = 0; i < tagList.size(); i++) {
             titleList.add(tagList.get(i).getTagName());
             fragmentList.add(ActivityListFragment.newInstance(tagList.get(i).getId()));
+
         }
 
-        //tab个数低于5个平分，不可滑动
-        if (tagList.size() <= 5) {
-            tabActivity.setTabSpaceEqual(true);
-        } else {
-            tabActivity.setTabSpaceEqual(false);
-        }
+
+        tabActivity.setTabSpaceEqual(false);
+
         MyFragmentAdapter adapter = new MyFragmentAdapter(getChildFragmentManager(),
                 fragmentList, titleList);
         vpActivity.setOffscreenPageLimit(titleList.size());

@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.ConsumeBean;
 import com.hfbh.yuecheng.bean.LocationBean;
 import com.hfbh.yuecheng.bean.UpdateBean;
 import com.hfbh.yuecheng.bean.UserInfoBean;
@@ -361,8 +362,10 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                             if (!getIntent().getBooleanExtra("log_out", false)) {
                                 MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
                                 MyApp.organizeName = locationBean.getData().getOrganizeName();
+                                addClientId();
                                 initView();
                             }
+
                         }
                     }
                 });
@@ -446,6 +449,33 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    /**
+     * 个推clientId
+     */
+    private void addClientId() {
+        OkHttpUtils.post()
+                .url(Constant.CLIENT_ID)
+                .addParams("appType", MyApp.appType)
+                .addParams("appVersion", MyApp.appVersion)
+                .addParams("organizeId", MyApp.organizeId)
+                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
+                .addParams("clientId", SharedPreUtils.getStr(this, "client_id"))
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+
+                    }
+                });
     }
 
     @Override

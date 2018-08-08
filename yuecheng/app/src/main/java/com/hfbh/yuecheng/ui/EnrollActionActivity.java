@@ -336,7 +336,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         etUsername = (EditText) view.findViewById(R.id.et_action_username);
         etPhone = (EditText) view.findViewById(R.id.et_action_phone);
 
-
+        etPhone.setText(SharedPreUtils.getStr(EnrollActionActivity.this,"phone"));
         tvActionName.setText(activityBean.getData().getSignupActivity().getActivityTitle());
         if (activityBean.getData().getSignupActivity().getTags() != null &&
                 activityBean.getData().getSignupActivity().getTags().size() > 0) {

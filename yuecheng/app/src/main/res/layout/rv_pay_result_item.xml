@@ -24,6 +24,7 @@
         android:layout_marginRight="20dp"
         android:textColor="@color/gray_9f"
         android:textSize="13sp"
-        android:maxEms="20"
-        android:singleLine="true"/>
+        android:maxEms="12"
+        android:singleLine="true"
+        android:ellipsize="end"/>
 </RelativeLayout>

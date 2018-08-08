@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -16,12 +17,10 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.GoodsBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
-import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -54,6 +53,12 @@ public class NewGoodsActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
     //当前页
     private int page = 1;
     //刷新
@@ -71,6 +76,8 @@ public class NewGoodsActivity extends BaseActivity {
         setContentView(R.layout.activity_now_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("新品");
+        ivNullData.setImageResource(R.mipmap.ic_null_goods);
+        tvNullData.setText("暂无商品");
         loadingView.smoothToShow();
         initView();
         initData();
@@ -116,7 +123,14 @@ public class NewGoodsActivity extends BaseActivity {
 
                         if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
                             goodsList.addAll(goodsBean.getData());
+                            llNullData.setVisibility(View.GONE);
+                        } else {
+                            if (!isLoadMore) {
+                                llNullData.setVisibility(View.VISIBLE);
+                            }
                         }
+
+                        isLoadMore = false;
                         adapter.notifyDataSetChanged();
                     }
                 });

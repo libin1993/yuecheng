@@ -39,6 +39,7 @@ import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.ScanOrderBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.BigDecimalUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -259,7 +260,7 @@ public class ScanOrderActivity extends BaseActivity {
                         ivCoupon.setImageResource(R.mipmap.ic_register_normal);
                     }
 
-                    etCoupon.setFilters(new InputFilter[]{new MoneyInputFilter(usableMoney)});
+//                    etCoupon.setFilters(new InputFilter[]{new MoneyInputFilter(usableMoney)});
 
                     //3.新建一个监听
                     TextWatcher watcher = new TextWatcher() {
@@ -283,7 +284,12 @@ public class ScanOrderActivity extends BaseActivity {
 
                                     double needPay = needPay();
 
-                                    useCoupon = Double.parseDouble(s.toString());
+                                    if (".".equals(s.toString())) {
+                                        useCoupon = Math.min(needPay, usableMoney);
+                                    } else {
+                                        useCoupon = Double.parseDouble(s.toString());
+                                    }
+
                                     if (useCoupon > Math.min(needPay, usableMoney)) {
                                         etCoupon.removeTextChangedListener(this);
                                         useCoupon = Math.min(needPay, usableMoney);
@@ -368,8 +374,8 @@ public class ScanOrderActivity extends BaseActivity {
         pointsRatio = orderBean.getData().getExchangeRate();
         tvPointsValue.setText("(" + DisplayUtils.isInteger(1.0 / pointsRatio) + "分=1元)");
 
-        etUseBalance.setFilters(new InputFilter[]{new MoneyInputFilter(userBalance)});
-        etUsePoints.setFilters(new InputFilter[]{new MoneyInputFilter(userPoints)});
+//        etUseBalance.setFilters(new InputFilter[]{new MoneyInputFilter(userBalance)});
+//        etUsePoints.setFilters(new InputFilter[]{new MoneyInputFilter(userPoints)});
 
 
         etUseBalance.addTextChangedListener(new TextWatcher() {
@@ -390,7 +396,12 @@ public class ScanOrderActivity extends BaseActivity {
                     balanceDiscount = 0;
                     double needPay = needPay();
 
-                    balanceDiscount = Double.parseDouble(s.toString());
+                    if (".".equals(s.toString())) {
+                        balanceDiscount = Math.min(needPay, userBalance);
+                    } else {
+                        balanceDiscount = Double.parseDouble(s.toString());
+                    }
+
                     if (balanceDiscount > Math.min(needPay, userBalance)) {
                         etUseBalance.removeTextChangedListener(this);
                         balanceDiscount = Math.min(needPay, userBalance);
@@ -434,7 +445,12 @@ public class ScanOrderActivity extends BaseActivity {
                     pointsDiscount = 0;
                     double needPay = needPay();
 
-                    pointsDiscount = Double.parseDouble(s.toString()) * pointsRatio;
+                    if (".".equals(s.toString())) {
+                        pointsDiscount = Math.min(needPay, userBalance);
+                    } else {
+                        pointsDiscount = Double.parseDouble(s.toString()) * pointsRatio;
+                    }
+
                     if (pointsDiscount > Math.min(needPay, userPoints * pointsRatio)) {
                         etUsePoints.removeTextChangedListener(this);
                         pointsDiscount = (int) Math.min(needPay, userPoints * pointsRatio);
@@ -493,19 +509,16 @@ public class ScanOrderActivity extends BaseActivity {
         if (orderBean.getData().getCouponlist() != null && orderBean.getData().getCouponlist().size() > 0) {
             for (int i = 0; i < orderBean.getData().getCouponlist().size(); i++) {
                 if (orderBean.getData().getCouponlist().get(i).isCheck()) {
-                    couponDiscount += orderBean.getData().getCouponlist().get(i).getUseCoupon();
+                    couponDiscount = BigDecimalUtils.add(couponDiscount, orderBean.getData().getCouponlist().get(i).getUseCoupon());
                 }
             }
         }
 
-        BigDecimal b1 = new BigDecimal(Double.toString(totalPrice));
-        BigDecimal b2 = new BigDecimal(Double.toString(cardDiscount));
-        BigDecimal b3 = new BigDecimal(Double.toString(otherDiscount));
-        BigDecimal b4 = new BigDecimal(Double.toString(balanceDiscount));
-        BigDecimal b5 = new BigDecimal(Double.toString(pointsDiscount));
-        BigDecimal b6 = new BigDecimal(Double.toString(couponDiscount));
-
-        needPayMoney = b1.subtract(b2).subtract(b3).subtract(b4).subtract(b5).subtract(b6).doubleValue();
+        needPayMoney = BigDecimalUtils.sub(totalPrice, cardDiscount);
+        needPayMoney = BigDecimalUtils.sub(needPayMoney, otherDiscount);
+        needPayMoney = BigDecimalUtils.sub(needPayMoney, balanceDiscount);
+        needPayMoney = BigDecimalUtils.sub(needPayMoney, pointsDiscount);
+        needPayMoney = BigDecimalUtils.sub(needPayMoney, couponDiscount);
 
         tvOrderMoney.setText(DisplayUtils.decimalFormat(needPayMoney));
         return needPayMoney;
@@ -570,13 +583,13 @@ public class ScanOrderActivity extends BaseActivity {
             if (orderBean.getData().getCouponlist().get(i).isCheck()) {
                 ConfirmOrderBean.CouponList couponBean = new ConfirmOrderBean.CouponList(
                         orderBean.getData().getCouponlist().get(i).getCouponid(),
-                        String.valueOf((int) (orderBean.getData().getCouponlist().get(i).getUseCoupon() * 100)));
+                        String.valueOf(DisplayUtils.doubleToInt((orderBean.getData().getCouponlist().get(i).getUseCoupon() * 100))));
                 list.add(couponBean);
             }
         }
         ConfirmOrderBean confirmOrderBean = new ConfirmOrderBean(orderNo,
                 SharedPreUtils.getStr(this, "card_number"),
-                String.valueOf((int) (totalPrice) * 100), list);
+                String.valueOf(DisplayUtils.doubleToInt(totalPrice * 100)), list);
 
         map.put("dataStr", GsonUtils.beanToJson(confirmOrderBean));
 
@@ -779,9 +792,9 @@ public class ScanOrderActivity extends BaseActivity {
             map.put("existOtherPay", "N");
         }
         map.put("serverIp", ip);
-        map.put("cashCardVal", String.valueOf((int) (balanceDiscount * 100)));
+        map.put("cashCardVal", String.valueOf(DisplayUtils.doubleToInt((balanceDiscount * 100))));
         if (pointsDiscount > 0) {
-            map.put("scoreVal", String.valueOf((int) (pointsDiscount / pointsRatio)));
+            map.put("scoreVal", String.valueOf(DisplayUtils.doubleToInt((pointsDiscount / pointsRatio))));
         }
 
 
@@ -790,13 +803,13 @@ public class ScanOrderActivity extends BaseActivity {
             if (orderBean.getData().getCouponlist().get(i).isCheck()) {
                 ConfirmOrderBean.CouponList couponBean = new ConfirmOrderBean.CouponList(
                         orderBean.getData().getCouponlist().get(i).getCouponid(),
-                        String.valueOf((int) (orderBean.getData().getCouponlist().get(i).getUseCoupon() * 100)));
+                        String.valueOf(DisplayUtils.doubleToInt((orderBean.getData().getCouponlist().get(i).getUseCoupon() * 100))));
                 list.add(couponBean);
             }
         }
         ConfirmOrderBean confirmOrderBean = new ConfirmOrderBean(orderNo,
                 SharedPreUtils.getStr(this, "card_number"),
-                String.valueOf((int) (totalPrice * 100)),
+                String.valueOf(DisplayUtils.doubleToInt((totalPrice * 100))),
                 list);
 
         map.put("dataStr", GsonUtils.beanToJson(confirmOrderBean));

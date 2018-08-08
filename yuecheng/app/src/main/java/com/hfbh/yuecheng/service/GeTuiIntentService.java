@@ -1,6 +1,7 @@
 package com.hfbh.yuecheng.service;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 
 import com.hfbh.yuecheng.utils.LogUtils;
@@ -23,7 +24,7 @@ public class GeTuiIntentService extends GTIntentService {
 
     @Override
     public void onReceiveClientId(Context context, String s) {
-        if (s != null) {
+        if (!TextUtils.isEmpty(s)) {
             SharedPreUtils.saveStr(this, "client_id", s);
         }
     }
@@ -31,7 +32,6 @@ public class GeTuiIntentService extends GTIntentService {
     @Override
     public void onReceiveMessageData(Context context, GTTransmitMessage gtTransmitMessage) {
 
-        String msg = new String(gtTransmitMessage.getPayload());
 
     }
 

@@ -106,4 +106,12 @@ public class DisplayUtils {
     public static String isInteger(double value) {
         return (int) value == value ? String.valueOf((int) value) : decimalFormat(value);
     }
+
+
+    /**
+     * @return double转整型
+     */
+    public static int doubleToInt(double value) {
+        return (Double.valueOf(value)).intValue();
+    }
 }
