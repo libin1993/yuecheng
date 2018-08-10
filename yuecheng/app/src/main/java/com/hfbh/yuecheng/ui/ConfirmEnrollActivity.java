@@ -8,7 +8,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -17,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -29,7 +29,7 @@ import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.UserBalanceBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.utils.MoneyInputFilter;
+import com.hfbh.yuecheng.utils.BigDecimalUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SerializableMap;
@@ -79,13 +79,15 @@ public class ConfirmEnrollActivity extends BaseActivity {
     TextView tvEnrollMoney;
     @BindView(R.id.tv_confirm_enroll)
     TextView tvConfirmEnroll;
+    @BindView(R.id.ll_enroll_balance)
+    LinearLayout llEnrollBalance;
 
     //报名参数
     private Map<String, String> map;
-    //活动id
-    private int activityId;
     //报名记录id
     private int enrollId;
+    //活动id
+    private int activityId;
     private ActivityRecordBean activityBean;
     private UserBalanceBean balanceBean;
     //用户余额
@@ -199,8 +201,6 @@ public class ConfirmEnrollActivity extends BaseActivity {
         tvConfirmEnroll.setEnabled(true);
         tvUserMoney.setText("¥" + DisplayUtils.decimalFormat(balance));
         etInputMoney.setEnabled(true);
-//        etInputMoney.setFilters(new InputFilter[]{new MoneyInputFilter(Math.min(balance, enrollFee))});
-
 
         etInputMoney.addTextChangedListener(new TextWatcher() {
             @Override
@@ -216,12 +216,11 @@ public class ConfirmEnrollActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s.toString())) {
-                    if (".".equals(s.toString())){
+                    if (".".equals(s.toString())) {
                         useBalance = Math.min(enrollFee, balance);
-                    }else {
+                    } else {
                         useBalance = Double.parseDouble(s.toString());
                     }
-
 
                     if (useBalance > Math.min(enrollFee, balance)) {
                         etInputMoney.removeTextChangedListener(this);
@@ -238,7 +237,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
                         etInputMoney.addTextChangedListener(this);
                     }
                     tvInputMoney.setText("¥" + DisplayUtils.decimalFormat(useBalance));
-                    tvEnrollMoney.setText(DisplayUtils.decimalFormat(enrollFee - useBalance));
+                    tvEnrollMoney.setText(DisplayUtils.decimalFormat(BigDecimalUtils.sub(enrollFee, useBalance)));
 
                 } else {
                     useBalance = 0;
@@ -354,7 +353,8 @@ public class ConfirmEnrollActivity extends BaseActivity {
     private void inputPwd() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_validate_pwd, null);
 
-        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, (int) DisplayUtils.dp2px(this, 191));
+        mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                (int) DisplayUtils.dp2px(this, 191));
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
@@ -493,7 +493,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
         List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
         orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderBean.getData().getOrder().getTranNo()));
         MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrder().getTranNo(),
-                "ACTIVITY", "", false, enrollFee-useBalance, discountBeans, orderInfoList);
+                "ACTIVITY", "", false, BigDecimalUtils.sub(enrollFee, useBalance), discountBeans, orderInfoList);
         startActivity(new Intent(ConfirmEnrollActivity.this, ConfirmPayActivity.class));
     }
 

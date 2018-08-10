@@ -114,11 +114,13 @@
             android:background="@color/gray_ed"/>
 
         <LinearLayout
+            android:id="@+id/ll_enroll_balance"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginTop="15dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -174,9 +176,9 @@
                 android:id="@+id/tv_input_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="¥0.00"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:text="¥0.00"/>
+                android:textSize="16sp"/>
         </LinearLayout>
     </LinearLayout>
 

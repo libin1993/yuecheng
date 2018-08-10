@@ -109,6 +109,7 @@ public class OldGoodsFragment extends BaseFragment {
                 .addParams("hash", SharedPreUtils.getStr(getParentFragment().getActivity(), "hash"))
                 .addParams("commodityType", type)
                 .addParams("pageNum", "1")
+                .addParams("pageSize", "4")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -221,8 +222,8 @@ public class OldGoodsFragment extends BaseFragment {
                 ivNewGoods.setImageURI(newGoods.get(position).getPicturePath());
 
                 holder.setText(R.id.tv_discovery_new_name, newGoods.get(position).getCommodityName());
-                holder.setText(R.id.tv_discovery_new_tip, newGoods.get(position).getIndustryName());
-                holder.setText(R.id.tv_discovery_new_time, newGoods.get(position).getModifyTime());
+                holder.setText(R.id.tv_discovery_new_tip, newGoods.get(position).getShopName());
+                holder.setText(R.id.tv_discovery_new_time, newGoods.get(position).getOnlineTime());
 
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {

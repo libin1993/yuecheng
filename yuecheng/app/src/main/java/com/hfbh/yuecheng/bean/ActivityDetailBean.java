@@ -9,10 +9,11 @@ import java.util.List;
  */
 public class ActivityDetailBean {
 
+
     /**
      * flag : true
-     * hash : c07ed299d6364f04ba33869ed2f26fc9
-     * data : {"statistic":null,"member":{"balanceScore":39990,"birthday":null,"cardLevelId":null,"entityCardId":"600104165","idCardNumber":null,"isDelete":"N","isQuit":"N","listMemberExtraInfo":null,"memberBirthday":"1997-01-01 00:00:00","memberBirthdayBegin":null,"memberBirthdayEnd":null,"memberCardNo":"9900000115","memberCarnumber":null,"memberCity":"杭州市","memberCountry":"下城区","memberHead":"http://yjwang.wmalle.com/image/20180604/8616041263101812.png","memberId":179178,"memberName":null,"memberNickName":"6688875","memberPhone":"15167168495","memberProvince":"浙江省","memberScore":214,"memberSex":"MAN","memberSource":"APP_ORDINARY_FOCUS","memberType":"MEMBER","modifyTime":"2018-06-02 13:05:55","modifyTimeBegin":null,"modifyTimeEnd":null,"openId":null,"organizeId":0,"registerOrganizeId":null,"registerTime":"2018-05-30 16:21:35","registerTimeBegin":null,"registerTimeEnd":null,"subscribeTime":null,"subscribeTimeBegin":null,"subscribeTimeEnd":null,"useScore":192},"seconds":-1,"signupDo":{"acivityAddress":"1","acivityType":"NONEED","activityEndtime":"2018-04-30 00:00:00","activityIntroduce":"21","activityPicture":"http://m.hfbh.com.cn/image/20180425/1312842440275216.jpg","activityStarttime":"2018-04-28 00:00:00","activityTitle":"不要报名","createTime":"2018-04-25 15:30:31","creatorId":4,"endTime":"2018-04-26 00:00:00","endTimeStr":"2018/04/26","enrollFee":null,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":397,"memberLevel":null,"memberSignupState":"活动已结束","modifierId":4,"modifyTime":"2018-04-27 18:02:35","offlineTime":null,"onlineTime":"2018-04-27 18:02:35","organizeId":2,"signStateText":"已结束","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"END","signupTime":null,"startTime":"2018-04-18 00:00:00","startTimeStr":"2018/04/18","tags":[{"tagType":"public","tagName":"五一欢庆"}],"telephone":"15044512366","useCrowd":"MEMBER","verifyCode":null},"memberType":"MEMBER"}
+     * hash : 36b5876d897940bea6558f101dcd8fcb
+     * data : {"statistic":{"auditState":"AUDIT","auditStateText":null,"createTime":"2018-08-09 15:15:07","creatorId":null,"endTimeText":null,"isDelete":"N","marketingActivitySignupId":225,"marketingActivitySignupStatisticsId":226,"memberId":"72","modifierId":null,"modifyTime":null,"name":"222222","organizeId":2,"phone":"15167168495","signupTime":"2018-08-09 15:15:07","startTimeText":null,"state":"UNDESTROY","stateText":null,"verifyCode":"vKrPM7w5"},"member":{"balanceScore":5835,"birthday":null,"cardLevelId":null,"entityCardId":"600104165","idCardNumber":null,"isDelete":"N","isQuit":"N","listMemberExtraInfo":null,"memberBirthday":"1980-01-01 00:00:00","memberBirthdayBegin":null,"memberBirthdayEnd":null,"memberCardNo":"9900000115","memberCarnumber":null,"memberCity":"黄冈市","memberCountry":"蕲春县","memberHead":"http://ceshi.wmalle.com/image/20180703/1548150014946696.png","memberId":72,"memberName":null,"memberNickName":"几点的车吃","memberPhone":"15167168495","memberProvince":"湖北","memberScore":1007,"memberSex":"MAN","memberSource":"APP_ORDINARY_FOCUS","memberType":"MEMBER","modifyTime":null,"modifyTimeBegin":null,"modifyTimeEnd":null,"openId":null,"organizeId":0,"registerOrganizeId":null,"registerTime":"2018-06-20 15:34:45","registerTimeBegin":null,"registerTimeEnd":null,"subscribeTime":null,"subscribeTimeBegin":null,"subscribeTimeEnd":null,"useScore":62},"order":{"activitySignupPayId":81,"createTime":"2018-08-09 15:15:23","data":null,"enrollFee":0.03,"marketingActivitySignupId":225,"memberId":72,"mobile":"15167168495","openId":"36b5876d897940bea6558f101dcd8fcb","organizeId":2,"payTime":null,"realname":"222222","state":0,"tradeNo":null,"tranNo":"6001027453268823646208","userCode":null,"wechatTradeNo":null},"seconds":1845846,"signupDo":{"acivityAddress":"西湖区西斗门路3号天堂软件园10楼慧优科技","acivityType":"CASH","activityEndtime":"2018-09-30 00:00:00","activityIntroduce":"阿斯达","activityPicture":"http://ceshi.wmalle.com/image/20180809/4736314399931896.jpg","activityStarttime":"2018-08-09 00:00:00","activityTitle":"现金活动5","createTime":"2018-08-09 09:49:18","creatorId":4,"endTime":"2018-08-31 00:00:00","endTimeStr":"2018/08/31","enrollFee":0.03,"enrollScore":0,"extraIntroduce":"1111","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":225,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-08-09 09:49:18","organizeId":2,"signStateText":"已上架","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":1,"signupState":"ONLINE","signupTime":null,"startTime":"2018-08-01 00:00:00","startTimeStr":"2018/08/01","tags":[{"tagType":"public","tagName":"测试"}],"telephone":"","useCrowd":null,"verifyCode":null},"memberType":"MEMBER","signupStatId":226}
      * code : 0
      */
 
@@ -55,24 +56,28 @@ public class ActivityDetailBean {
 
     public static class DataBean {
         /**
-         * statistic : null
-         * member : {"balanceScore":39990,"birthday":null,"cardLevelId":null,"entityCardId":"600104165","idCardNumber":null,"isDelete":"N","isQuit":"N","listMemberExtraInfo":null,"memberBirthday":"1997-01-01 00:00:00","memberBirthdayBegin":null,"memberBirthdayEnd":null,"memberCardNo":"9900000115","memberCarnumber":null,"memberCity":"杭州市","memberCountry":"下城区","memberHead":"http://yjwang.wmalle.com/image/20180604/8616041263101812.png","memberId":179178,"memberName":null,"memberNickName":"6688875","memberPhone":"15167168495","memberProvince":"浙江省","memberScore":214,"memberSex":"MAN","memberSource":"APP_ORDINARY_FOCUS","memberType":"MEMBER","modifyTime":"2018-06-02 13:05:55","modifyTimeBegin":null,"modifyTimeEnd":null,"openId":null,"organizeId":0,"registerOrganizeId":null,"registerTime":"2018-05-30 16:21:35","registerTimeBegin":null,"registerTimeEnd":null,"subscribeTime":null,"subscribeTimeBegin":null,"subscribeTimeEnd":null,"useScore":192}
-         * seconds : -1
-         * signupDo : {"acivityAddress":"1","acivityType":"NONEED","activityEndtime":"2018-04-30 00:00:00","activityIntroduce":"21","activityPicture":"http://m.hfbh.com.cn/image/20180425/1312842440275216.jpg","activityStarttime":"2018-04-28 00:00:00","activityTitle":"不要报名","createTime":"2018-04-25 15:30:31","creatorId":4,"endTime":"2018-04-26 00:00:00","endTimeStr":"2018/04/26","enrollFee":null,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":null,"joinNumber":0,"marketingActivitySignupId":397,"memberLevel":null,"memberSignupState":"活动已结束","modifierId":4,"modifyTime":"2018-04-27 18:02:35","offlineTime":null,"onlineTime":"2018-04-27 18:02:35","organizeId":2,"signStateText":"已结束","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":0,"signupState":"END","signupTime":null,"startTime":"2018-04-18 00:00:00","startTimeStr":"2018/04/18","tags":[{"tagType":"public","tagName":"五一欢庆"}],"telephone":"15044512366","useCrowd":"MEMBER","verifyCode":null}
+         * statistic : {"auditState":"AUDIT","auditStateText":null,"createTime":"2018-08-09 15:15:07","creatorId":null,"endTimeText":null,"isDelete":"N","marketingActivitySignupId":225,"marketingActivitySignupStatisticsId":226,"memberId":"72","modifierId":null,"modifyTime":null,"name":"222222","organizeId":2,"phone":"15167168495","signupTime":"2018-08-09 15:15:07","startTimeText":null,"state":"UNDESTROY","stateText":null,"verifyCode":"vKrPM7w5"}
+         * member : {"balanceScore":5835,"birthday":null,"cardLevelId":null,"entityCardId":"600104165","idCardNumber":null,"isDelete":"N","isQuit":"N","listMemberExtraInfo":null,"memberBirthday":"1980-01-01 00:00:00","memberBirthdayBegin":null,"memberBirthdayEnd":null,"memberCardNo":"9900000115","memberCarnumber":null,"memberCity":"黄冈市","memberCountry":"蕲春县","memberHead":"http://ceshi.wmalle.com/image/20180703/1548150014946696.png","memberId":72,"memberName":null,"memberNickName":"几点的车吃","memberPhone":"15167168495","memberProvince":"湖北","memberScore":1007,"memberSex":"MAN","memberSource":"APP_ORDINARY_FOCUS","memberType":"MEMBER","modifyTime":null,"modifyTimeBegin":null,"modifyTimeEnd":null,"openId":null,"organizeId":0,"registerOrganizeId":null,"registerTime":"2018-06-20 15:34:45","registerTimeBegin":null,"registerTimeEnd":null,"subscribeTime":null,"subscribeTimeBegin":null,"subscribeTimeEnd":null,"useScore":62}
+         * order : {"activitySignupPayId":81,"createTime":"2018-08-09 15:15:23","data":null,"enrollFee":0.03,"marketingActivitySignupId":225,"memberId":72,"mobile":"15167168495","openId":"36b5876d897940bea6558f101dcd8fcb","organizeId":2,"payTime":null,"realname":"222222","state":0,"tradeNo":null,"tranNo":"6001027453268823646208","userCode":null,"wechatTradeNo":null}
+         * seconds : 1845846
+         * signupDo : {"acivityAddress":"西湖区西斗门路3号天堂软件园10楼慧优科技","acivityType":"CASH","activityEndtime":"2018-09-30 00:00:00","activityIntroduce":"阿斯达","activityPicture":"http://ceshi.wmalle.com/image/20180809/4736314399931896.jpg","activityStarttime":"2018-08-09 00:00:00","activityTitle":"现金活动5","createTime":"2018-08-09 09:49:18","creatorId":4,"endTime":"2018-08-31 00:00:00","endTimeStr":"2018/08/31","enrollFee":0.03,"enrollScore":0,"extraIntroduce":"1111","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":225,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-08-09 09:49:18","organizeId":2,"signStateText":"已上架","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":1,"signupState":"ONLINE","signupTime":null,"startTime":"2018-08-01 00:00:00","startTimeStr":"2018/08/01","tags":[{"tagType":"public","tagName":"测试"}],"telephone":"","useCrowd":null,"verifyCode":null}
          * memberType : MEMBER
+         * signupStatId : 226
          */
 
-        private Object statistic;
+        private StatisticBean statistic;
         private MemberBean member;
+        private OrderBean order;
         private int seconds;
         private SignupDoBean signupDo;
         private String memberType;
+        private int signupStatId;
 
-        public Object getStatistic() {
+        public StatisticBean getStatistic() {
             return statistic;
         }
 
-        public void setStatistic(Object statistic) {
+        public void setStatistic(StatisticBean statistic) {
             this.statistic = statistic;
         }
 
@@ -82,6 +87,14 @@ public class ActivityDetailBean {
 
         public void setMember(MemberBean member) {
             this.member = member;
+        }
+
+        public OrderBean getOrder() {
+            return order;
+        }
+
+        public void setOrder(OrderBean order) {
+            this.order = order;
         }
 
         public int getSeconds() {
@@ -108,9 +121,213 @@ public class ActivityDetailBean {
             this.memberType = memberType;
         }
 
+        public int getSignupStatId() {
+            return signupStatId;
+        }
+
+        public void setSignupStatId(int signupStatId) {
+            this.signupStatId = signupStatId;
+        }
+
+        public static class StatisticBean {
+            /**
+             * auditState : AUDIT
+             * auditStateText : null
+             * createTime : 2018-08-09 15:15:07
+             * creatorId : null
+             * endTimeText : null
+             * isDelete : N
+             * marketingActivitySignupId : 225
+             * marketingActivitySignupStatisticsId : 226
+             * memberId : 72
+             * modifierId : null
+             * modifyTime : null
+             * name : 222222
+             * organizeId : 2
+             * phone : 15167168495
+             * signupTime : 2018-08-09 15:15:07
+             * startTimeText : null
+             * state : UNDESTROY
+             * stateText : null
+             * verifyCode : vKrPM7w5
+             */
+
+            private String auditState;
+            private Object auditStateText;
+            private String createTime;
+            private Object creatorId;
+            private Object endTimeText;
+            private String isDelete;
+            private int marketingActivitySignupId;
+            private int marketingActivitySignupStatisticsId;
+            private String memberId;
+            private Object modifierId;
+            private Object modifyTime;
+            private String name;
+            private int organizeId;
+            private String phone;
+            private String signupTime;
+            private Object startTimeText;
+            private String state;
+            private Object stateText;
+            private String verifyCode;
+
+            public String getAuditState() {
+                return auditState;
+            }
+
+            public void setAuditState(String auditState) {
+                this.auditState = auditState;
+            }
+
+            public Object getAuditStateText() {
+                return auditStateText;
+            }
+
+            public void setAuditStateText(Object auditStateText) {
+                this.auditStateText = auditStateText;
+            }
+
+            public String getCreateTime() {
+                return createTime;
+            }
+
+            public void setCreateTime(String createTime) {
+                this.createTime = createTime;
+            }
+
+            public Object getCreatorId() {
+                return creatorId;
+            }
+
+            public void setCreatorId(Object creatorId) {
+                this.creatorId = creatorId;
+            }
+
+            public Object getEndTimeText() {
+                return endTimeText;
+            }
+
+            public void setEndTimeText(Object endTimeText) {
+                this.endTimeText = endTimeText;
+            }
+
+            public String getIsDelete() {
+                return isDelete;
+            }
+
+            public void setIsDelete(String isDelete) {
+                this.isDelete = isDelete;
+            }
+
+            public int getMarketingActivitySignupId() {
+                return marketingActivitySignupId;
+            }
+
+            public void setMarketingActivitySignupId(int marketingActivitySignupId) {
+                this.marketingActivitySignupId = marketingActivitySignupId;
+            }
+
+            public int getMarketingActivitySignupStatisticsId() {
+                return marketingActivitySignupStatisticsId;
+            }
+
+            public void setMarketingActivitySignupStatisticsId(int marketingActivitySignupStatisticsId) {
+                this.marketingActivitySignupStatisticsId = marketingActivitySignupStatisticsId;
+            }
+
+            public String getMemberId() {
+                return memberId;
+            }
+
+            public void setMemberId(String memberId) {
+                this.memberId = memberId;
+            }
+
+            public Object getModifierId() {
+                return modifierId;
+            }
+
+            public void setModifierId(Object modifierId) {
+                this.modifierId = modifierId;
+            }
+
+            public Object getModifyTime() {
+                return modifyTime;
+            }
+
+            public void setModifyTime(Object modifyTime) {
+                this.modifyTime = modifyTime;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public int getOrganizeId() {
+                return organizeId;
+            }
+
+            public void setOrganizeId(int organizeId) {
+                this.organizeId = organizeId;
+            }
+
+            public String getPhone() {
+                return phone;
+            }
+
+            public void setPhone(String phone) {
+                this.phone = phone;
+            }
+
+            public String getSignupTime() {
+                return signupTime;
+            }
+
+            public void setSignupTime(String signupTime) {
+                this.signupTime = signupTime;
+            }
+
+            public Object getStartTimeText() {
+                return startTimeText;
+            }
+
+            public void setStartTimeText(Object startTimeText) {
+                this.startTimeText = startTimeText;
+            }
+
+            public String getState() {
+                return state;
+            }
+
+            public void setState(String state) {
+                this.state = state;
+            }
+
+            public Object getStateText() {
+                return stateText;
+            }
+
+            public void setStateText(Object stateText) {
+                this.stateText = stateText;
+            }
+
+            public String getVerifyCode() {
+                return verifyCode;
+            }
+
+            public void setVerifyCode(String verifyCode) {
+                this.verifyCode = verifyCode;
+            }
+        }
+
         public static class MemberBean {
             /**
-             * balanceScore : 39990
+             * balanceScore : 5835
              * birthday : null
              * cardLevelId : null
              * entityCardId : 600104165
@@ -118,39 +335,39 @@ public class ActivityDetailBean {
              * isDelete : N
              * isQuit : N
              * listMemberExtraInfo : null
-             * memberBirthday : 1997-01-01 00:00:00
+             * memberBirthday : 1980-01-01 00:00:00
              * memberBirthdayBegin : null
              * memberBirthdayEnd : null
              * memberCardNo : 9900000115
              * memberCarnumber : null
-             * memberCity : 杭州市
-             * memberCountry : 下城区
-             * memberHead : http://yjwang.wmalle.com/image/20180604/8616041263101812.png
-             * memberId : 179178
+             * memberCity : 黄冈市
+             * memberCountry : 蕲春县
+             * memberHead : http://ceshi.wmalle.com/image/20180703/1548150014946696.png
+             * memberId : 72
              * memberName : null
-             * memberNickName : 6688875
+             * memberNickName : 几点的车吃
              * memberPhone : 15167168495
-             * memberProvince : 浙江省
-             * memberScore : 214
+             * memberProvince : 湖北
+             * memberScore : 1007
              * memberSex : MAN
              * memberSource : APP_ORDINARY_FOCUS
              * memberType : MEMBER
-             * modifyTime : 2018-06-02 13:05:55
+             * modifyTime : null
              * modifyTimeBegin : null
              * modifyTimeEnd : null
              * openId : null
              * organizeId : 0
              * registerOrganizeId : null
-             * registerTime : 2018-05-30 16:21:35
+             * registerTime : 2018-06-20 15:34:45
              * registerTimeBegin : null
              * registerTimeEnd : null
              * subscribeTime : null
              * subscribeTimeBegin : null
              * subscribeTimeEnd : null
-             * useScore : 192
+             * useScore : 62
              */
 
-            private double balanceScore;
+            private int balanceScore;
             private Object birthday;
             private Object cardLevelId;
             private String entityCardId;
@@ -175,7 +392,7 @@ public class ActivityDetailBean {
             private String memberSex;
             private String memberSource;
             private String memberType;
-            private String modifyTime;
+            private Object modifyTime;
             private Object modifyTimeBegin;
             private Object modifyTimeEnd;
             private Object openId;
@@ -189,11 +406,11 @@ public class ActivityDetailBean {
             private Object subscribeTimeEnd;
             private int useScore;
 
-            public double getBalanceScore() {
+            public int getBalanceScore() {
                 return balanceScore;
             }
 
-            public void setBalanceScore(double balanceScore) {
+            public void setBalanceScore(int balanceScore) {
                 this.balanceScore = balanceScore;
             }
 
@@ -389,11 +606,11 @@ public class ActivityDetailBean {
                 this.memberType = memberType;
             }
 
-            public String getModifyTime() {
+            public Object getModifyTime() {
                 return modifyTime;
             }
 
-            public void setModifyTime(String modifyTime) {
+            public void setModifyTime(Object modifyTime) {
                 this.modifyTime = modifyTime;
             }
 
@@ -494,45 +711,211 @@ public class ActivityDetailBean {
             }
         }
 
+        public static class OrderBean {
+            /**
+             * activitySignupPayId : 81
+             * createTime : 2018-08-09 15:15:23
+             * data : null
+             * enrollFee : 0.03
+             * marketingActivitySignupId : 225
+             * memberId : 72
+             * mobile : 15167168495
+             * openId : 36b5876d897940bea6558f101dcd8fcb
+             * organizeId : 2
+             * payTime : null
+             * realname : 222222
+             * state : 0
+             * tradeNo : null
+             * tranNo : 6001027453268823646208
+             * userCode : null
+             * wechatTradeNo : null
+             */
+
+            private int activitySignupPayId;
+            private String createTime;
+            private Object data;
+            private double enrollFee;
+            private int marketingActivitySignupId;
+            private int memberId;
+            private String mobile;
+            private String openId;
+            private int organizeId;
+            private Object payTime;
+            private String realname;
+            private int state;
+            private Object tradeNo;
+            private String tranNo;
+            private Object userCode;
+            private Object wechatTradeNo;
+
+            public int getActivitySignupPayId() {
+                return activitySignupPayId;
+            }
+
+            public void setActivitySignupPayId(int activitySignupPayId) {
+                this.activitySignupPayId = activitySignupPayId;
+            }
+
+            public String getCreateTime() {
+                return createTime;
+            }
+
+            public void setCreateTime(String createTime) {
+                this.createTime = createTime;
+            }
+
+            public Object getData() {
+                return data;
+            }
+
+            public void setData(Object data) {
+                this.data = data;
+            }
+
+            public double getEnrollFee() {
+                return enrollFee;
+            }
+
+            public void setEnrollFee(double enrollFee) {
+                this.enrollFee = enrollFee;
+            }
+
+            public int getMarketingActivitySignupId() {
+                return marketingActivitySignupId;
+            }
+
+            public void setMarketingActivitySignupId(int marketingActivitySignupId) {
+                this.marketingActivitySignupId = marketingActivitySignupId;
+            }
+
+            public int getMemberId() {
+                return memberId;
+            }
+
+            public void setMemberId(int memberId) {
+                this.memberId = memberId;
+            }
+
+            public String getMobile() {
+                return mobile;
+            }
+
+            public void setMobile(String mobile) {
+                this.mobile = mobile;
+            }
+
+            public String getOpenId() {
+                return openId;
+            }
+
+            public void setOpenId(String openId) {
+                this.openId = openId;
+            }
+
+            public int getOrganizeId() {
+                return organizeId;
+            }
+
+            public void setOrganizeId(int organizeId) {
+                this.organizeId = organizeId;
+            }
+
+            public Object getPayTime() {
+                return payTime;
+            }
+
+            public void setPayTime(Object payTime) {
+                this.payTime = payTime;
+            }
+
+            public String getRealname() {
+                return realname;
+            }
+
+            public void setRealname(String realname) {
+                this.realname = realname;
+            }
+
+            public int getState() {
+                return state;
+            }
+
+            public void setState(int state) {
+                this.state = state;
+            }
+
+            public Object getTradeNo() {
+                return tradeNo;
+            }
+
+            public void setTradeNo(Object tradeNo) {
+                this.tradeNo = tradeNo;
+            }
+
+            public String getTranNo() {
+                return tranNo;
+            }
+
+            public void setTranNo(String tranNo) {
+                this.tranNo = tranNo;
+            }
+
+            public Object getUserCode() {
+                return userCode;
+            }
+
+            public void setUserCode(Object userCode) {
+                this.userCode = userCode;
+            }
+
+            public Object getWechatTradeNo() {
+                return wechatTradeNo;
+            }
+
+            public void setWechatTradeNo(Object wechatTradeNo) {
+                this.wechatTradeNo = wechatTradeNo;
+            }
+        }
+
         public static class SignupDoBean {
             /**
-             * acivityAddress : 1
-             * acivityType : NONEED
-             * activityEndtime : 2018-04-30 00:00:00
-             * activityIntroduce : 21
-             * activityPicture : http://m.hfbh.com.cn/image/20180425/1312842440275216.jpg
-             * activityStarttime : 2018-04-28 00:00:00
-             * activityTitle : 不要报名
-             * createTime : 2018-04-25 15:30:31
+             * acivityAddress : 西湖区西斗门路3号天堂软件园10楼慧优科技
+             * acivityType : CASH
+             * activityEndtime : 2018-09-30 00:00:00
+             * activityIntroduce : 阿斯达
+             * activityPicture : http://ceshi.wmalle.com/image/20180809/4736314399931896.jpg
+             * activityStarttime : 2018-08-09 00:00:00
+             * activityTitle : 现金活动5
+             * createTime : 2018-08-09 09:49:18
              * creatorId : 4
-             * endTime : 2018-04-26 00:00:00
-             * endTimeStr : 2018/04/26
-             * enrollFee : null
-             * enrollScore : null
-             * extraIntroduce :
+             * endTime : 2018-08-31 00:00:00
+             * endTimeStr : 2018/08/31
+             * enrollFee : 0.03
+             * enrollScore : 0
+             * extraIntroduce : 1111
              * isAudit : N
              * isDelete : N
-             * isSignup : null
+             * isSignup : false
              * joinNumber : 0
-             * marketingActivitySignupId : 397
+             * marketingActivitySignupId : 225
              * memberLevel : null
-             * memberSignupState : 活动已结束
-             * modifierId : 4
-             * modifyTime : 2018-04-27 18:02:35
+             * memberSignupState : 去报名
+             * modifierId : null
+             * modifyTime : null
              * offlineTime : null
-             * onlineTime : 2018-04-27 18:02:35
+             * onlineTime : 2018-08-09 09:49:18
              * organizeId : 2
-             * signStateText : 已结束
+             * signStateText : 已上架
              * signinOffline : OPEN
              * signupLimitNumber : 0
-             * signupNumber : 0
-             * signupState : END
+             * signupNumber : 1
+             * signupState : ONLINE
              * signupTime : null
-             * startTime : 2018-04-18 00:00:00
-             * startTimeStr : 2018/04/18
-             * tags : [{"tagType":"public","tagName":"五一欢庆"}]
-             * telephone : 15044512366
-             * useCrowd : MEMBER
+             * startTime : 2018-08-01 00:00:00
+             * startTimeStr : 2018/08/01
+             * tags : [{"tagType":"public","tagName":"测试"}]
+             * telephone :
+             * useCrowd : null
              * verifyCode : null
              */
 
@@ -548,7 +931,7 @@ public class ActivityDetailBean {
             private String endTime;
             private String endTimeStr;
             private double enrollFee;
-            private double enrollScore;
+            private int enrollScore;
             private String extraIntroduce;
             private String isAudit;
             private String isDelete;
@@ -557,8 +940,8 @@ public class ActivityDetailBean {
             private int marketingActivitySignupId;
             private Object memberLevel;
             private String memberSignupState;
-            private int modifierId;
-            private String modifyTime;
+            private Object modifierId;
+            private Object modifyTime;
             private Object offlineTime;
             private String onlineTime;
             private int organizeId;
@@ -567,12 +950,12 @@ public class ActivityDetailBean {
             private int signupLimitNumber;
             private int signupNumber;
             private String signupState;
-            private String signupTime;
+            private Object signupTime;
             private String startTime;
             private String startTimeStr;
             private String telephone;
-            private String useCrowd;
-            private String verifyCode;
+            private Object useCrowd;
+            private Object verifyCode;
             private List<TagsBean> tags;
 
             public String getAcivityAddress() {
@@ -671,11 +1054,11 @@ public class ActivityDetailBean {
                 this.enrollFee = enrollFee;
             }
 
-            public double getEnrollScore() {
+            public int getEnrollScore() {
                 return enrollScore;
             }
 
-            public void setEnrollScore(double enrollScore) {
+            public void setEnrollScore(int enrollScore) {
                 this.enrollScore = enrollScore;
             }
 
@@ -703,7 +1086,7 @@ public class ActivityDetailBean {
                 this.isDelete = isDelete;
             }
 
-            public boolean getIsSignup() {
+            public boolean isIsSignup() {
                 return isSignup;
             }
 
@@ -743,19 +1126,19 @@ public class ActivityDetailBean {
                 this.memberSignupState = memberSignupState;
             }
 
-            public int getModifierId() {
+            public Object getModifierId() {
                 return modifierId;
             }
 
-            public void setModifierId(int modifierId) {
+            public void setModifierId(Object modifierId) {
                 this.modifierId = modifierId;
             }
 
-            public String getModifyTime() {
+            public Object getModifyTime() {
                 return modifyTime;
             }
 
-            public void setModifyTime(String modifyTime) {
+            public void setModifyTime(Object modifyTime) {
                 this.modifyTime = modifyTime;
             }
 
@@ -823,11 +1206,11 @@ public class ActivityDetailBean {
                 this.signupState = signupState;
             }
 
-            public String getSignupTime() {
+            public Object getSignupTime() {
                 return signupTime;
             }
 
-            public void setSignupTime(String signupTime) {
+            public void setSignupTime(Object signupTime) {
                 this.signupTime = signupTime;
             }
 
@@ -855,19 +1238,19 @@ public class ActivityDetailBean {
                 this.telephone = telephone;
             }
 
-            public String getUseCrowd() {
+            public Object getUseCrowd() {
                 return useCrowd;
             }
 
-            public void setUseCrowd(String useCrowd) {
+            public void setUseCrowd(Object useCrowd) {
                 this.useCrowd = useCrowd;
             }
 
-            public String getVerifyCode() {
+            public Object getVerifyCode() {
                 return verifyCode;
             }
 
-            public void setVerifyCode(String verifyCode) {
+            public void setVerifyCode(Object verifyCode) {
                 this.verifyCode = verifyCode;
             }
 
@@ -882,7 +1265,7 @@ public class ActivityDetailBean {
             public static class TagsBean {
                 /**
                  * tagType : public
-                 * tagName : 五一欢庆
+                 * tagName : 测试
                  */
 
                 private String tagType;

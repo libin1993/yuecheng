@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/rl_null_data"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -14,10 +15,11 @@
         android:textColor="@color/blue_a4c"
         android:textSize="25sp"/>
 
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/bg_null_line"/>
+        fresco:placeholderImage="@mipmap/bg_null_line"
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:viewAspectRatio="0.9715"/>
 </RelativeLayout>

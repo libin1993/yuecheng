@@ -71,7 +71,7 @@
                 app:tl_indicator_margin_bottom="3dp"
                 app:tl_indicator_style="BLOCK"
                 app:tl_indicator_width="20dp"
-                app:tl_tab_space_equal="true"
+                app:tl_tab_space_equal="false"
                 app:tl_textSelectColor="@color/red_99"
                 app:tl_textUnselectColor="@color/yellow_e0"
                 app:tl_textsize="16sp"

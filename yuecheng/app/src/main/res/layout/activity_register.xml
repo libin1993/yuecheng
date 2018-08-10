@@ -171,7 +171,7 @@
                 android:background="@drawable/layout_selector_login"
                 android:enabled="false"
                 android:gravity="center"
-                android:textColor="@color/orange_e0"
+                android:textColor="@color/btn_login_selector"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
         </RelativeLayout>

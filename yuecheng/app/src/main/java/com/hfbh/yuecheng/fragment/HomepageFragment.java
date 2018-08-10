@@ -889,18 +889,14 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 @Override
                 public void onBindViewHolder(ViewHolder holder, final int position) {
                     super.onBindViewHolder(holder, position);
-                    ImageView ivGift = holder.getView(R.id.iv_home_gift);
-                    ViewGroup.LayoutParams layoutParams = ivGift.getLayoutParams();
-                    layoutParams.width = width;
-                    layoutParams.height = width;
-                    ivGift.setLayoutParams(layoutParams);
+                    SimpleDraweeView ivGift = holder.getView(R.id.iv_home_gift);
+//                    ViewGroup.LayoutParams layoutParams = ivGift.getLayoutParams();
+//                    layoutParams.width = width;
+//                    layoutParams.height = width;
+//                    ivGift.setLayoutParams(layoutParams);
 
-                    Glide.with(getActivity())
-                            .load(giftBean.getData().get(position).getGiftPicturePath())
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .dontAnimate()
-                            .placeholder(R.mipmap.img_place)
-                            .into(ivGift);
+                    ivGift.setImageURI(giftBean.getData().get(position).getGiftPicturePath());
+
                     holder.setText(R.id.tv_home_gift_name, giftBean.getData().get(position).getRelateName());
                     holder.setText(R.id.tv_home_gift_score, DisplayUtils.isInteger(giftBean.getData().get(position).getNeedScore()) + "积分");
 

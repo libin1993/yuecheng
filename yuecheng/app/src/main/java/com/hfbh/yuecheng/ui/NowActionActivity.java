@@ -176,12 +176,12 @@ public class NowActionActivity extends BaseActivity {
                 //是否报名
                 final boolean isEnroll = dataBean.isIsSignup();
 
-                if (!TextUtils.isEmpty(dataBean.getAcivityType()) && dataBean.getAcivityType().equals("NONEED")) {
-                    tvReceive.setVisibility(View.GONE);
-                } else {
-                    tvReceive.setVisibility(View.VISIBLE);
 
-                    if (!isActivityEnd) {
+                if (!isActivityEnd) {
+                    if (!TextUtils.isEmpty(dataBean.getAcivityType()) && dataBean.getAcivityType().equals("NONEED")) {
+                        tvReceive.setVisibility(View.GONE);
+                    } else {
+                        tvReceive.setVisibility(View.VISIBLE);
                         if (isEnrollStart) {
                             if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                                 if (isEnroll) {
@@ -224,11 +224,13 @@ public class NowActionActivity extends BaseActivity {
                             tvReceive.setText("待报名");
                             tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                         }
-                    } else {
-                        tvReceive.setVisibility(View.VISIBLE);
-                        tvReceive.setText("已结束");
-                        tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                     }
+
+                } else {
+                    tvReceive.setVisibility(View.VISIBLE);
+                    tvReceive.setText("已结束");
+                    tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+
                 }
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);

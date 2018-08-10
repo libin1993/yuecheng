@@ -148,6 +148,8 @@ public class Constant {
     public static final String SCAN_ORDER_SUBMIT = HOST + "/wechat/scanCodePay/confirmPay.json";
     //订单列表
     public static final String ORDER_LIST = HOST + "/wechat/memberOrderShop/listOrder.json";
+    //去支付
+    public static final String PAY_ORDER = HOST + "/wechat/order/orderView.json";
     //取消订单
     public static final String CANCEL_ORDER = HOST + "/wechat/memberOrderShop/cancelOrder.json";
     //订单详情

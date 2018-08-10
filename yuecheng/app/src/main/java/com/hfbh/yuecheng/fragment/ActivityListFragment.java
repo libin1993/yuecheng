@@ -25,11 +25,13 @@ import com.hfbh.yuecheng.ui.ActionDetailActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -96,6 +98,7 @@ public class ActivityListFragment extends BaseFragment {
         tvNullData.setText("暂无活动");
         isViewCreated = true;
         getData();
+
         initView();
         lazyLoad();
         return view;
@@ -117,7 +120,9 @@ public class ActivityListFragment extends BaseFragment {
      */
     private void lazyLoad() {
         if (isViewCreated && isUIVisible) {
-            viewLoading.smoothToShow();
+            if (viewLoading != null) {
+                viewLoading.smoothToShow();
+            }
             initData();
             //数据加载完毕,恢复标记,防止重复加载
             isViewCreated = false;
@@ -160,7 +165,10 @@ public class ActivityListFragment extends BaseFragment {
                             refreshLayout.finishLoadMore();
                         } else {
                             dataList.clear();
-                            viewLoading.smoothToHide();
+                            if (viewLoading != null) {
+                                viewLoading.smoothToHide();
+                            }
+
                         }
 
                         if (activityListBean.isFlag() && activityListBean.getData() != null &&
@@ -212,12 +220,11 @@ public class ActivityListFragment extends BaseFragment {
                 //是否报名
                 final boolean isEnroll = dataBean.isIsSignup();
 
-                if (!TextUtils.isEmpty(dataBean.getAcivityType()) && dataBean.getAcivityType().equals("NONEED")) {
-                    tvReceive.setVisibility(View.GONE);
-                } else {
-                    tvReceive.setVisibility(View.VISIBLE);
-
-                    if (!isActivityEnd) {
+                if (!isActivityEnd) {
+                    if (!TextUtils.isEmpty(dataBean.getAcivityType()) && dataBean.getAcivityType().equals("NONEED")) {
+                        tvReceive.setVisibility(View.GONE);
+                    } else {
+                        tvReceive.setVisibility(View.VISIBLE);
                         if (isEnrollStart) {
                             if (!TextUtils.isEmpty(dataBean.getAcivityType())) {
                                 if (isEnroll) {
@@ -260,12 +267,15 @@ public class ActivityListFragment extends BaseFragment {
                             tvReceive.setText("待报名");
                             tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                         }
-                    } else {
-                        tvReceive.setVisibility(View.VISIBLE);
-                        tvReceive.setText("已结束");
-                        tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
+
                     }
+
+                } else {
+                    tvReceive.setVisibility(View.VISIBLE);
+                    tvReceive.setText("已结束");
+                    tvReceive.setBackgroundResource(R.drawable.bound_gray_15dp);
                 }
+
 
                 FlowLayout flowLayout = holder.getView(R.id.flow_home_activity);
                 flowLayout.removeAllViews();
@@ -363,11 +373,15 @@ public class ActivityListFragment extends BaseFragment {
 
     private void getData() {
         Bundle bundle = getArguments();
+        LogUtils.log(bundle.hashCode()+"bundle");
         tagId = bundle.getInt("tag_id");
+        LogUtils.log(tagId+"aaaa");
     }
 
     public static ActivityListFragment newInstance(int tagId) {
+
         Bundle args = new Bundle();
+        LogUtils.log(args.hashCode()+"fffffffff");
         args.putInt("tag_id", tagId);
         ActivityListFragment fragment = new ActivityListFragment();
         fragment.setArguments(args);

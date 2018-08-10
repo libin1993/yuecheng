@@ -37,6 +37,7 @@ import com.hfbh.yuecheng.ui.ConfirmOrderActivity;
 import com.hfbh.yuecheng.ui.GroupGoodsActivity;
 import com.hfbh.yuecheng.ui.GroupGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.OrderDetailActivity;
+import com.hfbh.yuecheng.ui.PayOrderActivity;
 import com.hfbh.yuecheng.ui.PopGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.RefundDetailActivity;
 import com.hfbh.yuecheng.ui.RushGoodsDetailActivity;
@@ -434,7 +435,7 @@ public class OrderFragment extends BaseFragment {
                     public void onClick(View v) {
                         switch (dataBean.getStatus()) {
                             case 1:
-                                payMoney(dataBean.getOrderDtlList().get(0).getDetailId());
+                                payMoney(dataBean.getMemberOrderShopId());
                                 break;
                             case 2:
                             case 3:
@@ -555,10 +556,9 @@ public class OrderFragment extends BaseFragment {
     /**
      * 付款
      */
-    private void payMoney(int goodsId) {
-        Intent intent = new Intent(getActivity(), ConfirmOrderActivity.class);
-        intent.putExtra("goods_id", goodsId);
-
+    private void payMoney(int orderId) {
+        Intent intent = new Intent(getActivity(), PayOrderActivity.class);
+        intent.putExtra("order_id", orderId);
         startActivity(intent);
     }
 

@@ -8,13 +8,14 @@
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
     android:layout_marginTop="15dp"
-    app:cardBackgroundColor="@color/gray_ed"
     app:cardCornerRadius="6dp"
-    app:cardElevation="6dp">
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@color/gray_ed">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/gray_ed">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_coupon_bg"

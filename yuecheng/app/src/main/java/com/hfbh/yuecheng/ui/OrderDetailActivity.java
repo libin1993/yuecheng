@@ -569,8 +569,8 @@ public class OrderDetailActivity extends BaseActivity {
      * 付款
      */
     private void payMoney() {
-        Intent intent = new Intent(this, ConfirmOrderActivity.class);
-        intent.putExtra("goods_id", orderBean.getData().getOrderDtlList().get(0).getDetailId());
+        Intent intent = new Intent(this, PayOrderActivity.class);
+        intent.putExtra("order_id", orderId);
         startActivity(intent);
     }
 

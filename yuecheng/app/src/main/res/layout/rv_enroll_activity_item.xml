@@ -47,7 +47,9 @@
         android:textColor="@color/gray_33"
         android:textColorHint="@color/gray_9f"
         android:textSize="13sp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:maxLength="20"
+        android:singleLine="true"/>
 
     <TextView
         android:id="@+id/tv_enroll_activity_value"

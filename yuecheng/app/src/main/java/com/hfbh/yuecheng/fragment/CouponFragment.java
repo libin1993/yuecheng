@@ -118,7 +118,9 @@ public class CouponFragment extends BaseFragment {
                             isRefresh = false;
                             refreshLayout.finishRefresh();
                         } else {
-                            viewLoading.smoothToHide();
+                            if (viewLoading != null){
+                                viewLoading.smoothToHide();
+                            }
                         }
 
                         if (couponBean.isFlag() && couponBean.getData() != null

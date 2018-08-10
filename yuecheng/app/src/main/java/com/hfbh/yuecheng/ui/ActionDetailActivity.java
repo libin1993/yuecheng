@@ -61,6 +61,8 @@ public class ActionDetailActivity extends BaseActivity {
     ImageView ivHeaderBack;
     @BindView(R.id.iv_header_share)
     ImageView ivHeaderShare;
+    @BindView(R.id.rl_activity_status)
+    RelativeLayout rlActivityStatus;
     //活动id
     private int activityId;
     private ActivityDetailBean activityBean;
@@ -85,8 +87,13 @@ public class ActionDetailActivity extends BaseActivity {
         tvHeaderTitle.setText("活动详情");
         ivHeaderShare.setVisibility(View.VISIBLE);
         getData();
-        initData();
         initWebView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 
     private void initWebView() {
@@ -149,7 +156,7 @@ public class ActionDetailActivity extends BaseActivity {
     private void initView() {
         isActivityEnd = System.currentTimeMillis() > DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getActivityEndtime());
-        isEnroll = activityBean.getData().getSignupDo().getIsSignup();
+        isEnroll = activityBean.getData().getSignupDo().isIsSignup();
 
         isEnrollStart = System.currentTimeMillis() >= DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getStartTime());
@@ -161,43 +168,43 @@ public class ActionDetailActivity extends BaseActivity {
 //                        == activityBean.getData().getSignupDo().getSignupLimitNumber();
         if (!TextUtils.isEmpty(activityBean.getData().getSignupDo().getAcivityType())) {
             switch (activityBean.getData().getSignupDo().getAcivityType()) {
-                case "NONEED":
-                    rlActionJoin.setVisibility(View.GONE);
-                    break;
                 case "FREE":
-                    rlActionJoin.setVisibility(View.VISIBLE);
                     tvExchangeScore.setText("免费");
+                    tvExchangeType.setVisibility(View.GONE);
                     break;
                 case "SCORE":
-                    rlActionJoin.setVisibility(View.VISIBLE);
                     tvExchangeScore.setText(DisplayUtils.isInteger(activityBean.getData()
                             .getSignupDo().getEnrollScore()));
                     tvExchangeType.setVisibility(View.VISIBLE);
                     break;
                 case "CASH":
-                    rlActionJoin.setVisibility(View.VISIBLE);
                     tvExchangeScore.setText("¥" + DisplayUtils.isInteger(activityBean.getData()
                             .getSignupDo().getEnrollFee()));
+                    tvExchangeType.setVisibility(View.GONE);
                     break;
             }
         }
 
 
         if (!isActivityEnd) {
-            if (isEnrollStart) {
-                if (isEnroll) {
-                    tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                    tvExchange.setText("已报名，查看报名信息");
-                    tvExchange.setEnabled(true);
-                } else {
-                    if (isEnrollEnd) {
-                        tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                        tvExchange.setText("报名已结束");
-                        tvExchange.setEnabled(false);
+            if ("NONEED".equals(activityBean.getData().getSignupDo().getAcivityType())) {
+                rlActionJoin.setVisibility(View.GONE);
+            } else {
+                rlActionJoin.setVisibility(View.VISIBLE);
+                if (isEnrollStart) {
+                    if (isEnroll) {
+                        rlActivityStatus.setVisibility(View.VISIBLE);
+                        tvActivityEnd.setVisibility(View.GONE);
+                        tvExchange.setText("已报名，查看报名信息");
                     } else {
-                        tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                        tvExchange.setText("去报名");
-                        tvExchange.setEnabled(true);
+                        if (isEnrollEnd) {
+                            rlActivityStatus.setVisibility(View.GONE);
+                            tvActivityEnd.setVisibility(View.VISIBLE);
+                            tvActivityEnd.setText("报名已结束");
+                        } else {
+                            rlActivityStatus.setVisibility(View.VISIBLE);
+                            tvActivityEnd.setVisibility(View.GONE);
+                            tvExchange.setText("去报名");
 //                        if (!isLimit) {
 //                            if (SharedPreUtils.getBoolean(this, "is_login", false)
 //                                    && activityBean.getData().getSignupDo().getAcivityType().equals("SCORE")
@@ -218,19 +225,19 @@ public class ActionDetailActivity extends BaseActivity {
 //                            tvExchange.setText("名额已满");
 //                            tvExchange.setEnabled(false);
 //                        }
+                        }
                     }
+                } else {
+                    rlActivityStatus.setVisibility(View.GONE);
+                    tvActivityEnd.setVisibility(View.VISIBLE);
+                    tvActivityEnd.setText("待报名");
                 }
-            } else {
-                tvExchange.setText("待报名");
-                tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                tvExchange.setEnabled(false);
             }
-
         } else {
-            tvExchangeType.setVisibility(View.GONE);
-            tvExchangeScore.setVisibility(View.GONE);
-            tvExchange.setVisibility(View.GONE);
+            rlActionJoin.setVisibility(View.VISIBLE);
+            rlActivityStatus.setVisibility(View.GONE);
             tvActivityEnd.setVisibility(View.VISIBLE);
+            tvActivityEnd.setText("活动已结束");
         }
     }
 
@@ -253,10 +260,10 @@ public class ActionDetailActivity extends BaseActivity {
                 enrollActivity();
                 break;
             case R.id.iv_header_share:
-                if (activityBean != null){
-                    ShareUtils.showShare(this,activityBean.getData().getSignupDo()
-                            .getActivityPicture(),activityBean.getData().getSignupDo().getActivityTitle(),
-                            "",url+"&share=true");
+                if (activityBean != null) {
+                    ShareUtils.showShare(this, activityBean.getData().getSignupDo()
+                                    .getActivityPicture(), activityBean.getData().getSignupDo().getActivityTitle(),
+                            "", url + "&share=true");
                 }
 
                 break;
@@ -272,12 +279,25 @@ public class ActionDetailActivity extends BaseActivity {
             if (SharedPreUtils.getBoolean(this, "is_login", false)) {
                 if (isEnroll) {
                     intent = new Intent(this, CloseActionActivity.class);
-                    intent.putExtra("activity_id", activityId);
+                    intent.putExtra("activity_id", activityBean.getData().getSignupDo().getMarketingActivitySignupId());
                     startActivity(intent);
                 } else {
+
                     intent = new Intent(this, EnrollActionActivity.class);
                     intent.putExtra("activity_id", activityId);
                     startActivity(intent);
+                    //报名是否中断
+//                    if (activityBean.getData().getStatistic() != null) {
+//                        intent = new Intent(this, ConfirmEnrollActivity.class);
+//                        intent.putExtra("enroll_id", activityBean.getData().getStatistic().getMarketingActivitySignupStatisticsId());
+//                        intent.putExtra("activity_id", activityId);
+//                        startActivity(intent);
+//                    } else {
+//                        intent = new Intent(this, EnrollActionActivity.class);
+//                        intent.putExtra("activity_id", activityId);
+//                        startActivity(intent);
+//                    }
+
                 }
 
             } else {
@@ -293,7 +313,6 @@ public class ActionDetailActivity extends BaseActivity {
     public void isLogin(String msg) {
         if ("login_success".equals(msg)) {
             webView.reload();
-            initData();
         }
     }
 

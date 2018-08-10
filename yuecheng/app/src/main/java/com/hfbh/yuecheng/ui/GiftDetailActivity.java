@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -20,14 +21,10 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.GiftDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
-import com.hfbh.yuecheng.utils.ShareUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
-import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -67,14 +64,22 @@ public class GiftDetailActivity extends BaseActivity {
     ImageView ivGiftBack;
     @BindView(R.id.iv_exchange_share)
     ImageView ivGiftShare;
-    @BindView(R.id.tv_exchange_need_score)
-    TextView tvTotalScore;
-    @BindView(R.id.tv_exchange_now)
-    TextView tvExchange;
     @BindView(R.id.tv_exchange_gift_count)
     TextView tvExchangeGiftCount;
     @BindView(R.id.tv_exchange_gift_info)
     TextView tvExchangeGiftInfo;
+    @BindView(R.id.tv_exchange_activity_score)
+    TextView tvNeedScore;
+    @BindView(R.id.tv_exchange_activity_type)
+    TextView tvExchangeType;
+    @BindView(R.id.tv_exchange_activity)
+    TextView tvExchangeGift;
+    @BindView(R.id.rl_activity_status)
+    RelativeLayout rlGiftStatus;
+    @BindView(R.id.tv_activity_end)
+    TextView tvGiftEnd;
+    @BindView(R.id.rl_action_join)
+    RelativeLayout rlStatus;
 
     //礼品id
     private int giftId;
@@ -97,6 +102,8 @@ public class GiftDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_gift_detail);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        rlStatus.setVisibility(View.VISIBLE);
+        tvExchangeType.setVisibility(View.VISIBLE);
         getData();
         initData();
     }
@@ -186,7 +193,7 @@ public class GiftDetailActivity extends BaseActivity {
 
         tvGiftCount.setText("还剩" + balanceNum + "件");
         tvExchangeGiftCount.setText(String.valueOf(num));
-        tvTotalScore.setText(String.valueOf(score * num));
+        tvNeedScore.setText(String.valueOf(score * num));
 //        boolean isFinish = false;
 //        if (!TextUtils.isEmpty(giftBean.getData().getOfflineTime())) {
 //            isFinish = System.currentTimeMillis() > DateUtils.getTime(
@@ -200,31 +207,34 @@ public class GiftDetailActivity extends BaseActivity {
         if (isOnline) {
             switch (giftBean.getData().getState()) {
                 case "CANEXCHANGE":
-                    tvExchange.setText("立即兑换");
-                    tvExchange.setBackgroundResource(R.drawable.bound_gradient_red);
-                    tvExchange.setEnabled(true);
+                    rlGiftStatus.setVisibility(View.VISIBLE);
+                    tvGiftEnd.setVisibility(View.GONE);
+                    tvExchangeGift.setText("立即兑换");
+
                     break;
                 case "NOHAVE":
-                    tvExchange.setText("已抢光");
-                    tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                    tvExchange.setEnabled(false);
+                    rlGiftStatus.setVisibility(View.GONE);
+                    tvGiftEnd.setVisibility(View.VISIBLE);
+                    tvGiftEnd.setText("已抢光");
+
                     break;
                 case "EXCHANGED":
-                    tvExchange.setText("已兑换");
-                    tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                    tvExchange.setEnabled(false);
+                    rlGiftStatus.setVisibility(View.GONE);
+                    tvGiftEnd.setVisibility(View.VISIBLE);
+                    tvGiftEnd.setText("已兑换");
                     break;
                 case "NOPOINTS":
-                    tvExchange.setText("积分不足");
-                    tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                    tvExchange.setEnabled(false);
+                    rlGiftStatus.setVisibility(View.GONE);
+                    tvGiftEnd.setVisibility(View.VISIBLE);
+                    tvGiftEnd.setText("积分不足");
+
                     break;
 
             }
         } else {
-            tvExchange.setText("已失效");
-            tvExchange.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-            tvExchange.setEnabled(false);
+            rlGiftStatus.setVisibility(View.GONE);
+            tvGiftEnd.setVisibility(View.VISIBLE);
+            tvGiftEnd.setText("已失效");
         }
 
 //        if (!isFinish) {
@@ -265,7 +275,7 @@ public class GiftDetailActivity extends BaseActivity {
     }
 
     @OnClick({R.id.tv_gift_reduce, R.id.tv_gift_add, R.id.iv_exchange_back, R.id.iv_exchange_share,
-            R.id.tv_exchange_now})
+            R.id.tv_exchange_activity})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_gift_reduce:
@@ -306,7 +316,7 @@ public class GiftDetailActivity extends BaseActivity {
             case R.id.iv_exchange_share:
 //                ShareUtils.showShare(this,"www","111","111","111");
                 break;
-            case R.id.tv_exchange_now:
+            case R.id.tv_exchange_activity:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {
                     exChangeGift();
                 } else {

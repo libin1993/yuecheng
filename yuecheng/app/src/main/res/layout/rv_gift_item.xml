@@ -2,15 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
               android:background="@android:color/white"
               android:orientation="vertical">
 
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/iv_home_gift"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        fresco:roundedCornerRadius="4dp"
+        fresco:viewAspectRatio="1"
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:placeholderImage="@mipmap/img_place"/>
 
     <TextView
         android:id="@+id/tv_home_gift_name"

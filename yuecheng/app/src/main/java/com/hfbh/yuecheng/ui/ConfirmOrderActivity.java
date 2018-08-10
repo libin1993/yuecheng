@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -18,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -31,9 +31,9 @@ import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.UserBalanceBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.BigDecimalUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.MoneyInputFilter;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.jungly.gridpasswordview.GridPasswordView;
@@ -93,6 +93,10 @@ public class ConfirmOrderActivity extends BaseActivity {
     TextView tvConfirmOrder;
     @BindView(R.id.iv_header_back)
     ImageView ivHeaderBack;
+    @BindView(R.id.ll_order_num)
+    LinearLayout llOrderNum;
+    @BindView(R.id.ll_order_balance)
+    LinearLayout llOrderBalance;
 
 
     private GroupGoodsDetailBean goodsBean;
@@ -106,13 +110,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     private int num = 1;
     private PopupWindow mPopupWindow;
     private GoodsOrderBean orderBean;
-    private int goodsId;
-    //商品信息数据加载
-    private boolean isGoods;
-    //余额数据加载
-    private boolean isBalance;
 
-    private String orderNo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,43 +120,15 @@ public class ConfirmOrderActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         tvHeaderTitle.setText("确认订单");
         tvConfirmOrder.setText("立即支付");
+        llOrderNum.setVisibility(View.VISIBLE);
+        llOrderBalance.setVisibility(View.VISIBLE);
         etUseBalance.setFocusable(false);
         etUseBalance.setFocusableInTouchMode(false);
         getData();
-        initData();
+        initView();
         initBalance();
     }
 
-    private void initData() {
-        OkHttpUtils.get()
-                .url(Constant.GOODS_DETAIL)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token", SharedPreUtils.getStr(this, "token"))
-                .addParams("commodityId", String.valueOf(goodsId))
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        goodsBean = GsonUtils.jsonToBean(response, GroupGoodsDetailBean.class);
-                        if (goodsBean.isFlag() && goodsBean.getData() != null) {
-                            isGoods = true;
-                            initView();
-                            if (isBalance) {
-                                isGoods = false;
-                                init();
-                            }
-                        }
-                    }
-                });
-    }
 
     private void initView() {
         ivShopLogo.setImageURI(goodsBean.getData().getShopLogo());
@@ -185,14 +155,12 @@ public class ConfirmOrderActivity extends BaseActivity {
             tvGoodsAdd.setTextColor(getResources().getColor(R.color.gray_ee));
         }
 
-        totalPrice = goodsBean.getData().getNowPrice() * num;
+        totalPrice = BigDecimalUtils.mul(goodsBean.getData().getNowPrice(), num);
 
         tvGoodsNum.setText(String.valueOf(num));
 
         tvUseBalance.setText("¥" + DisplayUtils.decimalFormat(useBalance));
-        tvNeedMoney.setText(DisplayUtils.decimalFormat(totalPrice - useBalance));
-
-//        etUseBalance.setFilters(new InputFilter[]{new MoneyInputFilter(Math.min(balance, totalPrice))});
+        tvNeedMoney.setText(DisplayUtils.decimalFormat(BigDecimalUtils.sub(totalPrice, useBalance)));
 
     }
 
@@ -218,71 +186,63 @@ public class ConfirmOrderActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         balanceBean = GsonUtils.jsonToBean(response, UserBalanceBean.class);
                         if (balanceBean.isFlag() && balanceBean.getData() != null) {
-                            isBalance = true;
                             balance = balanceBean.getData().getAccountBalance();
                             tvBalance.setText("¥" + DisplayUtils.decimalFormat(balance));
-                            if (isGoods) {
-                                isBalance = false;
-                                init();
+                            initPrice();
+                            if (balance > 0) {
+                                etUseBalance.setFocusable(true);
+                                etUseBalance.setFocusableInTouchMode(true);
+                                etUseBalance.setEnabled(true);
+                                etUseBalance.addTextChangedListener(new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                    }
+
+                                    @Override
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable s) {
+                                        if (!TextUtils.isEmpty(s.toString())) {
+                                            if (".".equals(s.toString())) {
+                                                useBalance = Math.min(totalPrice, balance);
+                                            } else {
+                                                useBalance = Double.parseDouble(s.toString());
+                                            }
+
+                                            if (useBalance > Math.min(totalPrice, balance)) {
+                                                etUseBalance.removeTextChangedListener(this);
+                                                useBalance = Math.min(totalPrice, balance);
+                                                etUseBalance.setText(DisplayUtils.isInteger(useBalance));
+                                                etUseBalance.setSelection(etUseBalance.getText().toString().length());
+                                                etUseBalance.addTextChangedListener(this);
+                                            } else if (useBalance != (int) useBalance && String.valueOf(useBalance).length()
+                                                    - String.valueOf(useBalance).indexOf(".") >= 3) {
+                                                etUseBalance.removeTextChangedListener(this);
+                                                useBalance = Double.parseDouble(DisplayUtils.decimalFormat(useBalance));
+                                                etUseBalance.setText(DisplayUtils.isInteger(useBalance));
+                                                etUseBalance.setSelection(etUseBalance.getText().toString().length());
+                                                etUseBalance.addTextChangedListener(this);
+                                            }
+
+                                        } else {
+                                            useBalance = 0;
+                                        }
+
+                                        initPrice();
+                                    }
+                                });
                             }
                         }
                     }
                 });
     }
 
-    private void init() {
-        initPrice();
-        if (balance > 0) {
-            etUseBalance.setFocusable(true);
-            etUseBalance.setFocusableInTouchMode(true);
-            etUseBalance.setEnabled(true);
-            etUseBalance.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (!TextUtils.isEmpty(s.toString())) {
-                        if (".".equals(s.toString())){
-                            useBalance = Math.min(totalPrice, balance);
-                        }else {
-                            useBalance = Double.parseDouble(s.toString());
-                        }
-
-                        if (useBalance > Math.min(totalPrice, balance)) {
-                            etUseBalance.removeTextChangedListener(this);
-                            useBalance = Math.min(totalPrice, balance);
-                            etUseBalance.setText(DisplayUtils.isInteger(useBalance));
-                            etUseBalance.setSelection(etUseBalance.getText().toString().length());
-                            etUseBalance.addTextChangedListener(this);
-                        } else if (useBalance != (int) useBalance && String.valueOf(useBalance).length()
-                                - String.valueOf(useBalance).indexOf(".") >= 3) {
-                            etUseBalance.removeTextChangedListener(this);
-                            useBalance = Double.parseDouble(DisplayUtils.decimalFormat(useBalance));
-                            etUseBalance.setText(DisplayUtils.isInteger(useBalance));
-                            etUseBalance.setSelection(etUseBalance.getText().toString().length());
-                            etUseBalance.addTextChangedListener(this);
-                        }
-
-                    } else {
-                        useBalance = 0;
-                    }
-
-                    initPrice();
-                }
-            });
-        }
-    }
-
     private void getData() {
-        goodsId = getIntent().getIntExtra("goods_id", 0);
+        goodsBean = (GroupGoodsDetailBean) getIntent().getSerializableExtra("goods");
     }
 
 
@@ -510,7 +470,7 @@ public class ConfirmOrderActivity extends BaseActivity {
 
         MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrderNumber(),
                 "COMMODITY", "", false,
-                totalPrice - useBalance, discountBeans, orderInfoList);
+                BigDecimalUtils.sub(totalPrice, useBalance), discountBeans, orderInfoList);
 
         startActivity(new Intent(ConfirmOrderActivity.this, ConfirmPayActivity.class));
 
@@ -635,7 +595,7 @@ public class ConfirmOrderActivity extends BaseActivity {
 
                                 MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrderNumber(),
                                         "COMMODITY", "", false,
-                                        totalPrice - useBalance, discountBeans, orderInfoList);
+                                        BigDecimalUtils.sub(totalPrice, useBalance), discountBeans, orderInfoList);
 
 
                                 MyApp.orderBean.setPayResult(true);

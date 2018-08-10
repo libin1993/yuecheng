@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -19,15 +20,11 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.CouponDetailBean;
-import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
-import com.hfbh.yuecheng.utils.ToastUtils;
-import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -65,12 +62,19 @@ public class CouponDetailActivity extends BaseActivity {
     TextView tvCouponRange;
     @BindView(R.id.tv_coupon_detail_intro)
     TextView tvCouponIntro;
-    @BindView(R.id.tv_exchange_coupon_score)
-    TextView tvCouponScore;
-    @BindView(R.id.tv_exchange_coupon_now)
+    @BindView(R.id.tv_exchange_activity_score)
+    TextView tvExchangeScore;
+    @BindView(R.id.tv_exchange_activity_type)
+    TextView tvExchangeType;
+    @BindView(R.id.tv_exchange_activity)
     TextView tvExchangeCoupon;
-    @BindView(R.id.tv_exchange_coupon_type)
-    TextView tvCouponType;
+    @BindView(R.id.rl_activity_status)
+    RelativeLayout rlCouponStatus;
+    @BindView(R.id.tv_activity_end)
+    TextView tvCouponEnd;
+    @BindView(R.id.rl_action_join)
+    RelativeLayout rlStatus;
+
 
     //优惠券id
     private int couponId;
@@ -90,6 +94,7 @@ public class CouponDetailActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         tvHeaderTitle.setText("优惠券详情");
         viewHeaderLine.setVisibility(View.GONE);
+        rlStatus.setVisibility(View.VISIBLE);
         getData();
         initData();
     }
@@ -173,14 +178,16 @@ public class CouponDetailActivity extends BaseActivity {
         if (!TextUtils.isEmpty(type)) {
             switch (type) {
                 case "FREE":
-                    tvCouponScore.setText("免费");
+                    tvExchangeScore.setText("免费");
+                    tvExchangeType.setVisibility(View.GONE);
                     break;
                 case "POINT":
-                    tvCouponScore.setText(DisplayUtils.isInteger(couponBean.getData().getAccessValue()));
-                    tvCouponType.setVisibility(View.VISIBLE);
+                    tvExchangeScore.setText(DisplayUtils.isInteger(couponBean.getData().getAccessValue()));
+                    tvExchangeType.setVisibility(View.VISIBLE);
                     break;
                 case "BUY":
-                    tvCouponScore.setText("¥" + DisplayUtils.isInteger(couponBean.getData().getAccessValue()));
+                    tvExchangeScore.setText("¥" + DisplayUtils.isInteger(couponBean.getData().getAccessValue()));
+                    tvExchangeType.setVisibility(View.GONE);
                     break;
             }
 
@@ -196,24 +203,23 @@ public class CouponDetailActivity extends BaseActivity {
         if (balanceNum > 0) {
             if (limitNum > 0) {
                 if (hasGetNum > 0 && hasGetNum >= limitNum) {
-                    tvExchangeCoupon.setText("已领取");
-                    tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                    tvExchangeCoupon.setEnabled(false);
-
+                    rlCouponStatus.setVisibility(View.GONE);
+                    tvCouponEnd.setVisibility(View.VISIBLE);
+                    tvCouponEnd.setText("已领取");
                 } else {
+                    rlCouponStatus.setVisibility(View.VISIBLE);
+                    tvCouponEnd.setVisibility(View.GONE);
                     tvExchangeCoupon.setText("立即领取");
-                    tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gradient_red);
-                    tvExchangeCoupon.setEnabled(true);
                 }
             } else {
+                rlCouponStatus.setVisibility(View.VISIBLE);
+                tvCouponEnd.setVisibility(View.GONE);
                 tvExchangeCoupon.setText("立即领取");
-                tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gradient_red);
-                tvExchangeCoupon.setEnabled(true);
             }
         } else {
-            tvExchangeCoupon.setText("已抢光");
-            tvExchangeCoupon.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-            tvExchangeCoupon.setEnabled(false);
+            rlCouponStatus.setVisibility(View.GONE);
+            tvCouponEnd.setVisibility(View.VISIBLE);
+            tvCouponEnd.setText("已抢光");
         }
     }
 
@@ -222,13 +228,13 @@ public class CouponDetailActivity extends BaseActivity {
         couponId = intent.getIntExtra("coupon_id", 0);
     }
 
-    @OnClick({R.id.iv_header_back, R.id.tv_exchange_coupon_now})
+    @OnClick({R.id.iv_header_back, R.id.tv_exchange_activity})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_header_back:
                 finish();
                 break;
-            case R.id.tv_exchange_coupon_now:
+            case R.id.tv_exchange_activity:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {
                     exchangeCoupon();
                 } else {
@@ -274,7 +280,7 @@ public class CouponDetailActivity extends BaseActivity {
                                     exChangeResult(true, "您兑换的优惠券已放置于“我的-票券”，记得去查看哦！");
                                 } else {
                                     exChangeResult(false, msg);
-                                    if (jsonObject.getInt("code")== 4002) {
+                                    if (jsonObject.getInt("code") == 4002) {
                                         SharedPreUtils.deleteStr(CouponDetailActivity.this, "is_login");
                                     }
                                 }

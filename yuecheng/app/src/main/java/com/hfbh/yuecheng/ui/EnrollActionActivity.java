@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,11 +113,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     //必填项数量
     private int totalNum;
     //已填数量
-    private int inputNum;
-    //是否首次选择性别
-    private boolean isSelectSex = true;
-    //是否首次上传照片
-    private boolean isUploadPic = true;
+    private SparseArray<Boolean> inputNum = new SparseArray<>();
     //报名类型
     private String type;
     //活动报名id
@@ -203,50 +201,12 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
 
                 switch (optionListBean.getType()) {
-                    case "SINGLE":
-                        etValue.setVisibility(View.VISIBLE);
-                        rgsValue.setVisibility(View.GONE);
-                        tvValue.setVisibility(View.GONE);
-                        etValue.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                                if (!TextUtils.isEmpty(s.toString().trim())) {
-                                    map.put(optionListBean.getTitle(), s.toString().trim());
-                                    map.put(optionListBean.getTitle() + "id", String.valueOf(optionListBean.getId()));
-                                    if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
-                                            optionListBean.getRequired().equals("true")) {
-                                        inputNum++;
-                                    }
-
-                                } else {
-                                    if (map.containsKey(optionListBean.getTitle())) {
-                                        map.remove(optionListBean.getTitle());
-                                        map.remove(optionListBean.getTitle() + "id");
-                                        if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
-                                                optionListBean.getRequired().equals("true")) {
-                                            inputNum--;
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                        break;
                     case "RADIO":
                         etValue.setVisibility(View.GONE);
                         rgsValue.setVisibility(View.VISIBLE);
                         tvValue.setVisibility(View.GONE);
                         rgsValue.removeAllViews();
-                        addView(rgsValue, optionListBean);
+                        addView(rgsValue, optionListBean, position - 1);
                         break;
                     case "UPLOAD_IMAGE":
                         etValue.setVisibility(View.GONE);
@@ -275,6 +235,47 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                             }
                         });
                         break;
+
+                    case "SINGLE":
+                    default:
+                        etValue.setVisibility(View.VISIBLE);
+                        etValue.setHint("请输入" + optionListBean.getTitle());
+                        rgsValue.setVisibility(View.GONE);
+                        tvValue.setVisibility(View.GONE);
+                        etValue.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                if (!TextUtils.isEmpty(s.toString().trim())) {
+                                    map.put(optionListBean.getTitle(), s.toString().trim());
+                                    map.put(optionListBean.getTitle() + "id", String.valueOf(optionListBean.getId()));
+                                    if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
+                                            optionListBean.getRequired().equals("true")) {
+                                        inputNum.put(position - 1, true);
+                                    }
+
+                                } else {
+                                    if (map.containsKey(optionListBean.getTitle())) {
+                                        map.remove(optionListBean.getTitle());
+                                        map.remove(optionListBean.getTitle() + "id");
+                                        if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
+                                                optionListBean.getRequired().equals("true")) {
+                                            inputNum.put(position - 1, false);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        break;
                 }
             }
         };
@@ -288,7 +289,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
      * @param rgsValue
      * @param optionListBean RadioGroup动态添加
      */
-    private void addView(final RadioGroup rgsValue, final EnrollActivityBean.DataBean.OptionListBean optionListBean) {
+    private void addView(final RadioGroup rgsValue, final EnrollActivityBean.DataBean.OptionListBean optionListBean, final int position) {
         for (int i = 0; i < optionListBean.getItemList().size(); i++) {
             RadioButton radioButton = new RadioButton(this);
             RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
@@ -305,14 +306,18 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         rgsValue.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                if (isSelectSex) {
-                    isSelectSex = false;
-                    if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
-                            optionListBean.getRequired().equals("true")) {
-                        inputNum++;
-                    }
+                if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
+                        optionListBean.getRequired().equals("true")) {
+                    inputNum.put(position, true);
                 }
+
+//                if (isSelectSex) {
+//                    isSelectSex = false;
+//                    if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
+//                            optionListBean.getRequired().equals("true")) {
+//                        inputNum++;
+//                    }
+//                }
                 for (int i = 0; i < rgsValue.getChildCount(); i++) {
                     if (rgsValue.getChildAt(i).getId() == checkedId) {
                         map.put(optionListBean.getTitle(), optionListBean.getItemList().get(i).getTitle());
@@ -336,7 +341,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         etUsername = (EditText) view.findViewById(R.id.et_action_username);
         etPhone = (EditText) view.findViewById(R.id.et_action_phone);
 
-        etPhone.setText(SharedPreUtils.getStr(EnrollActionActivity.this,"phone"));
+        etPhone.setText(SharedPreUtils.getStr(EnrollActionActivity.this, "phone"));
         tvActionName.setText(activityBean.getData().getSignupActivity().getActivityTitle());
         if (activityBean.getData().getSignupActivity().getTags() != null &&
                 activityBean.getData().getSignupActivity().getTags().size() > 0) {
@@ -413,8 +418,14 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
      * 活动报名
      */
     private void enrollActivity() {
+        int num = 0;
+        for (int i = 0; i < inputNum.size(); i++) {
+            if (inputNum.get(i)) {
+                num++;
+            }
+        }
         if (etUsername != null && etPhone != null && !TextUtils.isEmpty(etUsername.getText().toString().trim())
-                && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && inputNum == totalNum) {
+                && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && num >= totalNum) {
             if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {
                 final Map<String, String> paramMap = new HashMap<>();
                 paramMap.put("appType", MyApp.appType);
@@ -623,19 +634,17 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
 
             @Override
             public void onResponse(Call call, final Response response) {
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            ResponseBean responseBean = GsonUtils.jsonToBean(response.body().string(),
-                                    ResponseBean.class);
+                            ResponseBean responseBean = GsonUtils.jsonToBean(response.body().string(), ResponseBean.class);
                             if (responseBean.isFlag() && !TextUtils.isEmpty(responseBean.getData())) {
-                                if (isUploadPic) {
-                                    isUploadPic = false;
-                                    if (!TextUtils.isEmpty(dataList.get(picPosition).getRequired()) &&
-                                            dataList.get(picPosition).getRequired().equals("true")) {
-                                        inputNum++;
-                                    }
+
+                                if (!TextUtils.isEmpty(dataList.get(picPosition).getRequired()) &&
+                                        dataList.get(picPosition).getRequired().equals("true")) {
+                                    inputNum.put(picPosition, true);
                                 }
                                 dataList.get(picPosition).setFinish(true);
                                 headerAndFooterWrapper.notifyItemChanged(picPosition + 1);
@@ -645,8 +654,10 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+
                     }
                 });
+
             }
         });
     }
@@ -661,8 +672,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
      * @param grantResults 结果
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
@@ -691,7 +701,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         if ("enroll_success".equals(msg)) {
             isEnroll = true;
         }
-        if ("pay_order".equals(msg)){
+        if ("pay_order".equals(msg)) {
             finish();
         }
     }
@@ -699,7 +709,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     @Override
     protected void onResume() {
         super.onResume();
-        if (isEnroll){
+        if (isEnroll) {
             isEnroll = false;
             enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
             tvEnrollActivity.setText("已报名");

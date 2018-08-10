@@ -67,7 +67,7 @@ public class ActivityFragment extends BaseFragment {
 
     private Unbinder unbinder;
 
-    private List<ActivityListBean.TagListBean> tagList;
+    private List<ActivityListBean.TagListBean> tagList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -113,9 +113,8 @@ public class ActivityFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
-
                         ActivityListBean activityListBean = GsonUtils.jsonToBean(response, ActivityListBean.class);
-                        tagList = new ArrayList<>();
+                        tagList.clear();
                         if (activityListBean.isFlag() && activityListBean.getTagList().size() > 0) {
                             tagList.addAll(activityListBean.getTagList());
                             initView();
@@ -132,13 +131,11 @@ public class ActivityFragment extends BaseFragment {
         List<Fragment> fragmentList = new ArrayList<>();
 
         for (int i = 0; i < tagList.size(); i++) {
+            LogUtils.log("id" + tagList.get(i).getId());
             titleList.add(tagList.get(i).getTagName());
             fragmentList.add(ActivityListFragment.newInstance(tagList.get(i).getId()));
-
         }
 
-
-        tabActivity.setTabSpaceEqual(false);
 
         MyFragmentAdapter adapter = new MyFragmentAdapter(getChildFragmentManager(),
                 fragmentList, titleList);
@@ -146,7 +143,8 @@ public class ActivityFragment extends BaseFragment {
         vpActivity.setAdapter(adapter);
 
         tabActivity.setViewPager(vpActivity);
-        vpActivity.setCurrentItem(0);
+        tabActivity.setCurrentTab(0);
+
     }
 
     public static ActivityFragment newInstance() {

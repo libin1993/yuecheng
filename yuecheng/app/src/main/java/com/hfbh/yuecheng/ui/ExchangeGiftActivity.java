@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
@@ -156,16 +157,9 @@ public class ExchangeGiftActivity extends BaseActivity {
                 R.layout.rv_gift_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, GiftListBean.DataBean dataBean, int position) {
-                ImageView ivGift = holder.getView(R.id.iv_home_gift);
-                ViewGroup.LayoutParams layoutParams = ivGift.getLayoutParams();
-                layoutParams.width = width;
-                layoutParams.height = width;
-                ivGift.setLayoutParams(layoutParams);
+                SimpleDraweeView ivGift = holder.getView(R.id.iv_home_gift);
 
-                Glide.with(ExchangeGiftActivity.this)
-                        .load(dataBean.getPicUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(ivGift);
+                ivGift.setImageURI(dataBean.getPicUrl());
                 holder.setText(R.id.tv_home_gift_name, dataBean.getRelateName());
                 holder.setText(R.id.tv_home_gift_score, dataBean.getNeedScore() + "积分");
             }

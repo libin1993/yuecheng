@@ -142,7 +142,7 @@ public class NewGoodsFragment extends BaseFragment {
                 ivGoods.setImageURI(dataBean.getPicturePath());
 
                 holder.setText(R.id.tv_discovery_new_name, dataBean.getCommodityName());
-                holder.setText(R.id.tv_discovery_new_tip, dataBean.getIndustryName());
+                holder.setText(R.id.tv_discovery_new_tip, dataBean.getShopName());
                 holder.setText(R.id.tv_discovery_new_time, dataBean.getOnlineTime());
 
             }

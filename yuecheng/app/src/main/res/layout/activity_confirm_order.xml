@@ -135,6 +135,7 @@
                     android:textSize="13sp"/>
 
                 <LinearLayout
+                    android:id="@+id/ll_order_num"
                     android:layout_width="150dp"
                     android:layout_height="36dp"
                     android:layout_alignParentRight="true"
@@ -142,7 +143,8 @@
                     android:layout_marginRight="12dp"
                     android:background="@drawable/layout_gray"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tv_order_goods_reduce"
@@ -182,6 +184,17 @@
                         android:textColor="@color/gray_99"
                         android:textSize="18sp"/>
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_order_buy_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:textColor="@color/gray_10"
+                    android:textSize="13sp"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -299,11 +312,13 @@
                     android:background="@color/gray_ed"/>
 
                 <LinearLayout
+                    android:id="@+id/ll_order_balance"
                     android:layout_width="match_parent"
                     android:layout_height="38dp"
                     android:layout_marginTop="15dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"

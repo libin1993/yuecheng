@@ -117,7 +117,7 @@ public class CloseCouponBean {
         private String couponName;
         private CouponRecomBean couponRecom;
         private String couponTypeKind;
-        private int couponValue;
+        private double couponValue;
         private String endTime;
         private String exchangeTime;
         private String isLimitedShop;
@@ -218,11 +218,11 @@ public class CloseCouponBean {
             this.couponTypeKind = couponTypeKind;
         }
 
-        public int getCouponValue() {
+        public double getCouponValue() {
             return couponValue;
         }
 
-        public void setCouponValue(int couponValue) {
+        public void setCouponValue(double couponValue) {
             this.couponValue = couponValue;
         }
 

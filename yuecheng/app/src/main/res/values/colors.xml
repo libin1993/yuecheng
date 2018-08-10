@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="transparent">#00000000</color>
-    <color name="gray_ed">#EDEDED</color>
+    <color name="gray_ed1">#EDEDED</color>
+    <color name="gray_ed">#F2F4F5</color>
     <color name="gray_aa">#AAAAAA</color>
     <color name="gray_22">#222222</color>
     <color name="gray_10">#101010</color>
@@ -45,8 +46,7 @@
     <color name="gray_f7">#F7E9D3</color>
     <color name="red_d9">#D90000</color>
     <color name="orange_e0">#E0BE8D</color>
-    <color name="gray_c9">#C98D8D</color>
-    <color name="black_99">#996B6B</color>
+    <color name="gray_c9">#C9B5B5</color>
     <color name="green_59">#59B300</color>
     <color name="gray_da">#DADFE6</color>
     <color name="gray_9f">#9FABBA</color>
@@ -79,4 +79,5 @@
     <color name="gray_998">#998A8A</color>
     <color name="green_46">#469723</color>
     <color name="gray_e9">#E9ECF0</color>
+    <color name="gray_9e">#9EA1A9</color>
 </resources>

@@ -129,7 +129,9 @@ public class ExchangeFragment extends BaseFragment {
                             refreshLayout.finishLoadMore();
                         } else {
                             dataList.clear();
-                            viewLoading.smoothToHide();
+                            if (viewLoading != null){
+                                viewLoading.smoothToHide();
+                            }
                         }
                         if (giftBean.isFlag() && giftBean.getData().size() > 0) {
                             dataList.addAll(giftBean.getData());

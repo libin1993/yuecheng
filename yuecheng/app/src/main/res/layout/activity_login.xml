@@ -190,9 +190,11 @@
                 android:enabled="false"
                 android:gravity="center"
                 android:text="登录"
-                android:textColor="@color/orange_e0"
+                android:textColor="@color/btn_login_selector"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:elevation="4dp"
+                android:layout_marginBottom="6dp"/>
         </RelativeLayout>
 
     </RelativeLayout>

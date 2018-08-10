@@ -9,10 +9,11 @@ import java.util.List;
  */
 public class ActivityRecordBean {
 
+
     /**
      * flag : true
      * hash : 848489fbe87c4e88a44c2e6ad0eb8c68
-     * data : {"record":{"auditState":"AUDIT","createTime":"2018-06-05 16:53:18","creatorId":null,"endTimeText":null,"infoList":[],"isDelete":"Y","marketingActivitySignupId":611,"marketingActivitySignupStatisticsId":753,"memberHeadPic":"https://wx.qlogo.cn/mmopen/vi_32/4pK9bSia82XyXyNW32h9VV90gfJz2NZOVWRACiamP5PjePncLxzhKH8rdNJtDCVsZrxrvdrKmZFlialZ5sdBCbkGA/132","memberId":"177477","memberSex":"UNKNOW","modifierId":null,"modifyTime":"2018-06-05 16:54:19","name":"委屈","organizeId":45,"phone":"15171407725","signupTime":"2018-06-05 16:53:18","startTimeText":null,"state":"UNDESTROY","stateText":null,"verifyCode":"ANStakFw"},"memberValues":null,"activity":{"acivityAddress":"西湖区西斗门路3号天堂软件园10楼慧优科技","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"222","activityPicture":"http://yjwang.wmalle.com/image/20180530/8180652675109694.jpg","activityStarttime":"2018-05-30 00:00:00","activityTitle":"中断操作1","createTime":"2018-05-30 16:34:52","creatorId":161,"endTime":"2018-06-07 18:00:00","endTimeStr":"2018/06/07","enrollFee":0.02,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":611,"memberLevel":null,"memberSignupState":"活动已结束","modifierId":null,"modifyTime":null,"offlineTime":"2018-07-02 12:11:41","onlineTime":"2018-05-30 16:34:52","organizeId":45,"signStateText":"已下架","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":6,"signupState":"OFFLINE","signupTime":null,"startTime":"2018-05-30 00:00:00","startTimeStr":"2018/05/30","tags":[{"tagType":"public","tagName":"活动状态测试"}],"telephone":"","useCrowd":null,"verifyCode":null}}
+     * data : {"record":{"auditState":"AUDIT","createTime":"2018-08-09 16:38:21","creatorId":null,"endTimeText":null,"infoList":[],"isDelete":"N","marketingActivitySignupId":775,"marketingActivitySignupStatisticsId":1081,"memberHeadPic":null,"memberId":"181166","memberSex":"MAN","modifierId":null,"modifyTime":null,"name":"1","organizeId":2,"phone":"15167168495","signupTime":"2018-08-09 16:38:21","startTimeText":null,"state":"UNDESTROY","stateText":null,"verifyCode":"FXguGvH8"},"order":{"activitySignupPayId":610,"appType":"Android","createTime":"2018-08-09 16:38:26","data":null,"enrollFee":0.01,"marketingActivitySignupId":775,"memberId":181166,"mobile":"15167168495","openId":"848489fbe87c4e88a44c2e6ad0eb8c68","organizeId":2,"payTime":null,"realname":"1","state":0,"tradeNo":null,"tranNo":"6001027474169749315584","userCode":null,"wechatTradeNo":null},"memberValues":null,"cyOrder":{"createTime":"2018-08-09 16:38:26","id":801,"memberId":null,"orderNo":"6001027474169749315584","orderPayNo":null,"state":"PREPAID","transId":"203511575","transMoney":0.01,"type":"ACTIVITY"},"activity":{"acivityAddress":"123123123","acivityType":"CASH","activityEndtime":"2018-08-18 00:00:00","activityIntroduce":"111111111111112222222222222222222333333333333333333","activityPicture":"http://yjwang.wmalle.com/image/20180808/14220388533199809.png","activityStarttime":"2018-08-08 00:00:00","activityTitle":"活动报名1416","createTime":"2018-08-08 14:20:56","creatorId":4,"endTime":"2018-08-16 00:00:00","endTimeStr":"2018/08/16","enrollFee":0.02,"enrollScore":0,"extraIntroduce":"1231321","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":775,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-08-08 14:20:56","organizeId":2,"signStateText":"已上架","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":1,"signupState":"ONLINE","signupTime":null,"startTime":"2018-08-08 00:00:00","startTimeStr":"2018/08/08","tags":[{"tagType":"public","tagName":"啦啦啦啦啦"},{"tagType":"public","tagName":"西湖"}],"telephone":"","useCrowd":null,"verifyCode":null}}
      * code : 0
      */
 
@@ -55,13 +56,17 @@ public class ActivityRecordBean {
 
     public static class DataBean {
         /**
-         * record : {"auditState":"AUDIT","createTime":"2018-06-05 16:53:18","creatorId":null,"endTimeText":null,"infoList":[],"isDelete":"Y","marketingActivitySignupId":611,"marketingActivitySignupStatisticsId":753,"memberHeadPic":"https://wx.qlogo.cn/mmopen/vi_32/4pK9bSia82XyXyNW32h9VV90gfJz2NZOVWRACiamP5PjePncLxzhKH8rdNJtDCVsZrxrvdrKmZFlialZ5sdBCbkGA/132","memberId":"177477","memberSex":"UNKNOW","modifierId":null,"modifyTime":"2018-06-05 16:54:19","name":"委屈","organizeId":45,"phone":"15171407725","signupTime":"2018-06-05 16:53:18","startTimeText":null,"state":"UNDESTROY","stateText":null,"verifyCode":"ANStakFw"}
+         * record : {"auditState":"AUDIT","createTime":"2018-08-09 16:38:21","creatorId":null,"endTimeText":null,"infoList":[],"isDelete":"N","marketingActivitySignupId":775,"marketingActivitySignupStatisticsId":1081,"memberHeadPic":null,"memberId":"181166","memberSex":"MAN","modifierId":null,"modifyTime":null,"name":"1","organizeId":2,"phone":"15167168495","signupTime":"2018-08-09 16:38:21","startTimeText":null,"state":"UNDESTROY","stateText":null,"verifyCode":"FXguGvH8"}
+         * order : {"activitySignupPayId":610,"appType":"Android","createTime":"2018-08-09 16:38:26","data":null,"enrollFee":0.01,"marketingActivitySignupId":775,"memberId":181166,"mobile":"15167168495","openId":"848489fbe87c4e88a44c2e6ad0eb8c68","organizeId":2,"payTime":null,"realname":"1","state":0,"tradeNo":null,"tranNo":"6001027474169749315584","userCode":null,"wechatTradeNo":null}
          * memberValues : null
-         * activity : {"acivityAddress":"西湖区西斗门路3号天堂软件园10楼慧优科技","acivityType":"CASH","activityEndtime":"2018-06-30 00:00:00","activityIntroduce":"222","activityPicture":"http://yjwang.wmalle.com/image/20180530/8180652675109694.jpg","activityStarttime":"2018-05-30 00:00:00","activityTitle":"中断操作1","createTime":"2018-05-30 16:34:52","creatorId":161,"endTime":"2018-06-07 18:00:00","endTimeStr":"2018/06/07","enrollFee":0.02,"enrollScore":null,"extraIntroduce":"","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":611,"memberLevel":null,"memberSignupState":"活动已结束","modifierId":null,"modifyTime":null,"offlineTime":"2018-07-02 12:11:41","onlineTime":"2018-05-30 16:34:52","organizeId":45,"signStateText":"已下架","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":6,"signupState":"OFFLINE","signupTime":null,"startTime":"2018-05-30 00:00:00","startTimeStr":"2018/05/30","tags":[{"tagType":"public","tagName":"活动状态测试"}],"telephone":"","useCrowd":null,"verifyCode":null}
+         * cyOrder : {"createTime":"2018-08-09 16:38:26","id":801,"memberId":null,"orderNo":"6001027474169749315584","orderPayNo":null,"state":"PREPAID","transId":"203511575","transMoney":0.01,"type":"ACTIVITY"}
+         * activity : {"acivityAddress":"123123123","acivityType":"CASH","activityEndtime":"2018-08-18 00:00:00","activityIntroduce":"111111111111112222222222222222222333333333333333333","activityPicture":"http://yjwang.wmalle.com/image/20180808/14220388533199809.png","activityStarttime":"2018-08-08 00:00:00","activityTitle":"活动报名1416","createTime":"2018-08-08 14:20:56","creatorId":4,"endTime":"2018-08-16 00:00:00","endTimeStr":"2018/08/16","enrollFee":0.02,"enrollScore":0,"extraIntroduce":"1231321","isAudit":"N","isDelete":"N","isSignup":false,"joinNumber":0,"marketingActivitySignupId":775,"memberLevel":null,"memberSignupState":"去报名","modifierId":null,"modifyTime":null,"offlineTime":null,"onlineTime":"2018-08-08 14:20:56","organizeId":2,"signStateText":"已上架","signinOffline":"OPEN","signupLimitNumber":0,"signupNumber":1,"signupState":"ONLINE","signupTime":null,"startTime":"2018-08-08 00:00:00","startTimeStr":"2018/08/08","tags":[{"tagType":"public","tagName":"啦啦啦啦啦"},{"tagType":"public","tagName":"西湖"}],"telephone":"","useCrowd":null,"verifyCode":null}
          */
 
         private RecordBean record;
+        private OrderBean order;
         private Object memberValues;
+        private CyOrderBean cyOrder;
         private ActivityBean activity;
 
         public RecordBean getRecord() {
@@ -72,12 +77,28 @@ public class ActivityRecordBean {
             this.record = record;
         }
 
+        public OrderBean getOrder() {
+            return order;
+        }
+
+        public void setOrder(OrderBean order) {
+            this.order = order;
+        }
+
         public Object getMemberValues() {
             return memberValues;
         }
 
         public void setMemberValues(Object memberValues) {
             this.memberValues = memberValues;
+        }
+
+        public CyOrderBean getCyOrder() {
+            return cyOrder;
+        }
+
+        public void setCyOrder(CyOrderBean cyOrder) {
+            this.cyOrder = cyOrder;
         }
 
         public ActivityBean getActivity() {
@@ -91,26 +112,26 @@ public class ActivityRecordBean {
         public static class RecordBean {
             /**
              * auditState : AUDIT
-             * createTime : 2018-06-05 16:53:18
+             * createTime : 2018-08-09 16:38:21
              * creatorId : null
              * endTimeText : null
              * infoList : []
-             * isDelete : Y
-             * marketingActivitySignupId : 611
-             * marketingActivitySignupStatisticsId : 753
-             * memberHeadPic : https://wx.qlogo.cn/mmopen/vi_32/4pK9bSia82XyXyNW32h9VV90gfJz2NZOVWRACiamP5PjePncLxzhKH8rdNJtDCVsZrxrvdrKmZFlialZ5sdBCbkGA/132
-             * memberId : 177477
-             * memberSex : UNKNOW
+             * isDelete : N
+             * marketingActivitySignupId : 775
+             * marketingActivitySignupStatisticsId : 1081
+             * memberHeadPic : null
+             * memberId : 181166
+             * memberSex : MAN
              * modifierId : null
-             * modifyTime : 2018-06-05 16:54:19
-             * name : 委屈
-             * organizeId : 45
-             * phone : 15171407725
-             * signupTime : 2018-06-05 16:53:18
+             * modifyTime : null
+             * name : 1
+             * organizeId : 2
+             * phone : 15167168495
+             * signupTime : 2018-08-09 16:38:21
              * startTimeText : null
              * state : UNDESTROY
              * stateText : null
-             * verifyCode : ANStakFw
+             * verifyCode : FXguGvH8
              */
 
             private String auditState;
@@ -120,11 +141,11 @@ public class ActivityRecordBean {
             private String isDelete;
             private int marketingActivitySignupId;
             private int marketingActivitySignupStatisticsId;
-            private String memberHeadPic;
+            private Object memberHeadPic;
             private String memberId;
             private String memberSex;
             private Object modifierId;
-            private String modifyTime;
+            private Object modifyTime;
             private String name;
             private int organizeId;
             private String phone;
@@ -191,11 +212,11 @@ public class ActivityRecordBean {
                 this.marketingActivitySignupStatisticsId = marketingActivitySignupStatisticsId;
             }
 
-            public String getMemberHeadPic() {
+            public Object getMemberHeadPic() {
                 return memberHeadPic;
             }
 
-            public void setMemberHeadPic(String memberHeadPic) {
+            public void setMemberHeadPic(Object memberHeadPic) {
                 this.memberHeadPic = memberHeadPic;
             }
 
@@ -223,11 +244,11 @@ public class ActivityRecordBean {
                 this.modifierId = modifierId;
             }
 
-            public String getModifyTime() {
+            public Object getModifyTime() {
                 return modifyTime;
             }
 
-            public void setModifyTime(String modifyTime) {
+            public void setModifyTime(Object modifyTime) {
                 this.modifyTime = modifyTime;
             }
 
@@ -304,43 +325,315 @@ public class ActivityRecordBean {
             }
         }
 
+        public static class OrderBean {
+            /**
+             * activitySignupPayId : 610
+             * appType : Android
+             * createTime : 2018-08-09 16:38:26
+             * data : null
+             * enrollFee : 0.01
+             * marketingActivitySignupId : 775
+             * memberId : 181166
+             * mobile : 15167168495
+             * openId : 848489fbe87c4e88a44c2e6ad0eb8c68
+             * organizeId : 2
+             * payTime : null
+             * realname : 1
+             * state : 0
+             * tradeNo : null
+             * tranNo : 6001027474169749315584
+             * userCode : null
+             * wechatTradeNo : null
+             */
+
+            private int activitySignupPayId;
+            private String appType;
+            private String createTime;
+            private Object data;
+            private double enrollFee;
+            private int marketingActivitySignupId;
+            private int memberId;
+            private String mobile;
+            private String openId;
+            private int organizeId;
+            private Object payTime;
+            private String realname;
+            private int state;
+            private Object tradeNo;
+            private String tranNo;
+            private Object userCode;
+            private Object wechatTradeNo;
+
+            public int getActivitySignupPayId() {
+                return activitySignupPayId;
+            }
+
+            public void setActivitySignupPayId(int activitySignupPayId) {
+                this.activitySignupPayId = activitySignupPayId;
+            }
+
+            public String getAppType() {
+                return appType;
+            }
+
+            public void setAppType(String appType) {
+                this.appType = appType;
+            }
+
+            public String getCreateTime() {
+                return createTime;
+            }
+
+            public void setCreateTime(String createTime) {
+                this.createTime = createTime;
+            }
+
+            public Object getData() {
+                return data;
+            }
+
+            public void setData(Object data) {
+                this.data = data;
+            }
+
+            public double getEnrollFee() {
+                return enrollFee;
+            }
+
+            public void setEnrollFee(double enrollFee) {
+                this.enrollFee = enrollFee;
+            }
+
+            public int getMarketingActivitySignupId() {
+                return marketingActivitySignupId;
+            }
+
+            public void setMarketingActivitySignupId(int marketingActivitySignupId) {
+                this.marketingActivitySignupId = marketingActivitySignupId;
+            }
+
+            public int getMemberId() {
+                return memberId;
+            }
+
+            public void setMemberId(int memberId) {
+                this.memberId = memberId;
+            }
+
+            public String getMobile() {
+                return mobile;
+            }
+
+            public void setMobile(String mobile) {
+                this.mobile = mobile;
+            }
+
+            public String getOpenId() {
+                return openId;
+            }
+
+            public void setOpenId(String openId) {
+                this.openId = openId;
+            }
+
+            public int getOrganizeId() {
+                return organizeId;
+            }
+
+            public void setOrganizeId(int organizeId) {
+                this.organizeId = organizeId;
+            }
+
+            public Object getPayTime() {
+                return payTime;
+            }
+
+            public void setPayTime(Object payTime) {
+                this.payTime = payTime;
+            }
+
+            public String getRealname() {
+                return realname;
+            }
+
+            public void setRealname(String realname) {
+                this.realname = realname;
+            }
+
+            public int getState() {
+                return state;
+            }
+
+            public void setState(int state) {
+                this.state = state;
+            }
+
+            public Object getTradeNo() {
+                return tradeNo;
+            }
+
+            public void setTradeNo(Object tradeNo) {
+                this.tradeNo = tradeNo;
+            }
+
+            public String getTranNo() {
+                return tranNo;
+            }
+
+            public void setTranNo(String tranNo) {
+                this.tranNo = tranNo;
+            }
+
+            public Object getUserCode() {
+                return userCode;
+            }
+
+            public void setUserCode(Object userCode) {
+                this.userCode = userCode;
+            }
+
+            public Object getWechatTradeNo() {
+                return wechatTradeNo;
+            }
+
+            public void setWechatTradeNo(Object wechatTradeNo) {
+                this.wechatTradeNo = wechatTradeNo;
+            }
+        }
+
+        public static class CyOrderBean {
+            /**
+             * createTime : 2018-08-09 16:38:26
+             * id : 801
+             * memberId : null
+             * orderNo : 6001027474169749315584
+             * orderPayNo : null
+             * state : PREPAID
+             * transId : 203511575
+             * transMoney : 0.01
+             * type : ACTIVITY
+             */
+
+            private String createTime;
+            private int id;
+            private Object memberId;
+            private String orderNo;
+            private Object orderPayNo;
+            private String state;
+            private String transId;
+            private double transMoney;
+            private String type;
+
+            public String getCreateTime() {
+                return createTime;
+            }
+
+            public void setCreateTime(String createTime) {
+                this.createTime = createTime;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public Object getMemberId() {
+                return memberId;
+            }
+
+            public void setMemberId(Object memberId) {
+                this.memberId = memberId;
+            }
+
+            public String getOrderNo() {
+                return orderNo;
+            }
+
+            public void setOrderNo(String orderNo) {
+                this.orderNo = orderNo;
+            }
+
+            public Object getOrderPayNo() {
+                return orderPayNo;
+            }
+
+            public void setOrderPayNo(Object orderPayNo) {
+                this.orderPayNo = orderPayNo;
+            }
+
+            public String getState() {
+                return state;
+            }
+
+            public void setState(String state) {
+                this.state = state;
+            }
+
+            public String getTransId() {
+                return transId;
+            }
+
+            public void setTransId(String transId) {
+                this.transId = transId;
+            }
+
+            public double getTransMoney() {
+                return transMoney;
+            }
+
+            public void setTransMoney(double transMoney) {
+                this.transMoney = transMoney;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
+            }
+        }
+
         public static class ActivityBean {
             /**
-             * acivityAddress : 西湖区西斗门路3号天堂软件园10楼慧优科技
+             * acivityAddress : 123123123
              * acivityType : CASH
-             * activityEndtime : 2018-06-30 00:00:00
-             * activityIntroduce : 222
-             * activityPicture : http://yjwang.wmalle.com/image/20180530/8180652675109694.jpg
-             * activityStarttime : 2018-05-30 00:00:00
-             * activityTitle : 中断操作1
-             * createTime : 2018-05-30 16:34:52
-             * creatorId : 161
-             * endTime : 2018-06-07 18:00:00
-             * endTimeStr : 2018/06/07
+             * activityEndtime : 2018-08-18 00:00:00
+             * activityIntroduce : 111111111111112222222222222222222333333333333333333
+             * activityPicture : http://yjwang.wmalle.com/image/20180808/14220388533199809.png
+             * activityStarttime : 2018-08-08 00:00:00
+             * activityTitle : 活动报名1416
+             * createTime : 2018-08-08 14:20:56
+             * creatorId : 4
+             * endTime : 2018-08-16 00:00:00
+             * endTimeStr : 2018/08/16
              * enrollFee : 0.02
-             * enrollScore : null
-             * extraIntroduce :
+             * enrollScore : 0
+             * extraIntroduce : 1231321
              * isAudit : N
              * isDelete : N
              * isSignup : false
              * joinNumber : 0
-             * marketingActivitySignupId : 611
+             * marketingActivitySignupId : 775
              * memberLevel : null
-             * memberSignupState : 活动已结束
+             * memberSignupState : 去报名
              * modifierId : null
              * modifyTime : null
-             * offlineTime : 2018-07-02 12:11:41
-             * onlineTime : 2018-05-30 16:34:52
-             * organizeId : 45
-             * signStateText : 已下架
+             * offlineTime : null
+             * onlineTime : 2018-08-08 14:20:56
+             * organizeId : 2
+             * signStateText : 已上架
              * signinOffline : OPEN
              * signupLimitNumber : 0
-             * signupNumber : 6
-             * signupState : OFFLINE
+             * signupNumber : 1
+             * signupState : ONLINE
              * signupTime : null
-             * startTime : 2018-05-30 00:00:00
-             * startTimeStr : 2018/05/30
-             * tags : [{"tagType":"public","tagName":"活动状态测试"}]
+             * startTime : 2018-08-08 00:00:00
+             * startTimeStr : 2018/08/08
+             * tags : [{"tagType":"public","tagName":"啦啦啦啦啦"},{"tagType":"public","tagName":"西湖"}]
              * telephone :
              * useCrowd : null
              * verifyCode : null
@@ -358,7 +651,7 @@ public class ActivityRecordBean {
             private String endTime;
             private String endTimeStr;
             private double enrollFee;
-            private Object enrollScore;
+            private int enrollScore;
             private String extraIntroduce;
             private String isAudit;
             private String isDelete;
@@ -369,7 +662,7 @@ public class ActivityRecordBean {
             private String memberSignupState;
             private Object modifierId;
             private Object modifyTime;
-            private String offlineTime;
+            private Object offlineTime;
             private String onlineTime;
             private int organizeId;
             private String signStateText;
@@ -481,11 +774,11 @@ public class ActivityRecordBean {
                 this.enrollFee = enrollFee;
             }
 
-            public Object getEnrollScore() {
+            public int getEnrollScore() {
                 return enrollScore;
             }
 
-            public void setEnrollScore(Object enrollScore) {
+            public void setEnrollScore(int enrollScore) {
                 this.enrollScore = enrollScore;
             }
 
@@ -569,11 +862,11 @@ public class ActivityRecordBean {
                 this.modifyTime = modifyTime;
             }
 
-            public String getOfflineTime() {
+            public Object getOfflineTime() {
                 return offlineTime;
             }
 
-            public void setOfflineTime(String offlineTime) {
+            public void setOfflineTime(Object offlineTime) {
                 this.offlineTime = offlineTime;
             }
 
@@ -692,7 +985,7 @@ public class ActivityRecordBean {
             public static class TagsBean {
                 /**
                  * tagType : public
-                 * tagName : 活动状态测试
+                 * tagName : 啦啦啦啦啦
                  */
 
                 private String tagType;
