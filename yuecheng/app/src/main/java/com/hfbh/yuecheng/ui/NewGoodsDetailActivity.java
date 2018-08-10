@@ -8,7 +8,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
@@ -34,14 +34,16 @@ import static android.webkit.WebSettings.LOAD_NO_CACHE;
  * Describe：新品详情
  */
 public class NewGoodsDetailActivity extends BaseActivity {
-    @BindView(R.id.webview_goods_detail)
+    @BindView(R.id.tv_header_title)
+    TextView tvHeaderTitle;
+    @BindView(R.id.iv_header_back)
+    ImageView ivHeaderBack;
+    @BindView(R.id.iv_header_share)
+    ImageView ivHeaderShare;
+    @BindView(R.id.webview_new_detail)
     WebView webView;
-    @BindView(R.id.iv_goods_back)
-    ImageView ivGoodsBack;
-    @BindView(R.id.iv_goods_share)
-    ImageView ivGoodsShare;
-    @BindView(R.id.rl_pop_goods_buy)
-    RelativeLayout rlBuyGoods;
+    @BindView(R.id.view_header_line)
+    View viewHeaderLine;
 
     private int goodsId;
     private GroupGoodsDetailBean goodsBean;
@@ -50,9 +52,11 @@ public class NewGoodsDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods_detail);
+        setContentView(R.layout.activity_new_goods_detail);
         ButterKnife.bind(this);
-        rlBuyGoods.setVisibility(View.GONE);
+        tvHeaderTitle.setText("新品详情");
+        ivHeaderShare.setVisibility(View.VISIBLE);
+        viewHeaderLine.setVisibility(View.GONE);
         getData();
         initData();
         initView();
@@ -117,16 +121,20 @@ public class NewGoodsDetailActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.iv_goods_back, R.id.iv_goods_share})
+
+    @OnClick({R.id.iv_header_back, R.id.iv_header_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_goods_back:
+            case R.id.iv_header_back:
                 finish();
                 break;
-            case R.id.iv_goods_share:
-                ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
-                        , goodsBean.getData().getCommodityName(),
-                        "", url + "&share=true");
+            case R.id.iv_header_share:
+                if (goodsBean != null) {
+                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
+                            , goodsBean.getData().getCommodityName(),
+                            "", url + "&share=true");
+                }
+
                 break;
         }
     }

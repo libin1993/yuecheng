@@ -350,6 +350,11 @@ public class ActivityListFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     /**
      * //     * 动态添加布局
      * //
