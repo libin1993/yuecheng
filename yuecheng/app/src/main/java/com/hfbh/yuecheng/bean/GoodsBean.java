@@ -194,7 +194,7 @@ public class GoodsBean {
         private String industryName;
         private String isDelete;
         private String isJoin;
-        private Object isMustGroup;
+        private String isMustGroup;
         private Object isRefund;
         private Object isZeroOffline;
         private int joinNum;
@@ -440,11 +440,11 @@ public class GoodsBean {
             this.isJoin = isJoin;
         }
 
-        public Object getIsMustGroup() {
+        public String getIsMustGroup() {
             return isMustGroup;
         }
 
-        public void setIsMustGroup(Object isMustGroup) {
+        public void setIsMustGroup(String isMustGroup) {
             this.isMustGroup = isMustGroup;
         }
 

@@ -142,7 +142,41 @@ public class GroupGoodsActivity extends BaseActivity {
 
                 holder.setText(R.id.tv_group_goods_name, dataBean.getCommodityName());
 
-                holder.setText(R.id.tv_group_goods_num, "已拼" + dataBean.getSaleNum() + "件");
+
+                int num;
+                long currentTime = System.currentTimeMillis();
+                long endTime = DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                long time = endTime - currentTime;
+
+                if ("Y".equals(dataBean.getIsMustGroup())) {
+                    if (dataBean.getSaleNum() >= dataBean.getGroupNum()) {
+                        num = dataBean.getSaleNum();
+                    } else {
+                        if (time > 0) {
+                            if (time > 15 * 60 * 1000) {
+                                num = dataBean.getSaleNum();
+                            } else if (time > 10 * 60 * 1000) {
+                                if (dataBean.getSaleNum() * 5 >= dataBean.getGroupNum()) {
+                                    num = dataBean.getSaleNum();
+                                } else {
+                                    num = dataBean.getGroupNum() / 5;
+                                }
+                            } else {
+                                if (dataBean.getSaleNum() * 2 >= dataBean.getGroupNum()) {
+                                    num = dataBean.getSaleNum();
+                                } else {
+                                    num = dataBean.getGroupNum() / 2;
+                                }
+                            }
+                        } else {
+                            num = dataBean.getGroupNum();
+                        }
+                    }
+                } else {
+                    num = dataBean.getSaleNum();
+                }
+
+                holder.setText(R.id.tv_group_goods_num, "已拼" + num + "件");
 
                 holder.setText(R.id.tv_group_goods_discount, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));
                 TextView tvOld = holder.getView(R.id.tv_group_goods_price);
@@ -150,9 +184,7 @@ public class GroupGoodsActivity extends BaseActivity {
                 tvOld.setText("¥" + DisplayUtils.isInteger(dataBean.getOldPrice()));
 
                 TextView tvStatus = holder.getView(R.id.tv_group_goods_buy);
-                boolean isFinish = !TextUtils.isEmpty(dataBean.getEndTime()) &&
-                        System.currentTimeMillis() >
-                                DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
+                boolean isFinish = !TextUtils.isEmpty(dataBean.getEndTime()) && currentTime > endTime;
                 boolean isStart = !TextUtils.isEmpty(dataBean.getStartTime()) &&
                         System.currentTimeMillis() >
                                 DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());

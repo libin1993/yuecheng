@@ -26,8 +26,6 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.ConfirmPayBean;
-import com.hfbh.yuecheng.bean.GoodsOrderBean;
-import com.hfbh.yuecheng.bean.GroupGoodsDetailBean;
 import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.bean.UserBalanceBean;
@@ -90,6 +88,10 @@ public class PayOrderActivity extends BaseActivity {
     TextView tvNeedMoney;
     @BindView(R.id.tv_confirm_enroll)
     TextView tvConfirmOrder;
+    @BindView(R.id.tv_goods_time)
+    TextView tvGoodsTime;
+    @BindView(R.id.tv_goods_type)
+    TextView tvGoodsType;
 
     //订单id
     private int orderId;
@@ -168,6 +170,13 @@ public class PayOrderActivity extends BaseActivity {
         tvOldPrice.setText("¥" + DisplayUtils.isInteger(orderBean.getData().getOrderDtlList().get(0).getOriginalPrice()));
         tvBuyNum.setVisibility(View.VISIBLE);
         tvBuyNum.setText("x" + orderBean.getData().getOrderDtlList().get(0).getDetailAccount());
+
+        tvGoodsTime.setText(orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
+        if ("GROUPON".equals(orderBean.getData().getOrderType())) {
+            tvGoodsType.setText("失效未提货审核退款");
+        } else {
+            tvGoodsType.setText("失效未提货自动退款");
+        }
     }
 
 
@@ -438,8 +447,9 @@ public class PayOrderActivity extends BaseActivity {
         discountBeans.add(new PayOrderBean.DiscountBean("余额抵扣", "-¥" + DisplayUtils.decimalFormat(useBalance)));
 
         MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrderShopNumber(),
-                "COMMODITY", "", false,
-                BigDecimalUtils.sub(totalPrice, useBalance), discountBeans, orderInfoList);
+                "COMMODITY", "", false,totalPrice,
+                BigDecimalUtils.sub(totalPrice, useBalance), orderBean.getData().getOrderType(),
+                orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit(), discountBeans, orderInfoList);
 
         startActivity(new Intent(PayOrderActivity.this, ConfirmPayActivity.class));
 
@@ -529,7 +539,7 @@ public class PayOrderActivity extends BaseActivity {
 
 
                                 MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrderShopNumber(),
-                                        "COMMODITY", "", false,
+                                        "COMMODITY", "", false,totalPrice,
                                         BigDecimalUtils.sub(totalPrice, useBalance), discountBeans, orderInfoList);
 
 

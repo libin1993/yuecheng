@@ -50,6 +50,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/gray_ed"/>
+        android:background="@color/gray_f2"/>
 
 </LinearLayout>

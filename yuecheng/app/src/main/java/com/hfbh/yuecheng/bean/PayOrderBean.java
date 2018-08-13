@@ -9,32 +9,65 @@ import java.util.List;
  */
 public class PayOrderBean {
 
-    private String orderNo;
-    private String orderType;
-    private String payType;
-    private boolean payResult;
-    private double money;
+    private String orderNo;  //订单号
+    private String orderType;   //订单类型
+    private String payType;   //支付方式
+    private boolean payResult;  //是否支付成功
+    private double orderPrice; //订单金额
+    private double money;  //支付金额
+    private String goodsType;  //商品类型
+    private int limitTime;  //提货时间
     private List<DiscountBean> discountList;
+
+    public double getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(double orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
     private List<OrderInfo> orderList;
 
-    public PayOrderBean(String orderNo, String orderType, String payType, boolean payResult,
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
+    }
+
+    public int getLimitTime() {
+        return limitTime;
+    }
+
+    public void setLimitTime(int limitTime) {
+        this.limitTime = limitTime;
+    }
+
+    public PayOrderBean(String orderNo, String orderType, String payType, boolean payResult, double orderPrice,
                         double money, List<DiscountBean> discountList, List<OrderInfo> orderList) {
         this.orderNo = orderNo;
         this.orderType = orderType;
         this.payType = payType;
         this.payResult = payResult;
+        this.orderPrice = orderPrice;
         this.money = money;
         this.discountList = discountList;
         this.orderList = orderList;
     }
 
-    public PayOrderBean(String orderNo, String orderType, String payType, boolean payResult,
-                        double money, List<OrderInfo> orderList) {
+    public PayOrderBean(String orderNo, String orderType, String payType, boolean payResult, double orderPrice, double
+            money, String goodsType, int limitTime, List<DiscountBean> discountList, List<OrderInfo> orderList) {
         this.orderNo = orderNo;
         this.orderType = orderType;
         this.payType = payType;
         this.payResult = payResult;
+        this.orderPrice = orderPrice;
         this.money = money;
+        this.goodsType = goodsType;
+        this.limitTime = limitTime;
+        this.discountList = discountList;
         this.orderList = orderList;
     }
 

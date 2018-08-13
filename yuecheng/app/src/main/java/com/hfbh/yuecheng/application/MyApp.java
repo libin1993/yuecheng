@@ -59,7 +59,7 @@ public class MyApp extends Application {
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
             @Override
             public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
-                layout.setPrimaryColors(0xffededed, 0xffaaaaaa);//全局设置主题颜色
+                layout.setPrimaryColors(0xfff2f4f5, 0xffaaaaaa);//全局设置主题颜色
 
                 ClassicsHeader classicsHeader = new ClassicsHeader(context);
                 classicsHeader.setEnableLastTime(false);
@@ -75,7 +75,7 @@ public class MyApp extends Application {
         SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
             @Override
             public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
-                layout.setPrimaryColors(0xffededed, 0xffaaaaaa);//全局设置主题颜色
+                layout.setPrimaryColors(0xfff2f4f5, 0xffaaaaaa);//全局设置主题颜色
                 ClassicsFooter classicsFooter = new ClassicsFooter(context);
                 BallSpinFadeLoaderIndicator ball = new BallSpinFadeLoaderIndicator();
                 ball.setColor(0xffaaaaaa);

@@ -283,20 +283,17 @@ public class ActionDetailActivity extends BaseActivity {
                     startActivity(intent);
                 } else {
 
-                    intent = new Intent(this, EnrollActionActivity.class);
-                    intent.putExtra("activity_id", activityId);
-                    startActivity(intent);
-                    //报名是否中断
-//                    if (activityBean.getData().getStatistic() != null) {
-//                        intent = new Intent(this, ConfirmEnrollActivity.class);
-//                        intent.putExtra("enroll_id", activityBean.getData().getStatistic().getMarketingActivitySignupStatisticsId());
-//                        intent.putExtra("activity_id", activityId);
-//                        startActivity(intent);
-//                    } else {
-//                        intent = new Intent(this, EnrollActionActivity.class);
-//                        intent.putExtra("activity_id", activityId);
-//                        startActivity(intent);
-//                    }
+                    //是否已报名
+                    if (activityBean.getData().getStatistic() != null) {
+                        intent = new Intent(this, ConfirmEnrollActivity.class);
+                        intent.putExtra("enroll_id", activityBean.getData().getStatistic().getMarketingActivitySignupStatisticsId());
+                        intent.putExtra("activity_id", activityId);
+                        startActivity(intent);
+                    } else {
+                        intent = new Intent(this, EnrollActionActivity.class);
+                        intent.putExtra("activity_id", activityId);
+                        startActivity(intent);
+                    }
 
                 }
 

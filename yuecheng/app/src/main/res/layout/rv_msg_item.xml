@@ -41,6 +41,6 @@
         android:layout_height="1dp"
         android:layout_below="@id/tv_msg_time"
         android:layout_marginLeft="12dp"
-        android:background="@color/gray_ed"/>
+        android:background="@color/gray_f2"/>
 
 </RelativeLayout>

@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.bean.MyOrderBean;
 import com.hfbh.yuecheng.bean.PayOrderBean;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -62,6 +61,10 @@ public class PayResultActivity extends BaseActivity {
     RecyclerView rvOrder;
     @BindView(R.id.ll_order_status)
     LinearLayout llOrderStatus;
+    @BindView(R.id.tv_order_goods_time)
+    TextView tvOrderTime;
+    @BindView(R.id.tv_order_goods_type)
+    TextView tvOrderType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +102,15 @@ public class PayResultActivity extends BaseActivity {
                     initOrder();
                     llOrderStatus.setVisibility(View.VISIBLE);
                     llOrderType.setVisibility(View.VISIBLE);
+
+                    tvOrderTime.setText(MyApp.orderBean.getLimitTime() + "天提货有效");
+                    if ("GROUPON".equals(MyApp.orderBean.getGoodsType())) {
+                        tvOrderType.setText("失效未提货审核退款");
+                    } else {
+                        tvOrderType.setText("失效未提货自动退款");
+                    }
+
+
                     if (MyApp.orderBean.isPayResult()) {
                         rlOrderDetail.setVisibility(View.VISIBLE);
                         tvOrderTips.setVisibility(View.VISIBLE);
@@ -113,7 +125,7 @@ public class PayResultActivity extends BaseActivity {
                         viewStatus.setVisibility(View.VISIBLE);
                         rlOrderDetail.setVisibility(View.VISIBLE);
                         initDiscount();
-                    }else {
+                    } else {
                         tvOrderStatus.setVisibility(View.VISIBLE);
                     }
                     initOrder();

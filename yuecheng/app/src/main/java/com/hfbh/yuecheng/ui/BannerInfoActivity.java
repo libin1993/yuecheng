@@ -12,8 +12,6 @@ import android.widget.RelativeLayout;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseActivity;
-import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.utils.SharedPreUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +31,8 @@ public class BannerInfoActivity extends BaseActivity {
     ImageView ivGoodsBack;
     @BindView(R.id.rl_pop_goods_buy)
     RelativeLayout rlPopGoodsBuy;
+    @BindView(R.id.iv_goods_share)
+    ImageView ivGoodsShare;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class BannerInfoActivity extends BaseActivity {
 
     private void initView() {
         rlPopGoodsBuy.setVisibility(View.GONE);
+        ivGoodsShare.setVisibility(View.GONE);
         String url = getIntent().getStringExtra("url");
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);

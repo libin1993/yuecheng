@@ -52,7 +52,6 @@ import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
 import com.hfbh.yuecheng.view.PermissionDialog;
-import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;

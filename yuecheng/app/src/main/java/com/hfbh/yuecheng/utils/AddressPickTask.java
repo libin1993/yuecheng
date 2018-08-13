@@ -80,7 +80,7 @@ public class AddressPickTask extends AsyncTask<String, Void, ArrayList<Province>
         if (result.size() > 0) {
             AddressPicker picker = new AddressPicker((Activity) context, result);
             picker.setSubmitTextColor(context.getResources().getColor(R.color.red_99));
-            picker.setTopLineColor(context.getResources().getColor(R.color.gray_ed));
+            picker.setTopLineColor(context.getResources().getColor(R.color.gray_f2));
             picker.setHideProvince(hideProvince);
             picker.setHideCounty(hideCounty);
             if (hideCounty) {

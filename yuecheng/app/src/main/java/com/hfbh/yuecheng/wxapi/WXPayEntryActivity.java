@@ -29,7 +29,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawableResource(R.color.gray_ed);
+        getWindow().setBackgroundDrawableResource(R.color.gray_f2);
         api = WXAPIFactory.createWXAPI(this, Constant.APP_ID);
         api.handleIntent(getIntent(), this);
     }

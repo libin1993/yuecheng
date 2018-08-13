@@ -3,7 +3,7 @@
                 xmlns:fresco="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/gray_ed"
+                android:background="@color/gray_f2"
                 android:fitsSystemWindows="true">
 
     <include
@@ -36,7 +36,7 @@
                     fresco:placeholderImage="@mipmap/img_place_circle"
                     fresco:placeholderImageScaleType="centerCrop"
                     fresco:roundAsCircle="true"
-                    fresco:roundingBorderColor="@color/gray_ed"
+                    fresco:roundingBorderColor="@color/gray_f2"
                     fresco:roundingBorderWidth="1px"/>
 
                 <TextView
@@ -59,7 +59,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@id/rl_order_shop"
                 android:layout_marginLeft="12dp"
-                android:background="@color/gray_ed"/>
+                android:background="@color/gray_f2"/>
 
             <RelativeLayout
                 android:id="@+id/rl_confirm_order_goods"
@@ -231,7 +231,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@id/rl_order_type"
                 android:layout_marginLeft="12dp"
-                android:background="@color/gray_ed"/>
+                android:background="@color/gray_f2"/>
 
             <LinearLayout
                 android:id="@+id/ll_order_tip"
@@ -253,22 +253,22 @@
                     android:textSize="12sp"/>
 
                 <TextView
+                    android:id="@+id/tv_goods_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:drawableLeft="@mipmap/ic_register_checked"
                     android:drawablePadding="3dp"
-                    android:text="7天提货有效"
                     android:textColor="@color/gray_10"
                     android:textSize="12sp"/>
 
                 <TextView
+                    android:id="@+id/tv_goods_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:drawableLeft="@mipmap/ic_register_checked"
                     android:drawablePadding="3dp"
-                    android:text="失效未提货自动退款"
                     android:textColor="@color/gray_10"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -309,7 +309,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="@color/gray_ed"/>
+                    android:background="@color/gray_f2"/>
 
                 <LinearLayout
                     android:id="@+id/ll_order_balance"

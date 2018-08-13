@@ -218,33 +218,6 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
         }
     }
 
-
-    /**
-     * 取消订单
-     */
-    private void cancelOrder() {
-        OkHttpUtils.post()
-                .url(Constant.CANCEL_ORDER)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token", SharedPreUtils.getStr(this, "token"))
-                .addParams("memberOrderShopId", String.valueOf(refundId))
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-
-                    }
-                });
-    }
-
     /**
      * 选择退款理由
      */

@@ -3,6 +3,7 @@ package com.hfbh.yuecheng.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 
 import java.util.List;
 
@@ -11,14 +12,16 @@ import java.util.List;
  * Email：1993911441@qq.com
  * Describe：
  */
-public class MyFragmentAdapter extends FragmentPagerAdapter{
+public class MyFragmentAdapter extends FragmentPagerAdapter {
     private List<String> titleList;
     private List<Fragment> fragmentList;
+    private FragmentManager fm;
 
     public MyFragmentAdapter(FragmentManager fm, List<Fragment> fragmentList, List<String> titleList) {
         super(fm);
         this.fragmentList = fragmentList;
         this.titleList = titleList;
+        this.fm = fm;
     }
 
 
@@ -48,4 +51,5 @@ public class MyFragmentAdapter extends FragmentPagerAdapter{
     public CharSequence getPageTitle(int position) {
         return titleList.get(position);
     }
+
 }

@@ -68,6 +68,6 @@
         android:layout_height="8dp"
         android:layout_below="@id/tv_home_activity_time"
         android:layout_marginTop="11dp"
-        android:background="@color/gray_ed"/>
+        android:background="@color/gray_f2"/>
 
 </RelativeLayout>

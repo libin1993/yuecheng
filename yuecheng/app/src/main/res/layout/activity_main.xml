@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_above="@id/rgs_main_tab"
-        android:background="@color/gray_ed"/>
+        android:background="@color/gray_f2"/>
 
     <FrameLayout
         android:id="@+id/fl_main_container"

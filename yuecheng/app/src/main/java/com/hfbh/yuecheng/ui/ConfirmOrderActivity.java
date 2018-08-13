@@ -97,6 +97,10 @@ public class ConfirmOrderActivity extends BaseActivity {
     LinearLayout llOrderNum;
     @BindView(R.id.ll_order_balance)
     LinearLayout llOrderBalance;
+    @BindView(R.id.tv_goods_time)
+    TextView tvGoodsTime;
+    @BindView(R.id.tv_goods_type)
+    TextView tvGoodsType;
 
 
     private GroupGoodsDetailBean goodsBean;
@@ -138,6 +142,13 @@ public class ConfirmOrderActivity extends BaseActivity {
         tvNewPrice.setText("¥" + DisplayUtils.isInteger(goodsBean.getData().getNowPrice()));
         tvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
         tvOldPrice.setText("¥" + DisplayUtils.isInteger(goodsBean.getData().getOldPrice()));
+
+        tvGoodsTime.setText(goodsBean.getData().getGetTimeLimit() + "天提货有效");
+        if ("GROUPON".equals(goodsBean.getData().getCommodityType())) {
+            tvGoodsType.setText("失效未提货审核退款");
+        } else {
+            tvGoodsType.setText("失效未提货自动退款");
+        }
     }
 
     /**
@@ -469,8 +480,9 @@ public class ConfirmOrderActivity extends BaseActivity {
         discountBeans.add(new PayOrderBean.DiscountBean("余额抵扣", "-¥" + DisplayUtils.decimalFormat(useBalance)));
 
         MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrderNumber(),
-                "COMMODITY", "", false,
-                BigDecimalUtils.sub(totalPrice, useBalance), discountBeans, orderInfoList);
+                "COMMODITY", "", false, totalPrice,
+                BigDecimalUtils.sub(totalPrice, useBalance), goodsBean.getData().getCommodityType(),
+                goodsBean.getData().getGetTimeLimit(), discountBeans, orderInfoList);
 
         startActivity(new Intent(ConfirmOrderActivity.this, ConfirmPayActivity.class));
 
@@ -500,6 +512,23 @@ public class ConfirmOrderActivity extends BaseActivity {
                     if (num < goodsBean.getData().getBuyLimitNum() - goodsBean.getData().getBuyNum()) {
                         num++;
                         initPrice();
+                    }
+
+
+                    if (goodsBean.getData().getBuyLimitNum() > 0) {
+                        if (goodsBean.getData().getBuyLimitNum() < goodsBean.getData().getCommodityNum()) {
+                            if (num < goodsBean.getData().getBuyLimitNum()) {
+                                num++;
+                            }
+                        } else {
+                            if (num < goodsBean.getData().getCommodityNum()) {
+                                num++;
+                            }
+                        }
+                    } else {
+                        if (num < goodsBean.getData().getCommodityNum()) {
+                            num++;
+                        }
                     }
                 }
 
@@ -594,8 +623,9 @@ public class ConfirmOrderActivity extends BaseActivity {
 
 
                                 MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrderNumber(),
-                                        "COMMODITY", "", false,
-                                        BigDecimalUtils.sub(totalPrice, useBalance), discountBeans, orderInfoList);
+                                        "COMMODITY", "", false, totalPrice,
+                                        BigDecimalUtils.sub(totalPrice, useBalance), goodsBean.getData().getCommodityType(),
+                                        goodsBean.getData().getGetTimeLimit(), discountBeans, orderInfoList);
 
 
                                 MyApp.orderBean.setPayResult(true);

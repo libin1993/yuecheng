@@ -453,7 +453,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                 //现金报名
                 if (!TextUtils.isEmpty(type) && type.equals("CASH") && activityBean.getData()
                         .getSignupActivity().getEnrollFee() > 0 && enrollId > 0) {
-                    cashEnroll(paramMap);
+                    cashEnroll();
                 } else {
                     OkHttpUtils.post()
                             .url(Constant.POINTS_ENROLL_ACTIVITY)
@@ -477,12 +477,13 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                                                 JSONObject data = jsonObject.getJSONObject("data");
                                                 enrollId = data.getInt("data");
 
-                                                cashEnroll(paramMap);
+                                                cashEnroll();
 
                                             } else {
                                                 enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
                                                 tvEnrollActivity.setText("已报名");
                                                 tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+                                                tvEnrollActivity.setEnabled(false);
                                             }
 
                                         } else {
@@ -515,15 +516,10 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     /**
      * 现金报名
      */
-    private void cashEnroll(Map<String, String> map) {
+    private void cashEnroll() {
         Intent intent = new Intent(EnrollActionActivity.this, ConfirmEnrollActivity.class);
-        Bundle bundle = new Bundle();
-        SerializableMap serializableMap = new SerializableMap();
-        serializableMap.setMap(map);
-        bundle.putSerializable("map", serializableMap);
-        bundle.putInt("activity_id", activityId);
-        bundle.putInt("enroll_id", enrollId);
-        intent.putExtras(bundle);
+        intent.putExtra("activity_id", activityId);
+        intent.putExtra("enroll_id", enrollId);
         startActivity(intent);
     }
 
@@ -714,6 +710,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
             enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
             tvEnrollActivity.setText("已报名");
             tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
+            tvEnrollActivity.setEnabled(false);
         }
     }
 

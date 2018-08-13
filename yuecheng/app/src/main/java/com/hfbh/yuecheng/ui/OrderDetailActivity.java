@@ -1,5 +1,7 @@
 package com.hfbh.yuecheng.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -271,17 +273,15 @@ public class OrderDetailActivity extends BaseActivity {
                     }
 
                     isPaid(true);
-                    llOrderDetail.setVisibility(View.GONE);
+                    llOrderDetail.setVisibility(View.VISIBLE);
 
-//                    tvCancel.setVisibility(View.VISIBLE);
-//                    tvCancel.setText("去退款");
-//                    tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
-//
-//                    tvConfirm.setVisibility(View.VISIBLE);
-//                    tvConfirm.setText("去提货");
-//                    tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
-//
-//                    type = 4;
+                    tvCancel.setVisibility(View.GONE);
+
+                    tvConfirm.setVisibility(View.VISIBLE);
+                    tvConfirm.setText("去提货");
+                    tvConfirm.setBackgroundResource(R.drawable.bound_red_16dp);
+
+                    type = 4;
                     break;
                 case "CLOSE":
                     switch (orderBean.getData().getCloseType()) {
@@ -482,6 +482,7 @@ public class OrderDetailActivity extends BaseActivity {
                         payMoney();
                         break;
                     case 2:
+                    case 4:
                         receiveGoods();
                         break;
                 }
@@ -589,38 +590,62 @@ public class OrderDetailActivity extends BaseActivity {
      * 取消订单
      */
     private void cancelOrder() {
-        OkHttpUtils.post()
-                .url(Constant.CANCEL_ORDER)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token", SharedPreUtils.getStr(this, "token"))
-                .addParams("memberOrderShopId", String.valueOf(orderId))
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this,
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("您确定要取消订单吗？");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                OkHttpUtils.post()
+                        .url(Constant.CANCEL_ORDER)
+                        .addParams("appType", MyApp.appType)
+                        .addParams("appVersion", MyApp.appVersion)
+                        .addParams("organizeId", MyApp.organizeId)
+                        .addParams("hash", SharedPreUtils.getStr(OrderDetailActivity.this, "hash"))
+                        .addParams("token", SharedPreUtils.getStr(OrderDetailActivity.this, "token"))
+                        .addParams("memberOrderShopId", String.valueOf(orderId))
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
 
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            if (flag) {
-                                ToastUtils.showToast(OrderDetailActivity.this, "已取消订单");
-                                initData();
-                            } else {
-                                String msg = jsonObject.getString("msg");
-                                ToastUtils.showToast(OrderDetailActivity.this, msg);
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    boolean flag = jsonObject.getBoolean("flag");
+                                    if (flag) {
+                                        ToastUtils.showToast(OrderDetailActivity.this, "已取消订单");
+                                        initData();
+                                    } else {
+                                        String msg = jsonObject.getString("msg");
+                                        ToastUtils.showToast(OrderDetailActivity.this, msg);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        });
+
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.create();
+        dialog.show();
+
+
     }
 
     @Override

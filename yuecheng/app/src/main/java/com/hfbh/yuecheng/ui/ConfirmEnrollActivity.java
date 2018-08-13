@@ -45,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,8 +83,6 @@ public class ConfirmEnrollActivity extends BaseActivity {
     @BindView(R.id.ll_enroll_balance)
     LinearLayout llEnrollBalance;
 
-    //报名参数
-    private Map<String, String> map;
     //报名记录id
     private int enrollId;
     //活动id
@@ -92,16 +91,17 @@ public class ConfirmEnrollActivity extends BaseActivity {
     private UserBalanceBean balanceBean;
     //用户余额
     private double balance;
-    //活动接口是否成功
-    private boolean isActivity;
-    //余额接口是否成功
-    private boolean isBalance;
     //活动报名金额
     private double enrollFee;
     //使用余额
     private double useBalance;
     private PopupWindow mPopupWindow;
-    private EnrollOrderBean orderBean;
+    //报名姓名
+    private String enrollName;
+    //报名手机号
+    private String enrollPhone;
+    //报名数据
+    private String enrollData;
 
 
     @Override
@@ -114,11 +114,10 @@ public class ConfirmEnrollActivity extends BaseActivity {
         tvConfirmEnroll.setText("去支付");
         etInputMoney.setFocusable(false);
         etInputMoney.setFocusableInTouchMode(false);
-        tvConfirmEnroll.setEnabled(false);
 
         getData();
         initData();
-        initBalance();
+
     }
 
     /**
@@ -145,13 +144,27 @@ public class ConfirmEnrollActivity extends BaseActivity {
                         activityBean = GsonUtils.jsonToBean(response, ActivityRecordBean.class);
                         if (activityBean.isFlag() && activityBean.getData() != null) {
                             enrollFee = activityBean.getData().getActivity().getEnrollFee();
-
-                            isActivity = true;
-                            initView();
-                            if (isBalance) {
-                                initUserBalance();
+                            enrollName = activityBean.getData().getRecord().getName();
+                            enrollPhone = activityBean.getData().getRecord().getPhone();
+                            enrollData = activityBean.getData().getRecord().getDataSign();
+                            //是否下单
+                            if (activityBean.getData().getOrder() == null) {
+                                llEnrollBalance.setVisibility(View.VISIBLE);
+                                initBalance();
+                            } else {
+                                //是否冻结余额
+                                if (activityBean.getData().getCyOrder() == null) {
+                                    llEnrollBalance.setVisibility(View.VISIBLE);
+                                    initBalance();
+                                } else {
+                                    llEnrollBalance.setVisibility(View.GONE);
+                                    useBalance = activityBean.getData().getCyOrder().getTransMoney();
+                                    tvInputMoney.setText("¥" + DisplayUtils.decimalFormat(useBalance));
+                                    tvEnrollMoney.setText(DisplayUtils.decimalFormat(BigDecimalUtils.sub(enrollFee, useBalance)));
+                                }
                             }
 
+                            initView();
                         }
                     }
                 });
@@ -181,13 +194,11 @@ public class ConfirmEnrollActivity extends BaseActivity {
                         if (balanceBean.isFlag() && balanceBean.getData() != null) {
                             balance = balanceBean.getData().getAccountBalance();
                             if (balance > 0) {
+                                etInputMoney.setEnabled(true);
                                 etInputMoney.setFocusable(true);
                                 etInputMoney.setFocusableInTouchMode(true);
                             }
-                            isBalance = true;
-                            if (isActivity) {
-                                initUserBalance();
-                            }
+                            initUserBalance();
                         }
                     }
                 });
@@ -198,9 +209,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
      */
     private void initUserBalance() {
         tvEnrollMoney.setText(DisplayUtils.decimalFormat(enrollFee));
-        tvConfirmEnroll.setEnabled(true);
         tvUserMoney.setText("¥" + DisplayUtils.decimalFormat(balance));
-        etInputMoney.setEnabled(true);
 
         etInputMoney.addTextChangedListener(new TextWatcher() {
             @Override
@@ -259,11 +268,10 @@ public class ConfirmEnrollActivity extends BaseActivity {
     }
 
     private void getData() {
-        Bundle bundle = getIntent().getExtras();
-        SerializableMap serializableMap = (SerializableMap) bundle.getSerializable("map");
-        map = serializableMap.getMap();
-        activityId = bundle.getInt("activity_id");
-        enrollId = bundle.getInt("enroll_id");
+        Intent intent = getIntent();
+
+        activityId = intent.getIntExtra("activity_id", -1);
+        enrollId = intent.getIntExtra("enroll_id", -1);
     }
 
     @OnClick({R.id.iv_header_back, R.id.tv_confirm_enroll})
@@ -273,11 +281,28 @@ public class ConfirmEnrollActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_confirm_enroll:
-                if (useBalance > 0) {
-                    isSetPayPwd();
-                } else {
-                    cashEnroll();
+                if (activityBean.getData() != null) {
+                    //是否下单,未下单去下单，已下单去支付
+                    if (activityBean.getData().getOrder() == null) {
+                        if (useBalance > 0) {
+                            isSetPayPwd();
+                        } else {
+                            cashEnroll();
+                        }
+                    } else {
+                        //是否冻结余额，未使用余额去冻结余额
+                        if (activityBean.getData().getCyOrder() == null) {
+                            if (useBalance == 0) {
+                                payMoney(activityBean.getData().getOrder().getTranNo());
+                            } else {
+                                frozenMoney(activityBean.getData().getOrder().getTranNo());
+                            }
+                        } else {
+                            payMoney(activityBean.getData().getOrder().getTranNo());
+                        }
+                    }
                 }
+
                 break;
         }
     }
@@ -452,6 +477,20 @@ public class ConfirmEnrollActivity extends BaseActivity {
      * 现金报名
      */
     private void cashEnroll() {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("appType", MyApp.appType);
+        map.put("appVersion", MyApp.appVersion);
+        map.put("organizeId", MyApp.organizeId);
+        map.put("hash", SharedPreUtils.getStr(this, "hash"));
+        map.put("token", SharedPreUtils.getStr(this, "token"));
+        map.put("realname", enrollName);
+        map.put("mobile", enrollPhone);
+        map.put("id", String.valueOf(activityId));
+
+        if (enrollData != null) {
+            map.put("data", enrollData);
+        }
         if (useBalance > 0) {
             map.put("enrollFee", String.valueOf(useBalance));
         }
@@ -467,10 +506,10 @@ public class ConfirmEnrollActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        orderBean = GsonUtils.jsonToBean(response, EnrollOrderBean.class);
+                        EnrollOrderBean orderBean = GsonUtils.jsonToBean(response, EnrollOrderBean.class);
                         if (orderBean.isFlag() && orderBean.getData() != null) {
                             if (useBalance == 0) {
-                                payMoney();
+                                payMoney(orderBean.getData().getOrder().getTranNo());
                             } else {
                                 frozenMoney(orderBean.getData().getOrder().getTranNo());
                             }
@@ -485,15 +524,15 @@ public class ConfirmEnrollActivity extends BaseActivity {
     /**
      * 付现金
      */
-    private void payMoney() {
+    private void payMoney(String orderNo) {
         List<PayOrderBean.DiscountBean> discountBeans = new ArrayList<>();
         discountBeans.add(new PayOrderBean.DiscountBean("订单金额", "¥" + DisplayUtils.decimalFormat(enrollFee)));
         discountBeans.add(new PayOrderBean.DiscountBean("余额抵扣", "-¥" + DisplayUtils.decimalFormat(useBalance)));
 
         List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
-        orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderBean.getData().getOrder().getTranNo()));
-        MyApp.orderBean = new PayOrderBean(orderBean.getData().getOrder().getTranNo(),
-                "ACTIVITY", "", false, BigDecimalUtils.sub(enrollFee, useBalance), discountBeans, orderInfoList);
+        orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderNo));
+        MyApp.orderBean = new PayOrderBean(orderNo, "ACTIVITY", "",
+                false, enrollFee, BigDecimalUtils.sub(enrollFee, useBalance), discountBeans, orderInfoList);
         startActivity(new Intent(ConfirmEnrollActivity.this, ConfirmPayActivity.class));
     }
 
@@ -501,7 +540,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
     /**
      * 冻结余额
      */
-    private void frozenMoney(String orderNo) {
+    private void frozenMoney(final String orderNo) {
         OkHttpUtils.post()
                 .url(Constant.FROZEN_ENROLL_BALANCE)
                 .addParams("appType", MyApp.appType)
@@ -525,9 +564,9 @@ public class ConfirmEnrollActivity extends BaseActivity {
                             boolean flag = jsonObject.getBoolean("flag");
                             if (flag) {
                                 if (useBalance == enrollFee) {
-                                    balancePay();
+                                    balancePay(orderNo);
                                 } else {
-                                    payMoney();
+                                    payMoney(orderNo);
                                 }
                             } else {
                                 String msg = jsonObject.getString("msg");
@@ -543,7 +582,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
     /**
      * 预付卡全额支付
      */
-    private void balancePay() {
+    private void balancePay(String orderNo) {
         OkHttpUtils.get()
                 .url(Constant.ENROLL_BALANCE_PAY)
                 .addParams("appType", MyApp.appType)
@@ -551,7 +590,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
                 .addParams("token", SharedPreUtils.getStr(this, "token"))
-                .addParams("orderNo", orderBean.getData().getOrder().getTranNo())
+                .addParams("orderNo", orderNo)
                 .build()
                 .execute(new StringCallback() {
                     @Override

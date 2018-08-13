@@ -89,6 +89,6 @@
         android:layout_alignBottom="@id/card_discovery"
         android:layout_marginLeft="9dp"
         android:layout_toRightOf="@id/card_discovery"
-        android:background="@color/gray_ed"/>
+        android:background="@color/gray_f2"/>
 
 </RelativeLayout>

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,14 +13,11 @@ import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.MyFragmentAdapter;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.fragment.MemberPointsFragment;
-import com.hfbh.yuecheng.utils.DisplayUtils;
 
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -123,7 +119,7 @@ public class MemberPointsActivity extends BaseActivity {
         DatePicker picker = new DatePicker(this, DatePicker.YEAR_MONTH);
         picker.setSubmitTextColor(getResources().getColor(R.color.red_99));
         picker.setOffset(3);
-        picker.setTopLineColor(getResources().getColor(R.color.gray_ed));
+        picker.setTopLineColor(getResources().getColor(R.color.gray_f2));
 
         Calendar c = Calendar.getInstance();
         int currentYear = c.get(Calendar.YEAR);

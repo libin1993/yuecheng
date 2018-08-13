@@ -1,5 +1,7 @@
 package com.hfbh.yuecheng.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -41,6 +43,7 @@ import com.hfbh.yuecheng.ui.PayOrderActivity;
 import com.hfbh.yuecheng.ui.PopGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.RefundDetailActivity;
 import com.hfbh.yuecheng.ui.RushGoodsDetailActivity;
+import com.hfbh.yuecheng.ui.ValidateActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
@@ -576,40 +579,61 @@ public class OrderFragment extends BaseFragment {
     /**
      * 取消订单
      */
-    private void cancelOrder(int orderId) {
-        OkHttpUtils.post()
-                .url(Constant.CANCEL_ORDER)
-                .addParams("appType", MyApp.appType)
-                .addParams("appVersion", MyApp.appVersion)
-                .addParams("organizeId", MyApp.organizeId)
-                .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
-                .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
-                .addParams("memberOrderShopId", String.valueOf(orderId))
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
+    private void cancelOrder(final int orderId) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(),
+                R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        dialog.setTitle("提示");
+        dialog.setMessage("您确定要取消订单吗？");
+        //为“确定”按钮注册监听事件
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                OkHttpUtils.post()
+                        .url(Constant.CANCEL_ORDER)
+                        .addParams("appType", MyApp.appType)
+                        .addParams("appVersion", MyApp.appVersion)
+                        .addParams("organizeId", MyApp.organizeId)
+                        .addParams("hash", SharedPreUtils.getStr(getActivity(), "hash"))
+                        .addParams("token", SharedPreUtils.getStr(getActivity(), "token"))
+                        .addParams("memberOrderShopId", String.valueOf(orderId))
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
 
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean flag = jsonObject.getBoolean("flag");
-                            if (flag) {
-                                ToastUtils.showToast(getActivity(), "已取消订单");
-                                page = 1;
-                                initData();
-                            } else {
-                                String msg = jsonObject.getString("msg");
-                                ToastUtils.showToast(getActivity(), msg);
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    boolean flag = jsonObject.getBoolean("flag");
+                                    if (flag) {
+                                        ToastUtils.showToast(getActivity(), "已取消订单");
+                                        page = 1;
+                                        initData();
+                                    } else {
+                                        String msg = jsonObject.getString("msg");
+                                        ToastUtils.showToast(getActivity(), msg);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+            }
+        });
+
+        //为“取消”按钮注册监听事件
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
+
     }
 
     public static OrderFragment newInstance(String type) {

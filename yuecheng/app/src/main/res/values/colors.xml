@@ -4,8 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="transparent">#00000000</color>
-    <color name="gray_ed1">#EDEDED</color>
-    <color name="gray_ed">#F2F4F5</color>
+    <color name="gray_f2">#F2F4F5</color>
     <color name="gray_aa">#AAAAAA</color>
     <color name="gray_22">#222222</color>
     <color name="gray_10">#101010</color>

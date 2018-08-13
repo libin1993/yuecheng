@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/et_search_coupon"
-        android:background="@color/gray_ed"
+        android:background="@color/gray_f2"
         android:paddingTop="15dp">
 
         <android.support.v7.widget.RecyclerView

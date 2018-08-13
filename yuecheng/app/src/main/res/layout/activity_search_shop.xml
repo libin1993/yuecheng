@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/et_search_market"
-        android:background="@color/gray_ed"/>
+        android:background="@color/gray_f2"/>
 
     <LinearLayout
         android:id="@+id/ll_search_market"
@@ -63,7 +63,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/gray_ed"/>
+            android:background="@color/gray_f2"/>
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/ll_search_market"
-        android:background="@color/gray_ed">
+        android:background="@color/gray_f2">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_search_market_list"

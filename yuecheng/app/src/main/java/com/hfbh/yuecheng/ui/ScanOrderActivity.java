@@ -866,7 +866,7 @@ public class ScanOrderActivity extends BaseActivity {
                                 }
 
                                 MyApp.orderBean = new PayOrderBean(orderNo, "SCANCODE",
-                                        payType, false, needPayMoney, discountBeans, orderInfoList);
+                                        payType, false, totalPrice, needPayMoney, discountBeans, orderInfoList);
 
                                 if (needPayMoney > 0) {
                                     startActivity(new Intent(ScanOrderActivity.this, ConfirmPayActivity.class));

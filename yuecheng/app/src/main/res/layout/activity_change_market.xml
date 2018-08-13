@@ -21,6 +21,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="44dp"
         android:layout_toRightOf="@id/rv_city_list"
-        android:background="@color/gray_ed">
+        android:background="@color/gray_f2">
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

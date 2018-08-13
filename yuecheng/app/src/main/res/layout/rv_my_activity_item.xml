@@ -4,7 +4,7 @@
               xmlns:fresco="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="10dp"
+              android:layout_marginBottom="12dp"
               android:background="@android:color/white"
               android:orientation="vertical">
 
@@ -30,9 +30,9 @@
                 android:layout_width="166dp"
                 android:layout_height="83dp"
                 fresco:actualImageScaleType="centerCrop"
-                fresco:roundedCornerRadius="4dp"
                 fresco:placeholderImage="@mipmap/img_place"
-                fresco:placeholderImageScaleType="centerCrop"/>
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:roundedCornerRadius="4dp"/>
         </android.support.v7.widget.CardView>
 
 

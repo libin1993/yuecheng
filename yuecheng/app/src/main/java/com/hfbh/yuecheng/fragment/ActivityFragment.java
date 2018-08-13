@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.MyFragmentAdapter;
+import com.hfbh.yuecheng.adapter.MyPagerAdapter;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
@@ -68,6 +71,8 @@ public class ActivityFragment extends BaseFragment {
     private Unbinder unbinder;
 
     private List<ActivityListBean.TagListBean> tagList = new ArrayList<>();
+    List<String> titleList = new ArrayList<>();
+    List<Fragment> fragmentList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -123,23 +128,36 @@ public class ActivityFragment extends BaseFragment {
                 });
     }
 
+
     /**
      * tab关联viewpager
      */
     private void initView() {
-        List<String> titleList = new ArrayList<>();
-        List<Fragment> fragmentList = new ArrayList<>();
 
+
+        //移除之前的Fragment
+        FragmentManager fm = getChildFragmentManager();
+
+        if (fragmentList.size() > 0) {
+            FragmentTransaction ft = fm.beginTransaction();
+            for (Fragment f : this.fragmentList) {
+                ft.remove(f);
+            }
+            ft.commit();
+            ft = null;
+            fm.executePendingTransactions();
+
+        }
+
+
+        fragmentList.clear();
+        titleList.clear();
         for (int i = 0; i < tagList.size(); i++) {
             LogUtils.log("id" + tagList.get(i).getId());
             titleList.add(tagList.get(i).getTagName());
             fragmentList.add(ActivityListFragment.newInstance(tagList.get(i).getId()));
         }
-
-
-        MyFragmentAdapter adapter = new MyFragmentAdapter(getChildFragmentManager(),
-                fragmentList, titleList);
-        vpActivity.setOffscreenPageLimit(titleList.size());
+        MyFragmentAdapter adapter = new MyFragmentAdapter(fm, fragmentList, titleList);
         vpActivity.setAdapter(adapter);
 
         tabActivity.setViewPager(vpActivity);

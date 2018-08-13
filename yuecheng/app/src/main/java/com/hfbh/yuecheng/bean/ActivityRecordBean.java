@@ -146,6 +146,7 @@ public class ActivityRecordBean {
             private String memberSex;
             private Object modifierId;
             private Object modifyTime;
+            private String dataSign;
             private String name;
             private int organizeId;
             private String phone;
@@ -156,6 +157,15 @@ public class ActivityRecordBean {
             private String verifyCode;
             private List<?> infoList;
 
+
+
+            public String getDataSign() {
+                return dataSign;
+            }
+
+            public void setDataSign(String dataSign) {
+                this.dataSign = dataSign;
+            }
             public String getAuditState() {
                 return auditState;
             }
