@@ -121,7 +121,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
     }
 
     /**
-     * 活动数据
+     * 报名信息
      */
     private void initData() {
         OkHttpUtils.get()

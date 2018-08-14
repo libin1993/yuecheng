@@ -65,7 +65,7 @@ public class ActivityRecordBean {
 
         private RecordBean record;
         private OrderBean order;
-        private Object memberValues;
+        private List<MemberValuesBean> memberValues;
         private CyOrderBean cyOrder;
         private ActivityBean activity;
 
@@ -85,11 +85,11 @@ public class ActivityRecordBean {
             this.order = order;
         }
 
-        public Object getMemberValues() {
+        public List<MemberValuesBean> getMemberValues() {
             return memberValues;
         }
 
-        public void setMemberValues(Object memberValues) {
+        public void setMemberValues(List<MemberValuesBean> memberValues) {
             this.memberValues = memberValues;
         }
 
@@ -107,6 +107,100 @@ public class ActivityRecordBean {
 
         public void setActivity(ActivityBean activity) {
             this.activity = activity;
+        }
+
+        public static class MemberValuesBean {
+
+            private int commonOptionId;
+            private int marketingActivitySignupId;
+            private int memberId;
+            private int memberValueId;
+            private String optionName;
+            private String optionValueIds;
+            private String type;
+            private String value;
+            private int organizeId;
+            private int signupStatisticsId;
+
+            public int getCommonOptionId() {
+                return commonOptionId;
+            }
+
+            public void setCommonOptionId(int commonOptionId) {
+                this.commonOptionId = commonOptionId;
+            }
+
+            public int getMarketingActivitySignupId() {
+                return marketingActivitySignupId;
+            }
+
+            public void setMarketingActivitySignupId(int marketingActivitySignupId) {
+                this.marketingActivitySignupId = marketingActivitySignupId;
+            }
+
+            public int getMemberId() {
+                return memberId;
+            }
+
+            public void setMemberId(int memberId) {
+                this.memberId = memberId;
+            }
+
+            public int getMemberValueId() {
+                return memberValueId;
+            }
+
+            public void setMemberValueId(int memberValueId) {
+                this.memberValueId = memberValueId;
+            }
+
+            public String getOptionName() {
+                return optionName;
+            }
+
+            public void setOptionName(String optionName) {
+                this.optionName = optionName;
+            }
+
+            public String getOptionValueIds() {
+                return optionValueIds;
+            }
+
+            public void setOptionValueIds(String optionValueIds) {
+                this.optionValueIds = optionValueIds;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
+            }
+
+            public String getValue() {
+                return value;
+            }
+
+            public void setValue(String value) {
+                this.value = value;
+            }
+
+            public int getOrganizeId() {
+                return organizeId;
+            }
+
+            public void setOrganizeId(int organizeId) {
+                this.organizeId = organizeId;
+            }
+
+            public int getSignupStatisticsId() {
+                return signupStatisticsId;
+            }
+
+            public void setSignupStatisticsId(int signupStatisticsId) {
+                this.signupStatisticsId = signupStatisticsId;
+            }
         }
 
         public static class RecordBean {
@@ -158,7 +252,6 @@ public class ActivityRecordBean {
             private List<?> infoList;
 
 
-
             public String getDataSign() {
                 return dataSign;
             }
@@ -166,6 +259,7 @@ public class ActivityRecordBean {
             public void setDataSign(String dataSign) {
                 this.dataSign = dataSign;
             }
+
             public String getAuditState() {
                 return auditState;
             }

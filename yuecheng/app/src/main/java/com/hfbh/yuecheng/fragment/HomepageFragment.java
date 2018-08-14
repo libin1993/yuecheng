@@ -799,8 +799,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         }
 
                     } else {
-                        tvCouponName.setText(DisplayUtils.isInteger(couponBean.getData().get(position).getCouponValue())
-                                + "元-" + couponBean.getData().get(position).getCouponName());
+                        tvCouponName.setText(DisplayUtils.isInteger(couponBean.getData().get(position)
+                                .getCouponValue()) + "元-" + couponBean.getData().get(position).getCouponName());
                     }
 
 
@@ -881,24 +881,20 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             gridLayoutHelper.setHGap((int) DisplayUtils.dp2px(getActivity(), 11));// 控制子元素之间的水平间距
             gridLayoutHelper.setAutoExpand(false);
             gridLayoutHelper.setBgColor(Color.WHITE);
-            //布局宽高
-            int widthPixels = DisplayUtils.getMetrics(getActivity()).widthPixels;
-            final int width = (int) ((widthPixels - DisplayUtils.dp2px(getActivity(), 35)) / 2);
+
             BaseDelegateAdapter giftAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper,
                     R.layout.rv_gift_item, giftBean.getData().size(), 8) {
                 @Override
                 public void onBindViewHolder(ViewHolder holder, final int position) {
                     super.onBindViewHolder(holder, position);
                     SimpleDraweeView ivGift = holder.getView(R.id.iv_home_gift);
-//                    ViewGroup.LayoutParams layoutParams = ivGift.getLayoutParams();
-//                    layoutParams.width = width;
-//                    layoutParams.height = width;
-//                    ivGift.setLayoutParams(layoutParams);
+
 
                     ivGift.setImageURI(giftBean.getData().get(position).getGiftPicturePath());
 
                     holder.setText(R.id.tv_home_gift_name, giftBean.getData().get(position).getRelateName());
-                    holder.setText(R.id.tv_home_gift_score, DisplayUtils.isInteger(giftBean.getData().get(position).getNeedScore()) + "积分");
+                    holder.setText(R.id.tv_home_gift_score, DisplayUtils.isInteger(
+                            giftBean.getData().get(position).getNeedScore()) + "积分");
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -277,12 +277,15 @@ public class ActionDetailActivity extends BaseActivity {
         if (!isActivityEnd && isEnrollStart) {
             Intent intent;
             if (SharedPreUtils.getBoolean(this, "is_login", false)) {
+                //下单完成
                 if (isEnroll) {
-                    intent = new Intent(this, CloseActionActivity.class);
-                    intent.putExtra("activity_id", activityBean.getData().getSignupDo().getMarketingActivitySignupId());
-                    startActivity(intent);
-                } else {
+                    if (activityBean.getData().getStatistic() != null) {
+                        intent = new Intent(this, EnrollInfoActivity.class);
+                        intent.putExtra("enroll_id", activityBean.getData().getStatistic().getMarketingActivitySignupStatisticsId());
+                        startActivity(intent);
+                    }
 
+                } else {
                     //是否已报名
                     if (activityBean.getData().getStatistic() != null) {
                         intent = new Intent(this, ConfirmEnrollActivity.class);

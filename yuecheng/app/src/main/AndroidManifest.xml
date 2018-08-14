@@ -234,6 +234,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".ui.RefundDetailActivity"/>
         <activity android:name=".ui.PayOrderActivity"/>
+        <activity android:name=".ui.EnrollInfoActivity"/>
 
         <service
             android:name=".service.TimerService"

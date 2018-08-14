@@ -163,11 +163,11 @@ public class PopGoodsActivity extends BaseActivity {
                         .into(ivPop);
 
                 holder.setText(R.id.tv_discovery_pop_name, dataBean.getCommodityName());
-                holder.setText(R.id.tv_discovery_pop_price, "¥" + dataBean.getNowPrice());
+                holder.setText(R.id.tv_discovery_pop_price, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));
 
                 TextView tvOld = holder.getView(R.id.tv_discovery_pop_original);
                 tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
-                tvOld.setText("¥" + dataBean.getOldPrice());
+                tvOld.setText("¥" + DisplayUtils.isInteger(dataBean.getOldPrice()));
 
             }
         };

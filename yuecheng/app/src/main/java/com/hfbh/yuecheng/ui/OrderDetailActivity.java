@@ -147,6 +147,7 @@ public class OrderDetailActivity extends BaseActivity {
 
                     }
 
+
                     @Override
                     public void onResponse(String response, int id) {
                         orderBean = GsonUtils.jsonToBean(response, OrderDetailBean.class);
@@ -212,8 +213,13 @@ public class OrderDetailActivity extends BaseActivity {
                         tvStatusInfo.setText("拼团中，活动结束拼团不成功自动退款");
                         llOrderDetail.setVisibility(View.GONE);
                     } else {
-                        tvStatusInfo.setText("请在" + orderBean.getData().getOrderDtlList().get(0)
-                                .getGetTimeLimit() + "天内到店提货哟！失效未提货自动退款");
+                        if ("SPECIAL".equals(orderBean.getData().getOrderType())){
+                            tvStatusInfo.setText("支付成功后" + orderBean.getData().getOrderDtlList().get(0)
+                                    .getGetTimeLimit() + "天内到店提货哟！失效未提货自动退款");
+                        }else {
+                            tvStatusInfo.setText("活动结束后" + orderBean.getData().getOrderDtlList().get(0)
+                                    .getGetTimeLimit() + "天内到店提货哟！失效未提货自动退款");
+                        }
 
                         llOrderDetail.setVisibility(View.VISIBLE);
 
@@ -308,14 +314,14 @@ public class OrderDetailActivity extends BaseActivity {
                             tvOrderStatus.setText("已关闭");
                             if (("GROUPON").equals(orderBean.getData().getOrderType())
                                     && "GROUP_CLOSE".equals(orderBean.getData().getGroupState())) {
-                                if ("SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())) {
+                                if ("SINGIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())) {
                                     tvStatusInfo.setText("拼团成功已完成提货，申请退货退款成功");
                                 } else {
                                     tvStatusInfo.setText("拼团成功未提货且已失效，申请退款成功");
                                 }
 
                             } else {
-                                if ("SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())) {
+                                if ("SINGIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())) {
                                     tvStatusInfo.setText("已完成提货，申请退货退款成功");
                                 } else {
                                     tvStatusInfo.setText("未提货，申请退款成功");
@@ -370,12 +376,12 @@ public class OrderDetailActivity extends BaseActivity {
         tvOrderNum.setText("x" + orderBean.getData().getOrderDtlList().get(0).getDetailAccount());
         tvTotalPrice.setText("¥" + DisplayUtils.isInteger(orderBean.getData().getPrice()));
 
-        if (("GROUPON").equals(orderBean.getData().getOrderType())) {
-            tvReceiveTime.setText("活动结束后" + orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
-            tvExpiredIntro.setText("失效未提货申请退款");
-        } else {
+        if (("SPECIAL").equals(orderBean.getData().getOrderType())) {
             tvReceiveTime.setText("支付成功后" + orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
             tvExpiredIntro.setText("失效未提货自动退款");
+        } else {
+            tvReceiveTime.setText("活动结束后" + orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
+            tvExpiredIntro.setText("失效未提货申请退款");
         }
 
         if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())) {
@@ -418,6 +424,7 @@ public class OrderDetailActivity extends BaseActivity {
         tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
 
         tvConfirm.setVisibility(View.GONE);
+
         type = 3;
     }
 
@@ -471,7 +478,7 @@ public class OrderDetailActivity extends BaseActivity {
                     case 2:
                     case 3:
                         refundOrder(orderBean.getData().getOrderDtlList().get(0).getMemberOrderDetailId(),
-                                "SIGNIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())
+                                "SINGIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())
                                         ? "RETURN" : "REFUND", orderBean.getData().getOrderDtlList().get(0).getDetailPrice());
                         break;
                 }

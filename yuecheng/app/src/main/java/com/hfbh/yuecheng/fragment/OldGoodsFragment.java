@@ -192,11 +192,11 @@ public class OldGoodsFragment extends BaseFragment {
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(ivPop);
                 holder.setText(R.id.tv_discovery_pop_name, popGoods.get(position).getCommodityName());
-                holder.setText(R.id.tv_discovery_pop_price, "¥" + popGoods.get(position).getNowPrice());
+                holder.setText(R.id.tv_discovery_pop_price, "¥" + DisplayUtils.isInteger(popGoods.get(position).getNowPrice()));
 
                 TextView tvOld = holder.getView(R.id.tv_discovery_pop_original);
                 tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
-                tvOld.setText("¥" + popGoods.get(position).getOldPrice());
+                tvOld.setText("¥" + DisplayUtils.isInteger(popGoods.get(position).getOldPrice()));
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -126,9 +126,15 @@ public class CouponFragment extends BaseFragment {
                         if (couponBean.isFlag() && couponBean.getData() != null
                                 && couponBean.getData().size() > 0) {
                             dataList.addAll(couponBean.getData());
-                            llNullData.setVisibility(View.GONE);
+                            if (llNullData !=null){
+                                llNullData.setVisibility(View.GONE);
+                            }
+
                         } else {
-                            llNullData.setVisibility(View.VISIBLE);
+                            if (llNullData !=null){
+                                llNullData.setVisibility(View.VISIBLE);
+                            }
+
                             if (couponBean.getCode() == 4002) {
                                 SharedPreUtils.deleteStr(getActivity(), "is_login");
                             }

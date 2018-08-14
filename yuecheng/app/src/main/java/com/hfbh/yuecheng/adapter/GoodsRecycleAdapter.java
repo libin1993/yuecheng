@@ -114,10 +114,10 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(((ViewHolder2) holder).ivPop);
             ((ViewHolder2) holder).tvName.setText(dataList.get(position).getCommodityName());
-            ((ViewHolder2) holder).tvPrice.setText("¥" + dataList.get(position).getNowPrice());
+            ((ViewHolder2) holder).tvPrice.setText("¥" + DisplayUtils.isInteger(dataList.get(position).getNowPrice()));
 
             ((ViewHolder2) holder).tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
-            ((ViewHolder2) holder).tvOld.setText("¥" + dataList.get(position).getOldPrice());
+            ((ViewHolder2) holder).tvOld.setText("¥" + DisplayUtils.isInteger(dataList.get(position).getOldPrice()));
             holder.itemView.setTag(position);
 
         } else if (holder instanceof ViewHolder3) {

@@ -242,9 +242,9 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
 
         RecyclerView rvRefund = (RecyclerView) contentView.findViewById(R.id.rv_refund_content);
         final List<String> reasonList = new ArrayList<>();
-        reasonList.add("协商一致退货");
-        reasonList.add("缺货");
-        reasonList.add("拍错/多拍/不想要了");
+        reasonList.add("未提货");
+        reasonList.add("个人原因");
+        reasonList.add("商品问题");
         reasonList.add("其他");
         isConfirm = false;
 

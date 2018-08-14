@@ -112,11 +112,11 @@ public class GoodsActivity extends BaseActivity {
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(ivPop);
                 holder.setText(R.id.tv_discovery_pop_name, goodsList.get(position).getCommodityName());
-                holder.setText(R.id.tv_discovery_pop_price, "¥" + goodsList.get(position).getNowPrice());
+                holder.setText(R.id.tv_discovery_pop_price, "¥" + DisplayUtils.isInteger(goodsList.get(position).getNowPrice()));
 
                 TextView tvOld = holder.getView(R.id.tv_discovery_pop_original);
                 tvOld.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中间横线
-                tvOld.setText("¥" + goodsList.get(position).getOldPrice());
+                tvOld.setText("¥" + DisplayUtils.isInteger(goodsList.get(position).getOldPrice()));
 
             }
         };
