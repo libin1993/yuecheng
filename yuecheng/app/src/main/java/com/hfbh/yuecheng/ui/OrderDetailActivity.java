@@ -213,10 +213,10 @@ public class OrderDetailActivity extends BaseActivity {
                         tvStatusInfo.setText("拼团中，活动结束拼团不成功自动退款");
                         llOrderDetail.setVisibility(View.GONE);
                     } else {
-                        if ("SPECIAL".equals(orderBean.getData().getOrderType())){
+                        if ("SPECIAL".equals(orderBean.getData().getOrderType())) {
                             tvStatusInfo.setText("支付成功后" + orderBean.getData().getOrderDtlList().get(0)
                                     .getGetTimeLimit() + "天内到店提货哟！失效未提货自动退款");
-                        }else {
+                        } else {
                             tvStatusInfo.setText("活动结束后" + orderBean.getData().getOrderDtlList().get(0)
                                     .getGetTimeLimit() + "天内到店提货哟！失效未提货自动退款");
                         }
@@ -479,7 +479,7 @@ public class OrderDetailActivity extends BaseActivity {
                     case 3:
                         refundOrder(orderBean.getData().getOrderDtlList().get(0).getMemberOrderDetailId(),
                                 "SINGIN".equals(orderBean.getData().getOrderDtlList().get(0).getVerifyState())
-                                        ? "RETURN" : "REFUND", orderBean.getData().getOrderDtlList().get(0).getDetailPrice());
+                                        ? "RETURN" : "REFUND", orderBean.getData().getPrice());
                         break;
                 }
                 break;

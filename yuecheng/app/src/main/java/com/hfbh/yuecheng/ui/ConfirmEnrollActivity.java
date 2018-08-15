@@ -532,6 +532,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
         List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
         orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderNo));
         MyApp.orderBean = new PayOrderBean(orderNo, "ACTIVITY", "",
+
                 false, enrollFee, BigDecimalUtils.sub(enrollFee, useBalance), discountBeans, orderInfoList);
         startActivity(new Intent(ConfirmEnrollActivity.this, ConfirmPayActivity.class));
     }

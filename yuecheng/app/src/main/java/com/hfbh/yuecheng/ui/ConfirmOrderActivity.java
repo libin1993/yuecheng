@@ -498,8 +498,8 @@ public class ConfirmOrderActivity extends BaseActivity {
                 if (goodsBean.getData() != null) {
                     if (num > 1) {
                         num--;
-                        totalPrice = goodsBean.getData().getNowPrice() * num;
                         if (useBalance > Math.min(balance, totalPrice)) {
+                            totalPrice = BigDecimalUtils.mul(goodsBean.getData().getNowPrice(), num);
                             etUseBalance.setText(DisplayUtils.isInteger(Math.min(balance, totalPrice)));
                         } else {
                             initPrice();
@@ -509,27 +509,36 @@ public class ConfirmOrderActivity extends BaseActivity {
                 break;
             case R.id.tv_order_goods_add:
                 if (goodsBean.getData() != null) {
-                    if (num < goodsBean.getData().getBuyLimitNum() - goodsBean.getData().getBuyNum()) {
-                        num++;
-                        initPrice();
-                    }
-
-
                     if (goodsBean.getData().getBuyLimitNum() > 0) {
                         if (goodsBean.getData().getBuyLimitNum() < goodsBean.getData().getCommodityNum()) {
-                            if (num < goodsBean.getData().getBuyLimitNum()) {
+                            if (num < goodsBean.getData().getBuyLimitNum() - goodsBean.getData().getBuyNum()) {
                                 num++;
                             }
                         } else {
-                            if (num < goodsBean.getData().getCommodityNum()) {
-                                num++;
+                            if (goodsBean.getData().getBuyNum() < goodsBean.getData().getCommodityNum()) {
+                                if (num < goodsBean.getData().getCommodityNum() - goodsBean.getData().getBuyNum()) {
+                                    num++;
+                                }
+                            } else {
+                                if (goodsBean.getData().getBuyLimitNum() - goodsBean.getData().getBuyNum() < goodsBean.getData().getCommodityNum()) {
+                                    if (num < goodsBean.getData().getBuyLimitNum() - goodsBean.getData().getBuyNum()) {
+                                        num++;
+                                    }
+                                } else {
+                                    if (num < goodsBean.getData().getCommodityNum()) {
+                                        num++;
+                                    }
+                                }
                             }
+
                         }
                     } else {
                         if (num < goodsBean.getData().getCommodityNum()) {
                             num++;
                         }
                     }
+
+                    initPrice();
                 }
 
                 break;

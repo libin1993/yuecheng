@@ -414,6 +414,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         }
     }
 
+
     /**
      * 活动报名
      */

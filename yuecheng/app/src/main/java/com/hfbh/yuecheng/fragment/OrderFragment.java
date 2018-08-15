@@ -235,7 +235,7 @@ public class OrderFragment extends BaseFragment {
                 final TextView tvCancel = holder.getView(R.id.tv_cancel_order);
                 final TextView tvConfirm = holder.getView(R.id.tv_order_confirm);
 
-//                RelativeLayout rlGoods = holder.getView(R.id.rl_order_goods);
+
 
                 final TextView tvStatus = holder.getView(R.id.tv_status_order);
                 CountDownTimer countDownTimer = countDownMap.get(tvStatus.hashCode());
@@ -426,7 +426,7 @@ public class OrderFragment extends BaseFragment {
                                 break;
                             case 4:
                                 refundOrder(dataBean.getOrderDtlList().get(0).getMemberOrderDetailId(),
-                                        dataBean.getOrderDtlList().get(0).getDetailPrice());
+                                        dataBean.getPrice());
                                 break;
 
                         }

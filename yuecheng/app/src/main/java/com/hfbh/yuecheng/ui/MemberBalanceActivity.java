@@ -125,6 +125,7 @@ public class MemberBalanceActivity extends BaseActivity {
                     @Override
                     public void onResponse(String s, int i) {
                         MemberBalanceBean balanceBean = GsonUtils.jsonToBean(s, MemberBalanceBean.class);
+                        dataList.clear();
                         if (balanceBean.isFlag() && balanceBean.getPage() != null
                                 && balanceBean.getPage().getTotal() > 0) {
                             tvBalanceCount.setText("预付卡  (" + balanceBean.getPage().getTotal() + ")");
