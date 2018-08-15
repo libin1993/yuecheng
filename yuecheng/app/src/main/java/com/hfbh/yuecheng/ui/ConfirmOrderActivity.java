@@ -439,6 +439,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         if (useBalance > 0) {
             map.put("useAmount", String.valueOf(useBalance));
         }
+        map.put("payment",String.valueOf(BigDecimalUtils.sub(totalPrice,useBalance)));
         OkHttpUtils.post()
                 .url(Constant.SUBMIT_ORDER)
                 .params(map)
