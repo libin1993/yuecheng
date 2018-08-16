@@ -13,11 +13,10 @@
 
         <ImageView
             android:id="@+id/iv_shop_back"
-            android:layout_width="60dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dp"
-            android:scaleType="fitStart"
+            android:layout_width="26dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitCenter"
             android:src="@mipmap/ic_back_gray"/>
 
         <TextView

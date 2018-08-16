@@ -326,15 +326,15 @@ public class ConfirmOrderActivity extends BaseActivity {
      */
     private void inputPwd() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_validate_pwd, null);
-
+        int height = DisplayUtils.getMetrics(this).heightPixels;
         mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-                (int) DisplayUtils.dp2px(this, 191));
+                (int) (height - DisplayUtils.dp2px(this, 180)));
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
         DisplayUtils.setBackgroundAlpha(this, true);
 
         ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_cancel_pay);
@@ -418,8 +418,6 @@ public class ConfirmOrderActivity extends BaseActivity {
                         }
                     }
                 });
-
-
     }
 
     /**
@@ -439,7 +437,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         if (useBalance > 0) {
             map.put("useAmount", String.valueOf(useBalance));
         }
-        map.put("payment",String.valueOf(BigDecimalUtils.sub(totalPrice,useBalance)));
+        map.put("payment", String.valueOf(BigDecimalUtils.sub(totalPrice, useBalance)));
         OkHttpUtils.post()
                 .url(Constant.SUBMIT_ORDER)
                 .params(map)
@@ -499,8 +497,8 @@ public class ConfirmOrderActivity extends BaseActivity {
                 if (goodsBean.getData() != null) {
                     if (num > 1) {
                         num--;
+                        totalPrice = BigDecimalUtils.mul(goodsBean.getData().getNowPrice(), num);
                         if (useBalance > Math.min(balance, totalPrice)) {
-                            totalPrice = BigDecimalUtils.mul(goodsBean.getData().getNowPrice(), num);
                             etUseBalance.setText(DisplayUtils.isInteger(Math.min(balance, totalPrice)));
                         } else {
                             initPrice();

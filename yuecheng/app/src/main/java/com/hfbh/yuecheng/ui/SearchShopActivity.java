@@ -120,6 +120,7 @@ public class SearchShopActivity extends BaseActivity {
     CommonAdapter<SearchShopBean.ShopListBean> shopAdapter;
     private Drawable grayDrawable;
     private Drawable redDrawable;
+    private SearchShopBean marketListBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -180,7 +181,7 @@ public class SearchShopActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        SearchShopBean marketListBean = GsonUtils.jsonToBean(response, SearchShopBean.class);
+                        marketListBean = GsonUtils.jsonToBean(response, SearchShopBean.class);
                         if (marketListBean.getPage() != null) {
                             pages = marketListBean.getPage().getPages();
                         }
@@ -188,6 +189,9 @@ public class SearchShopActivity extends BaseActivity {
                         if (isRefresh) {
                             shopList.clear();
                             refreshLayout.finishRefresh();
+                            if (loadingView.isShown()){
+                                loadingView.smoothToHide();
+                            }
                             isRefresh = false;
                         } else if (isLoadMore) {
                             refreshLayout.finishLoadMore();
@@ -526,7 +530,7 @@ public class SearchShopActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_market_type:
-                if (shopList.size() > 0){
+                if (marketListBean!=null){
                     tvMarketType.setTextColor(getResources().getColor(R.color.red_99));
                     tvMarketType.setCompoundDrawables(null, null, redDrawable, null);
                     tvMarketFloor.setTextColor(getResources().getColor(R.color.gray_1a));
@@ -536,7 +540,7 @@ public class SearchShopActivity extends BaseActivity {
 
                 break;
             case R.id.tv_market_floor:
-                if (shopList.size() > 0){
+                if (marketListBean!=null){
                     tvMarketFloor.setTextColor(getResources().getColor(R.color.red_99));
                     tvMarketFloor.setCompoundDrawables(null, null, redDrawable, null);
                     tvMarketType.setTextColor(getResources().getColor(R.color.gray_1a));

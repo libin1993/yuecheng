@@ -88,6 +88,7 @@ public class GroupGoodsDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         if (paySuccess) {
+            paySuccess = false;
             balancePayResult();
         }
     }
@@ -127,6 +128,8 @@ public class GroupGoodsDetailActivity extends BaseActivity {
                         DateUtils.getTime("yyyy-MM-dd HH:mm:ss", goodsBean.getData().getStartTime());
         boolean isBuy = "Y".equals(goodsBean.getData().getIsJoin());
 
+        boolean isNull = goodsBean.getData().getCommodityNum() == 0;
+
         if (isFinish) {
             tvGoodsStatus.setText("团购已结束");
             tvGoodsStatus.setVisibility(View.VISIBLE);
@@ -137,6 +140,10 @@ public class GroupGoodsDetailActivity extends BaseActivity {
             rlGoodsStatus.setVisibility(View.GONE);
         } else if (isBuy) {
             tvGoodsStatus.setText("已参团");
+            tvGoodsStatus.setVisibility(View.VISIBLE);
+            rlGoodsStatus.setVisibility(View.GONE);
+        } else if (isNull) {
+            tvGoodsStatus.setText("已抢光");
             tvGoodsStatus.setVisibility(View.VISIBLE);
             rlGoodsStatus.setVisibility(View.GONE);
         } else {

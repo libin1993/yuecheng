@@ -143,10 +143,12 @@ public class RushGoodsActivity extends BaseActivity {
                 holder.setText(R.id.tv_group_goods_num, "已抢" + dataBean.getSaleNum() + "件");
 
                 ProgressBar progressBar = holder.getView(R.id.progressbar_goods);
+
                 int progress = 0;
-                if (dataBean.getCommodityNum() > 0) {
-                    progress = dataBean.getSaleNum() / dataBean.getCommodityNum() * 100;
+                if (dataBean.getSaleNum() + dataBean.getCommodityNum() > 0) {
+                    progress = dataBean.getSaleNum() * 100 / (dataBean.getSaleNum() + dataBean.getCommodityNum());
                 }
+
                 progressBar.setProgress(progress);
                 holder.setText(R.id.tv_group_goods_limit, progress + "%");
                 holder.setText(R.id.tv_group_goods_discount, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));
@@ -161,7 +163,7 @@ public class RushGoodsActivity extends BaseActivity {
                         System.currentTimeMillis() >
                                 DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
                 boolean isBuy = "Y".equals(dataBean.getIsJoin());
-                boolean isNull = dataBean.getCommodityNum() == dataBean.getSaleNum();
+                boolean isNull = dataBean.getCommodityNum() == 0;
 
                 TextView tvStatus = holder.getView(R.id.tv_group_goods_buy);
                 if (isFinish) {

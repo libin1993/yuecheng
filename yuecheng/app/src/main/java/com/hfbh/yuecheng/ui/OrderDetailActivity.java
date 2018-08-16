@@ -376,13 +376,6 @@ public class OrderDetailActivity extends BaseActivity {
         tvOrderNum.setText("x" + orderBean.getData().getOrderDtlList().get(0).getDetailAccount());
         tvTotalPrice.setText("¥" + DisplayUtils.isInteger(orderBean.getData().getPrice()));
 
-        if (("SPECIAL").equals(orderBean.getData().getOrderType())) {
-            tvReceiveTime.setText("支付成功后" + orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
-            tvExpiredIntro.setText("失效未提货自动退款");
-        } else {
-            tvReceiveTime.setText("活动结束后" + orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
-            tvExpiredIntro.setText("失效未提货申请退款");
-        }
 
         if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())) {
             tvRefundIntro.setText("提货后" + orderBean.getData().getOrderDtlList().get(0).getRefundTimeLimit() + "天后可退货退款");
@@ -391,15 +384,22 @@ public class OrderDetailActivity extends BaseActivity {
         }
 
         tvOrderNo.setText(orderBean.getData().getOrderShopNumber());
+
         switch (orderBean.getData().getOrderType()) {
             case "GROUPON":
                 tvOrderType.setText("团购");
+                tvReceiveTime.setText("活动结束后" + orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
+                tvExpiredIntro.setText("失效未提货申请退款");
                 break;
             case "SPECIAL":
                 tvOrderType.setText("单品");
+                tvReceiveTime.setText("支付成功后" + orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
+                tvExpiredIntro.setText("失效未提货自动退款");
                 break;
             case "SECKILL":
                 tvOrderType.setText("秒杀");
+                tvReceiveTime.setText("活动结束后" + orderBean.getData().getOrderDtlList().get(0).getGetTimeLimit() + "天提货有效");
+                tvExpiredIntro.setText("失效未提货自动退款");
                 break;
         }
         tvSubmitTime.setText(orderBean.getData().getSumbitTime());
@@ -436,19 +436,27 @@ public class OrderDetailActivity extends BaseActivity {
             llOrderPay.setVisibility(View.VISIBLE);
             tvBalancePay.setText("¥" + DisplayUtils.decimalFormat(orderBean.getData().getUseAccountBalance()));
 
-            switch (orderBean.getData().getPayWay()) {
-                case "WX_SPAY":
-                case "WX_JSAPI":
-                case "WX_APP":
-                    tvPayType.setText("微信支付");
-                    break;
-                case "ALIPAY_WAP":
-                case "ALIPAY_APP":
-                    tvPayType.setText("支付宝支付");
-                    break;
+            if (!TextUtils.isEmpty(orderBean.getData().getPayWay())){
+                switch (orderBean.getData().getPayWay()) {
+                    case "WX_SPAY":
+                    case "WX_JSAPI":
+                    case "WX_APP":
+                        tvPayType.setText("微信支付");
+                        break;
+                    case "ALIPAY_WAP":
+                    case "ALIPAY_APP":
+                        tvPayType.setText("支付宝支付");
+                        break;
+                    default:
+                        tvPayType.setText("现金支付");
+                        break;
+                }
+            }else {
+                tvPayType.setText("现金支付");
             }
 
             tvCashPay.setText("¥" + DisplayUtils.decimalFormat(orderBean.getData().getWechatPay()));
+
             tvTotalPay.setText("¥" + DisplayUtils.decimalFormat(orderBean.getData().getPrice()));
 
             rlPayTime.setVisibility(View.VISIBLE);

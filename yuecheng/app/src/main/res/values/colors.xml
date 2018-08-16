@@ -20,7 +20,7 @@
     <color name="pink_e6">#E6D3E5</color>
     <color name="pink_f2">#F2DDD5</color>
     <color name="blue_df">#DFE2F2</color>
-    <color name="green_e4">#E4F2DF </color>
+    <color name="green_e4">#E4F2DF</color>
     <color name="blue_da">#DAEEF2</color>
     <color name="blue_19">#194F82</color>
     <color name="blue_85">#859BAB</color>
@@ -79,4 +79,5 @@
     <color name="green_46">#469723</color>
     <color name="gray_e9">#E9ECF0</color>
     <color name="gray_9e">#9EA1A9</color>
+    <color name="translucent">#7F000000</color>
 </resources>

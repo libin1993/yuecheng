@@ -55,14 +55,12 @@ public class ActionDetailActivity extends BaseActivity {
     RelativeLayout rlActionJoin;
     @BindView(R.id.tv_activity_end)
     TextView tvActivityEnd;
-    @BindView(R.id.tv_header_title)
-    TextView tvHeaderTitle;
-    @BindView(R.id.iv_header_back)
-    ImageView ivHeaderBack;
-    @BindView(R.id.iv_header_share)
-    ImageView ivHeaderShare;
     @BindView(R.id.rl_activity_status)
     RelativeLayout rlActivityStatus;
+    @BindView(R.id.iv_activity_back)
+    ImageView ivActivityBack;
+    @BindView(R.id.iv_activity_share)
+    ImageView ivActivityShare;
     //活动id
     private int activityId;
     private ActivityDetailBean activityBean;
@@ -84,8 +82,7 @@ public class ActionDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_action_detail);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        tvHeaderTitle.setText("活动详情");
-        ivHeaderShare.setVisibility(View.VISIBLE);
+
         getData();
         initWebView();
     }
@@ -246,10 +243,10 @@ public class ActionDetailActivity extends BaseActivity {
         activityId = getIntent().getIntExtra("activity_id", 0);
     }
 
-    @OnClick({R.id.iv_header_back, R.id.tv_exchange_activity, R.id.iv_header_share})
+    @OnClick({R.id.iv_activity_back, R.id.tv_exchange_activity, R.id.iv_activity_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_header_back:
+            case R.id.iv_activity_back:
                 if (webView.canGoBack()) {
                     webView.goBack();
                 } else {
@@ -259,7 +256,7 @@ public class ActionDetailActivity extends BaseActivity {
             case R.id.tv_exchange_activity:
                 enrollActivity();
                 break;
-            case R.id.iv_header_share:
+            case R.id.iv_activity_share:
                 if (activityBean != null) {
                     ShareUtils.showShare(this, activityBean.getData().getSignupDo()
                                     .getActivityPicture(), activityBean.getData().getSignupDo().getActivityTitle(),

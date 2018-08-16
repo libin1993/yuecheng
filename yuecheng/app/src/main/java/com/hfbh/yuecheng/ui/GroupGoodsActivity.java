@@ -189,7 +189,7 @@ public class GroupGoodsActivity extends BaseActivity {
                         System.currentTimeMillis() >
                                 DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
                 boolean isBuy = "Y".equals(dataBean.getIsJoin());
-                boolean isNull = dataBean.getCommodityNum() == dataBean.getSaleNum();
+                boolean isNull = dataBean.getCommodityNum() == 0;
 
                 if (isFinish) {
                     tvStatus.setText("已结束");

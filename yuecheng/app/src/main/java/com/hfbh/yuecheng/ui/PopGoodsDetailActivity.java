@@ -88,6 +88,7 @@ public class PopGoodsDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         if (paySuccess) {
+            paySuccess = false;
             balancePayResult();
         }
     }
@@ -120,7 +121,7 @@ public class PopGoodsDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-        boolean isNull = goodsBean.getData().getCommodityNum() == goodsBean.getData().getSaleNum();
+        boolean isNull = goodsBean.getData().getCommodityNum() == 0;
         boolean isBuy = "Y".equals(goodsBean.getData().getIsJoin());
 
         if (isNull) {
@@ -184,7 +185,7 @@ public class PopGoodsDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_goods_share:
-                if (goodsBean !=null){
+                if (goodsBean != null) {
                     ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
                             , goodsBean.getData().getCommodityName(),
                             "", url + "&share=true");

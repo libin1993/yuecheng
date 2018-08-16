@@ -88,6 +88,7 @@ public class RushGoodsDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         if (paySuccess) {
+            paySuccess = false;
             balancePayResult();
         }
     }
@@ -126,6 +127,7 @@ public class RushGoodsDetailActivity extends BaseActivity {
                 DateUtils.getTime("yyyy-MM-dd HH:mm:ss", goodsBean.getData().getNowDate()) >
                         DateUtils.getTime("yyyy-MM-dd HH:mm:ss", goodsBean.getData().getStartTime());
         boolean isBuy = "Y".equals(goodsBean.getData().getIsJoin());
+        boolean isNull = goodsBean.getData().getCommodityNum() == 0;
 
         if (isFinish) {
             tvGoodsStatus.setText("抢购已结束");
@@ -137,6 +139,10 @@ public class RushGoodsDetailActivity extends BaseActivity {
             rlGoodsStatus.setVisibility(View.GONE);
         } else if (isBuy) {
             tvGoodsStatus.setText("已抢购");
+            tvGoodsStatus.setVisibility(View.VISIBLE);
+            rlGoodsStatus.setVisibility(View.GONE);
+        } else if (isNull) {
+            tvGoodsStatus.setText("已抢光");
             tvGoodsStatus.setVisibility(View.VISIBLE);
             rlGoodsStatus.setVisibility(View.GONE);
         } else {

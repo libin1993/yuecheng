@@ -157,14 +157,15 @@ public class ScanedOrderActivity extends BaseActivity {
     private void inputPwd() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_validate_pwd, null);
 
+        int height = DisplayUtils.getMetrics(this).heightPixels;
         mPopupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-                (int) DisplayUtils.dp2px(this, 191));
+                (int) (height - DisplayUtils.dp2px(this, 180)));
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
         DisplayUtils.setBackgroundAlpha(this, true);
 
         ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_cancel_pay);
