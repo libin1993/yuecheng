@@ -595,11 +595,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         }
 
-//        //优惠券
-//        initTitle("团购优惠", 15);
-//        //优惠券
-//        initTitle("限时秒杀", 16);
-
         BaseDelegateAdapter groupAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.layout_homepage_goods, 1, 15) {
             @Override
@@ -719,11 +714,15 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         mAdapters.add(groupAdapter);
 
         //优惠券
-        initTitle("优惠券", 5);
+        initTitle("优惠券",5);
 
 
         if (couponBean != null && couponBean.getData() != null && couponBean.getData().size() > 0) {
-            couponAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+
+            LinearLayoutHelper linearLayoutHelper = new LinearLayoutHelper();
+            linearLayoutHelper.setDividerHeight((int)DisplayUtils.dp2px(getActivity(),15));
+
+            couponAdapter = new BaseDelegateAdapter(getActivity(), linearLayoutHelper,
                     R.layout.rv_coupon_item, couponBean.getData().size(), 6) {
                 @Override
                 public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -1185,6 +1184,27 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     }
 
 
+    private void initCouponTitle(){
+        BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
+                R.layout.layout_coupon_title, 1, 5) {
+            @Override
+            public void onBindViewHolder(ViewHolder holder, int position) {
+                super.onBindViewHolder(holder, position);
+                LinearLayout linearLayout = holder.getView(R.id.ll_coupon_title);
+
+                linearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
+            }
+        };
+        mAdapters.add(titleAdapter);
+    }
+
+
     /**
      * @param title
      * @param type  标题
@@ -1211,12 +1231,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                 break;
                             case 9:
                                 EventBus.getDefault().post("activity");
-                                break;
-                            case 15:
-                                startActivity(new Intent(getActivity(), GroupGoodsActivity.class));
-                                break;
-                            case 16:
-                                startActivity(new Intent(getActivity(), RushGoodsActivity.class));
                                 break;
                         }
                     }

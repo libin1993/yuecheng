@@ -29,6 +29,7 @@ import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
+import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -153,6 +154,8 @@ public class MyActivityFragment extends BaseFragment {
      */
     private void initView() {
         rvActivity.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvActivity.addItemDecoration(new SpaceItemDecoration((int) DisplayUtils.dp2px(getActivity(), 12)));
+
         adapter = new CommonAdapter<ActivityListBean.DataBean>(getActivity(),
                 R.layout.rv_my_activity_item, dataList) {
             @Override

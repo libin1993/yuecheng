@@ -19,16 +19,13 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.MyCouponBean;
 import com.hfbh.yuecheng.constant.Constant;
-import com.hfbh.yuecheng.ui.CloseActionActivity;
 import com.hfbh.yuecheng.ui.CloseCouponActivity;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -50,9 +47,11 @@ import okhttp3.Call;
  * Describe：我的优惠券
  */
 public class CouponFragment extends BaseFragment {
-    @BindView(R.id.rv_my_activity)
+
+
+    @BindView(R.id.rv_my_coupon)
     RecyclerView rvCoupon;
-    @BindView(R.id.layout_refresh_my_activity)
+    @BindView(R.id.layout_refresh_my_coupon)
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.iv_null_data)
     ImageView ivNullData;
@@ -62,7 +61,6 @@ public class CouponFragment extends BaseFragment {
     LinearLayout llNullData;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
-
     private Unbinder unbinder;
 
     private List<MyCouponBean.DataBean> dataList = new ArrayList<>();
@@ -75,7 +73,7 @@ public class CouponFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_coupon, container, false);
         unbinder = ButterKnife.bind(this, view);
         ivNullData.setImageResource(R.mipmap.ic_null_coupon);
         tvNullData.setText("暂无优惠券");
@@ -118,7 +116,7 @@ public class CouponFragment extends BaseFragment {
                             isRefresh = false;
                             refreshLayout.finishRefresh();
                         } else {
-                            if (viewLoading != null){
+                            if (viewLoading != null) {
                                 viewLoading.smoothToHide();
                             }
                         }
@@ -126,12 +124,12 @@ public class CouponFragment extends BaseFragment {
                         if (couponBean.isFlag() && couponBean.getData() != null
                                 && couponBean.getData().size() > 0) {
                             dataList.addAll(couponBean.getData());
-                            if (llNullData !=null){
+                            if (llNullData != null) {
                                 llNullData.setVisibility(View.GONE);
                             }
 
                         } else {
-                            if (llNullData !=null){
+                            if (llNullData != null) {
                                 llNullData.setVisibility(View.VISIBLE);
                             }
 

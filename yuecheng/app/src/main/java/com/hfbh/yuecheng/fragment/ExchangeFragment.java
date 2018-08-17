@@ -23,9 +23,11 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.ui.CloseGiftActivity;
 import com.hfbh.yuecheng.ui.GiftDetailActivity;
 import com.hfbh.yuecheng.utils.DateUtils;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -155,6 +157,8 @@ public class ExchangeFragment extends BaseFragment {
      */
     private void initView() {
         rvGift.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvGift.addItemDecoration(new SpaceItemDecoration((int) DisplayUtils.dp2px(getActivity(), 12)));
+
         adapter = new CommonAdapter<MyGiftBean.DataBean>(getActivity(), R.layout.rv_my_exchange_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, MyGiftBean.DataBean dataBean, final int position) {

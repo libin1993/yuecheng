@@ -130,6 +130,7 @@ public class GroupGoodsActivity extends BaseActivity {
 
     }
 
+
     private void initView() {
         rvGoods.setLayoutManager(new LinearLayoutManager(this));
 

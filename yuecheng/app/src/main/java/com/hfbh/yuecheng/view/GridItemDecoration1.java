@@ -7,7 +7,7 @@ import android.view.View;
 /**
  * Author：Libin on 2018/5/24 17:50
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：grideview间距
  */
 public class GridItemDecoration1 extends RecyclerView.ItemDecoration {
     //间距

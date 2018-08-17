@@ -7,8 +7,7 @@
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/layout_refresh_my_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="12dp">
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_my_activity"

@@ -163,7 +163,6 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-
         if ("NORMAL".equals(orderBean.getData().getRefundState())) {
             switch (orderBean.getData().getState()) {
                 case "UNPAID":
@@ -181,7 +180,6 @@ public class OrderDetailActivity extends BaseActivity {
 
 
                                 llOrderDetail.setVisibility(View.VISIBLE);
-
 
                                 tvCancel.setVisibility(View.VISIBLE);
                                 tvCancel.setText("取消订单");
@@ -333,7 +331,6 @@ public class OrderDetailActivity extends BaseActivity {
                             break;
                         case "UNSIGNIN":
                             expiredGroup();
-
                             break;
                     }
 
@@ -348,19 +345,50 @@ public class OrderDetailActivity extends BaseActivity {
             switch (orderBean.getData().getRefundState()) {
                 case "REFUNDING":
                     status = "退款中";
+                    llOrderDetail.setVisibility(View.GONE);
                     break;
                 case "REFUNDED":
                     status = "退款成功";
+                    llOrderDetail.setVisibility(View.GONE);
                     break;
                 case "REFUND_FAIL":
                     status = "退款失败";
+
+                    if ("SINGIN".equals(orderBean.getData().getState())) {
+                        if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())
+                                && orderBean.getData().getOrderDtlList().get(0).getSingInDays() >= 0) {
+                            llOrderDetail.setVisibility(View.VISIBLE);
+
+                            tvCancel.setVisibility(View.VISIBLE);
+                            tvCancel.setText("退货退款");
+                            tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+
+                            tvConfirm.setVisibility(View.GONE);
+
+                            type = 3;
+                        } else {
+                            llOrderDetail.setVisibility(View.GONE);
+                        }
+                    } else if (("CLOSE".equals(orderBean.getData().getState()) && "UNSIGNIN".equals(orderBean.getData().getCloseType()))
+                            || "EXPIRED".equals(orderBean.getData().getState())) {
+
+                        llOrderDetail.setVisibility(View.VISIBLE);
+                        tvCancel.setVisibility(View.VISIBLE);
+                        tvCancel.setText("去退款");
+                        tvCancel.setBackgroundResource(R.drawable.stroke_gray_16dp);
+
+                        tvConfirm.setVisibility(View.GONE);
+
+                        type = 3;
+                    }
+
                     break;
             }
 
             tvOrderStatus.setText(status);
             tvStatusInfo.setText("");
             isPaid(true);
-            llOrderDetail.setVisibility(View.GONE);
+
         }
 
 
@@ -436,7 +464,7 @@ public class OrderDetailActivity extends BaseActivity {
             llOrderPay.setVisibility(View.VISIBLE);
             tvBalancePay.setText("¥" + DisplayUtils.decimalFormat(orderBean.getData().getUseAccountBalance()));
 
-            if (!TextUtils.isEmpty(orderBean.getData().getPayWay())){
+            if (!TextUtils.isEmpty(orderBean.getData().getPayWay())) {
                 switch (orderBean.getData().getPayWay()) {
                     case "WX_SPAY":
                     case "WX_JSAPI":
@@ -451,7 +479,7 @@ public class OrderDetailActivity extends BaseActivity {
                         tvPayType.setText("现金支付");
                         break;
                 }
-            }else {
+            } else {
                 tvPayType.setText("现金支付");
             }
 

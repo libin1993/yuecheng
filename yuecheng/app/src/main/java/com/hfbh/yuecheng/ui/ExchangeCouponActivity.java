@@ -30,6 +30,8 @@ import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.hfbh.yuecheng.view.GridItemDecoration;
+import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -175,6 +177,7 @@ public class ExchangeCouponActivity extends BaseActivity {
 
     private void initView() {
         rvExchangeCoupon.setLayoutManager(new LinearLayoutManager(this));
+        rvExchangeCoupon.addItemDecoration(new SpaceItemDecoration((int) DisplayUtils.dp2px(this, 15)));
         adapter = new CommonAdapter<CouponListBean.DataBean>(ExchangeCouponActivity.this,
                 R.layout.rv_coupon_item, dataList) {
             @Override

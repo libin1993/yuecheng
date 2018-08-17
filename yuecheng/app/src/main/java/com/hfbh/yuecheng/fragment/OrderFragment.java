@@ -51,6 +51,7 @@ import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
+import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -219,6 +220,7 @@ public class OrderFragment extends BaseFragment {
 
     private void initView() {
         rvOrder.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvOrder.addItemDecoration(new SpaceItemDecoration((int) DisplayUtils.dp2px(getActivity(), 12)));
         adapter = new CommonAdapter<MyOrderBean.DataBean>(getActivity(), R.layout.rv_order_item, orderList) {
             @Override
             protected void convert(ViewHolder holder, final MyOrderBean.DataBean dataBean, int position) {
@@ -234,7 +236,6 @@ public class OrderFragment extends BaseFragment {
                 holder.setText(R.id.tv_order_total_price, "¥" + DisplayUtils.isInteger(dataBean.getPrice()));
                 final TextView tvCancel = holder.getView(R.id.tv_cancel_order);
                 final TextView tvConfirm = holder.getView(R.id.tv_order_confirm);
-
 
 
                 final TextView tvStatus = holder.getView(R.id.tv_status_order);

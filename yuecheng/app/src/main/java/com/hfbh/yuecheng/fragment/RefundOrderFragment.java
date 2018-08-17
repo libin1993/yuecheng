@@ -33,6 +33,7 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -189,6 +190,7 @@ public class RefundOrderFragment extends BaseFragment {
 
     private void initView() {
         rvOrder.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvOrder.addItemDecoration(new SpaceItemDecoration((int) DisplayUtils.dp2px(getActivity(), 12)));
         adapter = new CommonAdapter<RefundOrderBean.DataBean>(getActivity(), R.layout.rv_order_item, orderList) {
             @Override
             protected void convert(ViewHolder holder, final RefundOrderBean.DataBean dataBean, int position) {

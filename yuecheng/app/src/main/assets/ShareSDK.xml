@@ -105,7 +105,7 @@
         AppId="wxde304ec90e9db692"
         AppSecret="2bf6169f6504c7ecf3cec586de20ae5c"
         BypassApproval="true"
-        Enable="true" />
+        Enable="false" />
         
 	<WechatFavorite
         Id="6"

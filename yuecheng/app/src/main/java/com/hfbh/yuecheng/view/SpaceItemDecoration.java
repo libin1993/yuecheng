@@ -12,22 +12,21 @@ import android.view.View;
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     //间距
     private int mSpace;
-    //总数量
-    private int counts;
 
-    public SpaceItemDecoration(int space, int counts) {
+    public SpaceItemDecoration(int space) {
         this.mSpace = space;
-        this.counts = counts;
     }
 
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
-
+        int childCount = parent.getAdapter().getItemCount();
         int position = parent.getChildAdapterPosition(view);
-        if (position >= 0 && position < counts) {
+        if (position > 0 && position < childCount) {
             outRect.set(0, 0, 0, mSpace);
+        } else {
+            outRect.set(0, mSpace, 0, mSpace);
         }
     }
 }

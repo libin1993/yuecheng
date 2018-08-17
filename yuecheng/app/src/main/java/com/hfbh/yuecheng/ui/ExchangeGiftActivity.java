@@ -148,9 +148,7 @@ public class ExchangeGiftActivity extends BaseActivity {
     private void initView() {
 
         rvExchange.setLayoutManager(new GridLayoutManager(this, 2));
-        //布局宽高
-        int widthPixels = DisplayUtils.getMetrics(this).widthPixels;
-        final int width = (int) ((widthPixels - DisplayUtils.dp2px(this, 35)) / 2);
+
         //间距
         rvExchange.addItemDecoration(new GridItemDecoration1((int) DisplayUtils.dp2px(this, 6)));
         adapter = new CommonAdapter<GiftListBean.DataBean>(ExchangeGiftActivity.this,

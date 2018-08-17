@@ -1,9 +1,11 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -80,6 +82,7 @@ public class PopGoodsActivity extends BaseActivity {
         setContentView(R.layout.activity_now_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("人气");
+        rvPopGoods.setBackgroundColor(Color.WHITE);
         ivNullData.setImageResource(R.mipmap.ic_null_goods);
         tvNullData.setText("暂无商品");
         loadingView.smoothToShow();
@@ -128,9 +131,11 @@ public class PopGoodsActivity extends BaseActivity {
                         if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
                             goodsList.addAll(goodsBean.getData());
                             llNullData.setVisibility(View.GONE);
+                            rvPopGoods.setBackgroundColor(Color.WHITE);
                         } else {
                             if (!isLoadMore) {
                                 llNullData.setVisibility(View.VISIBLE);
+                                rvPopGoods.setBackgroundColor(ContextCompat.getColor(PopGoodsActivity.this,R.color.gray_f2));
                             }
                         }
                         isLoadMore = false;

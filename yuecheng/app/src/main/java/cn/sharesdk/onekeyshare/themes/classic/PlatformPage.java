@@ -88,69 +88,54 @@ public abstract class PlatformPage extends OnekeySharePage {
         llPage.addView(vTop, lp);
 
 
+
         lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-//        lp.setMargins((int) dp2px(15), 0, (int) dp2px(15), (int) dp2px(15));
+        lp.setMargins((int) dp2px(15), 0, (int) dp2px(15), (int) dp2px(15));
 
         LinearLayout llPanel = new LinearLayout(activity);
-//        llPanel.setBackgroundResource(R.drawable.bound_white_8dp);
+        llPanel.setBackgroundResource(R.drawable.bound_white_8dp);
         llPanel.setOrientation(LinearLayout.VERTICAL);
         llPage.addView(llPanel, lp);
 
-        //增加分享到layout
-        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) dp2px(44));
-        LinearLayout buttonLayout = new LinearLayout(activity);
-        buttonLayout.setBackgroundColor(Color.WHITE);
 
-        LinearLayout.LayoutParams lpTitle = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                (int) dp2px(44));
+        //增加分享到layout
+        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int) dp2px(60));
+        RelativeLayout titleLayout = new RelativeLayout(activity);
+
+
+
+        RelativeLayout.LayoutParams rpTitle = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        rpTitle.addRule(RelativeLayout.CENTER_VERTICAL);
+        rpTitle.setMargins((int) dp2px(30), 0, 0, 0);
+
         TextView tv = new TextView(activity);
         tv.setGravity(Gravity.CENTER);
         tv.setText("分享到");
-        tv.setTextSize(16);
-        tv.setTextColor(0xff2e2e2e);
-        tv.setBackgroundColor(Color.WHITE);
-        buttonLayout.addView(tv, lpTitle);
-        llPanel.addView(buttonLayout, lp);
+        tv.setTextSize(18);
+        tv.setTextColor(0xff000000);
+        tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+        titleLayout.addView(tv, rpTitle);
 
 
-        //增加分享到layout
-//        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int) dp2px(60));
-//        RelativeLayout titleLayout = new RelativeLayout(activity);
-//        titleLayout.setBackgroundColor(Color.WHITE);
-//
-//
-//        RelativeLayout.LayoutParams rpTitle = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//        rpTitle.addRule(RelativeLayout.CENTER_VERTICAL);
-//        rpTitle.setMargins((int) dp2px(30), 0, 0, 0);
-//
-//        TextView tv = new TextView(activity);
-//        tv.setGravity(Gravity.CENTER);
-//        tv.setText("分享到");
-//        tv.setTextSize(18);
-//        tv.setTextColor(0xff000000);
-//        tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-//
-//        titleLayout.addView(tv, rpTitle);
-//
-//
-//        RelativeLayout.LayoutParams rpImg = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-//        rpImg.addRule(RelativeLayout.CENTER_VERTICAL);
-//        rpImg.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//
-//        ImageView ivCancel = new ImageView(activity);
-//        ivCancel.setImageResource(R.mipmap.ic_close_gray);
-//        ivCancel.setScaleType(ImageView.ScaleType.CENTER);
-//        ivCancel.setPadding((int) dp2px(18), 0, (int) dp2px(18), 0);
-//        ivCancel.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-//
-//        titleLayout.addView(ivCancel, rpImg);
-//
-//        llPanel.addView(titleLayout, lp);
+        RelativeLayout.LayoutParams rpImg = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        rpImg.addRule(RelativeLayout.CENTER_VERTICAL);
+        rpImg.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+        ImageView ivCancel = new ImageView(activity);
+        ivCancel.setImageResource(R.mipmap.ic_close_gray);
+        ivCancel.setScaleType(ImageView.ScaleType.CENTER);
+        ivCancel.setPadding((int) dp2px(18), 0, (int) dp2px(18), 0);
+        ivCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        titleLayout.addView(ivCancel, rpImg);
+
+        llPanel.addView(titleLayout, lp);
 
 
         MobViewPager mvp = new MobViewPager(activity);
@@ -168,47 +153,98 @@ public abstract class PlatformPage extends OnekeySharePage {
         adapter.setIndicator(vInd);
         mvp.setAdapter(adapter);
 
-//        View viewBg = new View(activity);
-//        viewBg.setBackgroundColor(Color.WHITE);
-//        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int) dp2px(20));
-//        llPanel.addView(viewBg, lp);
+        View viewBg = new View(activity);
+        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int) dp2px(20));
+        llPanel.addView(viewBg, lp);
 
 
-        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 51);
-        LinearLayout buttonLayout3 = new LinearLayout(activity);
-        buttonLayout3.setBackgroundColor(0xffffffff);
-
-        LinearLayout.LayoutParams lpLine = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-        lpLine.setMargins(0, 50, 0, 0);
-        View viewLine = new TextView(activity);
-        viewLine.setBackgroundColor(0xffababab);
-        buttonLayout3.addView(viewLine, lpLine);
-        llPanel.addView(buttonLayout3, lp);
 
 
-        //增加取消按钮
-        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) dp2px(44));
-        LinearLayout buttonLayout2 = new LinearLayout(activity);
-        buttonLayout2.setBackgroundColor(Color.WHITE);
 
-        LinearLayout.LayoutParams lp22 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                (int) dp2px(44));
-        TextView tvCancel = new TextView(activity);
-        tvCancel.setText("取消");
-        tvCancel.setTextSize(15);
-        tvCancel.setGravity(Gravity.CENTER);
-        tvCancel.setBackgroundColor(Color.WHITE);
-        tvCancel.setTextColor(0xff666666);
-        tvCancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                activity.getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));
-                finish();
-            }
-        });
-        buttonLayout2.addView(tvCancel, lp22);
-        llPanel.addView(buttonLayout2, lp);
+
+
+
+
+
+
+
+//        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//
+//
+//        LinearLayout llPanel = new LinearLayout(activity);
+//
+//        llPanel.setOrientation(LinearLayout.VERTICAL);
+//        llPage.addView(llPanel, lp);
+//
+//        //增加分享到layout
+//        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) dp2px(44));
+//        LinearLayout buttonLayout = new LinearLayout(activity);
+//        buttonLayout.setBackgroundColor(Color.WHITE);
+//
+//        LinearLayout.LayoutParams lpTitle = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                (int) dp2px(44));
+//        TextView tv = new TextView(activity);
+//        tv.setGravity(Gravity.CENTER);
+//        tv.setText("分享到");
+//        tv.setTextSize(16);
+//        tv.setTextColor(0xff2e2e2e);
+//        tv.setBackgroundColor(Color.WHITE);
+//        buttonLayout.addView(tv, lpTitle);
+//        llPanel.addView(buttonLayout, lp);
+//
+//
+//
+//        MobViewPager mvp = new MobViewPager(activity);
+//        ArrayList<Object> cells = collectCells();
+//        PlatformPageAdapter adapter = newAdapter(cells);
+//        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, adapter.getPanelHeight());
+//        llPanel.addView(mvp, lp);
+//
+//        IndicatorView vInd = new IndicatorView(activity);
+//        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, adapter.getBottomHeight());
+//        llPanel.addView(vInd, lp);
+//
+//        vInd.setScreenCount(adapter.getCount());
+//        vInd.onScreenChange(0, 0);
+//        adapter.setIndicator(vInd);
+//        mvp.setAdapter(adapter);
+//
+//
+//        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 51);
+//        LinearLayout buttonLayout3 = new LinearLayout(activity);
+//        buttonLayout3.setBackgroundColor(0xffffffff);
+//
+//        LinearLayout.LayoutParams lpLine = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+//        lpLine.setMargins(0, 50, 0, 0);
+//        View viewLine = new TextView(activity);
+//        viewLine.setBackgroundColor(0xffababab);
+//        buttonLayout3.addView(viewLine, lpLine);
+//        llPanel.addView(buttonLayout3, lp);
+//
+//
+//        //增加取消按钮
+//        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) dp2px(44));
+//        LinearLayout buttonLayout2 = new LinearLayout(activity);
+//        buttonLayout2.setBackgroundColor(Color.WHITE);
+//
+//        LinearLayout.LayoutParams lp22 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                (int) dp2px(44));
+//        TextView tvCancel = new TextView(activity);
+//        tvCancel.setText("取消");
+//        tvCancel.setTextSize(15);
+//        tvCancel.setGravity(Gravity.CENTER);
+//        tvCancel.setBackgroundColor(Color.WHITE);
+//        tvCancel.setTextColor(0xff666666);
+//        tvCancel.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // TODO Auto-generated method stub
+//                activity.getWindow().setBackgroundDrawable(new ColorDrawable(0x00000000));
+//                finish();
+//            }
+//        });
+//        buttonLayout2.addView(tvCancel, lp22);
+//        llPanel.addView(buttonLayout2, lp);
 
     }
 
@@ -273,21 +309,6 @@ public abstract class PlatformPage extends OnekeySharePage {
         finish();
     }
 
-    private void initAnims() {
-        animShow = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, 1,
-                Animation.RELATIVE_TO_SELF, 0);
-        animShow.setDuration(300);
-
-        animHide = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 1,
-                Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, 0);
-        animHide.setDuration(300);
-    }
 
     public boolean onFinish() {
         if (finished) {
@@ -295,31 +316,6 @@ public abstract class PlatformPage extends OnekeySharePage {
             return false;
         }
 
-//        animHide.setAnimationListener(new Animation.AnimationListener() {
-//            public void onAnimationStart(Animation animation) {
-//
-//            }
-//
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//
-//            public void onAnimationEnd(Animation animation) {
-//                if (beforeFinish == null) {
-//                    // 取消分享菜单的统计
-//                    ShareSDK.logDemoEvent(2, null);
-//                } else {
-//                    beforeFinish.run();
-//                    beforeFinish = null;
-//                }
-//
-//                finished = true;
-//                finish();
-//            }
-//        });
-//		llPanel.clearAnimation();
-//		llPanel.setAnimation(animHide);
-//		llPanel.setVisibility(View.GONE);
         if (beforeFinish == null) {
             // 取消分享菜单的统计
             ShareSDK.logDemoEvent(2, null);

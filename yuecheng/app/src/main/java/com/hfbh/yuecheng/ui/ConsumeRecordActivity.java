@@ -17,6 +17,7 @@ import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.BroadMsgBean;
 import com.hfbh.yuecheng.bean.ConsumeBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -124,12 +125,13 @@ public class ConsumeRecordActivity extends BaseActivity {
                 TextView tvMoney = holder.getView(R.id.tv_points_type);
 
                 if (!TextUtils.isEmpty(dataBean.getTotalMoney())) {
-                    if (Double.parseDouble(dataBean.getTotalMoney()) > 0) {
+                    double money = Double.parseDouble(dataBean.getTotalMoney());
+                    if (money > 0) {
                         tvMoney.setTextColor(getResources().getColor(R.color.red_99));
-                        tvMoney.setText("+" + dataBean.getTotalMoney());
+                        tvMoney.setText("+" + DisplayUtils.decimalFormat(money));
                     } else {
                         tvMoney.setTextColor(getResources().getColor(R.color.gray_10));
-                        tvMoney.setText(dataBean.getTotalMoney());
+                        tvMoney.setText(DisplayUtils.decimalFormat(money));
                     }
 
                 }
