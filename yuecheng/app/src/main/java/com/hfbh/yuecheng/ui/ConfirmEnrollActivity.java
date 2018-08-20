@@ -281,7 +281,7 @@ public class ConfirmEnrollActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_confirm_enroll:
-                if (activityBean.getData() != null) {
+                if (activityBean != null && activityBean.getData() != null) {
                     //是否下单,未下单去下单，已下单去支付
                     if (activityBean.getData().getOrder() == null) {
                         if (useBalance > 0) {
@@ -530,9 +530,8 @@ public class ConfirmEnrollActivity extends BaseActivity {
 
         List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
         orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderNo));
-        MyApp.orderBean = new PayOrderBean(orderNo, "ACTIVITY", "",
-
-                false, enrollFee, BigDecimalUtils.sub(enrollFee, useBalance), discountBeans, orderInfoList);
+        MyApp.orderBean = new PayOrderBean(orderNo, "ACTIVITY", "", false,
+                enrollFee, BigDecimalUtils.sub(enrollFee, useBalance), discountBeans, orderInfoList);
         startActivity(new Intent(ConfirmEnrollActivity.this, ConfirmPayActivity.class));
     }
 

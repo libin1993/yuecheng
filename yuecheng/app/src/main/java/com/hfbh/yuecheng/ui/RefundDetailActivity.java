@@ -127,6 +127,10 @@ public class RefundDetailActivity extends BaseActivity {
                         orderBean = GsonUtils.jsonToBean(response, RefundDetailBean.class);
                         if (orderBean.isFlag() && orderBean.getData() != null) {
                             initView();
+                        }else {
+                            if (orderBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(RefundDetailActivity.this, "is_login");
+                            }
                         }
 
                     }

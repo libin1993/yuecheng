@@ -420,11 +420,14 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
      */
     private void enrollActivity() {
         int num = 0;
-        for (int i = 0; i < inputNum.size(); i++) {
-            if (inputNum.get(i)) {
-                num++;
+        if (activityBean != null && activityBean.getData() != null) {
+            for (int i = 0; i < inputNum.size(); i++) {
+                if (inputNum.get(i)) {
+                    num++;
+                }
             }
         }
+
         if (etUsername != null && etPhone != null && !TextUtils.isEmpty(etUsername.getText().toString().trim())
                 && !TextUtils.isEmpty(etPhone.getText().toString().trim()) && num >= totalNum) {
             if (PhoneNumberUtils.judgePhoneNumber(etPhone.getText().toString().trim())) {

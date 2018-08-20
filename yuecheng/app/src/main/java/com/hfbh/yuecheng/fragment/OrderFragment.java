@@ -246,9 +246,10 @@ public class OrderFragment extends BaseFragment {
                     countDownTimer = null;
                 }
 
+                //是否退款单
                 if ("NORMAL".equals(dataBean.getRefundState())) {
                     switch (dataBean.getState()) {
-                        case "UNPAID":
+                        case "UNPAID":     //待付款定时15分钟
                             long currentTime = System.currentTimeMillis();
                             long orderTime = DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getSumbitTime());
 
@@ -282,9 +283,8 @@ public class OrderFragment extends BaseFragment {
 
                             }
 
-
                             break;
-                        case "PAID":
+                        case "PAID":    //待提货  团购中商品不能提货
                             tvStatus.setText("待提货");
 
                             tvCancel.setVisibility(View.GONE);
@@ -312,7 +312,7 @@ public class OrderFragment extends BaseFragment {
 
                             tvConfirm.setVisibility(View.GONE);
                             break;
-                        case "GROUP_SUCCESS":
+                        case "GROUP_SUCCESS":  //团购拼团成功
                             tvStatus.setText("待提货");
 
                             tvCancel.setVisibility(View.GONE);
@@ -391,28 +391,6 @@ public class OrderFragment extends BaseFragment {
                 //将此 countDownTimer 放入list.
                 countDownMap.put(tvStatus.hashCode(), countDownTimer);
 
-//                rlGoods.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        Intent intent = null;
-//                        switch (dataBean.getOrderType()) {
-//
-//                            case "GROUPON":
-//                                intent = new Intent(getActivity(), GroupGoodsDetailActivity.class);
-//                                break;
-//                            case "SPECIAL":
-//                                intent = new Intent(getActivity(), PopGoodsDetailActivity.class);
-//                                break;
-//                            case "SECKILL":
-//                                intent = new Intent(getActivity(), RushGoodsDetailActivity.class);
-//                                break;
-//                        }
-//                        intent.putExtra("goods_id", dataBean.getOrderDtlList().get(0).getDetailId());
-//                        startActivity(intent);
-//
-//                    }
-//                });
 
                 tvCancel.setOnClickListener(new View.OnClickListener() {
                     @Override

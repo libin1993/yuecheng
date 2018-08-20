@@ -84,7 +84,6 @@ public class ConfirmPayActivity extends BaseActivity {
         tvHeaderTitle.setText("确认支付");
         api = WXAPIFactory.createWXAPI(this, Constant.APP_ID);
         initView();
-
     }
 
     private void initView() {

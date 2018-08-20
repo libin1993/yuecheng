@@ -33,9 +33,11 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.SearchShopBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.DropDownPopupWindow;
+import com.hfbh.yuecheng.view.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -206,27 +208,28 @@ public class SearchShopActivity extends BaseActivity {
 
                         if (marketListBean.isFlag() && marketListBean.getShopList().size() > 0) {
                             if (firstIn) {
+                                SearchShopBean.FloorListBean floorBean = new SearchShopBean.FloorListBean();
+                                floorBean.setFloorName("全部楼层");
+                                floorList.add(floorBean);
+
+                                floorNum = 0;
+                                floorId = floorList.get(0).getFloorId();
+                                floorName = floorList.get(0).getFloorName();
+                                tvMarketFloor.setText(floorName);
                                 if (marketListBean.getFloorList().size() > 0) {
-                                    SearchShopBean.FloorListBean floorBean = new SearchShopBean.FloorListBean();
-                                    floorBean.setFloorName("全部楼层");
-                                    floorList.add(floorBean);
-
                                     floorList.addAll(marketListBean.getFloorList());
-                                    floorNum = 0;
-                                    floorId = floorList.get(0).getFloorId();
-                                    floorName = floorList.get(0).getFloorName();
-                                    tvMarketFloor.setText(floorName);
                                 }
-                                if (marketListBean.getIndustryList().size() > 0) {
-                                    SearchShopBean.IndustryListBeanX industryBean = new SearchShopBean.IndustryListBeanX();
-                                    industryBean.setIndustryName("全部分类");
-                                    industryList.add(industryBean);
 
+                                SearchShopBean.IndustryListBeanX industryBean = new SearchShopBean.IndustryListBeanX();
+                                industryBean.setIndustryName("全部分类");
+                                industryList.add(industryBean);
+
+                                industryId = industryList.get(0).getOrganizeIndustryId();
+                                industryNum = 0;
+                                industryName = industryList.get(0).getIndustryName();
+                                tvMarketType.setText(industryName);
+                                if (marketListBean.getIndustryList().size() > 0) {
                                     industryList.addAll(marketListBean.getIndustryList());
-                                    industryId = industryList.get(0).getIndustryId();
-                                    industryNum = 0;
-                                    industryName = industryList.get(0).getIndustryName();
-                                    tvMarketType.setText(industryName);
                                 }
                                 firstIn = false;
                             }
@@ -250,6 +253,7 @@ public class SearchShopActivity extends BaseActivity {
      */
     private void initView() {
         rvMarketList.setLayoutManager(new LinearLayoutManager(this));
+        rvMarketList.addItemDecoration(new SpaceItemDecoration((int) DisplayUtils.dp2px(this,10)));
         shopAdapter = new CommonAdapter<SearchShopBean.ShopListBean>(this,
                 R.layout.rv_search_market_item, shopList) {
             @Override
@@ -451,15 +455,6 @@ public class SearchShopActivity extends BaseActivity {
 
         mPopupWindow.showAsDropDown(llSearchMarket);
 
-//        if (Build.VERSION.SDK_INT >= 24) {
-//            Rect visibleFrame = new Rect();
-//            llSearchMarket.getGlobalVisibleRect(visibleFrame);
-//            int height = llSearchMarket.getResources().getDisplayMetrics().heightPixels - visibleFrame.bottom;
-//            mPopupWindow.setHeight(height);
-//            mPopupWindow.showAsDropDown(llNullData, 0, 0);
-//        } else {
-//            mPopupWindow.showAsDropDown(llSearchMarket);
-//        }
 
         RecyclerView rvType = (RecyclerView) contentView.findViewById(R.id.rv_select_floor);
         View viewBg = contentView.findViewById(R.id.view_shop_bg);
@@ -488,7 +483,7 @@ public class SearchShopActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 industryNum = holder.getLayoutPosition();
-                industryId = industryList.get(industryNum).getIndustryId();
+                industryId = industryList.get(industryNum).getOrganizeIndustryId();
                 industryName = industryList.get(industryNum).getIndustryName();
                 tvMarketType.setText(industryName);
                 typeAdapter.notifyDataSetChanged();

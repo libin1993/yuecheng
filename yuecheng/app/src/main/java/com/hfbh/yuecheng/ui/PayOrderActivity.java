@@ -153,6 +153,10 @@ public class PayOrderActivity extends BaseActivity {
                                 initBalance();
                             }
                             initPrice();
+                        }else {
+                            if (orderBean.getCode() == 4002) {
+                                SharedPreUtils.deleteStr(PayOrderActivity.this, "is_login");
+                            }
                         }
                     }
                 });
@@ -499,6 +503,7 @@ public class PayOrderActivity extends BaseActivity {
                 });
     }
 
+    
     /**
      * 预付卡全额支付
      */
@@ -527,7 +532,8 @@ public class PayOrderActivity extends BaseActivity {
                             if (flag) {
 
                                 List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
-                                orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderBean.getData().getOrderShopNumber()));
+                                orderInfoList.add(new PayOrderBean.OrderInfo("订单号",
+                                        orderBean.getData().getOrderShopNumber()));
                                 orderInfoList.add(new PayOrderBean.OrderInfo("商品名称",
                                         orderBean.getData().getOrderDtlList().get(0).getDetailName()));
                                 orderInfoList.add(new PayOrderBean.OrderInfo("支付方式", "余额支付"));

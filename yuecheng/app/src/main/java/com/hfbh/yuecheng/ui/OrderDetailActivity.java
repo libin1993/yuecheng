@@ -108,10 +108,14 @@ public class OrderDetailActivity extends BaseActivity {
     @BindView(R.id.rl_order_goods)
     RelativeLayout rlOrderGoods;
 
+    //订单id
     private int orderId;
     private OrderDetailBean orderBean;
+    //待付款订单定时器
     private CountDownTimer countDownTimer;
+    //订单状态
     private int type;
+    //提货二维码
     private Bitmap qrBmp;
 
     @Override
@@ -249,6 +253,7 @@ public class OrderDetailActivity extends BaseActivity {
                             break;
                     }
 
+                    //是否可退款，提货退款有效期内
                     if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())
                             && orderBean.getData().getOrderDtlList().get(0).getSingInDays() >= 0
                             && (orderBean.getData().getRefundState().equals("REFUND_FAIL") ||

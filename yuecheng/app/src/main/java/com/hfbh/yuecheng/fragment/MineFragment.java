@@ -314,7 +314,7 @@ public class MineFragment extends BaseFragment {
     private void toMemberPoints() {
         Intent intent;
         if (SharedPreUtils.getBoolean(getActivity(), "is_login", false)) {
-            if (userInfoBean != null) {
+            if (userInfoBean != null && userInfoBean.getData() != null) {
                 intent = new Intent(getActivity(), MemberPointsActivity.class);
                 intent.putExtra("points", userInfoBean.getData().getPoints());
                 startActivity(intent);

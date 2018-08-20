@@ -63,6 +63,7 @@ public class GroupGoodsActivity extends BaseActivity {
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
 
+    //当前页数
     private int page = 1;
     //刷新
     private boolean isRefresh;
@@ -149,6 +150,12 @@ public class GroupGoodsActivity extends BaseActivity {
                 long endTime = DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getEndTime());
                 long time = endTime - currentTime;
 
+                /*
+                 *  必须拼团商品
+                 *  距活动结束时间15分钟 - 10分钟，拼团数量低于成团数量20%，拼团数量自动补全到成团数量20%
+                 *  距活动结束时间10分钟，拼团数量低于成团数量50%，拼团数量自动补全到成团数量50%
+                 *  活动结束，拼团数量低于成团数量，拼团数量自动补全为成团数量
+                 */
                 if ("Y".equals(dataBean.getIsMustGroup())) {
                     if (dataBean.getSaleNum() >= dataBean.getGroupNum()) {
                         num = dataBean.getSaleNum();
@@ -185,11 +192,14 @@ public class GroupGoodsActivity extends BaseActivity {
                 tvOld.setText("¥" + DisplayUtils.isInteger(dataBean.getOldPrice()));
 
                 TextView tvStatus = holder.getView(R.id.tv_group_goods_buy);
+                //活动结束
                 boolean isFinish = !TextUtils.isEmpty(dataBean.getEndTime()) && currentTime > endTime;
-                boolean isStart = !TextUtils.isEmpty(dataBean.getStartTime()) &&
-                        System.currentTimeMillis() >
-                                DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
+                //活动是否开始
+                boolean isStart = !TextUtils.isEmpty(dataBean.getStartTime()) && System.currentTimeMillis()
+                        > DateUtils.getTime("yyyy-MM-dd HH:mm:ss", dataBean.getStartTime());
+                //购买数量上限
                 boolean isBuy = "Y".equals(dataBean.getIsJoin());
+                //是否抢光
                 boolean isNull = dataBean.getCommodityNum() == 0;
 
                 if (isFinish) {

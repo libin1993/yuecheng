@@ -78,7 +78,7 @@ public class PayResultActivity extends BaseActivity {
     private void initView() {
         tvHeaderTitle.setText("支付结果");
         if (MyApp.orderBean != null) {
-            tvOrderTotal.setText("¥" + DisplayUtils.decimalFormat(MyApp.orderBean.getMoney()));
+            tvOrderTotal.setText("¥" + DisplayUtils.decimalFormat(MyApp.orderBean.getOrderPrice()));
             if (MyApp.orderBean.isPayResult()) {
                 ivPayResult.setImageResource(R.mipmap.img_success);
                 tvPayResult.setText("支付成功");
