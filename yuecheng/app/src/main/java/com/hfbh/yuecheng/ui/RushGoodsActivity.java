@@ -165,6 +165,7 @@ public class RushGoodsActivity extends BaseActivity {
                 boolean isBuy = "Y".equals(dataBean.getIsJoin());
                 boolean isNull = dataBean.getCommodityNum() == 0;
 
+
                 TextView tvStatus = holder.getView(R.id.tv_group_goods_buy);
                 if (isFinish) {
                     tvStatus.setText("已结束");

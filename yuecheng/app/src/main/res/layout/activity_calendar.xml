@@ -17,14 +17,40 @@
         <include
             layout="@layout/layout_header_gray"/>
 
-        <TextView
-            android:id="@+id/tv_calendar_day"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/tv_calendar_day"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/iv_before_month"
+                android:layout_width="20dp"
+                android:layout_height="24dp"
+                android:layout_toLeftOf="@id/tv_calendar_day"
+                android:padding="6dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_pre_month"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/iv_next_month"
+                android:layout_width="20dp"
+                android:layout_height="24dp"
+                android:padding="6dp"
+                android:layout_toRightOf="@id/tv_calendar_day"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_next_month"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -137,8 +163,8 @@
         android:id="@+id/ll_null_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"

@@ -167,13 +167,13 @@ public class GroupGoodsActivity extends BaseActivity {
                                 if (dataBean.getSaleNum() * 5 >= dataBean.getGroupNum()) {
                                     num = dataBean.getSaleNum();
                                 } else {
-                                    num = dataBean.getGroupNum() / 5;
+                                    num = (int) Math.ceil(dataBean.getGroupNum() * 0.2);
                                 }
                             } else {
                                 if (dataBean.getSaleNum() * 2 >= dataBean.getGroupNum()) {
                                     num = dataBean.getSaleNum();
                                 } else {
-                                    num = dataBean.getGroupNum() / 2;
+                                    num = (int) Math.ceil(dataBean.getGroupNum() *0.5);
                                 }
                             }
                         } else {

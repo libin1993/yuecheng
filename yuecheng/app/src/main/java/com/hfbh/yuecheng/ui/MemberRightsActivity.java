@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +19,6 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.FadePageTransformer;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.CustomViewPager;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -42,16 +40,17 @@ import okhttp3.Call;
  * Describe：会员权限
  */
 public class MemberRightsActivity extends BaseActivity {
-    @BindView(R.id.tv_title_header)
-    TextView tvTitleHeader;
-    @BindView(R.id.iv_back_header)
-    ImageView ivBackHeader;
+
     @BindView(R.id.tv_member_rights_name)
     TextView tvMemberRights;
     @BindView(R.id.rv_member_rights_info)
     RecyclerView rvMemberRights;
     @BindView(R.id.vp_member_rights)
     CustomViewPager vpMemberRights;
+    @BindView(R.id.tv_title_header_white)
+    TextView tvTitleHeader;
+    @BindView(R.id.iv_back_header_white)
+    ImageView ivBackHeader;
     private MemberRightsBean memberBean;
 
     private CommonAdapter<MemberRightsBean.DataBean.ListPrivilegeBean> rightsAdapter;
@@ -73,7 +72,7 @@ public class MemberRightsActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -86,7 +85,7 @@ public class MemberRightsActivity extends BaseActivity {
                         memberBean = GsonUtils.jsonToBean(response, MemberRightsBean.class);
                         if (memberBean.isFlag() && memberBean.getData() != null && memberBean.getData().size() > 0) {
                             initView();
-                        }else if (memberBean.getCode() == 4002) {
+                        } else if (memberBean.getCode() == 4002) {
                             SharedPreUtils.deleteStr(MemberRightsActivity.this, "is_login");
                         }
                     }
@@ -151,7 +150,7 @@ public class MemberRightsActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.iv_back_header)
+    @OnClick(R.id.iv_back_header_white)
     public void onViewClicked() {
         finish();
     }

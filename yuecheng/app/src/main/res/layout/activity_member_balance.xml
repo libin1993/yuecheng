@@ -99,22 +99,32 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_member_balance"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
         android:layout_below="@id/ll_balance_count"
         android:overScrollMode="never">
     </android.support.v7.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/tv_bind_card"
+    <RelativeLayout
+
+        android:id="@+id/rl_action_join"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="80dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/gradient_red_33dp"
-        android:gravity="center"
-        android:text="绑定您的预付卡"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"/>
+        android:background="@drawable/gradient_orange_hor">
+        <TextView
+            android:id="@+id/tv_bind_card"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/gradient_red_33dp"
+            android:gravity="center"
+            android:text="绑定您的预付卡"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>

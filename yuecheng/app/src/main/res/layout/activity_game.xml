@@ -12,14 +12,12 @@
 
     <ImageView
         android:id="@+id/iv_game_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="30dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="30dp"
-        android:paddingTop="10dp"
-        android:scaleType="center"
-        android:src="@mipmap/btn_headerbar_back"/>
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/btn_headerbar_back"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"/>
 
     <include
         layout="@layout/layout_loading"/>

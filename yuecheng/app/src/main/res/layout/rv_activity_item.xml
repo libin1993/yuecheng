@@ -15,7 +15,8 @@
         fresco:roundedCornerRadius="5dp"
         fresco:viewAspectRatio="2"
         fresco:placeholderImage="@mipmap/img_place"
-        fresco:placeholderImageScaleType="centerCrop"/>
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:actualImageScaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/tv_home_activity_name"

@@ -146,7 +146,7 @@ public class SearchShopActivity extends BaseActivity {
         grayDrawable.setBounds(0, 0, grayDrawable.getMinimumWidth(),
                 grayDrawable.getMinimumHeight());
 
-        redDrawable = ContextCompat.getDrawable(this, R.mipmap.ic_home_triangle);
+        redDrawable = ContextCompat.getDrawable(this, R.mipmap.ic_triangle_up);
         redDrawable.setBounds(0, 0, redDrawable.getMinimumWidth(),
                 redDrawable.getMinimumHeight());
     }
@@ -386,14 +386,17 @@ public class SearchShopActivity extends BaseActivity {
                 <SearchShopBean.FloorListBean>(this, R.layout.rv_floor_list_item, floorList) {
             @Override
             protected void convert(ViewHolder holder, SearchShopBean.FloorListBean floorListBean, int position) {
-                holder.setText(R.id.tv_floor_name, floorListBean.getFloorName());
+                TextView tvName = holder.getView(R.id.tv_floor_name);
+                tvName.setText(floorListBean.getFloorName());
                 RelativeLayout rlFloor = holder.getView(R.id.rl_floor_item);
                 ImageView ivFloor = holder.getView(R.id.iv_floor_current);
                 if (position == floorNum) {
                     rlFloor.setBackgroundResource(R.color.gray_f5);
+                    tvName.setTextColor(ContextCompat.getColor(SearchShopActivity.this,R.color.red_99));
                     ivFloor.setVisibility(View.VISIBLE);
                 } else {
                     rlFloor.setBackgroundColor(Color.WHITE);
+                    tvName.setTextColor(ContextCompat.getColor(SearchShopActivity.this,R.color.gray_66));
                     ivFloor.setVisibility(View.GONE);
                 }
             }
@@ -464,14 +467,17 @@ public class SearchShopActivity extends BaseActivity {
                 R.layout.rv_floor_list_item, industryList) {
             @Override
             protected void convert(ViewHolder holder, SearchShopBean.IndustryListBeanX industryListBeanX, int position) {
-                holder.setText(R.id.tv_floor_name, industryListBeanX.getIndustryName());
+                TextView tvName = holder.getView(R.id.tv_floor_name);
+                tvName.setText(industryListBeanX.getIndustryName());
                 RelativeLayout rlFloor = holder.getView(R.id.rl_floor_item);
                 ImageView ivFloor = holder.getView(R.id.iv_floor_current);
                 if (position == industryNum) {
                     rlFloor.setBackgroundResource(R.color.gray_f5);
+                    tvName.setTextColor(ContextCompat.getColor(SearchShopActivity.this,R.color.red_99));
                     ivFloor.setVisibility(View.VISIBLE);
                 } else {
                     rlFloor.setBackgroundColor(Color.WHITE);
+                    tvName.setTextColor(ContextCompat.getColor(SearchShopActivity.this,R.color.gray_66));
                     ivFloor.setVisibility(View.GONE);
                 }
             }

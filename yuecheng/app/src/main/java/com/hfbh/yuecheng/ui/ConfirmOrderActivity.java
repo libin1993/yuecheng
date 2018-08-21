@@ -616,7 +616,6 @@ public class ConfirmOrderActivity extends BaseActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean flag = jsonObject.getBoolean("flag");
                             if (flag) {
-//                                EventBus.getDefault().post("balance_success");
 
                                 List<PayOrderBean.OrderInfo> orderInfoList = new ArrayList<>();
                                 orderInfoList.add(new PayOrderBean.OrderInfo("订单号", orderBean.getData().getOrderNumber()));

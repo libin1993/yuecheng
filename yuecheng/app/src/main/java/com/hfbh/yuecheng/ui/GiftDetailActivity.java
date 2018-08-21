@@ -279,7 +279,7 @@ public class GiftDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_exchange_share:
-//                ShareUtils.showShare(this,"www","111","111","111");
+
                 break;
             case R.id.tv_exchange_activity:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {

@@ -93,7 +93,6 @@ public class ConfirmPayActivity extends BaseActivity {
                 this, R.layout.rv_confirm_order_item, MyApp.orderBean.getDiscountList()) {
             @Override
             protected void convert(ViewHolder holder, PayOrderBean.DiscountBean discountBean, int position) {
-
                 holder.setText(R.id.tv_order_title, discountBean.getTitle());
                 holder.setText(R.id.tv_order_content, discountBean.getContent());
             }
@@ -191,6 +190,8 @@ public class ConfirmPayActivity extends BaseActivity {
 
                                     MyApp.orderBean.getOrderList().add(new PayOrderBean.OrderInfo(
                                             "支付方式", MyApp.orderBean.getPayType() + "微信支付"));
+                                    MyApp.orderBean.getDiscountList().add(new PayOrderBean.DiscountBean(
+                                            "微信支付", DisplayUtils.decimalFormat(MyApp.orderBean.getMoney())));
 
                                     finish();
                                 }
@@ -229,6 +230,8 @@ public class ConfirmPayActivity extends BaseActivity {
 
                     MyApp.orderBean.getOrderList().add(new PayOrderBean.OrderInfo(
                             "支付方式", MyApp.orderBean.getPayType() + "支付宝支付"));
+                    MyApp.orderBean.getDiscountList().add(new PayOrderBean.DiscountBean(
+                            "支付宝支付", DisplayUtils.decimalFormat(MyApp.orderBean.getMoney())));
                     startActivity(new Intent(ConfirmPayActivity.this, PayResultActivity.class));
                     finish();
                     break;

@@ -24,10 +24,8 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.FlowLayout;
-import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
@@ -66,6 +64,10 @@ public class CalendarActivity extends BaseActivity {
     AVLoadingIndicatorView viewLoading;
     @BindView(R.id.ll_null_activity)
     LinearLayout llNullActivity;
+    @BindView(R.id.iv_before_month)
+    ImageView ivBeforeMonth;
+    @BindView(R.id.iv_next_month)
+    ImageView ivNextMonth;
 
     //当前页数
     private int page = 1;
@@ -297,6 +299,7 @@ public class CalendarActivity extends BaseActivity {
             }
         });
 
+
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Calendar calendar, boolean isClick) {
@@ -356,8 +359,19 @@ public class CalendarActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.iv_back_header)
-    public void onViewClicked() {
-        finish();
+
+    @OnClick({R.id.iv_back_header,R.id.iv_before_month, R.id.iv_next_month})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back_header:
+                finish();
+                break;
+            case R.id.iv_before_month:
+               calendarView.scrollToPre();
+                break;
+            case R.id.iv_next_month:
+                calendarView.scrollToNext();
+                break;
+        }
     }
 }

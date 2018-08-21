@@ -9,20 +9,20 @@ android {
         applicationId "com.hfbh.yuecheng"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 5
-        versionName "1.0.6"
+        versionCode 6
+        versionName "1.2.0"
         multiDexEnabled true
 
         manifestPlaceholders = [
                 //正式环境
-//                GETUI_APP_ID    : "LtNtcjNIOe6Yj7JyJ1eFk9",
-//                GETUI_APP_KEY   : "EGj1lyD0BO89pks8VXeHs1",
-//                GETUI_APP_SECRET: "J5UR6eP2Ym6e4mvO1J5JH1"
+                GETUI_APP_ID    : "LtNtcjNIOe6Yj7JyJ1eFk9",
+                GETUI_APP_KEY   : "EGj1lyD0BO89pks8VXeHs1",
+                GETUI_APP_SECRET: "J5UR6eP2Ym6e4mvO1J5JH1"
 
                 //开发环境
-                GETUI_APP_ID    : "ME3je54kfv5npEQPFq7gh1",
-                GETUI_APP_KEY   : "eR2b309dwR9tHhVrlF9dk6",
-                GETUI_APP_SECRET: "Rd8buZiRVS6eJFKBC9oAv3"
+//                GETUI_APP_ID    : "ME3je54kfv5npEQPFq7gh1",
+//                GETUI_APP_KEY   : "eR2b309dwR9tHhVrlF9dk6",
+//                GETUI_APP_SECRET: "Rd8buZiRVS6eJFKBC9oAv3"
         ]
 
         ndk {

@@ -61,7 +61,8 @@ public class ExchangeGiftActivity extends BaseActivity {
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
     //积分排序是否高到低
-    private boolean isUp;
+//    private boolean isUp;
+    private int clickNum;
     //积分排序
     private String sortType = "DEFAULT";
     //当前页
@@ -74,6 +75,7 @@ public class ExchangeGiftActivity extends BaseActivity {
     //总页数
     private int pages;
     private CommonAdapter<GiftListBean.DataBean> adapter;
+    private Drawable drawableDefault;
     private Drawable drawableUp;
     private Drawable drawableDown;
 
@@ -89,6 +91,10 @@ public class ExchangeGiftActivity extends BaseActivity {
     }
 
     private void init() {
+        drawableDefault = ContextCompat.getDrawable(this, R.mipmap.btn_headerbar_sequence_normal);
+        drawableDefault.setBounds(0, 0, drawableDefault.getMinimumWidth(),
+                drawableDefault.getMinimumHeight());
+
         drawableUp = ContextCompat.getDrawable(this, R.mipmap.btn_headerbar_sequence_up);
         drawableUp.setBounds(0, 0, drawableUp.getMinimumWidth(),
                 drawableUp.getMinimumHeight());
@@ -211,21 +217,30 @@ public class ExchangeGiftActivity extends BaseActivity {
                 break;
             case R.id.tv_exchange_gift_score:
                 tvGiftScore.setEnabled(false);
-                if (isUp) {
-                    isUp = false;
-                    tvGiftScore.setCompoundDrawables(null, null, drawableDown, null);
-                    sortType = "ASC";
-                    isRefresh = true;
-                    page = 1;
-                    initData();
-                } else {
-                    isUp = true;
-                    tvGiftScore.setCompoundDrawables(null, null, drawableUp, null);
-                    sortType = "DESC";
-                    isRefresh = true;
-                    page = 1;
-                    initData();
+                clickNum++;
+
+                switch (clickNum % 3) {
+                    case 0:
+                        tvGiftScore.setCompoundDrawables(null, null, drawableDefault, null);
+                        tvGiftScore.setTextColor(ContextCompat.getColor(this, R.color.gray_10));
+                        sortType = "DEFAULT";
+                        break;
+                    case 1:
+                        tvGiftScore.setCompoundDrawables(null, null, drawableUp, null);
+                        tvGiftScore.setTextColor(ContextCompat.getColor(this, R.color.red_99));
+                        sortType = "ASC";
+                        break;
+                    case 2:
+                        tvGiftScore.setCompoundDrawables(null, null, drawableDown, null);
+                        tvGiftScore.setTextColor(ContextCompat.getColor(this, R.color.red_99));
+                        sortType = "DESC";
+                        break;
                 }
+
+                isRefresh = true;
+                page = 1;
+                initData();
+
                 break;
         }
     }
