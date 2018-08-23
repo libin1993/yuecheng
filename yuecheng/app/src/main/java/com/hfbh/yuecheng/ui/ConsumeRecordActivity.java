@@ -127,11 +127,11 @@ public class ConsumeRecordActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(dataBean.getTotalMoney())) {
                     double money = Double.parseDouble(dataBean.getTotalMoney());
                     if (money > 0) {
-                        tvMoney.setTextColor(getResources().getColor(R.color.red_99));
+                        tvMoney.setTextColor(getResources().getColor(R.color.gray_10));
                         tvMoney.setText("-" + DisplayUtils.decimalFormat(money));
                     } else {
-                        tvMoney.setTextColor(getResources().getColor(R.color.gray_10));
-                        tvMoney.setText("+" + DisplayUtils.decimalFormat(Math.abs(money)));
+                        tvMoney.setTextColor(getResources().getColor(R.color.red_99));
+                        tvMoney.setText(DisplayUtils.decimalFormat(Math.abs(money)));
                     }
                 }
             }

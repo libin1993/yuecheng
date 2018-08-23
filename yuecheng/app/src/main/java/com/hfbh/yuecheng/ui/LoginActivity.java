@@ -571,10 +571,12 @@ public class LoginActivity extends BaseActivity {
                                         mHandler.sendEmptyMessage(2);
                                     }
                                 }).start();
+                            }else {
+                                String msg = jsonObject.getString("msg");
+                                ToastUtils.showToast(LoginActivity.this, msg);
                             }
 
-                            String msg = jsonObject.getString("msg");
-                            ToastUtils.showToast(LoginActivity.this, msg);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

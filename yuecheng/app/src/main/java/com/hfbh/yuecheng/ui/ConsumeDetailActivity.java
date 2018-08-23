@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.ConsumeBean;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.smarttop.library.utils.LogUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -56,7 +57,7 @@ public class ConsumeDetailActivity extends BaseActivity {
         tvOrderNo.setText(dataBean.getOrderNo());
         tvOrderTime.setText(dataBean.getOrderTime());
         tvOrderShop.setText(dataBean.getOrderShopName());
-        tvOrderMoney.setText("¥" + dataBean.getTotalMoney());
+        tvOrderMoney.setText("¥" + DisplayUtils.decimalFormat(Double.parseDouble(dataBean.getTotalMoney()) * -1));
 
         rvGoods.setLayoutManager(new LinearLayoutManager(this));
         CommonAdapter<ConsumeBean.DataBean.SalesListBean> adapter = new CommonAdapter<ConsumeBean
@@ -64,7 +65,7 @@ public class ConsumeDetailActivity extends BaseActivity {
             @Override
             protected void convert(ViewHolder holder, ConsumeBean.DataBean.SalesListBean salesListBean, int position) {
                 holder.setText(R.id.tv_consume_goods_name, salesListBean.getProductName());
-                holder.setText(R.id.tv_consume_goods_money, "¥" + salesListBean.getSaleMoney());
+                holder.setText(R.id.tv_consume_goods_money, "¥" + DisplayUtils.decimalFormat(salesListBean.getSaleMoney() * -1));
             }
         };
         rvGoods.setAdapter(adapter);

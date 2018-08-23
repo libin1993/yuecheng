@@ -115,6 +115,7 @@ public class PayCardActivity extends BaseActivity {
                         }
                         if (isRefresh) {
                             refreshLayout.finishRefresh();
+                            dataList.clear();
                             isRefresh = false;
                         } else if (isLoadMore) {
                             refreshLayout.finishLoadMore();

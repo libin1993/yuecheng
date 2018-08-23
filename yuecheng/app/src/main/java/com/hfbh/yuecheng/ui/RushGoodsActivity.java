@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,7 +22,6 @@ import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -58,6 +58,12 @@ public class RushGoodsActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
 
     private int page = 1;
     //刷新
@@ -75,6 +81,8 @@ public class RushGoodsActivity extends BaseActivity {
         setContentView(R.layout.activity_now_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("限时秒杀");
+        ivNullData.setImageResource(R.mipmap.ic_null_goods);
+        tvNullData.setText("暂无商品");
         viewLoading.smoothToShow();
         initView();
         initData();
@@ -110,7 +118,6 @@ public class RushGoodsActivity extends BaseActivity {
                             isRefresh = false;
                             goodsList.clear();
                         } else if (isLoadMore) { //加载更多
-                            isLoadMore = false;
                             refreshLayout.finishLoadMore();
                         } else {
                             goodsList.clear();
@@ -119,9 +126,15 @@ public class RushGoodsActivity extends BaseActivity {
 
                         if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
                             goodsList.addAll(goodsBean.getData());
+                            llNullData.setVisibility(View.GONE);
+                        }else {
+                            if (!isLoadMore) {
+                                llNullData.setVisibility(View.VISIBLE);
+                            }
                         }
-                        adapter.notifyDataSetChanged();
 
+                        isLoadMore = false;
+                        adapter.notifyDataSetChanged();
                     }
                 });
 

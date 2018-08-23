@@ -339,15 +339,16 @@ public class CalendarActivity extends BaseActivity {
     }
 
     /**
-     * //     * 动态添加布局
-     * //
+     * 动态添加布局
      */
     private void addTextView(FlowLayout flowLayout, List<ActivityListBean.DataBean.TagsBean> tagsBeans) {
 
         for (int i = 0; i < tagsBeans.size(); i++) {
             TextView tvChild = new TextView(this);
-            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, (int) DisplayUtils.dp2px(this, 6), (int) DisplayUtils.dp2px(this, 2));
+            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT,
+                    ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, (int) DisplayUtils.dp2px(this, 6),
+                    (int) DisplayUtils.dp2px(this, 2));
             tvChild.setLayoutParams(params);
             tvChild.setBackgroundResource(R.drawable.flowlayout_item);
             tvChild.setText(tagsBeans.get(i).getTagName());

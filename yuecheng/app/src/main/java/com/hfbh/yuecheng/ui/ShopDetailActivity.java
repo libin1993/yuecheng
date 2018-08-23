@@ -99,7 +99,7 @@ public class ShopDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("shopId", String.valueOf(shopId))
                 .build()
                 .execute(new StringCallback() {
@@ -130,7 +130,7 @@ public class ShopDetailActivity extends BaseActivity {
                 .addParams("appVersion", MyApp.appVersion)
                 .addParams("organizeId", MyApp.organizeId)
                 .addParams("hash", SharedPreUtils.getStr(this, "hash"))
-                .addParams("token",SharedPreUtils.getStr(this, "token"))
+                .addParams("token", SharedPreUtils.getStr(this, "token"))
                 .addParams("commodityType", "FIRSTLOOK")
                 .addParams("pageNum", String.valueOf(page))
                 .build()
@@ -144,35 +144,35 @@ public class ShopDetailActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         GoodsBean goodsBean = GsonUtils.jsonToBean(response, GoodsBean.class);
 
+                        if (isRefresh) {
+                            goodsList.clear();
+                            refreshLayout.finishRefresh();
+                            isRefresh = false;
+                        } else if (isLoadMore) {
+                            isLoadMore = false;
+                            refreshLayout.finishLoadMore();
+                        } else {
+                            goodsList.clear();
+                        }
+
                         if (goodsBean.isFlag() && goodsBean.getData().size() > 0) {
                             if (goodsBean.getPage() != null) {
                                 pages = goodsBean.getPage().getPages();
                             }
 
-                            if (isRefresh) {
-                                goodsList.clear();
-                            }
                             goodsList.addAll(goodsBean.getData());
 
-                            //是否刷新状态
-                            if (isRefresh) {
-                                refreshLayout.finishRefresh();
-                                isRefresh = false;
-                            } else if (isLoadMore) { //加载更多
-                                refreshLayout.finishLoadMore();
-                                isLoadMore = false;
-                            }
                             if (llTitle != null) {
                                 llTitle.setVisibility(View.VISIBLE);
-                            }
-                            if (mHeaderAndFooterWrapper != null) {
-                                mHeaderAndFooterWrapper.notifyDataSetChanged();
                             }
 
                         } else {
                             if (llTitle != null) {
                                 llTitle.setVisibility(View.GONE);
                             }
+                        }
+                        if (mHeaderAndFooterWrapper != null) {
+                            mHeaderAndFooterWrapper.notifyDataSetChanged();
                         }
                     }
                 });
@@ -193,16 +193,16 @@ public class ShopDetailActivity extends BaseActivity {
         TextView tvShopDetailInfo = (TextView) view.findViewById(R.id.tv_shop_detail_info);
         llTitle = (LinearLayout) view.findViewById(R.id.ll_shop_goods);
 
-        if (!TextUtils.isEmpty(shopBean.getShop().getShopPicture())){
+        if (!TextUtils.isEmpty(shopBean.getShop().getShopPicture())) {
             ivShopDetail.setImageURI(shopBean.getShop().getShopPicture());
-        }else {
+        } else {
             ivShopDetail.setImageURI(shopBean.getMall().getOrganizePicturePath());
         }
 
         ivShopDetailAvatar.setImageURI(shopBean.getShop().getShopLogo());
         tvShopDetailName.setText(shopBean.getShop().getShopName());
         tvShopDetailType.setText(type);
-        tvShopDetailLocation.setText(shopBean.getMall().getOrganizeName() +"  "+address);
+        tvShopDetailLocation.setText(shopBean.getMall().getOrganizeName() + "  " + address);
 
         tvShopDetailInfo.setText(shopBean.getShop().getShopIntro());
 

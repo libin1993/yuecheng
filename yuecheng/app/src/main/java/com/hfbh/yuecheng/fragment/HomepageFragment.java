@@ -60,8 +60,12 @@ import com.hfbh.yuecheng.ui.GuideActivity;
 import com.hfbh.yuecheng.ui.LoginActivity;
 import com.hfbh.yuecheng.ui.MainActivity;
 import com.hfbh.yuecheng.ui.MemberCardActivity;
+import com.hfbh.yuecheng.ui.NewGoodsDetailActivity;
+import com.hfbh.yuecheng.ui.OrderDetailActivity;
 import com.hfbh.yuecheng.ui.PayActivity;
+import com.hfbh.yuecheng.ui.PopGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.RushGoodsActivity;
+import com.hfbh.yuecheng.ui.RushGoodsDetailActivity;
 import com.hfbh.yuecheng.ui.ScanCodeActivity;
 import com.hfbh.yuecheng.ui.SearchShopActivity;
 import com.hfbh.yuecheng.ui.ValidateActivity;
@@ -281,6 +285,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
     }
 
+
     /**
      * 加载视图
      */
@@ -349,6 +354,26 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                         Intent intent3 = new Intent(getActivity(), GiftDetailActivity.class);
                                         intent3.putExtra("gift_id", id);
                                         startActivity(intent3);
+                                        break;
+                                    case "GROUPON":
+                                        Intent intent4 = new Intent(getActivity(), GroupGoodsDetailActivity.class);
+                                        intent4.putExtra("goods_id", id);
+                                        startActivity(intent4);
+                                        break;
+                                    case "SECKILL":
+                                        Intent intent5 = new Intent(getActivity(), RushGoodsDetailActivity.class);
+                                        intent5.putExtra("goods_id", id);
+                                        startActivity(intent5);
+                                        break;
+                                    case "SPECIAL":
+                                        Intent intent6 = new Intent(getActivity(), PopGoodsDetailActivity.class);
+                                        intent6.putExtra("goods_id", id);
+                                        startActivity(intent6);
+                                        break;
+                                    case "FIRSTLOOK":
+                                        Intent intent7 = new Intent(getActivity(), NewGoodsDetailActivity.class);
+                                        intent7.putExtra("goods_id", id);
+                                        startActivity(intent7);
                                         break;
 
                                 }
@@ -714,13 +739,13 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         mAdapters.add(groupAdapter);
 
         //优惠券
-        initTitle("优惠券",5);
+        initTitle("优惠券", 5);
 
 
         if (couponBean != null && couponBean.getData() != null && couponBean.getData().size() > 0) {
 
             LinearLayoutHelper linearLayoutHelper = new LinearLayoutHelper();
-            linearLayoutHelper.setDividerHeight((int)DisplayUtils.dp2px(getActivity(),15));
+            linearLayoutHelper.setDividerHeight((int) DisplayUtils.dp2px(getActivity(), 15));
 
             couponAdapter = new BaseDelegateAdapter(getActivity(), linearLayoutHelper,
                     R.layout.rv_coupon_item, couponBean.getData().size(), 6) {
@@ -1184,7 +1209,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     }
 
 
-    private void initCouponTitle(){
+    private void initCouponTitle() {
         BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.layout_coupon_title, 1, 5) {
             @Override
@@ -1303,7 +1328,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
     @Override
     public void onResume() {
         super.onResume();
-        if (((MainActivity)getActivity()).isBack){
+        if (((MainActivity) getActivity()).isBack) {
             initType();
         }
 

@@ -109,11 +109,10 @@ public class OrderFragment extends BaseFragment {
     private CommonAdapter<MyOrderBean.DataBean> adapter;
 
     private SparseArray<CountDownTimer> countDownMap = new SparseArray<>();
+    //核销码
     private Bitmap qrBmp;
-
     //Fragment的View加载完毕的标记
     private boolean isViewCreated;
-
     //Fragment对用户可见的标记
     private boolean isUIVisible;
 
@@ -242,6 +241,7 @@ public class OrderFragment extends BaseFragment {
                 CountDownTimer countDownTimer = countDownMap.get(tvStatus.hashCode());
                 if (countDownTimer != null) {
                     //将复用的倒计时清除
+
                     countDownTimer.cancel();
                     countDownTimer = null;
                 }

@@ -70,8 +70,6 @@ public class ActionDetailActivity extends BaseActivity {
     private boolean isEnroll;
     //是否报名开始
     private boolean isEnrollStart;
-    //是否报名结束
-    private boolean isEnrollEnd;
     private String url;
 //    //是否满额
 //    private boolean isLimit;
@@ -157,7 +155,8 @@ public class ActionDetailActivity extends BaseActivity {
 
         isEnrollStart = System.currentTimeMillis() >= DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getStartTime());
-        isEnrollEnd = System.currentTimeMillis() > DateUtils.getTime(
+        //报名结束
+        boolean isEnrollEnd = System.currentTimeMillis() > DateUtils.getTime(
                 "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getEndTime());
 
 //        isLimit = activityBean.getData().getSignupDo().getSignupLimitNumber() > 0 &&

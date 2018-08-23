@@ -122,7 +122,6 @@ public class PopGoodsActivity extends BaseActivity {
                             goodsList.clear();
                         } else if (isLoadMore) { //加载更多
                             refreshLayout.finishLoadMore();
-                            isLoadMore = false;
                         } else {
                             goodsList.clear();
                             loadingView.smoothToHide();

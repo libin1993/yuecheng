@@ -1,6 +1,7 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,12 +10,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
@@ -23,7 +22,6 @@ import com.hfbh.yuecheng.bean.GiftListBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.view.GridItemDecoration1;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -60,8 +58,14 @@ public class ExchangeGiftActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
-    //积分排序是否高到低
-//    private boolean isUp;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
+
+    //点击次数
     private int clickNum;
     //积分排序
     private String sortType = "DEFAULT";
@@ -85,6 +89,8 @@ public class ExchangeGiftActivity extends BaseActivity {
         setContentView(R.layout.activity_exchange_gift);
         ButterKnife.bind(this);
         loadingView.smoothToShow();
+        ivNullData.setImageResource(R.mipmap.ic_null_gift);
+        tvNullData.setText("暂无礼品");
         init();
         initView();
         initData();
@@ -136,7 +142,6 @@ public class ExchangeGiftActivity extends BaseActivity {
                             dataList.clear();
                         } else if (isLoadMore) {
                             refreshLayout.finishLoadMore();
-                            isLoadMore = false;
                         } else {
                             dataList.clear();
                             loadingView.smoothToHide();
@@ -144,8 +149,15 @@ public class ExchangeGiftActivity extends BaseActivity {
 
                         if (ListBean.isFlag() && ListBean.getData() != null && ListBean.getData().size() > 0) {
                             dataList.addAll(ListBean.getData());
+                            llNullData.setVisibility(View.GONE);
+                            rvExchange.setBackgroundColor(Color.WHITE);
+                        } else {
+                            if (!isLoadMore) {
+                                llNullData.setVisibility(View.VISIBLE);
+                                rvExchange.setBackgroundColor(ContextCompat.getColor(ExchangeGiftActivity.this, R.color.gray_f2));
+                            }
                         }
-
+                        isLoadMore = false;
                         adapter.notifyDataSetChanged();
                     }
                 });

@@ -4,19 +4,15 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
@@ -27,7 +23,6 @@ import com.hfbh.yuecheng.utils.DateUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
-import com.hfbh.yuecheng.view.GridItemDecoration1;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -62,6 +57,12 @@ public class GroupGoodsActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView viewLoading;
+    @BindView(R.id.iv_null_data)
+    ImageView ivNullData;
+    @BindView(R.id.tv_null_data)
+    TextView tvNullData;
+    @BindView(R.id.ll_null_data)
+    LinearLayout llNullData;
 
     //当前页数
     private int page = 1;
@@ -80,6 +81,8 @@ public class GroupGoodsActivity extends BaseActivity {
         setContentView(R.layout.activity_now_activity);
         ButterKnife.bind(this);
         tvHeaderTitle.setText("团购优惠");
+        ivNullData.setImageResource(R.mipmap.ic_null_goods);
+        tvNullData.setText("暂无商品");
         viewLoading.smoothToShow();
         initView();
         initData();
@@ -115,7 +118,6 @@ public class GroupGoodsActivity extends BaseActivity {
                             goodsList.clear();
                         } else if (isLoadMore) {
                             refreshLayout.finishLoadMore();
-                            isLoadMore = false;
                         } else {
                             viewLoading.smoothToHide();
                             goodsList.clear();
@@ -124,7 +126,14 @@ public class GroupGoodsActivity extends BaseActivity {
 
                         if (goodsBean.isFlag() && goodsBean.getData() != null && goodsBean.getData().size() > 0) {
                             goodsList.addAll(goodsBean.getData());
+                            llNullData.setVisibility(View.GONE);
+                        }else {
+                            if (!isLoadMore) {
+                                llNullData.setVisibility(View.VISIBLE);
+                            }
                         }
+
+                        isLoadMore = false;
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -173,7 +182,7 @@ public class GroupGoodsActivity extends BaseActivity {
                                 if (dataBean.getSaleNum() * 2 >= dataBean.getGroupNum()) {
                                     num = dataBean.getSaleNum();
                                 } else {
-                                    num = (int) Math.ceil(dataBean.getGroupNum() *0.5);
+                                    num = (int) Math.ceil(dataBean.getGroupNum() * 0.5);
                                 }
                             }
                         } else {
