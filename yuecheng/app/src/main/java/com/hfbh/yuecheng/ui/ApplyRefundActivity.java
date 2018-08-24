@@ -348,7 +348,7 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
     }
 
     /**
-     * 提交反馈
+     * 提交申请
      */
     private void submitData() {
 
@@ -397,7 +397,6 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
                                 String msg = jsonObject.getString("msg");
                                 ToastUtils.showToast(ApplyRefundActivity.this, msg);
                             }
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();

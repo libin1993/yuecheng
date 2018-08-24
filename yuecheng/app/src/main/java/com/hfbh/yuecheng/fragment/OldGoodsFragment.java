@@ -72,18 +72,6 @@ public class OldGoodsFragment extends BaseFragment {
     private List<GoodsBean.DataBean> newGoods = new ArrayList<>();
     private List<DelegateAdapter.Adapter> mAdapters;
 
-//    private boolean isRefresh;
-//    //加载更多
-//    private boolean isLoadMore;
-//
-//    //人气当前页
-//    private int page1 = 1;
-//    //新品当前页
-//    private int page2 = 1;
-//    //人气总页数
-//    private int pages1;
-//    //新品总页数
-//    private int pages2;
 
     @Nullable
     @Override

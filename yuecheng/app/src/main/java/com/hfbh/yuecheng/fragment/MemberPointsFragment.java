@@ -153,10 +153,10 @@ public class MemberPointsFragment extends BaseFragment {
                 double points = pointsChangeListBean.getPoints();
                 if (points > 0) {
                     tvPoints.setTextColor(getActivity().getResources().getColor(R.color.red_99));
-                    tvPoints.setText("+" + pointsChangeListBean.getPoints());
+                    tvPoints.setText("+" + DisplayUtils.isInteger(points));
                 } else {
                     tvPoints.setTextColor(getActivity().getResources().getColor(R.color.gray_10));
-                    tvPoints.setText(String.valueOf(pointsChangeListBean.getPoints()));
+                    tvPoints.setText(DisplayUtils.isInteger(points));
                 }
             }
         };

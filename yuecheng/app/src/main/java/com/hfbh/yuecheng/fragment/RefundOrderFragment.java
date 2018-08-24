@@ -255,28 +255,6 @@ public class RefundOrderFragment extends BaseFragment {
                     }
                 });
 
-//                rlGoods.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        Intent intent = null;
-//                        switch ("") {
-//
-//                            case "GROUPON":
-//                                intent = new Intent(getActivity(), GroupGoodsDetailActivity.class);
-//                                break;
-//                            case "SPECIAL":
-//                                intent = new Intent(getActivity(), PopGoodsDetailActivity.class);
-//                                break;
-//                            case "SECKILL":
-//                                intent = new Intent(getActivity(), RushGoodsDetailActivity.class);
-//                                break;
-//                        }
-//                        intent.putExtra("goods_id", dataBean.getDetailId());
-//                        startActivity(intent);
-//
-//                    }
-//                });
             }
 
         };

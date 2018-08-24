@@ -134,7 +134,6 @@ public class ActivityFragment extends BaseFragment {
      */
     private void initView() {
 
-
         //移除之前的Fragment
         FragmentManager fm = getChildFragmentManager();
 
@@ -149,11 +148,9 @@ public class ActivityFragment extends BaseFragment {
 
         }
 
-
         fragmentList.clear();
         titleList.clear();
         for (int i = 0; i < tagList.size(); i++) {
-            LogUtils.log("id" + tagList.get(i).getId());
             titleList.add(tagList.get(i).getTagName());
             fragmentList.add(ActivityListFragment.newInstance(tagList.get(i).getId()));
         }

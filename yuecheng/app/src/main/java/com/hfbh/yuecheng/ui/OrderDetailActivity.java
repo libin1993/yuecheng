@@ -166,13 +166,14 @@ public class OrderDetailActivity extends BaseActivity {
                 });
     }
 
+
     private void initView() {
-        if ("NORMAL".equals(orderBean.getData().getRefundState())) {
+        if ("NORMAL".equals(orderBean.getData().getRefundState())) {        //是否退款单
             switch (orderBean.getData().getState()) {
                 case "UNPAID":
                     long currentTime = System.currentTimeMillis();
                     long orderTime = DateUtils.getTime("yyyy-MM-dd HH:mm:ss", orderBean.getData().getSumbitTime());
-
+                    //超过15分钟未支付取消订单
                     if (currentTime - orderTime < 15 * 60 * 1000) {
                         countDownTimer = new CountDownTimer(15 * 60 * 1000 + orderTime - currentTime, 1000) {
                             @Override
@@ -210,7 +211,7 @@ public class OrderDetailActivity extends BaseActivity {
                     break;
                 case "PAID":
                     tvOrderStatus.setText("待提货");
-
+                    //团购拼团中不能退款
                     if (("GROUPON").equals(orderBean.getData().getOrderType())) {
                         tvStatusInfo.setText("拼团中，活动结束拼团不成功自动退款");
                         llOrderDetail.setVisibility(View.GONE);
@@ -253,11 +254,9 @@ public class OrderDetailActivity extends BaseActivity {
                             break;
                     }
 
-                    //是否可退款，提货退款有效期内
+                    //是否可退款，提货退款有效期内可退款
                     if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())
-                            && orderBean.getData().getOrderDtlList().get(0).getSingInDays() >= 0
-                            && (orderBean.getData().getRefundState().equals("REFUND_FAIL") ||
-                            orderBean.getData().getRefundState().equals("NORMAL"))) {
+                            && orderBean.getData().getOrderDtlList().get(0).getSingInDays() >= 0) {
                         llOrderDetail.setVisibility(View.VISIBLE);
 
                         tvCancel.setVisibility(View.VISIBLE);
@@ -358,7 +357,7 @@ public class OrderDetailActivity extends BaseActivity {
                     break;
                 case "REFUND_FAIL":
                     status = "退款失败";
-
+                    //退款失败，可退货商品在提货有效期内可退货退款
                     if ("SINGIN".equals(orderBean.getData().getState())) {
                         if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())
                                 && orderBean.getData().getOrderDtlList().get(0).getSingInDays() >= 0) {
@@ -374,9 +373,10 @@ public class OrderDetailActivity extends BaseActivity {
                         } else {
                             llOrderDetail.setVisibility(View.GONE);
                         }
-                    } else if (("CLOSE".equals(orderBean.getData().getState()) && "UNSIGNIN".equals(orderBean.getData().getCloseType()))
+                    } else if (("CLOSE".equals(orderBean.getData().getState())
+                            && "UNSIGNIN".equals(orderBean.getData().getCloseType()))
                             || "EXPIRED".equals(orderBean.getData().getState())) {
-
+                        //超时未提货可退款
                         llOrderDetail.setVisibility(View.VISIBLE);
                         tvCancel.setVisibility(View.VISIBLE);
                         tvCancel.setText("去退款");
@@ -409,7 +409,7 @@ public class OrderDetailActivity extends BaseActivity {
         tvOrderNum.setText("x" + orderBean.getData().getOrderDtlList().get(0).getDetailAccount());
         tvTotalPrice.setText("¥" + DisplayUtils.isInteger(orderBean.getData().getPrice()));
 
-
+        //是否支持退款
         if ("Y".equals(orderBean.getData().getOrderDtlList().get(0).getIsRefund())) {
             tvRefundIntro.setText("提货后" + orderBean.getData().getOrderDtlList().get(0).getRefundTimeLimit() + "天后可退货退款");
         } else {
@@ -444,9 +444,7 @@ public class OrderDetailActivity extends BaseActivity {
      */
     private void expiredGroup() {
         tvOrderStatus.setText("已失效");
-        if (("GROUPON").equals(orderBean.getData().getOrderType())
-                && (orderBean.getData().getRefundState().equals("REFUND_FAIL")
-                || orderBean.getData().getRefundState().equals("NORMAL"))) {
+        if (("GROUPON").equals(orderBean.getData().getOrderType())) {
             tvStatusInfo.setText("团购成功，您未在有效时间内提货，可申请退款~");
         }
 
@@ -696,6 +694,9 @@ public class OrderDetailActivity extends BaseActivity {
 
     }
 
+    /**
+     * 取消定时
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

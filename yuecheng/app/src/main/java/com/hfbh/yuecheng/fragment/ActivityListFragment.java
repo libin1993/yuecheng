@@ -350,21 +350,18 @@ public class ActivityListFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 
     /**
-     * //     * 动态添加布局
-     * //
+     * 动态添加布局
      */
     private void addTextView(FlowLayout flowLayout, List<ActivityListBean.DataBean.TagsBean> tagsBeans) {
 
         for (int i = 0; i < tagsBeans.size(); i++) {
             TextView tvChild = new TextView(getActivity());
-            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, (int) DisplayUtils.dp2px(getActivity(), 6), (int) DisplayUtils.dp2px(getActivity(), 2));
+            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT,
+                    ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, (int) DisplayUtils.dp2px(getActivity(), 6),
+                    (int) DisplayUtils.dp2px(getActivity(), 2));
             tvChild.setLayoutParams(params);
             tvChild.setBackgroundResource(R.drawable.flowlayout_item);
             tvChild.setText(tagsBeans.get(i).getTagName());
@@ -378,15 +375,12 @@ public class ActivityListFragment extends BaseFragment {
 
     private void getData() {
         Bundle bundle = getArguments();
-        LogUtils.log(bundle.hashCode()+"bundle");
         tagId = bundle.getInt("tag_id");
-        LogUtils.log(tagId+"aaaa");
     }
 
     public static ActivityListFragment newInstance(int tagId) {
 
         Bundle args = new Bundle();
-        LogUtils.log(args.hashCode()+"fffffffff");
         args.putInt("tag_id", tagId);
         ActivityListFragment fragment = new ActivityListFragment();
         fragment.setArguments(args);

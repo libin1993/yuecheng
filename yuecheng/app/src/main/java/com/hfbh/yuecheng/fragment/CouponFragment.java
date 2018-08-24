@@ -48,7 +48,6 @@ import okhttp3.Call;
  */
 public class CouponFragment extends BaseFragment {
 
-
     @BindView(R.id.rv_my_coupon)
     RecyclerView rvCoupon;
     @BindView(R.id.layout_refresh_my_coupon)
@@ -247,6 +246,7 @@ public class CouponFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                //满减券核销
                 if (type.equals("UNUSE") && dataList.get(position).getCouponTypeKind() != null &&
                         "VOUCHER".equals(dataList.get(position).getCouponTypeKind())) {
                     Intent intent = new Intent(getActivity(), CloseCouponActivity.class);

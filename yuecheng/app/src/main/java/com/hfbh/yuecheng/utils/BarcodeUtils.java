@@ -12,7 +12,7 @@ import com.google.zxing.common.BitMatrix;
  * Describe：条形码工具类
  */
 public class BarcodeUtils {
-    public static Bitmap creatBarcode(String contents, int desiredWidth, int desiredHeight) {
+    public static Bitmap createBarcode(String contents, int desiredWidth, int desiredHeight) {
         BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
         return encodeAsBitmap(contents, barcodeFormat, desiredWidth, desiredHeight);
     }

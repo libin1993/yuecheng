@@ -15,6 +15,7 @@ import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
 import com.hfbh.yuecheng.bean.BalanceRecordBean;
 import com.hfbh.yuecheng.constant.Constant;
+import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
@@ -131,22 +132,23 @@ public class BalanceRecordActivity extends BaseActivity {
                         case "存款":
                             tvTitle.setText(dataBean.getProcType());
                             tvPoints.setTextColor(getResources().getColor(R.color.red_99));
-                            tvPoints.setText("+" + dataBean.getDebitMoney());
+                            tvPoints.setText("+" + DisplayUtils.decimalFormat(Double.parseDouble(dataBean.getDebitMoney())));
                             break;
                         case "取款":
                             tvTitle.setText(dataBean.getProcType());
                             tvPoints.setTextColor(getResources().getColor(R.color.gray_10));
-                            tvPoints.setText("-" + dataBean.getDebitMoney());
+                            tvPoints.setText("-" + DisplayUtils.decimalFormat(Double.parseDouble(dataBean.getDebitMoney())));
                             break;
                         case "消费":
-                            if (dataBean.getCreditMoney().contains("-")) {
+                            double money = Double.parseDouble(dataBean.getCreditMoney());
+                            if (money < 0) {
                                 tvTitle.setText("退款");
                                 tvPoints.setTextColor(getResources().getColor(R.color.red_99));
-                                tvPoints.setText("+" + dataBean.getCreditMoney().substring(1));
+                                tvPoints.setText("+" + DisplayUtils.decimalFormat(Math.abs(money)));
                             } else {
                                 tvTitle.setText("消费");
                                 tvPoints.setTextColor(getResources().getColor(R.color.gray_10));
-                                tvPoints.setText("-" + dataBean.getCreditMoney());
+                                tvPoints.setText("-" + DisplayUtils.decimalFormat(money));
                             }
                             break;
                     }

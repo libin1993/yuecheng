@@ -80,6 +80,9 @@ public class NewGoodsFragment extends BaseFragment {
         return view;
     }
 
+    /**
+     * 加载新品数据
+     */
     private void initData() {
         OkHttpUtils.post()
                 .url(Constant.DISCOVERY_GOODS)
@@ -132,6 +135,9 @@ public class NewGoodsFragment extends BaseFragment {
                 });
     }
 
+    /**
+     * 加载视图
+     */
     private void initView() {
         rvGoods.setLayoutManager(new LinearLayoutManager(getParentFragment().getActivity()));
         CommonAdapter<GoodsBean.DataBean> adapter = new CommonAdapter<GoodsBean.DataBean>(

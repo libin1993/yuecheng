@@ -218,19 +218,6 @@ public class ExchangeFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-//                boolean isFinish = false;
-//                if (!TextUtils.isEmpty(dataList.get(position).getEndTime())) {
-//                    isFinish = System.currentTimeMillis() > DateUtils.getTime(
-//                            "yyyy-MM-dd HH:mm:ss", dataList.get(position).getEndTime());
-//                }
-//
-//                if (dataList.get(position).getUseState() != null
-//                        && dataList.get(position).getUseState().equals("UNUSE")
-//                        && !isFinish) {
-//                    Intent intent = new Intent(getActivity(), CloseGiftActivity.class);
-//                    intent.putExtra("gain_id", dataList.get(position).getGainId());
-//                    startActivity(intent);
-//                }
 
                 Intent intent = new Intent(getActivity(), CloseGiftActivity.class);
                 intent.putExtra("gain_id", dataList.get(position).getGainId());

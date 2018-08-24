@@ -3,9 +3,7 @@ package com.hfbh.yuecheng.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +25,8 @@ import com.hfbh.yuecheng.utils.BarcodeUtils;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
-import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.QRCodeUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
-import com.smarttop.library.utils.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -71,8 +67,9 @@ public class PayCodeFragment extends BaseFragment {
     private UserInfoBean userInfoBean;
     //显示隐藏付款码
     private boolean isShow;
-
+    //条码
     private Bitmap barBmp;
+    //二维码
     private Bitmap qrBmp;
 
     private Timer mTimer;
@@ -161,7 +158,7 @@ public class PayCodeFragment extends BaseFragment {
                             tvPayBarcode.setText("点击查看数字");
                         }
 
-                        barBmp = BarcodeUtils.creatBarcode(payCode,
+                        barBmp = BarcodeUtils.createBarcode(payCode,
                                 (int) DisplayUtils.dp2px(getActivity(), 225),
                                 (int) DisplayUtils.dp2px(getActivity(), 41));
                         ivPayBarcode.setImageBitmap(barBmp);

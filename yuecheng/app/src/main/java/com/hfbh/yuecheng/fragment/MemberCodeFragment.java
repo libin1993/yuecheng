@@ -57,7 +57,7 @@ public class MemberCodeFragment extends BaseFragment {
     private void initView() {
         tvMemberCard.setText(memberCodeBean.getData().getCardLevel());
         String cardNumber = memberCodeBean.getData().getCardNumber();
-        barBmp = BarcodeUtils.creatBarcode(cardNumber,
+        barBmp = BarcodeUtils.createBarcode(cardNumber,
                 (int) DisplayUtils.dp2px(getActivity(), 225),
                 (int) DisplayUtils.dp2px(getActivity(), 41));
         ivMemberBarcode.setImageBitmap(barBmp);

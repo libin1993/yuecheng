@@ -88,7 +88,6 @@ public class DiscoveryFragment extends BaseFragment {
         tabDiscovery.setViewPager(vpDiscovery);
         tabDiscovery.setCurrentTab(0);
 
-
     }
 
     public static DiscoveryFragment newInstance() {
