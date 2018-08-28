@@ -22,7 +22,7 @@ import static android.webkit.WebSettings.LOAD_NO_CACHE;
 /**
  * Author：Libin on 2018/6/14 15:40
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：banner h5
  */
 public class BannerInfoActivity extends BaseActivity {
     @BindView(R.id.webview_goods_detail)

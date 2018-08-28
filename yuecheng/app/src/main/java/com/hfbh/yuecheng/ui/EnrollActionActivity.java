@@ -311,13 +311,6 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                     inputNum.put(position, true);
                 }
 
-//                if (isSelectSex) {
-//                    isSelectSex = false;
-//                    if (!TextUtils.isEmpty(optionListBean.getRequired()) &&
-//                            optionListBean.getRequired().equals("true")) {
-//                        inputNum++;
-//                    }
-//                }
                 for (int i = 0; i < rgsValue.getChildCount(); i++) {
                     if (rgsValue.getChildAt(i).getId() == checkedId) {
                         map.put(optionListBean.getTitle(), optionListBean.getItemList().get(i).getTitle());

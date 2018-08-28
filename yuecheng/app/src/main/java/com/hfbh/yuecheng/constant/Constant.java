@@ -137,7 +137,7 @@ public class Constant {
     //提交订单
     public static final String SUBMIT_ORDER = HOST + "/wechat/order/submitOrder.json";
     //商品余额全额支付
-    public static final String PAY_ORDER_BALANCE = HOST + "/wechat/order/payBalanceSuccess.json";
+    public static final String PAY_ORDER_BALANCE = HOST + "/wechat/order/confirmBalance.json";
     //商品余额冻结
     public static final String FROZEN_ORDER_BALANCE = HOST + "/wechat/order/freezeBalance.json";
     //主扫订单

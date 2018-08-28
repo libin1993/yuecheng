@@ -36,7 +36,7 @@ import okhttp3.Call;
 /**
  * Author：Libin on 2018/5/29 14:59
  * Email：1993911441@qq.com
- * Describe：核销
+ * Describe：活动核销
  */
 public class CloseActionActivity extends BaseActivity {
     @BindView(R.id.tv_header_title)

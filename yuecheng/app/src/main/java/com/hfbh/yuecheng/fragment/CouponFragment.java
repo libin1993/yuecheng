@@ -81,6 +81,7 @@ public class CouponFragment extends BaseFragment {
         initView();
         initData();
         return view;
+
     }
 
 
@@ -88,7 +89,6 @@ public class CouponFragment extends BaseFragment {
      * 获取优惠券
      */
     private void initData() {
-
         OkHttpUtils.post()
                 .url(Constant.MY_COUPON)
                 .addParams("appType", MyApp.appType)

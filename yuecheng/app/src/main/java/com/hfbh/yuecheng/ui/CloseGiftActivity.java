@@ -34,7 +34,7 @@ import okhttp3.Call;
 /**
  * Author：Libin on 2018/6/13 10:18
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：礼品核销
  */
 public class CloseGiftActivity extends BaseActivity {
     @BindView(R.id.tv_header_title)
