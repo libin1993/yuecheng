@@ -52,6 +52,7 @@ import okhttp3.Call;
  * Email：1993911441@qq.com
  * Describe：活动
  */
+
 public class ActivityFragment extends BaseFragment {
     @BindView(R.id.tv_header_title)
     TextView tvHeaderTitle;

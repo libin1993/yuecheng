@@ -8,7 +8,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.base.BaseActivity;
@@ -25,27 +24,21 @@ import static android.webkit.WebSettings.LOAD_NO_CACHE;
  * Describe：banner h5
  */
 public class BannerInfoActivity extends BaseActivity {
-    @BindView(R.id.webview_goods_detail)
+    @BindView(R.id.webview_banner)
     WebView webView;
-    @BindView(R.id.iv_goods_back)
-    ImageView ivGoodsBack;
-    @BindView(R.id.rl_pop_goods_buy)
-    RelativeLayout rlPopGoodsBuy;
-    @BindView(R.id.iv_goods_share)
-    ImageView ivGoodsShare;
+    @BindView(R.id.iv_banner_back)
+    ImageView ivBannerBack;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods_detail);
+        setContentView(R.layout.activity_banner_info);
         ButterKnife.bind(this);
 
         initView();
     }
 
     private void initView() {
-        rlPopGoodsBuy.setVisibility(View.GONE);
-        ivGoodsShare.setVisibility(View.GONE);
         String url = getIntent().getStringExtra("url");
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
@@ -74,7 +67,7 @@ public class BannerInfoActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.iv_goods_back)
+    @OnClick(R.id.iv_banner_back)
     public void onViewClicked() {
         finish();
     }

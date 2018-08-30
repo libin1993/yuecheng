@@ -29,6 +29,7 @@ import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.ShareUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
+import com.hfbh.yuecheng.utils.TitleBarUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -60,38 +61,31 @@ public class RushGoodsDetailActivity extends BaseActivity {
     TextView tvBuyGoods;
     @BindView(R.id.tv_goods_status)
     TextView tvGoodsStatus;
-    @BindView(R.id.rl_pop_goods_buy)
-    RelativeLayout rlPopGoodsBuy;
     @BindView(R.id.rl_goods_status)
     RelativeLayout rlGoodsStatus;
+    @BindView(R.id.tv_goods_title)
+    TextView tvGoodsTitle;
+    @BindView(R.id.rl_pop_goods_buy)
+    RelativeLayout rlPopGoodsBuy;
     //商品id
     private int goodsId;
     private String url;
     private GroupGoodsDetailBean goodsBean;
-    //余额支付回调
-    private boolean paySuccess;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TitleBarUtils.setNoTitleBar(this);
         setContentView(R.layout.activity_goods_detail);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         rlPopGoodsBuy.setVisibility(View.VISIBLE);
+        tvGoodsTitle.setText("秒杀详情");
         getData();
         initData();
         initWebView();
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (paySuccess) {
-            paySuccess = false;
-            balancePayResult();
-        }
-    }
 
     private void initData() {
         OkHttpUtils.get()
@@ -213,59 +207,6 @@ public class RushGoodsDetailActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 支付结果
-     */
-    private void balancePayResult() {
-        View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_exchange_success, null);
-        int widthPixels = DisplayUtils.getMetrics(this).widthPixels;
-        final PopupWindow mPopupWindow = new PopupWindow(contentView, (int) (widthPixels
-                - DisplayUtils.dp2px(this, 66)), ViewGroup.LayoutParams.WRAP_CONTENT);
-        mPopupWindow.setContentView(contentView);
-        mPopupWindow.setTouchable(true);
-        mPopupWindow.setFocusable(true);
-        mPopupWindow.setOutsideTouchable(true);
-        mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
-        DisplayUtils.setBackgroundAlpha(this, true);
-
-        ImageView ivResult = (ImageView) contentView.findViewById(R.id.iv_exchange_result);
-        ImageView ivCancel = (ImageView) contentView.findViewById(R.id.iv_exchange_cancel);
-        TextView tvResult = (TextView) contentView.findViewById(R.id.tv_exchange_result);
-        TextView tvMsg = (TextView) contentView.findViewById(R.id.tv_exchange_reason);
-        final TextView tvSuccess = (TextView) contentView.findViewById(R.id.tv_exchange_success);
-
-        ivResult.setImageResource(R.mipmap.img_success);
-        tvResult.setText("购买成功");
-        tvSuccess.setText("去查看");
-        tvSuccess.setBackgroundResource(R.drawable.bound_gradient_green);
-
-        tvMsg.setText("购买的商品已放置于“我的-订单”，记得到店提货哦！");
-
-
-        tvSuccess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RushGoodsDetailActivity.this, MyOrderActivity.class));
-                mPopupWindow.dismiss();
-            }
-        });
-
-        ivCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPopupWindow.dismiss();
-            }
-        });
-
-        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                DisplayUtils.setBackgroundAlpha(RushGoodsDetailActivity.this, false);
-            }
-        });
-    }
-
 
     @Subscribe
     public void isLogin(String msg) {
@@ -273,9 +214,6 @@ public class RushGoodsDetailActivity extends BaseActivity {
             initData();
         }
 
-        if ("balance_success".equals(msg)) {
-            paySuccess = true;
-        }
     }
 
     @Override

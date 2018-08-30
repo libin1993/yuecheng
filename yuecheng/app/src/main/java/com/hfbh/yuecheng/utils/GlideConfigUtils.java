@@ -18,7 +18,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 /**
  * Author：Libin on 2018/5/14 14:12
  * Email：1993911441@qq.com
- * Describe：Glide图片清晰度,缓存
+ * Describe：Glide图片格式,缓存
  */
 public class GlideConfigUtils implements GlideModule {
     @Override

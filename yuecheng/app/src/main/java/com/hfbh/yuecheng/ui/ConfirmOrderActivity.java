@@ -462,8 +462,8 @@ public class ConfirmOrderActivity extends BaseActivity {
                         }
 
                     }
-                });
 
+                });
     }
 
     /**

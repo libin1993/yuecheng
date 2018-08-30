@@ -61,6 +61,7 @@ public class GuideActivity extends BaseActivity {
 
     }
 
+    
     private void initData() {
         OkHttpUtils.get()
                 .url(Constant.FLOOR_GUIDE)
