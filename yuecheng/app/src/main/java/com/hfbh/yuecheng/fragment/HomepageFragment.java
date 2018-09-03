@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -830,6 +831,9 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                     if (couponBean.getData().get(position).getBalanceNum() > 0) {
 
+                        tvReceive.setBackgroundResource(R.color.red_99);
+                        tvReceive.setTextColor(ContextCompat.getColor(getActivity(), R.color.gray_e0));
+
                         int limitNum = couponBean.getData().get(position).getLimitNum();
                         int getNum = couponBean.getData().get(position).getMemberBroughtNum();
 
@@ -867,6 +871,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                             }
                         }
                     } else {
+                        tvReceive.setBackgroundResource(R.color.gray_9f);
+                        tvReceive.setTextColor(Color.WHITE);
                         tvReceive.setText("已抢光");
                     }
 
@@ -1207,28 +1213,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
     }
-
-
-    private void initCouponTitle() {
-        BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
-                R.layout.layout_coupon_title, 1, 5) {
-            @Override
-            public void onBindViewHolder(ViewHolder holder, int position) {
-                super.onBindViewHolder(holder, position);
-                LinearLayout linearLayout = holder.getView(R.id.ll_coupon_title);
-
-                linearLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
-
-            }
-        };
-        mAdapters.add(titleAdapter);
-    }
-
 
     /**
      * @param title

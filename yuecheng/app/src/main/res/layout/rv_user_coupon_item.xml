@@ -48,7 +48,6 @@
         android:layout_below="@id/tv_my_coupon_info"
         android:layout_marginLeft="36dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/coupon_dotted_line"
         android:layerType="software"/>
 
     <TextView

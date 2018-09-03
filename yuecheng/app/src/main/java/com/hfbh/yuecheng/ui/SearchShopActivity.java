@@ -3,10 +3,8 @@ package com.hfbh.yuecheng.ui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -121,7 +119,8 @@ public class SearchShopActivity extends BaseActivity {
     private boolean firstIn = true;
     CommonAdapter<SearchShopBean.ShopListBean> shopAdapter;
     private Drawable grayDrawable;
-    private Drawable redDrawable;
+    private Drawable redUpDrawable;
+    private Drawable redDownDrawable;
     private SearchShopBean marketListBean;
 
     @Override
@@ -146,9 +145,14 @@ public class SearchShopActivity extends BaseActivity {
         grayDrawable.setBounds(0, 0, grayDrawable.getMinimumWidth(),
                 grayDrawable.getMinimumHeight());
 
-        redDrawable = ContextCompat.getDrawable(this, R.mipmap.ic_triangle_up);
-        redDrawable.setBounds(0, 0, redDrawable.getMinimumWidth(),
-                redDrawable.getMinimumHeight());
+        redUpDrawable = ContextCompat.getDrawable(this, R.mipmap.ic_triangle_up);
+        redUpDrawable.setBounds(0, 0, redUpDrawable.getMinimumWidth(),
+                redUpDrawable.getMinimumHeight());
+
+
+        redDownDrawable = ContextCompat.getDrawable(this, R.mipmap.ic_triangle_down);
+        redDownDrawable.setBounds(0, 0, redDownDrawable.getMinimumWidth(),
+                redDownDrawable.getMinimumHeight());
     }
 
     /**
@@ -434,10 +438,14 @@ public class SearchShopActivity extends BaseActivity {
         mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                tvMarketType.setTextColor(getResources().getColor(R.color.gray_1a));
-                tvMarketType.setCompoundDrawables(null, null, grayDrawable, null);
-                tvMarketFloor.setTextColor(getResources().getColor(R.color.gray_1a));
-                tvMarketFloor.setCompoundDrawables(null, null, grayDrawable, null);
+                if (floorNum > 0){
+                    tvMarketFloor.setTextColor(getResources().getColor(R.color.red_99));
+                    tvMarketFloor.setCompoundDrawables(null, null, redDownDrawable, null);
+                }else {
+                    tvMarketFloor.setTextColor(getResources().getColor(R.color.gray_1a));
+                    tvMarketFloor.setCompoundDrawables(null, null, grayDrawable, null);
+                }
+
 
             }
         });
@@ -516,10 +524,13 @@ public class SearchShopActivity extends BaseActivity {
         mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                tvMarketType.setTextColor(getResources().getColor(R.color.gray_1a));
-                tvMarketType.setCompoundDrawables(null, null, grayDrawable, null);
-                tvMarketFloor.setTextColor(getResources().getColor(R.color.gray_1a));
-                tvMarketFloor.setCompoundDrawables(null, null, grayDrawable, null);
+                if (industryNum > 0){
+                    tvMarketType.setTextColor(getResources().getColor(R.color.red_99));
+                    tvMarketType.setCompoundDrawables(null, null, redDownDrawable, null);
+                }else {
+                    tvMarketType.setTextColor(getResources().getColor(R.color.gray_1a));
+                    tvMarketType.setCompoundDrawables(null, null, grayDrawable, null);
+                }
             }
         });
     }
@@ -533,7 +544,7 @@ public class SearchShopActivity extends BaseActivity {
             case R.id.tv_market_type:
                 if (marketListBean!=null){
                     tvMarketType.setTextColor(getResources().getColor(R.color.red_99));
-                    tvMarketType.setCompoundDrawables(null, null, redDrawable, null);
+                    tvMarketType.setCompoundDrawables(null, null, redUpDrawable, null);
                     tvMarketFloor.setTextColor(getResources().getColor(R.color.gray_1a));
                     tvMarketFloor.setCompoundDrawables(null, null, grayDrawable, null);
                     selectIndustry();
@@ -543,7 +554,7 @@ public class SearchShopActivity extends BaseActivity {
             case R.id.tv_market_floor:
                 if (marketListBean!=null){
                     tvMarketFloor.setTextColor(getResources().getColor(R.color.red_99));
-                    tvMarketFloor.setCompoundDrawables(null, null, redDrawable, null);
+                    tvMarketFloor.setCompoundDrawables(null, null, redUpDrawable, null);
                     tvMarketType.setTextColor(getResources().getColor(R.color.gray_1a));
                     tvMarketType.setCompoundDrawables(null, null, grayDrawable, null);
                     selectFloor();

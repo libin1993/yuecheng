@@ -1,9 +1,11 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -246,6 +248,9 @@ public class ExchangeCouponActivity extends BaseActivity {
                 }
 
                 if (dataBean.getBalanceNum() > 0) {
+
+                    tvReceive.setBackgroundResource(R.color.red_99);
+                    tvReceive.setTextColor(ContextCompat.getColor(ExchangeCouponActivity.this, R.color.gray_e0));
                     int limitNum = dataBean.getLimitNum();
                     int getNum = dataBean.getMemberBroughtNum();
 
@@ -283,6 +288,8 @@ public class ExchangeCouponActivity extends BaseActivity {
                         }
                     }
                 } else {
+                    tvReceive.setBackgroundResource(R.color.gray_9f);
+                    tvReceive.setTextColor(Color.WHITE);
                     tvReceive.setText("已抢光");
                 }
 

@@ -81,4 +81,5 @@
     <color name="gray_9e">#9EA1A9</color>
     <color name="translucent">#7F000000</color>
     <color name="translucent_white">#7FFFFFFF</color>
+    <color name="transparent_white">#00FFFFFF</color>
 </resources>

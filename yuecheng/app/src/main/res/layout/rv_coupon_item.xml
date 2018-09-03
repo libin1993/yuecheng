@@ -76,9 +76,7 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@color/red_99"
             android:gravity="center"
-            android:textColor="@color/gray_e0"
             android:textSize="16sp"/>
     </RelativeLayout>
 

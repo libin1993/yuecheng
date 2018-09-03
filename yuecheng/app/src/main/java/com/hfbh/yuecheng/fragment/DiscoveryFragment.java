@@ -89,6 +89,7 @@ public class DiscoveryFragment extends BaseFragment {
 
     }
 
+
     public static DiscoveryFragment newInstance() {
 
         Bundle args = new Bundle();

@@ -163,6 +163,7 @@ public class CouponFragment extends BaseFragment {
                 TextView tvPark = holder.getView(R.id.tv_coupon_type_park);
                 TextView tvType = holder.getView(R.id.tv_coupon_type_name);
                 ImageView ivType = holder.getView(R.id.iv_coupon_type);
+                View dottedLine = holder.getView(R.id.view_coupon_line);
 
 
                 tvCouponName.setText(dataBean.getCouponTypeName());
@@ -203,6 +204,7 @@ public class CouponFragment extends BaseFragment {
                         tvValue.setTextColor(getResources().getColor(R.color.gray_10));
                         tvPark.setTextColor(getResources().getColor(R.color.gray_10));
                         tvType.setTextColor(getResources().getColor(R.color.gray_10));
+                        dottedLine.setBackgroundResource(R.drawable.coupon_dotted_line);
                         break;
                     case "USE":
                         ivCouponBg.setImageResource(R.mipmap.img_user_bigcoupon_grey);
@@ -214,6 +216,7 @@ public class CouponFragment extends BaseFragment {
                         tvValue.setTextColor(getResources().getColor(R.color.gray_c2));
                         tvPark.setTextColor(getResources().getColor(R.color.gray_c2));
                         tvType.setTextColor(getResources().getColor(R.color.gray_c2));
+                        dottedLine.setBackgroundResource(R.drawable.coupon_dotted_line_disable);
                         break;
                     case "EXPIRE":
                         ivCouponBg.setImageResource(R.mipmap.img_user_bigcoupon_grey);
@@ -225,6 +228,7 @@ public class CouponFragment extends BaseFragment {
                         tvValue.setTextColor(getResources().getColor(R.color.gray_c2));
                         tvPark.setTextColor(getResources().getColor(R.color.gray_c2));
                         tvType.setTextColor(getResources().getColor(R.color.gray_c2));
+                        dottedLine.setBackgroundResource(R.drawable.coupon_dotted_line_disable);
                         break;
                 }
 

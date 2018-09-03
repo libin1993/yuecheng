@@ -52,7 +52,8 @@ import okhttp3.Call;
  * Email：1993911441@qq.com
  * Describe：活动列表
  */
-public class ActivityListFragment extends BaseFragment {
+public class
+ActivityListFragment extends BaseFragment {
 
     @BindView(R.id.sv_no_activity)
     NestedScrollView svNoActivity;
@@ -248,6 +249,7 @@ public class ActivityListFragment extends BaseFragment {
 //                                                break;
 //                                        }
 //                                    }
+                                    
                                     tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
                                     switch (dataBean.getAcivityType()) {
                                         case "FREE":

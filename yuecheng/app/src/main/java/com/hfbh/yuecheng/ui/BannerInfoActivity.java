@@ -55,7 +55,6 @@ public class BannerInfoActivity extends BaseActivity {
             ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
-
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
             @Override

@@ -176,6 +176,7 @@ public class RushGoodsDetailActivity extends BaseActivity {
                 return true;
             }
         });
+
     }
 
     private void getData() {

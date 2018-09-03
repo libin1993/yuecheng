@@ -15,7 +15,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@color/translucent_white">
+        android:background="@drawable/gradient_white_ver">
 
         <RelativeLayout
             android:layout_width="match_parent"
