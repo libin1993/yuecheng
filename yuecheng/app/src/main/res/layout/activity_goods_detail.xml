@@ -13,6 +13,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_goods_bg"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@drawable/gradient_white_ver">

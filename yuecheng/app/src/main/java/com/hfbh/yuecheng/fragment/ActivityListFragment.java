@@ -249,7 +249,7 @@ ActivityListFragment extends BaseFragment {
 //                                                break;
 //                                        }
 //                                    }
-                                    
+
                                     tvReceive.setBackgroundResource(R.drawable.bound_red_15dp);
                                     switch (dataBean.getAcivityType()) {
                                         case "FREE":

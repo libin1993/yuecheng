@@ -239,8 +239,7 @@ public class OldGoodsFragment extends BaseFragment {
      */
     private void initTitle(final String title, final int type) {
         BaseDelegateAdapter titleAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(),
-                new LinearLayoutHelper(),
-                R.layout.layout_homepage_title, 1, type) {
+                new LinearLayoutHelper(), R.layout.layout_homepage_title, 1, type) {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);

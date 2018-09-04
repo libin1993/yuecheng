@@ -44,7 +44,7 @@ import okhttp3.Call;
 /**
  * Author：Libin on 2018/6/14 14:22
  * Email：1993911441@qq.com
- * Describe：
+ * Describe：新品
  */
 public class NewGoodsFragment extends BaseFragment {
     @BindView(R.id.rv_discovery_goods)

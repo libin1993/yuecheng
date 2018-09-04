@@ -1,21 +1,15 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +24,7 @@ import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.ShareUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.TitleBarUtils;
+import com.hfbh.yuecheng.view.ScrollWebView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -49,8 +44,7 @@ import static android.webkit.WebSettings.LOAD_NO_CACHE;
  * Describe：团购商品详情
  */
 public class GroupGoodsDetailActivity extends BaseActivity {
-    @BindView(R.id.webview_goods_detail)
-    WebView webView;
+
     @BindView(R.id.iv_goods_back)
     ImageView ivGoodsBack;
     @BindView(R.id.iv_goods_share)
@@ -67,6 +61,8 @@ public class GroupGoodsDetailActivity extends BaseActivity {
     TextView tvGoodsTitle;
     @BindView(R.id.rl_pop_goods_buy)
     RelativeLayout rlPopGoodsBuy;
+    @BindView(R.id.webview_goods_detail)
+    WebView webView;
 
     //商品id
     private int goodsId;
@@ -178,7 +174,6 @@ public class GroupGoodsDetailActivity extends BaseActivity {
                 return true;
             }
         });
-
     }
 
     private void getData() {

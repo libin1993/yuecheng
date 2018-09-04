@@ -1,20 +1,14 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,8 +41,6 @@ import static android.webkit.WebSettings.LOAD_NO_CACHE;
  * Describe：人气单品详情
  */
 public class PopGoodsDetailActivity extends BaseActivity {
-    @BindView(R.id.webview_goods_detail)
-    WebView webView;
     @BindView(R.id.iv_goods_back)
     ImageView ivGoodsBack;
     @BindView(R.id.iv_goods_share)
@@ -65,6 +57,8 @@ public class PopGoodsDetailActivity extends BaseActivity {
     TextView tvGoodsTitle;
     @BindView(R.id.rl_pop_goods_buy)
     RelativeLayout rlPopGoodsBuy;
+    @BindView(R.id.webview_goods_detail)
+    WebView webView;
 
     //商品详情
     private int goodsId;

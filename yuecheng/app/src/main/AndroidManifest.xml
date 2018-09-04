@@ -153,7 +153,6 @@
         <activity android:name=".ui.CouponIntroActivity"/>
         <activity android:name=".ui.BannerInfoActivity"/>
         <activity android:name=".ui.GuideActivity"/>
-        <activity android:name=".ui.GoodsActivity"/>
 
         <activity
             android:name="com.mob.tools.MobUIShell"

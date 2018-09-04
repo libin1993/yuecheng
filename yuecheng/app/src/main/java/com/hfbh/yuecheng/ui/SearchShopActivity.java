@@ -545,8 +545,6 @@ public class SearchShopActivity extends BaseActivity {
                 if (marketListBean!=null){
                     tvMarketType.setTextColor(getResources().getColor(R.color.red_99));
                     tvMarketType.setCompoundDrawables(null, null, redUpDrawable, null);
-                    tvMarketFloor.setTextColor(getResources().getColor(R.color.gray_1a));
-                    tvMarketFloor.setCompoundDrawables(null, null, grayDrawable, null);
                     selectIndustry();
                 }
 
@@ -555,8 +553,6 @@ public class SearchShopActivity extends BaseActivity {
                 if (marketListBean!=null){
                     tvMarketFloor.setTextColor(getResources().getColor(R.color.red_99));
                     tvMarketFloor.setCompoundDrawables(null, null, redUpDrawable, null);
-                    tvMarketType.setTextColor(getResources().getColor(R.color.gray_1a));
-                    tvMarketType.setCompoundDrawables(null, null, grayDrawable, null);
                     selectFloor();
                 }
 

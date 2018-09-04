@@ -10,8 +10,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -60,6 +58,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initView() {
+
         boolean isFirstIn = SharedPreUtils.getBoolean(this, "first_in", true);
         if (isFirstIn) {
             rlSplash.setVisibility(View.VISIBLE);
