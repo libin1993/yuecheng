@@ -1,12 +1,14 @@
 package com.hfbh.yuecheng.ui;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -15,6 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,6 +57,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
+
+import static com.mob.MobSDK.getContext;
 
 /**
  * Author：Libin on 2018/7/18 15:23
@@ -102,7 +107,6 @@ public class ConfirmOrderActivity extends BaseActivity {
     @BindView(R.id.tv_goods_type)
     TextView tvGoodsType;
 
-
     private GroupGoodsDetailBean goodsBean;
     private UserBalanceBean balanceBean;
     //用户余额
@@ -150,6 +154,7 @@ public class ConfirmOrderActivity extends BaseActivity {
             tvGoodsType.setText("失效未提货自动退款");
         }
     }
+
 
     /**
      * 付款金额
@@ -291,6 +296,7 @@ public class ConfirmOrderActivity extends BaseActivity {
                 });
     }
 
+
     /**
      * 设置支付密码
      */
@@ -342,7 +348,7 @@ public class ConfirmOrderActivity extends BaseActivity {
         TextView tvForget = (TextView) contentView.findViewById(R.id.tv_forget_pay_pwd);
 
 
-        GridPasswordView pwdView = (GridPasswordView) contentView.findViewById(R.id.et_validate_pay_pwd);
+        final GridPasswordView pwdView = (GridPasswordView) contentView.findViewById(R.id.et_validate_pay_pwd);
 
 
         ivCancel.setOnClickListener(new View.OnClickListener() {
@@ -360,6 +366,19 @@ public class ConfirmOrderActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        pwdView.setFocusable(true);
+        pwdView.setFocusableInTouchMode(true);
+        pwdView.requestFocus();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(pwdView, InputMethodManager.SHOW_IMPLICIT);
+            }
+        },200);
+
 
         pwdView.setOnPasswordChangedListener(new GridPasswordView.OnPasswordChangedListener() {
             @Override

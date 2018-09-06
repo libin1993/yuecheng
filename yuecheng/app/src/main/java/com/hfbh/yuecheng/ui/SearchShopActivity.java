@@ -446,7 +446,6 @@ public class SearchShopActivity extends BaseActivity {
                     tvMarketFloor.setCompoundDrawables(null, null, grayDrawable, null);
                 }
 
-
             }
         });
     }
@@ -456,8 +455,8 @@ public class SearchShopActivity extends BaseActivity {
      */
     private void selectIndustry() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.ppw_select_floor, null);
-        final DropDownPopupWindow mPopupWindow = new DropDownPopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+        final DropDownPopupWindow mPopupWindow = new DropDownPopupWindow(contentView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setContentView(contentView);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);

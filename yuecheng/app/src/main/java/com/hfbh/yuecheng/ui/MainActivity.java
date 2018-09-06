@@ -85,7 +85,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     @BindView(R.id.view_loading)
     AVLoadingIndicatorView loadingView;
 
-
     //退出应用
     private long exitTime = 0;
     //读写权限，相机权限

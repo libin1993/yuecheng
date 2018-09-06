@@ -173,7 +173,6 @@ public class RushGoodsDetailActivity extends BaseActivity {
                 return true;
             }
         });
-        
     }
 
     private void getData() {
@@ -188,9 +187,8 @@ public class RushGoodsDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_goods_share:
                 if (goodsBean != null && goodsBean.getData() != null) {
-                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
-                            , goodsBean.getData().getCommodityName(),
-                            "", url + "&share=true");
+                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath(),
+                            goodsBean.getData().getCommodityName(), "", url + "&share=true");
                 }
                 break;
             case R.id.tv_buy_goods:

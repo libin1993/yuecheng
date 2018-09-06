@@ -1,15 +1,18 @@
 package com.hfbh.yuecheng.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -173,7 +176,7 @@ public class ScanedOrderActivity extends BaseActivity {
         TextView tvForget = (TextView) contentView.findViewById(R.id.tv_forget_pay_pwd);
 
 
-        GridPasswordView pwdView = (GridPasswordView) contentView.findViewById(R.id.et_validate_pay_pwd);
+        final GridPasswordView pwdView = (GridPasswordView) contentView.findViewById(R.id.et_validate_pay_pwd);
 
 
         ivCancel.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +195,18 @@ public class ScanedOrderActivity extends BaseActivity {
             }
         });
 
+
+        pwdView.setFocusable(true);
+        pwdView.setFocusableInTouchMode(true);
+        pwdView.requestFocus();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(pwdView, InputMethodManager.SHOW_IMPLICIT);
+            }
+        },200);
         pwdView.setOnPasswordChangedListener(new GridPasswordView.OnPasswordChangedListener() {
             @Override
             public void onTextChanged(String s) {

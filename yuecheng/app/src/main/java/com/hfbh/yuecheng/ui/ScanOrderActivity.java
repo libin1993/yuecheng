@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -699,7 +700,7 @@ public class ScanOrderActivity extends BaseActivity {
         TextView tvForget = (TextView) contentView.findViewById(R.id.tv_forget_pay_pwd);
 
 
-        GridPasswordView pwdView = (GridPasswordView) contentView.findViewById(R.id.et_validate_pay_pwd);
+        final GridPasswordView pwdView = (GridPasswordView) contentView.findViewById(R.id.et_validate_pay_pwd);
 
 
         ivCancel.setOnClickListener(new View.OnClickListener() {
@@ -717,6 +718,19 @@ public class ScanOrderActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+
+        pwdView.setFocusable(true);
+        pwdView.setFocusableInTouchMode(true);
+        pwdView.requestFocus();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(pwdView, InputMethodManager.SHOW_IMPLICIT);
+            }
+        },200);
 
         pwdView.setOnPasswordChangedListener(new GridPasswordView.OnPasswordChangedListener() {
             @Override

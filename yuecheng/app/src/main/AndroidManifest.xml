@@ -126,7 +126,8 @@
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".ui.SetPwdActivity"/>
         <activity android:name=".ui.ResetLoginPwdActivity"/>
-        <activity android:name=".ui.ResetPayPwdActivity"/>
+        <activity android:name=".ui.ResetPayPwdActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.ValidateActivity"/>
         <activity android:name=".ui.MemberBalanceActivity"/>
         <activity android:name=".ui.MemberPointsActivity"/>
