@@ -41,23 +41,24 @@
         android:layout_below="@id/tv_feedback_picture"
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:paddingBottom="10dp">
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp">
 
-        <ImageView
-            android:id="@+id/img_add_feed_back"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="15dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/img_user_addpic"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_feed_back"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="12dp">
+            android:layout_width="wrap_content"
+            android:layout_height="80dp">
         </android.support.v7.widget.RecyclerView>
+
+        <ImageView
+            android:id="@+id/img_add_feed_back"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_user_addpic"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
     <LinearLayout
@@ -81,7 +82,6 @@
             android:id="@+id/et_feedback_phone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:background="@null"
             android:hint="请留下您的手机号"

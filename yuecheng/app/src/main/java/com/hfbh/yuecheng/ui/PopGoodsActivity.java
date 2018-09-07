@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
@@ -147,24 +148,12 @@ public class PopGoodsActivity extends BaseActivity {
 
     private void initView() {
         rvPopGoods.setLayoutManager(new GridLayoutManager(this, 2));
-        //布局宽高
-        final int widthPixels = DisplayUtils.getMetrics(this).widthPixels;
-        final int imgWidth = (int) ((widthPixels - DisplayUtils.dp2px(this, 35)) / 2);
         rvPopGoods.addItemDecoration(new GridItemDecoration1((int) DisplayUtils.dp2px(this, 6)));
         adapter = new CommonAdapter<GoodsBean.DataBean>(this, R.layout.rv_pop_goods_item, goodsList) {
             @Override
             protected void convert(ViewHolder holder, GoodsBean.DataBean dataBean, int position) {
-
-                ImageView ivPop = holder.getView(R.id.iv_discovery_pop);
-                ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                layoutParams.width = imgWidth;
-                layoutParams.height = imgWidth;
-                ivPop.setLayoutParams(layoutParams);
-
-                Glide.with(PopGoodsActivity.this)
-                        .load(dataBean.getPicturePath())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(ivPop);
+                SimpleDraweeView ivPop = holder.getView(R.id.iv_discovery_pop);
+                ivPop.setImageURI(dataBean.getPicturePath());
 
                 holder.setText(R.id.tv_discovery_pop_name, dataBean.getCommodityName());
                 holder.setText(R.id.tv_discovery_pop_price, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));

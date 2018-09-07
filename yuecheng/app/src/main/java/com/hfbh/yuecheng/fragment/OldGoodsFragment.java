@@ -162,23 +162,12 @@ public class OldGoodsFragment extends BaseFragment {
         gridLayoutHelper.setBgColor(Color.WHITE);
         BaseDelegateAdapter popAdapter = new BaseDelegateAdapter(getParentFragment().getActivity(), gridLayoutHelper,
                 R.layout.rv_pop_goods_item, popGoods.size(), 2) {
-            //布局宽高
-            int widthPixels = DisplayUtils.getMetrics(getParentFragment().getActivity()).widthPixels;
-            final int width = (int) ((widthPixels - DisplayUtils.dp2px(getParentFragment().getActivity(), 35)) / 2);
-
             @Override
             public void onBindViewHolder(ViewHolder holder, final int position) {
                 super.onBindViewHolder(holder, position);
-                ImageView ivPop = holder.getView(R.id.iv_discovery_pop);
-                ViewGroup.LayoutParams layoutParams = ivPop.getLayoutParams();
-                layoutParams.width = width;
-                layoutParams.height = width;
-                ivPop.setLayoutParams(layoutParams);
+                SimpleDraweeView ivPop = holder.getView(R.id.iv_discovery_pop);
+                ivPop.setImageURI(popGoods.get(position).getPicturePath());
 
-                Glide.with(getParentFragment().getActivity())
-                        .load(popGoods.get(position).getPicturePath())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(ivPop);
                 holder.setText(R.id.tv_discovery_pop_name, popGoods.get(position).getCommodityName());
                 holder.setText(R.id.tv_discovery_pop_price, "¥" + DisplayUtils.isInteger(popGoods.get(position).getNowPrice()));
 

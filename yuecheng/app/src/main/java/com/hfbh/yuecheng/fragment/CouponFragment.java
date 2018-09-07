@@ -150,8 +150,7 @@ public class CouponFragment extends BaseFragment {
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableLoadMore(false);
         rvCoupon.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new CommonAdapter<MyCouponBean.DataBean>(getActivity(),
-                R.layout.rv_user_coupon_item, dataList) {
+        adapter = new CommonAdapter<MyCouponBean.DataBean>(getActivity(), R.layout.rv_user_coupon_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, MyCouponBean.DataBean dataBean, int position) {
                 SimpleDraweeView ivCouponBg = holder.getView(R.id.iv_coupon_bg);

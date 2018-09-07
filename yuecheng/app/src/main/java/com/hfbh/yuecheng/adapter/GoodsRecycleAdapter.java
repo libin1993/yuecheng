@@ -104,15 +104,8 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         } else if (holder instanceof ViewHolder2) {
 
-            ViewGroup.LayoutParams layoutParams = ((ViewHolder2) holder).ivPop.getLayoutParams();
-            layoutParams.width = imgWidth;
-            layoutParams.height = imgWidth;
-            ((ViewHolder2) holder).ivPop.setLayoutParams(layoutParams);
+            ((ViewHolder2) holder).ivPop.setImageURI(dataList.get(position).getPicturePath());
 
-            Glide.with(mContext)
-                    .load(dataList.get(position).getPicturePath())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(((ViewHolder2) holder).ivPop);
             ((ViewHolder2) holder).tvName.setText(dataList.get(position).getCommodityName());
             ((ViewHolder2) holder).tvPrice.setText("¥" + DisplayUtils.isInteger(dataList.get(position).getNowPrice()));
 
@@ -157,14 +150,14 @@ public class GoodsRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     class ViewHolder2 extends RecyclerView.ViewHolder {
-        public ImageView ivPop;
+        public SimpleDraweeView ivPop;
         public TextView tvName;
         public TextView tvPrice;
         public TextView tvOld;
 
         public ViewHolder2(View itemView) {
             super(itemView);
-            ivPop = (ImageView) itemView.findViewById(R.id.iv_discovery_pop);
+            ivPop = (SimpleDraweeView) itemView.findViewById(R.id.iv_discovery_pop);
             tvName = (TextView) itemView.findViewById(R.id.tv_discovery_pop_name);
             tvPrice = (TextView) itemView.findViewById(R.id.tv_discovery_pop_price);
             tvOld = (TextView) itemView.findViewById(R.id.tv_discovery_pop_original);

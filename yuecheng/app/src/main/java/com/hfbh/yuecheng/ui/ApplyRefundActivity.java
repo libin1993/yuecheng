@@ -137,11 +137,11 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
 
         tvRefundMoney.setText("¥" + DisplayUtils.decimalFormat(money));
 
-        rvRefund.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false));
+        rvRefund.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
+                false));
         adapter = new CommonAdapter<String>(this, R.layout.rv_photopicker_item, photoList) {
             @Override
-            protected void convert(ViewHolder holder, String s, int position) {
+            protected void convert(ViewHolder holder, String s, final int position) {
 
                 Uri uri = Uri.fromFile(new File(s));
 
@@ -156,25 +156,35 @@ public class ApplyRefundActivity extends BaseActivity implements EasyPermissions
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .into((ImageView) holder.getView(R.id.iv_picker_photo));
                 }
+
+
+                ImageView ivDelete = holder.getView(R.id.iv_delete_pic);
+                ivDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        photoList.remove(position);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         };
 
         rvRefund.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                PhotoPreview.builder()
-                        .setPhotos(photoList)
-                        .setCurrentItem(position)
-                        .start(ApplyRefundActivity.this);
-            }
-
-            @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-                return false;
-            }
-        });
+//        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+//                PhotoPreview.builder()
+//                        .setPhotos(photoList)
+//                        .setCurrentItem(position)
+//                        .start(ApplyRefundActivity.this);
+//            }
+//
+//            @Override
+//            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+//                return false;
+//            }
+//        });
 
     }
 

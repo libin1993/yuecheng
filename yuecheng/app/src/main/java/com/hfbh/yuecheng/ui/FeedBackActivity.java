@@ -83,7 +83,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
     private CommonAdapter<String> adapter;
     private ArrayList<String> photoList = new ArrayList<>();
 
-   private String[] permissionStr = {Manifest.permission.CAMERA};
+    private String[] permissionStr = {Manifest.permission.CAMERA};
     //反馈图片url
     private String imgUrl;
 
@@ -101,7 +101,7 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
                 LinearLayoutManager.HORIZONTAL, false));
         adapter = new CommonAdapter<String>(this, R.layout.rv_photopicker_item, photoList) {
             @Override
-            protected void convert(ViewHolder holder, String s, int position) {
+            protected void convert(ViewHolder holder, String s, final int position) {
 
                 Uri uri = Uri.fromFile(new File(s));
 
@@ -116,25 +116,34 @@ public class FeedBackActivity extends BaseActivity implements EasyPermissions.Pe
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .into((ImageView) holder.getView(R.id.iv_picker_photo));
                 }
+
+                ImageView ivDelete = holder.getView(R.id.iv_delete_pic);
+                ivDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        photoList.remove(position);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         };
 
         rvFeedBack.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                PhotoPreview.builder()
-                        .setPhotos(photoList)
-                        .setCurrentItem(position)
-                        .start(FeedBackActivity.this);
-            }
-
-            @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-                return false;
-            }
-        });
+//        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+//                PhotoPreview.builder()
+//                        .setPhotos(photoList)
+//                        .setCurrentItem(position)
+//                        .start(FeedBackActivity.this);
+//            }
+//
+//            @Override
+//            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+//                return false;
+//            }
+//        });
     }
 
     @OnClick({R.id.iv_header_back, R.id.img_add_feed_back, R.id.tv_confirm_feedback})

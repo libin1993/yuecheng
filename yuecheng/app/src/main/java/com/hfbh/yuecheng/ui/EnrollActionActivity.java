@@ -118,8 +118,9 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     private String type;
     //活动报名id
     private int enrollId;
-    //报名成功
+    //是否报名成功
     private boolean isEnroll;
+    private boolean enrollSuccess;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -402,7 +403,13 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                 finish();
                 break;
             case R.id.tv_enroll_activity:
-                enrollActivity();
+                if (isEnroll) {
+                    Intent intent = new Intent(this, EnrollInfoActivity.class);
+                    intent.putExtra("enroll_id", enrollId);
+                    startActivity(intent);
+                } else {
+                    enrollActivity();
+                }
                 break;
         }
     }
@@ -468,19 +475,15 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
                                         JSONObject jsonObject = new JSONObject(response);
                                         boolean flag = jsonObject.getBoolean("flag");
                                         if (flag) {
+                                            JSONObject data = jsonObject.getJSONObject("data");
+                                            enrollId = data.getInt("data");
                                             if (!TextUtils.isEmpty(type) && type.equals("CASH") && activityBean.getData()
                                                     .getSignupActivity().getEnrollFee() > 0) {
-
-                                                JSONObject data = jsonObject.getJSONObject("data");
-                                                enrollId = data.getInt("data");
-
                                                 cashEnroll();
-
                                             } else {
                                                 enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
-                                                tvEnrollActivity.setText("已报名");
-                                                tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-                                                tvEnrollActivity.setEnabled(false);
+                                                tvEnrollActivity.setText("已报名，查看报名信息");
+                                                isEnroll = true;
                                             }
 
                                         } else {
@@ -693,6 +696,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     public void enrollSuccess(String msg) {
         if ("enroll_success".equals(msg)) {
             isEnroll = true;
+            enrollSuccess = true;
         }
         if ("pay_order".equals(msg)) {
             finish();
@@ -702,12 +706,10 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     @Override
     protected void onResume() {
         super.onResume();
-        if (isEnroll) {
-            isEnroll = false;
+        if (enrollSuccess) {
+            enrollSuccess = false;
             enrollResult(true, "活动入场码已放置于“我的-活动”，记得到场参加活动哦！");
-            tvEnrollActivity.setText("已报名");
-            tvEnrollActivity.setBackgroundResource(R.drawable.bound_gray_99_33dp);
-            tvEnrollActivity.setEnabled(false);
+            tvEnrollActivity.setText("已报名,查看报名信息");
         }
     }
 

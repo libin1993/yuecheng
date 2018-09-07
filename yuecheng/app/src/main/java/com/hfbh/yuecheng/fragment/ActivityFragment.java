@@ -129,7 +129,6 @@ public class ActivityFragment extends BaseFragment {
                 });
     }
 
-
     /**
      * tab关联viewpager
      */
@@ -144,7 +143,6 @@ public class ActivityFragment extends BaseFragment {
                 ft.remove(f);
             }
             ft.commit();
-            ft = null;
             fm.executePendingTransactions();
 
         }

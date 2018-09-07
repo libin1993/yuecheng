@@ -13,20 +13,14 @@ import com.google.zxing.common.BitMatrix;
  */
 public class BarcodeUtils {
     public static Bitmap createBarcode(String contents, int desiredWidth, int desiredHeight) {
-        BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
-        return encodeAsBitmap(contents, barcodeFormat, desiredWidth, desiredHeight);
-    }
 
-
-    private static Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int desiredWidth,
-                                         int desiredHeight) {
         final int WHITE = 0xFFFFFFFF;
         final int BLACK = 0xFF000000;
 
         MultiFormatWriter writer = new MultiFormatWriter();
         BitMatrix result = null;
         try {
-            result = writer.encode(contents, format, desiredWidth,
+            result = writer.encode(contents, BarcodeFormat.CODE_128, desiredWidth,
                     desiredHeight, null);
         } catch (WriterException e) {
             // TODO Auto-generated catch block
@@ -44,8 +38,8 @@ public class BarcodeUtils {
             }
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height,
-                Bitmap.Config.ARGB_8888);
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;
     }
