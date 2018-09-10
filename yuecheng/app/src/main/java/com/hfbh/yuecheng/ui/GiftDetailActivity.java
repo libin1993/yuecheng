@@ -23,6 +23,7 @@ import com.hfbh.yuecheng.bean.GiftDetailBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DisplayUtils;
 import com.hfbh.yuecheng.utils.GsonUtils;
+import com.hfbh.yuecheng.utils.ShareUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
 import com.hfbh.yuecheng.utils.TitleBarUtils;
 import com.hfbh.yuecheng.utils.ToastUtils;
@@ -61,7 +62,6 @@ public class GiftDetailActivity extends BaseActivity {
     TextView tvGiftInfo;
     @BindView(R.id.tv_exchange_gift_introduce)
     TextView tvGiftIntroduce;
-
     @BindView(R.id.tv_exchange_gift_count)
     TextView tvExchangeGiftCount;
     @BindView(R.id.tv_exchange_gift_info)
@@ -80,6 +80,9 @@ public class GiftDetailActivity extends BaseActivity {
     RelativeLayout rlStatus;
     @BindView(R.id.iv_gift_back)
     ImageView ivGiftBack;
+    @BindView(R.id.iv_gift_share)
+    ImageView ivGiftShare;
+
 
     //礼品id
     private int giftId;
@@ -240,7 +243,8 @@ public class GiftDetailActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.tv_gift_reduce, R.id.tv_gift_add, R.id.iv_gift_back, R.id.tv_exchange_activity})
+    @OnClick({R.id.tv_gift_reduce, R.id.tv_gift_add, R.id.iv_gift_back, R.id.tv_exchange_activity,
+            R.id.iv_gift_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_gift_reduce:
@@ -277,6 +281,17 @@ public class GiftDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_gift_back:
                 finish();
+                break;
+            case R.id.iv_gift_share:
+                if (giftBean != null && giftBean.getData() != null) {
+                    ShareUtils.showShare(this, giftBean.getData().getPicUrl(),
+                            giftBean.getData().getRelateName(), giftBean.getData().getGiftIntro(),
+                            Constant.EXCHANGE_GIFT_DETAIL+"?appType=Android&id=" + giftId
+                                    + "&appVersion=" + MyApp.appVersion + "&organizeId=" + MyApp.organizeId
+                                    + "&token=" + SharedPreUtils.getStr(this, "token")
+                                    + "&hash=" + SharedPreUtils.getStr(this, "hash"));
+                }
+
                 break;
             case R.id.tv_exchange_activity:
                 if (SharedPreUtils.getBoolean(this, "is_login", false)) {
@@ -410,5 +425,4 @@ public class GiftDetailActivity extends BaseActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
 }

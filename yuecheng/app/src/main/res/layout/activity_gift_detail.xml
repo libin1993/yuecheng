@@ -3,8 +3,7 @@
                 xmlns:fresco="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/gray_f2"
-    >
+                android:background="@color/gray_f2">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -257,6 +256,18 @@
                 android:text="积分兑礼详情"
                 android:textColor="@color/gray_10"
                 android:textSize="18sp"/>
+
+            <ImageView
+                android:id="@+id/iv_gift_share"
+                android:layout_width="44dp"
+                android:layout_height="46dp"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="9dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="9dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/btn_headerbar_share"/>
         </RelativeLayout>
 
     </RelativeLayout>

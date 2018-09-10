@@ -2,7 +2,6 @@ package com.hfbh.yuecheng.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +18,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.adapter.MyFragmentAdapter;
-import com.hfbh.yuecheng.adapter.MyPagerAdapter;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseFragment;
 import com.hfbh.yuecheng.bean.ActivityListBean;
@@ -30,14 +28,10 @@ import com.hfbh.yuecheng.ui.NowActionActivity;
 import com.hfbh.yuecheng.utils.GsonUtils;
 import com.hfbh.yuecheng.utils.LogUtils;
 import com.hfbh.yuecheng.utils.SharedPreUtils;
-import com.smarttop.library.utils.LogUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

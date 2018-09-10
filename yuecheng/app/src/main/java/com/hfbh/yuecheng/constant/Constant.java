@@ -176,5 +176,7 @@ public class Constant {
     public static final String RUSH_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/secKill";
     //团购商品详情
     public static final String GROUP_GOODS_DETAIL = HOST + "/mall/baida-app-h5/index.html#/commodity/group";
+    //积分兑礼详情
+    public static final String EXCHANGE_GIFT_DETAIL = HOST +"/mall/baida-app-h5/index.html#/points";
 
 }

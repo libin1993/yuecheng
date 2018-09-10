@@ -1,11 +1,13 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -118,6 +120,8 @@ public class ActionDetailActivity extends BaseActivity {
                 view.loadUrl(url);
                 return true;
             }
+
+
         });
     }
 
@@ -149,8 +153,8 @@ public class ActionDetailActivity extends BaseActivity {
 
 
     private void initView() {
-        isActivityEnd = System.currentTimeMillis() > DateUtils.getTime(
-                "yyyy-MM-dd HH:mm:ss", activityBean.getData().getSignupDo().getActivityEndtime());
+        isActivityEnd = System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd HH:mm:ss",
+                activityBean.getData().getSignupDo().getActivityEndtime());
         isEnroll = activityBean.getData().getSignupDo().isIsSignup();
 
         isEnrollStart = System.currentTimeMillis() >= DateUtils.getTime(

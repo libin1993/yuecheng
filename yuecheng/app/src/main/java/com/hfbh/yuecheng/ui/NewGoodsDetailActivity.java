@@ -130,9 +130,8 @@ public class NewGoodsDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_header_share:
                 if (goodsBean != null) {
-                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath()
-                            , goodsBean.getData().getCommodityName(),
-                            "", url + "&share=true");
+                    ShareUtils.showShare(this, goodsBean.getData().getPicturePath(),
+                            goodsBean.getData().getCommodityName(), "", url + "&share=true");
                 }
                 break;
         }

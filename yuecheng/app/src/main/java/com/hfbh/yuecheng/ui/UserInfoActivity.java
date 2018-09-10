@@ -556,3 +556,4 @@ public class UserInfoActivity extends BaseActivity implements EasyPermissions.Pe
         EventBus.getDefault().unregister(this);
     }
 }
+

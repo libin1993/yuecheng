@@ -35,7 +35,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
 /**
  * Author：Libin on 2018/5/30 13:41
  * Email：1993911441@qq.com
