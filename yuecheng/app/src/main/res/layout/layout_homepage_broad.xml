@@ -24,7 +24,7 @@
         android:layout_gravity="center_vertical"
         app:mvAnimDuration="1000"
         app:mvDirection="bottom_to_top"
-        app:mvInterval="5000"
+        app:mvInterval="4500"
         app:mvTextColor="@color/gray_10"
         app:mvTextSize="13sp"/>
 </LinearLayout>

@@ -313,7 +313,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 public void onBindViewHolder(ViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
                     ConvenientBanner banner = holder.getView(R.id.banner_homepage);
-                    banner.startTurning(4000);
+                    banner.startTurning(5000);
                     List<String> bannerImg = new ArrayList<>();
                     for (int i = 0; i < bannerBean.getData().size(); i++) {
                         bannerImg.add(bannerBean.getData().get(i).getAdvertPic());

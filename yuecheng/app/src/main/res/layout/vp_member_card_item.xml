@@ -13,29 +13,4 @@
         fresco:roundedCornerRadius="8dp"
         fresco:viewAspectRatio="1.7268"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_vertical"
-        android:paddingBottom="15dp"
-        android:paddingLeft="20dp"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_card_qrcod"/>
-
-        <TextView
-            android:id="@+id/tv_member_card_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/gray_10"
-            android:textSize="12sp"/>
-
-    </LinearLayout>
-
 </RelativeLayout>

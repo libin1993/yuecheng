@@ -262,8 +262,8 @@ public class ActionDetailActivity extends BaseActivity {
             case R.id.iv_activity_share:
                 if (activityBean != null) {
                     ShareUtils.showShare(this, activityBean.getData().getSignupDo()
-                                    .getActivityPicture(), activityBean.getData().getSignupDo().getActivityTitle(),
-                            "", url + "&share=true");
+                                    .getActivityPicture(), activityBean.getData().getSignupDo()
+                                    .getActivityTitle(), "", url + "&share=true");
                 }
 
                 break;

@@ -42,12 +42,8 @@ public class MyPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.vp_member_card_item, null);
 
-
-        SimpleDraweeView ivDesigner = (SimpleDraweeView) view.findViewById(R.id.iv_member_card_bg);
-        TextView tvNumber = (TextView) view.findViewById(R.id.tv_member_card_number);
-
-        ivDesigner.setImageURI(dataList.get(position).getAppPic());
-        tvNumber.setText("NO." + dataList.get(position).getGradeNo());
+        SimpleDraweeView ivCard = (SimpleDraweeView) view.findViewById(R.id.iv_member_card_bg);
+        ivCard.setImageURI(dataList.get(position).getAppPic());
 
         container.addView(view);
         return view;

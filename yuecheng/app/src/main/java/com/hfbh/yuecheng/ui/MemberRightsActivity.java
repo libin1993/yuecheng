@@ -94,10 +94,10 @@ public class MemberRightsActivity extends BaseActivity {
     }
 
     private void initView() {
-//        vpMemberRights.setOffscreenPageLimit(memberBean.getData().size());
+        vpMemberRights.setOffscreenPageLimit(memberBean.getData().size());
         vpMemberRights.setPageTransformer(false, new FadePageTransformer());
         vpMemberRights.setPageMargin((int) DisplayUtils.dp2px(this, 10));
-        final MyPagerAdapter adapter = new MyPagerAdapter(memberBean.getData(), this);
+        MyPagerAdapter adapter = new MyPagerAdapter(memberBean.getData(), this);
         vpMemberRights.setAdapter(adapter);
 
         rvMemberRights.setLayoutManager(new GridLayoutManager(this, 3));
@@ -136,7 +136,6 @@ public class MemberRightsActivity extends BaseActivity {
 
         initRights(0);
 
-
     }
 
     private void initRights(int position) {
@@ -145,7 +144,6 @@ public class MemberRightsActivity extends BaseActivity {
         if (memberBean.getData().get(position).getListPrivilege() != null) {
             dataList.addAll(memberBean.getData().get(position).getListPrivilege());
         }
-
         rightsAdapter.notifyDataSetChanged();
     }
 
@@ -155,3 +153,4 @@ public class MemberRightsActivity extends BaseActivity {
         finish();
     }
 }
+
