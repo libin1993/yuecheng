@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "com.hfbh.yuecheng"
         minSdkVersion 14
-        targetSdkVersion 25
-        versionCode 11
+        targetSdkVersion 26
+        versionCode 12
         versionName "1.2.0"
         multiDexEnabled true
 
@@ -18,7 +18,7 @@ android {
                 GETUI_APP_ID    : "LtNtcjNIOe6Yj7JyJ1eFk9",
                 GETUI_APP_KEY   : "EGj1lyD0BO89pks8VXeHs1",
                 GETUI_APP_SECRET: "J5UR6eP2Ym6e4mvO1J5JH1"
-
+                
                 //开发环境
 //                GETUI_APP_ID    : "ME3je54kfv5npEQPFq7gh1",
 //                GETUI_APP_KEY   : "eR2b309dwR9tHhVrlF9dk6",
@@ -77,16 +77,16 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.bigkoo:convenientbanner:2.0.5'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:support-v4:25.4.0'
+    compile 'com.android.support:support-v4:26.1.0'
     compile 'com.zhy:base-rvadapter:3.0.3'
     compile 'com.jakewharton:butterknife:8.3.0'
     apt 'com.jakewharton:butterknife-compiler:8.3.0'
     compile 'com.zhy:okhttputils:2.6.2'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support:cardview-v7:25.4.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
     compile 'com.facebook.rebound:rebound:0.3.8'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.google.code.gson:gson:2.8.2'

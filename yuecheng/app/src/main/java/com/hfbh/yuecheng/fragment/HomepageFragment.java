@@ -389,10 +389,19 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         if (functionBean != null && functionBean.getData() != null && functionBean.getData().size() > 0) {
             //功能模块
 //            FunctionAdapter functionAdapter = new FunctionAdapter(getActivity(), new
-//                    GridLayoutHelper(2, 1), R.layout.layout_homepage_function,
+//                    GridLayoutHelper(1), R.layout.layout_homepage_function,
 //                    functionBean.getData(), 1, 2);
+
+            //布局宽高
+            int size = functionBean.getData().size();
+            int spanCount = 4;
+            if (size <= 4) {
+                spanCount = size;
+            }
+            final int width = DisplayUtils.getMetrics(getActivity()).widthPixels / spanCount;
+
             BaseDelegateAdapter functionAdapter = new BaseDelegateAdapter(getActivity(), new
-                    GridLayoutHelper(2, 1), R.layout.layout_homepage_function,
+                    GridLayoutHelper(1), R.layout.layout_homepage_function,
                     1, 2) {
                 @Override
                 public void onBindViewHolder(ViewHolder holder, int position) {
@@ -401,8 +410,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     rvFunction.setLayoutManager(new LinearLayoutManager(getActivity(),
                             LinearLayout.HORIZONTAL, false));
 
-                    //布局宽高
-                    final int width = DisplayUtils.getMetrics(getActivity()).widthPixels / 4;
+
                     CommonAdapter<FunctionBean.DataBean> adapter = new CommonAdapter<FunctionBean
                             .DataBean>(getActivity(),
                             R.layout.rv_founction_item, functionBean.getData()) {

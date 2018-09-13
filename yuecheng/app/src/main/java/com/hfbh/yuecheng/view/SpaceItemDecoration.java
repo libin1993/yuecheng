@@ -7,7 +7,7 @@ import android.view.View;
 /**
  * Author：Libin on 2018/5/18 09:05
  * Email：1993911441@qq.com
- * Describe：分割线
+ * Describe：rv间距
  */
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     //间距
