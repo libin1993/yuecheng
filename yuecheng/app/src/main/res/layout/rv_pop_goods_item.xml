@@ -10,7 +10,6 @@
         android:id="@+id/iv_discovery_pop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         fresco:viewAspectRatio="1"
         fresco:roundedCornerRadius="4dp"
         fresco:actualImageScaleType="centerCrop"
@@ -52,9 +51,5 @@
             android:textSize="10sp"/>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_f2"/>
 
 </LinearLayout>

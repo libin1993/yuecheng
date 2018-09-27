@@ -127,11 +127,12 @@
         android:id="@+id/ll_shop_goods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="35dp"
+        android:background="@android:color/white"
+        android:paddingBottom="15dp"
+        android:layout_marginTop="25dp"
+        android:paddingTop="10dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:orientation="horizontal">
 
         <View
             android:layout_width="0dp"

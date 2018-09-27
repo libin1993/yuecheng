@@ -18,8 +18,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_now_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_f2">
+            android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

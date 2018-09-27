@@ -206,6 +206,12 @@ public class ShopDetailActivity extends BaseActivity {
 
         tvShopDetailInfo.setText(shopBean.getShop().getShopIntro());
 
+        if (goodsList.size() > 0){
+            llTitle.setVisibility(View.VISIBLE);
+        }else {
+            llTitle.setVisibility(View.GONE);
+        }
+
         llTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -76,7 +76,8 @@ public class LocationUtils {
         if (location != null) {
             setLocation(location);
         }
-        // 监视地理位置变化，第二个和第三个参数分别为更新的最短时间minTime和最短距离minDistace
+
+        // 监视地理位置变化，第二个和第三个参数分别为更新的最短时间minTime和最短距离minDistance
         locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
     }
 

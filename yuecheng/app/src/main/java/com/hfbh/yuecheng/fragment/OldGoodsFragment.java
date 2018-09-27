@@ -127,7 +127,10 @@ public class OldGoodsFragment extends BaseFragment {
                             count++;
                             if (count == 2) {
                                 count = 0;
-                                loadingView.smoothToHide();
+                                if (loadingView !=null){
+                                    loadingView.smoothToHide();
+                                }
+
                                 initView();
                             }
                         }

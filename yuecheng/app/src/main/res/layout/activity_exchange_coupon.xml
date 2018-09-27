@@ -31,8 +31,7 @@
         android:id="@+id/layout_refresh_exchange_coupon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/et_search_coupon"
-        android:background="@color/gray_f2">
+        android:layout_below="@id/et_search_coupon">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_exchange_coupon"

@@ -662,6 +662,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                 if (rushBean != null && rushBean.getData().size() > 0) {
 
+                    llRushGoods.setVisibility(View.VISIBLE);
+
                     boolean isFinish = !TextUtils.isEmpty(rushBean.getData().get(0).getEndTime()) &&
                             System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd HH:mm:ss",
                                     rushBean.getData().get(0).getEndTime());
@@ -717,6 +719,9 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 }
 
                 if (groupBean != null && groupBean.getData().size() > 0) {
+
+                    llGroupGoods.setVisibility(View.VISIBLE);
+
                     tvLowestPrice.setVisibility(View.VISIBLE);
                     tvLowestPrice.setText("低至" + DisplayUtils.isInteger(groupBean.getData().get(0).getNowPrice()) + "元");
 
@@ -747,14 +752,17 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         };
         mAdapters.add(groupAdapter);
 
-        //优惠券
-        initTitle("优惠券", 5);
+
 
 
         if (couponBean != null && couponBean.getData() != null && couponBean.getData().size() > 0) {
 
+            //优惠券
+            initTitle("优惠券", 5);
+
             LinearLayoutHelper linearLayoutHelper = new LinearLayoutHelper();
-            linearLayoutHelper.setDividerHeight((int) DisplayUtils.dp2px(getActivity(), 15));
+            linearLayoutHelper.setBgColor(Color.WHITE);
+//            linearLayoutHelper.setDividerHeight((int) DisplayUtils.dp2px(getActivity(), 15));
 
             couponAdapter = new BaseDelegateAdapter(getActivity(), linearLayoutHelper,
                     R.layout.rv_coupon_item, couponBean.getData().size(), 6) {
@@ -765,8 +773,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     ivCoupon.setImageURI(couponBean.getData().get(position).getCouponImage());
 
                     TextView tvCouponName = holder.getView(R.id.tv_home_coupon_title);
-
-                    holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getCouponDesc());
 
 
                     if (couponBean.getData().get(position).getCouponTypeKind() != null &&
@@ -794,7 +800,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                         }
 
                     } else {
-                        holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getCouponDesc());
+                        holder.setText(R.id.tv_home_coupon_content, couponBean.getData().get(position).getUseRange());
                     }
 
 
@@ -909,10 +915,13 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
 
-        //积分兑换
-        initTitle("积分兑礼", 7);
+
 
         if (giftBean != null && giftBean.getData() != null && giftBean.getData().size() > 0) {
+
+            //积分兑换
+            initTitle("积分兑礼", 7);
+
             GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
             gridLayoutHelper.setPadding((int) DisplayUtils.dp2px(getActivity(), 12),
                     0, (int) DisplayUtils.dp2px(getActivity(), 12), 0);
@@ -948,12 +957,14 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
 
-        //精彩活动
-        initTitle("精彩活动", 9);
+
 
         if (activityBean != null && activityBean.getData() != null && activityBean.getData().size() > 0) {
-            GridLayoutHelper gridLayoutHelper1 = new GridLayoutHelper(1);
-            BaseDelegateAdapter activityAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper1,
+
+            //精彩活动
+            initTitle("精彩活动", 9);
+
+            BaseDelegateAdapter activityAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                     R.layout.rv_activity_item, activityBean.getData().size(), 10) {
 
                 @Override
@@ -1001,6 +1012,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                                                 break;
                                         }
                                     }
+
                                 }
                             } else {
                                 tvReceive.setText("待报名");

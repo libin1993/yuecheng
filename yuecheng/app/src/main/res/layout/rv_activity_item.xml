@@ -3,6 +3,8 @@
                 xmlns:fresco="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
                 android:background="@android:color/white">
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -11,21 +13,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="10dp"
-        fresco:roundedCornerRadius="5dp"
-        fresco:viewAspectRatio="2"
+        fresco:actualImageScaleType="centerCrop"
         fresco:placeholderImage="@mipmap/img_place"
         fresco:placeholderImageScaleType="centerCrop"
-        fresco:actualImageScaleType="centerCrop"/>
+        fresco:roundedCornerRadius="5dp"
+        fresco:viewAspectRatio="2"/>
 
     <TextView
         android:id="@+id/tv_home_activity_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_home_activity"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="10.5dp"
+        android:layout_marginBottom="10dp"
         android:singleLine="true"
         android:textColor="@color/gray_33"
         android:textSize="15sp"/>
@@ -45,9 +46,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/flow_home_activity"
-        android:layout_marginBottom="11dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="4dp"
+        android:layout_marginBottom="11dp"
         android:textColor="@color/gray_99"
         android:textSize="12sp"/>
 
@@ -63,12 +64,5 @@
         android:paddingRight="20dp"
         android:textColor="@android:color/white"
         android:textSize="13sp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_below="@id/tv_home_activity_time"
-        android:layout_marginTop="11dp"
-        android:background="@color/gray_f2"/>
 
 </RelativeLayout>

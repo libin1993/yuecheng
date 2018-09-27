@@ -183,8 +183,8 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     private void initView() {
         rvActivity.setLayoutManager(new LinearLayoutManager(this));
         CommonAdapter<EnrollActivityBean.DataBean.OptionListBean> adapter = new CommonAdapter
-                <EnrollActivityBean.DataBean.OptionListBean>(
-                EnrollActionActivity.this, R.layout.rv_enroll_activity_item, dataList) {
+                <EnrollActivityBean.DataBean.OptionListBean>(EnrollActionActivity.this,
+                R.layout.rv_enroll_activity_item, dataList) {
             @Override
             protected void convert(ViewHolder holder, final EnrollActivityBean.DataBean.OptionListBean
                     optionListBean, final int position) {

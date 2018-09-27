@@ -201,5 +201,3 @@ public class AboutUsActivity extends BaseActivity {
         super.onDestroy();
     }
 }
-
-

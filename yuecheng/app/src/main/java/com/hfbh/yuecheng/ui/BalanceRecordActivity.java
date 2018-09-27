@@ -142,11 +142,11 @@ public class BalanceRecordActivity extends BaseActivity {
                         case "消费":
                             double money = Double.parseDouble(dataBean.getCreditMoney());
                             if (money < 0) {
-                                tvTitle.setText("退款");
+                                tvTitle.setText(dataBean.getStoreName() + "退款");
                                 tvPoints.setTextColor(getResources().getColor(R.color.red_99));
                                 tvPoints.setText("+" + DisplayUtils.decimalFormat(Math.abs(money)));
                             } else {
-                                tvTitle.setText("消费");
+                                tvTitle.setText(dataBean.getStoreName() + "消费");
                                 tvPoints.setTextColor(getResources().getColor(R.color.gray_10));
                                 tvPoints.setText("-" + DisplayUtils.decimalFormat(money));
                             }

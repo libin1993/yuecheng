@@ -1,7 +1,9 @@
 package com.hfbh.yuecheng.ui;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -179,7 +181,16 @@ public class ExchangeCouponActivity extends BaseActivity {
 
     private void initView() {
         rvExchangeCoupon.setLayoutManager(new LinearLayoutManager(this));
-        rvExchangeCoupon.addItemDecoration(new SpaceItemDecoration((int) DisplayUtils.dp2px(this, 15)));
+        rvExchangeCoupon.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int position = parent.getChildAdapterPosition(view);
+                if (position == 0) {
+                    outRect.set(0, (int) DisplayUtils.dp2px(ExchangeCouponActivity.this, 9), 0, 0);
+                }
+            }
+        });
         adapter = new CommonAdapter<CouponListBean.DataBean>(ExchangeCouponActivity.this,
                 R.layout.rv_coupon_item, dataList) {
             @Override

@@ -7,7 +7,8 @@
     android:layout_height="100dp"
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
-    app:cardBackgroundColor="@android:color/white"
+    android:layout_marginBottom="15dp"
+    app:cardBackgroundColor="@color/gray_fb"
     app:cardCornerRadius="8dp"
     app:cardElevation="12dp">
 

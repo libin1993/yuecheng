@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         fresco:roundedCornerRadius="4dp"
         fresco:viewAspectRatio="1"
         fresco:placeholderImageScaleType="centerCrop"
@@ -35,11 +35,5 @@
         android:layout_marginBottom="10dp"
         android:textColor="@color/gray_95"
         android:textSize="13sp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_f2"/>
-
 
 </LinearLayout>
