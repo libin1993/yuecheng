@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,7 +114,7 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
     //必填项数量
     private int totalNum;
     //已填数量
-    private SparseArray<Boolean> inputNum = new SparseArray<>();
+    private SparseBooleanArray inputNum = new SparseBooleanArray();
     //报名类型
     private String type;
     //活动报名id
@@ -131,7 +132,6 @@ public class EnrollActionActivity extends BaseActivity implements EasyPermission
         tvHeaderTitle.setText("活动报名");
         getData();
         initData();
-
     }
 
     private void initData() {

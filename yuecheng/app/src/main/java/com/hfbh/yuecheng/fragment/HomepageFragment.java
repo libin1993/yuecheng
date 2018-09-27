@@ -192,8 +192,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     @Override
                     public void onResponse(String s, int i) {
                         typeBean = GsonUtils.jsonToBean(s, HomepageTypeBean.class);
-                        if (typeBean.isFlag()) {
+                        if (typeBean.isFlag() && typeBean.getData() != null && typeBean.getData().size() > 0) {
                             initData();
+                        } else {
+                            rvHomepage.setAdapter(null);
                         }
                     }
                 });
@@ -586,6 +588,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 gridLayoutHelper.setAutoExpand(false);
                 gridLayoutHelper.setBgColor(Color.WHITE);
 
+
                 BaseDelegateAdapter gameAdapter = new BaseDelegateAdapter(getActivity(), gridLayoutHelper,
                         R.layout.layout_homepage_game, topicBean.getData().get(0).getGameList().size(), 14) {
                     @Override
@@ -629,6 +632,8 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         }
 
+        final int width = DisplayUtils.getMetrics(getActivity()).widthPixels / 2;
+
         BaseDelegateAdapter groupAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.layout_homepage_goods, 1, 15) {
             @Override
@@ -663,6 +668,10 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                 if (rushBean != null && rushBean.getData().size() > 0) {
 
                     llRushGoods.setVisibility(View.VISIBLE);
+
+                    ViewGroup.LayoutParams rvParams = rvRushGoods.getLayoutParams();
+                    rvParams.width = width;
+                    rvRushGoods.setLayoutParams(rvParams);
 
                     boolean isFinish = !TextUtils.isEmpty(rushBean.getData().get(0).getEndTime()) &&
                             System.currentTimeMillis() > DateUtils.getTime("yyyy-MM-dd HH:mm:ss",
@@ -722,8 +731,15 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                     llGroupGoods.setVisibility(View.VISIBLE);
 
+
+                    ViewGroup.LayoutParams rvParams = rvGroupGoods.getLayoutParams();
+                    rvParams.width = width;
+                    rvGroupGoods.setLayoutParams(rvParams);
+
+
                     tvLowestPrice.setVisibility(View.VISIBLE);
                     tvLowestPrice.setText("低至" + DisplayUtils.isInteger(groupBean.getData().get(0).getNowPrice()) + "元");
+
 
                     rvGroupGoods.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                     CommonAdapter<GroupGoodsBean.DataBean> groupAdapter = new CommonAdapter
@@ -751,8 +767,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         };
         mAdapters.add(groupAdapter);
-
-
 
 
         if (couponBean != null && couponBean.getData() != null && couponBean.getData().size() > 0) {
@@ -915,8 +929,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
         }
 
 
-
-
         if (giftBean != null && giftBean.getData() != null && giftBean.getData().size() > 0) {
 
             //积分兑换
@@ -955,8 +967,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             };
             mAdapters.add(giftAdapter);
         }
-
-
 
 
         if (activityBean != null && activityBean.getData() != null && activityBean.getData().size() > 0) {
