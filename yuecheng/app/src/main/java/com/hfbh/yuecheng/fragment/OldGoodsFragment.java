@@ -213,6 +213,7 @@ public class OldGoodsFragment extends BaseFragment {
                         intent.putExtra("goods_id", newGoods.get(position).getCommodityId());
                         startActivity(intent);
                     }
+
                 });
             }
         };
@@ -220,9 +221,8 @@ public class OldGoodsFragment extends BaseFragment {
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableLoadMore(false);
         mAdapters.add(newAdapter);
+
         delegateAdapter.setAdapters(mAdapters);
-
-
     }
 
     /**

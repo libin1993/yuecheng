@@ -82,7 +82,6 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
             }
         }
         //提交事务
-//        ft.commit();
         ft.commitAllowingStateLoss();
     }
 

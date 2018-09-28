@@ -9,7 +9,7 @@ android {
         applicationId "com.hfbh.yuecheng"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 14
+        versionCode 15
         versionName "1.2.4"
         multiDexEnabled true
 

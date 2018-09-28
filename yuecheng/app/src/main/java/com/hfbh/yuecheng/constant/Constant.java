@@ -7,8 +7,8 @@ package com.hfbh.yuecheng.constant;
  */
 public class Constant {
 
-    private static final String HOST = "https://m.hfbh.com.cn";
-//        private static final String HOST = "http://ceshi.wmalle.com";
+//    private static final String HOST = "https://m.hfbh.com.cn";
+        private static final String HOST = "http://ceshi.wmalle.com";
 //    private static final String HOST = "http://yjwang.wmalle.com";
     //微信appid
     public static final String APP_ID = "wxde304ec90e9db692";

@@ -15,10 +15,10 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
  */
 public class BaseDelegateAdapter extends DelegateAdapter.Adapter<ViewHolder>{
     private LayoutHelper mLayoutHelper;
-    private int mCount = -1;
-    private int mLayoutId = -1;
+    private int mCount;
+    private int mLayoutId;
     private Context mContext;
-    private int mViewTypeItem = -1;
+    private int mViewTypeItem;
 
     public BaseDelegateAdapter(Context context, LayoutHelper layoutHelper, int layoutId, int count, int viewTypeItem) {
         this.mContext = context;
@@ -44,7 +44,6 @@ public class BaseDelegateAdapter extends DelegateAdapter.Adapter<ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-
     }
 
 
@@ -59,9 +58,15 @@ public class BaseDelegateAdapter extends DelegateAdapter.Adapter<ViewHolder>{
         return mViewTypeItem;
     }
 
-    //条目数量
+    /**
+     * @return  条目数量
+     */
+
     @Override
     public int getItemCount() {
         return mCount;
     }
 }
+
+
+
