@@ -14,6 +14,6 @@
         fresco:placeholderImage="@mipmap/img_place"
         fresco:placeholderImageScaleType="centerCrop"
         fresco:viewAspectRatio="1"
-        android:layout_marginBottom="42dp"/>
+        android:layout_marginBottom="10dp"/>
 
 </LinearLayout>

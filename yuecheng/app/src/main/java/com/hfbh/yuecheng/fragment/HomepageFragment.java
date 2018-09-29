@@ -632,7 +632,7 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
             }
         }
 
-        final int width = DisplayUtils.getMetrics(getActivity()).widthPixels / 2;
+        final int width = (int) (DisplayUtils.getMetrics(getActivity()).widthPixels / 2 - DisplayUtils.dp2px(getActivity(),17));
 
         BaseDelegateAdapter groupAdapter = new BaseDelegateAdapter(getActivity(), new LinearLayoutHelper(),
                 R.layout.layout_homepage_goods, 1, 15) {
@@ -703,12 +703,12 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
 
                     rvRushGoods.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                     CommonAdapter<GroupGoodsBean.DataBean> rushAdapter = new CommonAdapter
-                            <GroupGoodsBean.DataBean>(getActivity(), R.layout.rv_homepage_rush_item, rushBean.getData()) {
+                            <GroupGoodsBean.DataBean>(getActivity(), R.layout.rv_homepage_group_item, rushBean.getData()) {
                         @Override
                         protected void convert(ViewHolder holder, GroupGoodsBean.DataBean dataBean, int position) {
-                            SimpleDraweeView ivGoods = holder.getView(R.id.iv_rush_goods);
+                            SimpleDraweeView ivGoods = holder.getView(R.id.iv_homepage_group);
                             ivGoods.setImageURI(dataBean.getPicturePath());
-                            holder.setText(R.id.tv_rush_goods_price, "¥" + DisplayUtils.isInteger(dataBean.getNowPrice()));
+
                         }
                     };
                     rvRushGoods.setAdapter(rushAdapter);
@@ -735,7 +735,6 @@ public class HomepageFragment extends BaseFragment implements EasyPermissions.Pe
                     ViewGroup.LayoutParams rvParams = rvGroupGoods.getLayoutParams();
                     rvParams.width = width;
                     rvGroupGoods.setLayoutParams(rvParams);
-
 
                     tvLowestPrice.setVisibility(View.VISIBLE);
                     tvLowestPrice.setText("低至" + DisplayUtils.isInteger(groupBean.getData().get(0).getNowPrice()) + "元");
