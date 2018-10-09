@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.hfbh.yuecheng.R;
 import com.hfbh.yuecheng.application.MyApp;
 import com.hfbh.yuecheng.base.BaseActivity;
+import com.hfbh.yuecheng.bean.LocationBean;
 import com.hfbh.yuecheng.bean.ResponseBean;
 import com.hfbh.yuecheng.constant.Constant;
 import com.hfbh.yuecheng.utils.DataManagerUtils;
@@ -25,6 +27,9 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -170,11 +175,11 @@ public class SetUpActivity extends BaseActivity {
                         if (responseBean.isFlag()) {
                             SharedPreUtils.deleteStr(SetUpActivity.this, "is_login");
                             SharedPreUtils.deleteStr(SetUpActivity.this, "hash");
-                            ToastUtils.showToast(SetUpActivity.this, "退出成功");
-                            Intent intent = new Intent(SetUpActivity.this, MainActivity.class);
-                            intent.putExtra("log_out", true);
-                            startActivity(intent);
-                            finish();
+
+
+                            getHash();
+
+
                         } else {
                             ToastUtils.showToast(SetUpActivity.this, responseBean.getMsg());
                             if (responseBean.getCode() == 4002) {
@@ -184,6 +189,36 @@ public class SetUpActivity extends BaseActivity {
                     }
                 });
     }
+
+
+    /**
+     * 获取hash值
+     */
+    private void getHash() {
+        OkHttpUtils.post()
+                .url(Constant.LOCATION)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int i) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String s, int i) {
+                        LocationBean locationBean = GsonUtils.jsonToBean(s, LocationBean.class);
+                        if (locationBean.isFlag()) {
+                            SharedPreUtils.saveStr(SetUpActivity.this, "hash", locationBean.getHash());
+
+                            ToastUtils.showToast(SetUpActivity.this, "退出成功");
+                            Intent intent = new Intent(SetUpActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });
+    }
+
 
     /**
      * 清除缓存

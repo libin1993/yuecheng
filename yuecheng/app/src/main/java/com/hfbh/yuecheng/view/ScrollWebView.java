@@ -28,7 +28,6 @@ public class ScrollWebView extends WebView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        LogUtils.log(t+","+oldt);
         if (onScrollChangeListener != null) {
             onScrollChangeListener.onScrollChanged(t - oldt);
         }

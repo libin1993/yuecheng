@@ -357,12 +357,11 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                             if (!SharedPreUtils.getBoolean(MainActivity.this, "is_login", false)) {
                                 SharedPreUtils.saveStr(MainActivity.this, "hash", locationBean.getHash());
                             }
-                            if (!getIntent().getBooleanExtra("log_out", false)) {
-                                MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
-                                MyApp.organizeName = locationBean.getData().getOrganizeName();
-                                addClientId();
-                                initView();
-                            }
+
+                            MyApp.organizeId = String.valueOf(locationBean.getData().getOrganizeId());
+                            MyApp.organizeName = locationBean.getData().getOrganizeName();
+                            addClientId();
+                            initView();
 
                         }
                     }
@@ -524,11 +523,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             fragmentTabUtils.setCurrentFragment(0);
         }
 
-        boolean isLogout = intent1.getBooleanExtra("log_out", false);
-        //退出登录，重新获取hash值
-        if (isLogout) {
-            initLocation();
-        }
     }
 
     @Override
