@@ -60,7 +60,6 @@ public class MyApp extends Application {
             @Override
             public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
                 layout.setPrimaryColors(0xfff2f4f5, 0xffaaaaaa);//全局设置主题颜色
-
                 ClassicsHeader classicsHeader = new ClassicsHeader(context);
                 classicsHeader.setEnableLastTime(false);
                 classicsHeader.setArrowDrawable(ContextCompat.getDrawable(context, R.mipmap.ic_pulltorefresh_arrow));

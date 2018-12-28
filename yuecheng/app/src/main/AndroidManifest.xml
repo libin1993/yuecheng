@@ -40,7 +40,6 @@
         android:name="android.hardware.camera.front.autofocus"
         android:required="false"/>
 
-
     <application
         android:name=".application.MyApp"
         android:allowBackup="true"

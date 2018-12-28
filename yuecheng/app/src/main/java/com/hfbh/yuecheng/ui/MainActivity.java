@@ -109,7 +109,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         isLogin();
+
     }
+
 
     /**
      * 检测更新
