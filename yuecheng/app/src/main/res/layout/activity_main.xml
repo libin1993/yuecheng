@@ -22,9 +22,9 @@
         <RadioButton
             style="@style/RadioButton"
             android:text="@string/activity_tab"/>
-        <!--<RadioButton-->
-            <!--style="@style/RadioButton"-->
-            <!--android:text="@string/discovery_tab"/>-->
+        <RadioButton
+            style="@style/RadioButton"
+            android:text="@string/discovery_tab"/>
         <RadioButton
             style="@style/RadioButton"
             android:text="@string/mine_tab"/>

@@ -135,7 +135,7 @@ public class PopGoodsActivity extends BaseActivity {
                         } else {
                             if (!isLoadMore) {
                                 llNullData.setVisibility(View.VISIBLE);
-                                rvPopGoods.setBackgroundColor(ContextCompat.getColor(PopGoodsActivity.this,R.color.gray_f2));
+                                rvPopGoods.setBackgroundColor(ContextCompat.getColor(PopGoodsActivity.this, R.color.gray_f2));
                             }
                         }
                         isLoadMore = false;

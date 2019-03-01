@@ -378,7 +378,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(HomepageFragment.newInstance());
         fragmentList.add(ActivityFragment.newInstance());
-//        fragmentList.add(DiscoveryFragment.newInstance());
+        fragmentList.add(DiscoveryFragment.newInstance());
         fragmentList.add(MineFragment.newInstance());
         fragmentTabUtils = new FragmentTabUtils(this, getSupportFragmentManager(),
                 fragmentList, R.id.fl_main_container, rgsMainTab);
@@ -400,13 +400,13 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         drawableActivity.setBounds(0, 0, width, height);
         ((RadioButton) rgsMainTab.getChildAt(1)).setCompoundDrawables(null, drawableActivity, null, null);
 
-//        Drawable drawableDiscovery = getResources().getDrawable(R.drawable.selector_discovery_tab);
-//        drawableDiscovery.setBounds(0, 0, width, height);
-//        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableDiscovery, null, null);
+        Drawable drawableDiscovery = getResources().getDrawable(R.drawable.selector_discovery_tab);
+        drawableDiscovery.setBounds(0, 0, width, height);
+        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableDiscovery, null, null);
 
         Drawable drawableMine = getResources().getDrawable(R.drawable.selector_mine_tab);
         drawableMine.setBounds(0, 0, width, height);
-        ((RadioButton) rgsMainTab.getChildAt(2)).setCompoundDrawables(null, drawableMine, null, null);
+        ((RadioButton) rgsMainTab.getChildAt(3)).setCompoundDrawables(null, drawableMine, null, null);
 
     }
 
